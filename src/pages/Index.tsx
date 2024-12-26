@@ -39,6 +39,27 @@ const Index = () => {
     setFinalValue(result);
   }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod]);
 
+  // Handle value changes with locking logic
+  const handleTotalInvestmentChange = (value: number) => {
+    if (finalValue === 0 && value < totalInvestment) return;
+    setTotalInvestment(value);
+  };
+
+  const handleMonthlyWithdrawalChange = (value: number) => {
+    if (finalValue === 0 && value > monthlyWithdrawal) return;
+    setMonthlyWithdrawal(value);
+  };
+
+  const handleReturnRateChange = (value: number) => {
+    if (finalValue === 0 && value < returnRate) return;
+    setReturnRate(value);
+  };
+
+  const handleTimePeriodChange = (value: number) => {
+    if (finalValue === 0 && value > timePeriod) return;
+    setTimePeriod(value);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto space-y-8">
@@ -55,7 +76,7 @@ const Index = () => {
           <SliderInput
             label="Total investment"
             value={totalInvestment}
-            onChange={setTotalInvestment}
+            onChange={handleTotalInvestmentChange}
             min={5000}
             max={1000000000} // 100 crore
             step={1000}
@@ -65,7 +86,7 @@ const Index = () => {
           <SliderInput
             label="Withdrawal per month"
             value={monthlyWithdrawal}
-            onChange={setMonthlyWithdrawal}
+            onChange={handleMonthlyWithdrawalChange}
             min={100}
             max={1000000}
             step={100}
@@ -76,7 +97,7 @@ const Index = () => {
           <SliderInput
             label="Expected return rate (p.a)"
             value={returnRate}
-            onChange={setReturnRate}
+            onChange={handleReturnRateChange}
             min={1}
             max={50}
             step={0.1}
@@ -86,7 +107,7 @@ const Index = () => {
           <SliderInput
             label="Time period"
             value={timePeriod}
-            onChange={setTimePeriod}
+            onChange={handleTimePeriodChange}
             min={1}
             max={50}
             step={1}
