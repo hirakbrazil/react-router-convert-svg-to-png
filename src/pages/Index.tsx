@@ -9,6 +9,16 @@ const Index = () => {
   const [timePeriod, setTimePeriod] = useState(5);
   const [finalValue, setFinalValue] = useState(0);
 
+  // Calculate maximum monthly withdrawal (total investment / 12)
+  const maxMonthlyWithdrawal = Math.floor(totalInvestment / 12);
+
+  // Ensure monthly withdrawal doesn't exceed the maximum
+  useEffect(() => {
+    if (monthlyWithdrawal > maxMonthlyWithdrawal) {
+      setMonthlyWithdrawal(maxMonthlyWithdrawal);
+    }
+  }, [totalInvestment, maxMonthlyWithdrawal]);
+
   const calculateSWP = () => {
     let currentValue = totalInvestment;
     const monthlyRate = returnRate / 12 / 100;
@@ -46,9 +56,9 @@ const Index = () => {
             label="Total investment"
             value={totalInvestment}
             onChange={setTotalInvestment}
-            min={100000}
-            max={10000000}
-            step={10000}
+            min={5000}
+            max={1000000000} // 100 crore
+            step={1000}
             prefix="₹"
           />
 
@@ -56,10 +66,11 @@ const Index = () => {
             label="Withdrawal per month"
             value={monthlyWithdrawal}
             onChange={setMonthlyWithdrawal}
-            min={1000}
-            max={100000}
-            step={1000}
+            min={100}
+            max={1000000}
+            step={100}
             prefix="₹"
+            dynamicMax={maxMonthlyWithdrawal}
           />
 
           <SliderInput
@@ -67,8 +78,8 @@ const Index = () => {
             value={returnRate}
             onChange={setReturnRate}
             min={1}
-            max={30}
-            step={0.5}
+            max={50}
+            step={0.1}
             suffix="%"
           />
 
@@ -77,7 +88,7 @@ const Index = () => {
             value={timePeriod}
             onChange={setTimePeriod}
             min={1}
-            max={30}
+            max={50}
             step={1}
             suffix=" Yr"
           />
