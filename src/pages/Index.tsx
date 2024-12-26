@@ -15,15 +15,10 @@ const Index = () => {
     const totalMonths = timePeriod * 12;
     
     for (let i = 0; i < totalMonths; i++) {
-      // First calculate returns on beginning balance
+      // Add monthly returns
       currentValue = currentValue * (1 + monthlyRate);
-      // Then subtract monthly withdrawal
-      if (currentValue >= monthlyWithdrawal) {
-        currentValue -= monthlyWithdrawal;
-      } else {
-        currentValue = 0;
-        break;
-      }
+      // Subtract monthly withdrawal
+      currentValue -= monthlyWithdrawal;
     }
 
     return Math.max(0, Math.round(currentValue));
