@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SliderInput from "@/components/SliderInput";
 import ResultCard from "@/components/ResultCard";
+import CurrencySelector, { CurrencyType } from "@/components/CurrencySelector";
 
 const Index = () => {
   const [totalInvestment, setTotalInvestment] = useState(500000);
@@ -8,6 +9,7 @@ const Index = () => {
   const [returnRate, setReturnRate] = useState(8);
   const [timePeriod, setTimePeriod] = useState(5);
   const [finalValue, setFinalValue] = useState(0);
+  const [currency, setCurrency] = useState<CurrencyType>("INR");
 
   // Calculate maximum monthly withdrawal (total investment / 12)
   const maxMonthlyWithdrawal = Math.floor(totalInvestment / 12);
@@ -70,6 +72,7 @@ const Index = () => {
           <p className="mt-2 text-gray-600">
             Calculate your Systematic Withdrawal Plan
           </p>
+          <CurrencySelector value={currency} onChange={setCurrency} />
         </div>
 
         <div className="bg-white rounded-xl shadow-lg p-6 space-y-6">
@@ -127,6 +130,7 @@ const Index = () => {
           totalInvestment={totalInvestment}
           totalWithdrawal={monthlyWithdrawal * timePeriod * 12}
           finalValue={finalValue}
+          currency={currency}
         />
       </div>
     </div>
