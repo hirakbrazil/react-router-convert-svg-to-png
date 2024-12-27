@@ -36,19 +36,26 @@ const SliderInput = ({
     setInputValue(value.toString());
   }, [value]);
 
+  const enforceValueLimits = (newValue: number): number => {
+    if (isLocked) {
+      if (lockDirection === 'increment') {
+        return Math.min(value, Math.max(min, newValue));
+      } else if (lockDirection === 'decrement') {
+        return Math.max(value, Math.min(effectiveMax, newValue));
+      }
+    }
+    return Math.min(Math.max(newValue, min), effectiveMax);
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setInputValue(newValue);
     
     const numValue = parseFloat(newValue);
     if (!isNaN(numValue)) {
-      if (isLocked) {
-        if (lockDirection === 'increment' && numValue > value) return;
-        if (lockDirection === 'decrement' && numValue < value) return;
-      }
-      
-      if (numValue >= min && numValue <= effectiveMax) {
-        onChange(numValue);
+      const limitedValue = enforceValueLimits(numValue);
+      if (limitedValue !== value) {
+        onChange(limitedValue);
       }
     }
   };
@@ -58,32 +65,39 @@ const SliderInput = ({
     if (isNaN(numValue)) {
       setInputValue(value.toString());
     } else {
-      let clampedValue = numValue;
-      
-      if (isLocked) {
-        if (lockDirection === 'increment') {
-          clampedValue = Math.min(value, Math.max(min, numValue));
-        } else if (lockDirection === 'decrement') {
-          clampedValue = Math.max(value, Math.min(effectiveMax, numValue));
-        }
-      } else {
-        clampedValue = Math.min(Math.max(numValue, min), effectiveMax);
-      }
-      
-      setInputValue(clampedValue.toString());
-      onChange(clampedValue);
+      const limitedValue = enforceValueLimits(numValue);
+      setInputValue(limitedValue.toString());
+      onChange(limitedValue);
     }
   };
 
   const handleSliderChange = (values: number[]) => {
     const newValue = values[0];
-    if (isLocked) {
-      if (lockDirection === 'increment' && newValue > value) return;
-      if (lockDirection === 'decrement' && newValue < value) return;
+    const limitedValue = enforceValueLimits(newValue);
+    
+    // Only update if the value is different and within limits
+    if (limitedValue !== value) {
+      onChange(limitedValue);
+      setInputValue(limitedValue.toString());
+    } else {
+      // Force the slider to stay at the current value if it hits a limit
+      setInputValue(value.toString());
     }
-    onChange(newValue);
-    setInputValue(newValue.toString());
   };
+
+  // Calculate input min/max based on lock direction
+  const getInputLimits = () => {
+    if (isLocked) {
+      if (lockDirection === 'increment') {
+        return { min, max: value };
+      } else if (lockDirection === 'decrement') {
+        return { min: value, max: effectiveMax };
+      }
+    }
+    return { min, max: effectiveMax };
+  };
+
+  const inputLimits = getInputLimits();
 
   return (
     <div className="space-y-4">
@@ -96,8 +110,8 @@ const SliderInput = ({
             value={inputValue}
             onChange={handleInputChange}
             onBlur={handleInputBlur}
-            min={min}
-            max={effectiveMax}
+            min={inputLimits.min}
+            max={inputLimits.max}
             className="w-32 text-xl font-semibold text-primary bg-transparent border-none focus-visible:ring-0 p-0 text-right"
           />
           {suffix && <span className="text-xl font-semibold text-primary">{suffix}</span>}
@@ -109,7 +123,8 @@ const SliderInput = ({
         max={effectiveMax}
         min={min}
         step={step}
-        className={`py-4 ${isLocked ? 'opacity-50' : ''}`}
+        className={`py-4 ${isLocked ? 'opacity-50 pointer-events-none' : ''}`}
+        disabled={isLocked}
       />
     </div>
   );
