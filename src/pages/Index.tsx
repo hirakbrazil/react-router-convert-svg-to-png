@@ -77,10 +77,12 @@ const Index = () => {
             label="Total investment"
             value={totalInvestment}
             onChange={handleTotalInvestmentChange}
-            min={5000}
-            max={1000000000} // 100 crore
+            min={1000}
+            max={500000000} // 50 crore
             step={1000}
             prefix="₹"
+            isLocked={finalValue === 0}
+            lockDirection="decrement"
           />
 
           <SliderInput
@@ -92,6 +94,8 @@ const Index = () => {
             step={100}
             prefix="₹"
             dynamicMax={maxMonthlyWithdrawal}
+            isLocked={finalValue === 0}
+            lockDirection="increment"
           />
 
           <SliderInput
@@ -102,6 +106,8 @@ const Index = () => {
             max={50}
             step={0.1}
             suffix="%"
+            isLocked={finalValue === 0}
+            lockDirection="decrement"
           />
 
           <SliderInput
@@ -112,6 +118,8 @@ const Index = () => {
             max={50}
             step={1}
             suffix=" Yr"
+            isLocked={finalValue === 0}
+            lockDirection="increment"
           />
         </div>
 

@@ -12,6 +12,8 @@ interface SliderInputProps {
   prefix?: string;
   suffix?: string;
   dynamicMax?: number;
+  isLocked?: boolean;
+  lockDirection?: 'increment' | 'decrement';
 }
 
 const SliderInput = ({
@@ -24,6 +26,8 @@ const SliderInput = ({
   prefix = "",
   suffix = "",
   dynamicMax,
+  isLocked = false,
+  lockDirection,
 }: SliderInputProps) => {
   const [inputValue, setInputValue] = useState(value.toString());
   const effectiveMax = dynamicMax !== undefined ? dynamicMax : max;
@@ -37,8 +41,15 @@ const SliderInput = ({
     setInputValue(newValue);
     
     const numValue = parseFloat(newValue);
-    if (!isNaN(numValue) && numValue >= min && numValue <= effectiveMax) {
-      onChange(numValue);
+    if (!isNaN(numValue)) {
+      if (isLocked) {
+        if (lockDirection === 'increment' && numValue > value) return;
+        if (lockDirection === 'decrement' && numValue < value) return;
+      }
+      
+      if (numValue >= min && numValue <= effectiveMax) {
+        onChange(numValue);
+      }
     }
   };
 
@@ -47,10 +58,31 @@ const SliderInput = ({
     if (isNaN(numValue)) {
       setInputValue(value.toString());
     } else {
-      const clampedValue = Math.min(Math.max(numValue, min), effectiveMax);
+      let clampedValue = numValue;
+      
+      if (isLocked) {
+        if (lockDirection === 'increment') {
+          clampedValue = Math.min(value, Math.max(min, numValue));
+        } else if (lockDirection === 'decrement') {
+          clampedValue = Math.max(value, Math.min(effectiveMax, numValue));
+        }
+      } else {
+        clampedValue = Math.min(Math.max(numValue, min), effectiveMax);
+      }
+      
       setInputValue(clampedValue.toString());
       onChange(clampedValue);
     }
+  };
+
+  const handleSliderChange = (values: number[]) => {
+    const newValue = values[0];
+    if (isLocked) {
+      if (lockDirection === 'increment' && newValue > value) return;
+      if (lockDirection === 'decrement' && newValue < value) return;
+    }
+    onChange(newValue);
+    setInputValue(newValue.toString());
   };
 
   return (
@@ -64,6 +96,8 @@ const SliderInput = ({
             value={inputValue}
             onChange={handleInputChange}
             onBlur={handleInputBlur}
+            min={min}
+            max={effectiveMax}
             className="w-32 text-xl font-semibold text-primary bg-transparent border-none focus-visible:ring-0 p-0 text-right"
           />
           {suffix && <span className="text-xl font-semibold text-primary">{suffix}</span>}
@@ -71,14 +105,11 @@ const SliderInput = ({
       </div>
       <Slider
         value={[value]}
-        onValueChange={(values) => {
-          onChange(values[0]);
-          setInputValue(values[0].toString());
-        }}
+        onValueChange={handleSliderChange}
         max={effectiveMax}
         min={min}
         step={step}
-        className="py-4"
+        className={`py-4 ${isLocked ? 'opacity-50' : ''}`}
       />
     </div>
   );
