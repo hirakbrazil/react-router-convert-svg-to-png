@@ -21,21 +21,14 @@ const Index = () => {
 
   const calculateSWP = () => {
     let currentValue = totalInvestment;
-    const monthlyRate = returnRate / 100 / 12;
+    const monthlyRate = returnRate / 12 / 100;
     const totalMonths = timePeriod * 12;
     
     for (let i = 0; i < totalMonths; i++) {
-      // First add monthly returns
-      const monthlyReturn = currentValue * monthlyRate;
-      currentValue += monthlyReturn;
-      
-      // Then subtract monthly withdrawal
+      // Add monthly returns
+      currentValue = currentValue * (1 + monthlyRate);
+      // Subtract monthly withdrawal
       currentValue -= monthlyWithdrawal;
-      
-      // Ensure value doesn't go below 0
-      if (currentValue < 0) {
-        return 0;
-      }
     }
 
     return Math.max(0, Math.round(currentValue));
