@@ -20,18 +20,18 @@ const Index = () => {
   }, [totalInvestment, maxMonthlyWithdrawal]);
 
   const calculateSWP = () => {
-    let currentValue = totalInvestment;
-    const monthlyRate = returnRate / 12 / 100;
-    const totalMonths = timePeriod * 12;
-    
-    for (let i = 0; i < totalMonths; i++) {
-      // Add monthly returns
-      currentValue = currentValue * (1 + monthlyRate);
-      // Subtract monthly withdrawal
-      currentValue -= monthlyWithdrawal;
-    }
+    const n = 12; // 12 months in a year
+    const r = returnRate / (n * 100); // Monthly return rate
+    const t = timePeriod; // Number of years
 
-    return Math.max(0, Math.round(currentValue));
+    // Future Value Calculation using the compound interest formula with monthly withdrawals
+    let result = Math.round(
+      (totalInvestment * Math.pow((1 + returnRate / 100), t)) -
+      (monthlyWithdrawal * (Math.pow((1 + (Math.pow((1 + returnRate / 100), (1 / n)) - 1)), (t * n)) - 1) /
+        (Math.pow((1 + returnRate / 100), (1 / n)) - 1))
+    );
+
+    return Math.max(0, result);
   };
 
   useEffect(() => {
@@ -78,7 +78,7 @@ const Index = () => {
             value={totalInvestment}
             onChange={handleTotalInvestmentChange}
             min={1000}
-            max={500000000} // 50 crore
+            max={500000000}
             step={1000}
             prefix="₹"
             isLocked={finalValue === 0}
