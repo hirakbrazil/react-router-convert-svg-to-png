@@ -136,11 +136,11 @@ const SliderInput = ({
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <label className="text-lg text-gray-700">{label}</label>
-        <div className="bg-secondary px-4 py-2 rounded-lg flex items-center">
+        <div className="bg-secondary px-4 py-2 rounded-lg flex items-center min-w-[200px] max-w-full">
           {currency ? (
-            <span className="text-xl font-semibold text-primary">{getCurrencySymbol(currency)}</span>
+            <span className="text-xl font-semibold text-primary shrink-0">{getCurrencySymbol(currency)}</span>
           ) : (
-            prefix && <span className="text-xl font-semibold text-primary">{prefix}</span>
+            prefix && <span className="text-xl font-semibold text-primary shrink-0">{prefix}</span>
           )}
           <Input
             type="text"
@@ -151,9 +151,13 @@ const SliderInput = ({
             onBlur={handleInputBlur}
             min={min}
             max={effectiveMax}
-            className="w-32 text-xl font-semibold text-primary bg-transparent border-none focus-visible:ring-0 p-0 text-right"
+            className="w-full text-xl font-semibold text-primary bg-transparent border-none focus-visible:ring-0 p-0 text-right"
+            style={{
+              minWidth: '60px',
+              width: `${Math.max(60, inputValue.length * 12)}px`,
+            }}
           />
-          {suffix && <span className="text-xl font-semibold text-primary">{suffix}</span>}
+          {suffix && <span className="text-xl font-semibold text-primary shrink-0">{suffix}</span>}
         </div>
       </div>
       <Slider
