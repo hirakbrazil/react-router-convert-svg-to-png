@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
+import { CurrencyType } from "./CurrencySelector";
 
 interface SliderInputProps {
   label: string;
@@ -14,7 +15,16 @@ interface SliderInputProps {
   dynamicMax?: number;
   isLocked?: boolean;
   lockDirection?: 'increment' | 'decrement';
+  currency?: CurrencyType;
+  formatValue?: boolean;
 }
+
+const formatNumberByCurrency = (value: number, currency: CurrencyType): string => {
+  if (currency === "INR") {
+    return value.toLocaleString('en-IN');
+  }
+  return value.toLocaleString();
+};
 
 const SliderInput = ({
   label,
@@ -28,19 +38,25 @@ const SliderInput = ({
   dynamicMax,
   isLocked = false,
   lockDirection,
+  currency,
+  formatValue = false,
 }: SliderInputProps) => {
   const [inputValue, setInputValue] = useState(value.toString());
   const effectiveMax = dynamicMax !== undefined ? dynamicMax : max;
 
   useEffect(() => {
-    setInputValue(value.toString());
-  }, [value]);
+    if (formatValue && currency) {
+      setInputValue(formatNumberByCurrency(value, currency));
+    } else {
+      setInputValue(value.toString());
+    }
+  }, [value, currency, formatValue]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    setInputValue(newValue);
+    const rawValue = e.target.value.replace(/,/g, '');
+    setInputValue(rawValue);
     
-    const numValue = parseFloat(newValue);
+    const numValue = parseFloat(rawValue);
     if (!isNaN(numValue)) {
       if (isLocked) {
         if (lockDirection === 'increment' && numValue > value) return;
@@ -54,9 +70,14 @@ const SliderInput = ({
   };
 
   const handleInputBlur = () => {
-    const numValue = parseFloat(inputValue);
+    const rawValue = inputValue.replace(/,/g, '');
+    const numValue = parseFloat(rawValue);
     if (isNaN(numValue)) {
-      setInputValue(value.toString());
+      if (formatValue && currency) {
+        setInputValue(formatNumberByCurrency(value, currency));
+      } else {
+        setInputValue(value.toString());
+      }
     } else {
       let clampedValue = numValue;
       
@@ -70,7 +91,11 @@ const SliderInput = ({
         clampedValue = Math.min(Math.max(numValue, min), effectiveMax);
       }
       
-      setInputValue(clampedValue.toString());
+      if (formatValue && currency) {
+        setInputValue(formatNumberByCurrency(clampedValue, currency));
+      } else {
+        setInputValue(clampedValue.toString());
+      }
       onChange(clampedValue);
     }
   };
@@ -82,7 +107,29 @@ const SliderInput = ({
       if (lockDirection === 'decrement' && newValue < value) return;
     }
     onChange(newValue);
-    setInputValue(newValue.toString());
+    if (formatValue && currency) {
+      setInputValue(formatNumberByCurrency(newValue, currency));
+    } else {
+      setInputValue(newValue.toString());
+    }
+  };
+
+  const getCurrencySymbol = (currency?: CurrencyType): string => {
+    if (!currency) return prefix;
+    const symbols: { [key in CurrencyType]: string } = {
+      INR: "₹",
+      USD: "$",
+      EUR: "€",
+      JPY: "¥",
+      GBP: "£",
+      CNY: "¥",
+      AUD: "$",
+      CAD: "$",
+      CHF: "Fr",
+      HKD: "$",
+      SGD: "$"
+    };
+    return symbols[currency];
   };
 
   return (
@@ -90,9 +137,15 @@ const SliderInput = ({
       <div className="flex justify-between items-center">
         <label className="text-lg text-gray-700">{label}</label>
         <div className="bg-secondary px-4 py-2 rounded-lg flex items-center">
-          {prefix && <span className="text-xl font-semibold text-primary">{prefix}</span>}
+          {currency ? (
+            <span className="text-xl font-semibold text-primary">{getCurrencySymbol(currency)}</span>
+          ) : (
+            prefix && <span className="text-xl font-semibold text-primary">{prefix}</span>
+          )}
           <Input
             type="text"
+            inputMode="numeric"
+            pattern="[0-9,]*"
             value={inputValue}
             onChange={handleInputChange}
             onBlur={handleInputBlur}

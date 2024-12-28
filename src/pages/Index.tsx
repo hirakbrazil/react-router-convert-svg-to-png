@@ -5,11 +5,19 @@ import CurrencySelector, { CurrencyType } from "@/components/CurrencySelector";
 
 const Index = () => {
   const [totalInvestment, setTotalInvestment] = useState(500000);
-  const [monthlyWithdrawal, setMonthlyWithdrawal] = useState(10000);
-  const [returnRate, setReturnRate] = useState(8);
-  const [timePeriod, setTimePeriod] = useState(5);
+  const [monthlyWithdrawal, setMonthlyWithdrawal] = useState(5000);
+  const [returnRate, setReturnRate] = useState(13);
+  const [timePeriod, setTimePeriod] = useState(10);
   const [finalValue, setFinalValue] = useState(0);
-  const [currency, setCurrency] = useState<CurrencyType>("INR");
+  const [currency, setCurrency] = useState<CurrencyType>(() => {
+    const savedCurrency = localStorage.getItem("selectedCurrency");
+    return (savedCurrency as CurrencyType) || "INR";
+  });
+
+  // Save currency selection to localStorage
+  useEffect(() => {
+    localStorage.setItem("selectedCurrency", currency);
+  }, [currency]);
 
   // Calculate maximum monthly withdrawal (total investment / 12)
   const maxMonthlyWithdrawal = Math.floor(totalInvestment / 12);
@@ -83,7 +91,8 @@ const Index = () => {
             min={1000}
             max={500000000}
             step={1000}
-            prefix="₹"
+            currency={currency}
+            formatValue={true}
             isLocked={finalValue === 0}
             lockDirection="decrement"
           />
@@ -95,7 +104,8 @@ const Index = () => {
             min={100}
             max={1000000}
             step={100}
-            prefix="₹"
+            currency={currency}
+            formatValue={true}
             dynamicMax={maxMonthlyWithdrawal}
             isLocked={finalValue === 0}
             lockDirection="increment"

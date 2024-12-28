@@ -6,9 +6,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ChevronDown } from "lucide-react";
 
-export type CurrencyType = "INR" | "USD" | "EUR";
+export type CurrencyType = "INR" | "USD" | "EUR" | "JPY" | "GBP" | "CNY" | "AUD" | "CAD" | "CHF" | "HKD" | "SGD";
 
 interface CurrencySelectorProps {
   value: CurrencyType;
@@ -21,12 +20,19 @@ const CurrencySelector = ({ value, onChange }: CurrencySelectorProps) => {
       <Select value={value} onValueChange={onChange}>
         <SelectTrigger className="w-[100px]">
           <SelectValue />
-          <ChevronDown className="h-4 w-4 opacity-50" />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="bg-white">
           <SelectItem value="INR">INR</SelectItem>
           <SelectItem value="USD">USD</SelectItem>
           <SelectItem value="EUR">EUR</SelectItem>
+          <SelectItem value="JPY">JPY</SelectItem>
+          <SelectItem value="GBP">GBP</SelectItem>
+          <SelectItem value="CNY">CNY</SelectItem>
+          <SelectItem value="AUD">AUD</SelectItem>
+          <SelectItem value="CAD">CAD</SelectItem>
+          <SelectItem value="CHF">CHF</SelectItem>
+          <SelectItem value="HKD">HKD</SelectItem>
+          <SelectItem value="SGD">SGD</SelectItem>
         </SelectContent>
       </Select>
     </div>
