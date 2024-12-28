@@ -26,6 +26,12 @@ const formatNumberByCurrency = (value: number, currency: CurrencyType): string =
   return value.toLocaleString();
 };
 
+const getMaxLength = (label: string): number => {
+  if (label.includes("Expected return rate")) return 2;
+  if (label.includes("Time period")) return 2;
+  return 12; // For monetary inputs
+};
+
 const SliderInput = ({
   label,
   value,
@@ -43,6 +49,7 @@ const SliderInput = ({
 }: SliderInputProps) => {
   const [inputValue, setInputValue] = useState(value.toString());
   const effectiveMax = dynamicMax !== undefined ? dynamicMax : max;
+  const maxLength = getMaxLength(label);
 
   useEffect(() => {
     if (formatValue && currency) {
@@ -136,7 +143,7 @@ const SliderInput = ({
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <label className="text-lg text-gray-700">{label}</label>
-        <div className="bg-secondary px-4 py-2 rounded-lg flex items-center gap-0 w-fit">
+        <div className="bg-secondary px-4 py-2 rounded-lg inline-flex items-center gap-0">
           {currency ? (
             <span className="text-xl font-semibold text-primary shrink-0">{getCurrencySymbol(currency)}</span>
           ) : (
@@ -151,11 +158,12 @@ const SliderInput = ({
             onBlur={handleInputBlur}
             min={min}
             max={effectiveMax}
+            maxLength={maxLength}
             className="text-xl font-semibold text-primary bg-transparent border-none focus-visible:ring-0 p-0 text-right"
             style={{
               width: `${Math.max(60, inputValue.length * 12)}px`,
               minWidth: '60px',
-              maxWidth: '300px'
+              maxWidth: '200px'
             }}
           />
           {suffix && <span className="text-xl font-semibold text-primary shrink-0 ml-1">{suffix}</span>}
