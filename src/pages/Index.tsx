@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import SliderInput from "@/components/SliderInput";
+import SliderInput from "@/components/slider/SliderInput";
 import ResultCard from "@/components/ResultCard";
 import CurrencySelector, { CurrencyType } from "@/components/CurrencySelector";
 
@@ -95,6 +95,7 @@ const Index = () => {
             formatValue={true}
             isLocked={finalValue === 0}
             lockDirection="decrement"
+            maxLength={12}
           />
 
           <SliderInput
@@ -109,6 +110,7 @@ const Index = () => {
             dynamicMax={maxMonthlyWithdrawal}
             isLocked={finalValue === 0}
             lockDirection="increment"
+            maxLength={10}
           />
 
           <SliderInput
@@ -121,6 +123,7 @@ const Index = () => {
             suffix="%"
             isLocked={finalValue === 0}
             lockDirection="decrement"
+            maxLength={2}
           />
 
           <SliderInput
@@ -133,6 +136,7 @@ const Index = () => {
             suffix=" Yr"
             isLocked={finalValue === 0}
             lockDirection="increment"
+            maxLength={2}
           />
         </div>
 
@@ -142,6 +146,18 @@ const Index = () => {
           finalValue={finalValue}
           currency={currency}
         />
+
+        <footer className="text-center text-sm text-gray-600 pb-4">
+          Made with ❤️ by{" "}
+          <a 
+            href="https://mutualfundjournal.in/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-primary hover:underline"
+          >
+            Mutual Fund Journal
+          </a>
+        </footer>
       </div>
     </div>
   );
