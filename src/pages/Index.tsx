@@ -9,15 +9,10 @@ const Index = () => {
   const [returnRate, setReturnRate] = useState(13);
   const [timePeriod, setTimePeriod] = useState(10);
   const [finalValue, setFinalValue] = useState(0);
-  const [currency, setCurrency] = useState<CurrencyType>("INR");
-
-  // Initialize currency from localStorage after mount
-  useEffect(() => {
+  const [currency, setCurrency] = useState<CurrencyType>(() => {
     const savedCurrency = localStorage.getItem("selectedCurrency");
-    if (savedCurrency) {
-      setCurrency(savedCurrency as CurrencyType);
-    }
-  }, []);
+    return (savedCurrency as CurrencyType) || "INR";
+  });
 
   // Save currency selection to localStorage
   useEffect(() => {

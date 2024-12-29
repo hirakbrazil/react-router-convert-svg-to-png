@@ -19,8 +19,4 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  ssr: {
-    target: 'node',
-    format: 'cjs'
-  }
 }));
