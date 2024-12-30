@@ -25,7 +25,7 @@ const Index = () => {
 
   // Calculate withdrawal percentage whenever total investment or monthly withdrawal changes
   useEffect(() => {
-    const percentage = (monthlyWithdrawal * 12 / totalInvestment) * 100;
+    const percentage = (monthlyWithdrawal / totalInvestment) * 100;
     // Format to handle small decimals properly (up to 3 decimal places)
     setWithdrawalPercentage(Number(percentage.toFixed(3)));
   }, [totalInvestment, monthlyWithdrawal]);
