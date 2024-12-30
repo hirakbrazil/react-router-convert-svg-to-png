@@ -121,7 +121,7 @@ const Index = () => {
               lockDirection="increment"
               maxLength={10}
             />
-            <p className="text-sm text-gray-600 ml-1">{withdrawalPercentage}% of Total investment</p>
+            <p className="text-base text-gray-600 ml-1">{withdrawalPercentage}% of Total investment</p>
           </div>
 
           <SliderInput
