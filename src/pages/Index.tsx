@@ -20,22 +20,27 @@ const Index = () => {
     localStorage.setItem("selectedCurrency", currency);
   }, [currency]);
 
+  // Calculate minimum monthly withdrawal (0.1% of total investment)
+  const minMonthlyWithdrawal = Math.max(100, Math.round(totalInvestment * 0.001));
+
   // Calculate maximum monthly withdrawal (total investment / 12)
   const maxMonthlyWithdrawal = Math.floor(totalInvestment / 12);
 
   // Calculate withdrawal percentage whenever total investment or monthly withdrawal changes
   useEffect(() => {
-    const percentage = (monthlyWithdrawal / totalInvestment) * 100;
+    const percentage = (monthlyWithdrawal * 12 / totalInvestment) * 100;
     // Format to handle small decimals properly (up to 3 decimal places)
     setWithdrawalPercentage(Number(percentage.toFixed(3)));
   }, [totalInvestment, monthlyWithdrawal]);
 
-  // Ensure monthly withdrawal doesn't exceed the maximum
+  // Ensure monthly withdrawal stays within bounds when total investment changes
   useEffect(() => {
-    if (monthlyWithdrawal > maxMonthlyWithdrawal) {
+    if (monthlyWithdrawal < minMonthlyWithdrawal) {
+      setMonthlyWithdrawal(minMonthlyWithdrawal);
+    } else if (monthlyWithdrawal > maxMonthlyWithdrawal) {
       setMonthlyWithdrawal(maxMonthlyWithdrawal);
     }
-  }, [totalInvestment, maxMonthlyWithdrawal]);
+  }, [totalInvestment, minMonthlyWithdrawal, maxMonthlyWithdrawal]);
 
   const calculateSWP = () => {
     const n = 12; // 12 months in a year
@@ -111,7 +116,7 @@ const Index = () => {
               label="Withdrawal per month"
               value={monthlyWithdrawal}
               onChange={handleMonthlyWithdrawalChange}
-              min={100}
+              min={minMonthlyWithdrawal}
               max={1000000}
               step={100}
               currency={currency}
