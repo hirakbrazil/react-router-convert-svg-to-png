@@ -6,6 +6,7 @@ import CurrencySelector, { CurrencyType } from "@/components/CurrencySelector";
 const Index = () => {
   const [totalInvestment, setTotalInvestment] = useState(500000);
   const [monthlyWithdrawal, setMonthlyWithdrawal] = useState(5000);
+  const [withdrawalPercentage, setWithdrawalPercentage] = useState(1);
   const [returnRate, setReturnRate] = useState(13);
   const [timePeriod, setTimePeriod] = useState(10);
   const [finalValue, setFinalValue] = useState(0);
@@ -21,6 +22,20 @@ const Index = () => {
 
   // Calculate maximum monthly withdrawal (total investment / 12)
   const maxMonthlyWithdrawal = Math.floor(totalInvestment / 12);
+
+  // Update percentage when monthly withdrawal changes
+  useEffect(() => {
+    const newPercentage = (monthlyWithdrawal * 100) / totalInvestment;
+    setWithdrawalPercentage(Number(newPercentage.toFixed(1)));
+  }, [monthlyWithdrawal, totalInvestment]);
+
+  // Update monthly withdrawal when percentage changes
+  useEffect(() => {
+    const newMonthlyWithdrawal = Math.floor((totalInvestment * withdrawalPercentage) / 100);
+    if (newMonthlyWithdrawal !== monthlyWithdrawal) {
+      setMonthlyWithdrawal(Math.min(newMonthlyWithdrawal, maxMonthlyWithdrawal));
+    }
+  }, [withdrawalPercentage, totalInvestment]);
 
   // Ensure monthly withdrawal doesn't exceed the maximum
   useEffect(() => {
@@ -58,6 +73,11 @@ const Index = () => {
   const handleMonthlyWithdrawalChange = (value: number) => {
     if (finalValue === 0 && value > monthlyWithdrawal) return;
     setMonthlyWithdrawal(value);
+  };
+
+  const handleWithdrawalPercentageChange = (value: number) => {
+    if (finalValue === 0 && value > withdrawalPercentage) return;
+    setWithdrawalPercentage(value);
   };
 
   const handleReturnRateChange = (value: number) => {
@@ -98,20 +118,35 @@ const Index = () => {
             maxLength={12}
           />
 
-          <SliderInput
-            label="Withdrawal per month"
-            value={monthlyWithdrawal}
-            onChange={handleMonthlyWithdrawalChange}
-            min={100}
-            max={1000000}
-            step={100}
-            currency={currency}
-            formatValue={true}
-            dynamicMax={maxMonthlyWithdrawal}
-            isLocked={finalValue === 0}
-            lockDirection="increment"
-            maxLength={10}
-          />
+          <div className="space-y-2">
+            <SliderInput
+              label="Withdrawal per month"
+              value={monthlyWithdrawal}
+              onChange={handleMonthlyWithdrawalChange}
+              min={100}
+              max={1000000}
+              step={100}
+              currency={currency}
+              formatValue={true}
+              dynamicMax={maxMonthlyWithdrawal}
+              isLocked={finalValue === 0}
+              lockDirection="increment"
+              maxLength={10}
+            />
+
+            <SliderInput
+              label="or Withdrawal percentage"
+              value={withdrawalPercentage}
+              onChange={handleWithdrawalPercentageChange}
+              min={0.1}
+              max={100}
+              step={0.1}
+              suffix="%"
+              isLocked={finalValue === 0}
+              lockDirection="increment"
+              maxLength={2}
+            />
+          </div>
 
           <SliderInput
             label="Expected return rate (p.a)"
