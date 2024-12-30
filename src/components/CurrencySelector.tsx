@@ -16,7 +16,7 @@ interface CurrencySelectorProps {
 
 const CurrencySelector = ({ value, onChange }: CurrencySelectorProps) => {
   return (
-    <div className="flex items-center justify-center mt-[15px] mb-6">
+    <div className="flex items-center justify-center mt-5 mb-6">
       <Select value={value} onValueChange={onChange}>
         <SelectTrigger className="w-[100px]">
           <SelectValue />
