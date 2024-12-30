@@ -9,6 +9,7 @@ const Index = () => {
   const [returnRate, setReturnRate] = useState(13);
   const [timePeriod, setTimePeriod] = useState(10);
   const [finalValue, setFinalValue] = useState(0);
+  const [withdrawalPercentage, setWithdrawalPercentage] = useState(1);
   const [currency, setCurrency] = useState<CurrencyType>(() => {
     const savedCurrency = localStorage.getItem("selectedCurrency");
     return (savedCurrency as CurrencyType) || "INR";
@@ -21,6 +22,12 @@ const Index = () => {
 
   // Calculate maximum monthly withdrawal (total investment / 12)
   const maxMonthlyWithdrawal = Math.floor(totalInvestment / 12);
+
+  // Calculate withdrawal percentage whenever total investment or monthly withdrawal changes
+  useEffect(() => {
+    const percentage = (monthlyWithdrawal * 12 / totalInvestment) * 100;
+    setWithdrawalPercentage(Number(percentage.toFixed(1)));
+  }, [totalInvestment, monthlyWithdrawal]);
 
   // Ensure monthly withdrawal doesn't exceed the maximum
   useEffect(() => {
@@ -98,20 +105,23 @@ const Index = () => {
             maxLength={12}
           />
 
-          <SliderInput
-            label="Withdrawal per month"
-            value={monthlyWithdrawal}
-            onChange={handleMonthlyWithdrawalChange}
-            min={100}
-            max={1000000}
-            step={100}
-            currency={currency}
-            formatValue={true}
-            dynamicMax={maxMonthlyWithdrawal}
-            isLocked={finalValue === 0}
-            lockDirection="increment"
-            maxLength={10}
-          />
+          <div className="space-y-1">
+            <SliderInput
+              label="Withdrawal per month"
+              value={monthlyWithdrawal}
+              onChange={handleMonthlyWithdrawalChange}
+              min={100}
+              max={1000000}
+              step={100}
+              currency={currency}
+              formatValue={true}
+              dynamicMax={maxMonthlyWithdrawal}
+              isLocked={finalValue === 0}
+              lockDirection="increment"
+              maxLength={10}
+            />
+            <p className="text-sm text-gray-600 ml-1">{withdrawalPercentage}% of Total investment</p>
+          </div>
 
           <SliderInput
             label="Expected return rate (p.a)"
