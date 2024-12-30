@@ -1,31 +1,63 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import SliderInput from "@/components/slider/SliderInput";
 import ResultCard from "@/components/ResultCard";
-import CurrencySelector from "@/components/CurrencySelector";
-import WithdrawalInput from "@/components/WithdrawalInput";
-import { useSwpCalculator } from "@/hooks/useSwpCalculator";
+import CurrencySelector, { CurrencyType } from "@/components/CurrencySelector";
 
 const Index = () => {
-  const {
-    totalInvestment,
-    setTotalInvestment,
-    monthlyWithdrawal,
-    setMonthlyWithdrawal,
-    withdrawalPercentage,
-    setWithdrawalPercentage,
-    returnRate,
-    setReturnRate,
-    timePeriod,
-    setTimePeriod,
-    finalValue,
-    currency,
-    setCurrency,
-    maxMonthlyWithdrawal
-  } = useSwpCalculator();
+  const [totalInvestment, setTotalInvestment] = useState(500000);
+  const [monthlyWithdrawal, setMonthlyWithdrawal] = useState(5000);
+  const [returnRate, setReturnRate] = useState(13);
+  const [timePeriod, setTimePeriod] = useState(10);
+  const [finalValue, setFinalValue] = useState(0);
+  const [currency, setCurrency] = useState<CurrencyType>(() => {
+    const savedCurrency = localStorage.getItem("selectedCurrency");
+    return (savedCurrency as CurrencyType) || "INR";
+  });
 
+  // Save currency selection to localStorage
+  useEffect(() => {
+    localStorage.setItem("selectedCurrency", currency);
+  }, [currency]);
+
+  // Calculate maximum monthly withdrawal (total investment / 12)
+  const maxMonthlyWithdrawal = Math.floor(totalInvestment / 12);
+
+  // Ensure monthly withdrawal doesn't exceed the maximum
+  useEffect(() => {
+    if (monthlyWithdrawal > maxMonthlyWithdrawal) {
+      setMonthlyWithdrawal(maxMonthlyWithdrawal);
+    }
+  }, [totalInvestment, maxMonthlyWithdrawal]);
+
+  const calculateSWP = () => {
+    const n = 12; // 12 months in a year
+    const r = returnRate / (n * 100); // Monthly return rate
+    const t = timePeriod; // Number of years
+
+    // Future Value Calculation using the compound interest formula with monthly withdrawals
+    let result = Math.round(
+      (totalInvestment * Math.pow((1 + returnRate / 100), t)) -
+      (monthlyWithdrawal * (Math.pow((1 + (Math.pow((1 + returnRate / 100), (1 / n)) - 1)), (t * n)) - 1) /
+        (Math.pow((1 + returnRate / 100), (1 / n)) - 1))
+    );
+
+    return Math.max(0, result);
+  };
+
+  useEffect(() => {
+    const result = calculateSWP();
+    setFinalValue(result);
+  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod]);
+
+  // Handle value changes with locking logic
   const handleTotalInvestmentChange = (value: number) => {
     if (finalValue === 0 && value < totalInvestment) return;
     setTotalInvestment(value);
+  };
+
+  const handleMonthlyWithdrawalChange = (value: number) => {
+    if (finalValue === 0 && value > monthlyWithdrawal) return;
+    setMonthlyWithdrawal(value);
   };
 
   const handleReturnRateChange = (value: number) => {
@@ -66,16 +98,19 @@ const Index = () => {
             maxLength={12}
           />
 
-          <WithdrawalInput
+          <SliderInput
             label="Withdrawal per month"
             value={monthlyWithdrawal}
-            percentage={withdrawalPercentage}
-            onChange={setMonthlyWithdrawal}
-            onPercentageChange={setWithdrawalPercentage}
+            onChange={handleMonthlyWithdrawalChange}
             min={100}
-            max={maxMonthlyWithdrawal}
+            max={1000000}
+            step={100}
             currency={currency}
+            formatValue={true}
+            dynamicMax={maxMonthlyWithdrawal}
             isLocked={finalValue === 0}
+            lockDirection="increment"
+            maxLength={10}
           />
 
           <SliderInput
