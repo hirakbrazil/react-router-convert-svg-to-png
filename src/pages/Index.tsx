@@ -3,8 +3,16 @@ import SliderInput from "@/components/slider/SliderInput";
 import ResultCard from "@/components/ResultCard";
 import CurrencySelector, { CurrencyType } from "@/components/CurrencySelector";
 import { Button } from "@/components/ui/button";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, Sun, Moon, Monitor } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+type Theme = 'light' | 'dark' | 'system';
 
 const Index = () => {
   const [totalInvestment, setTotalInvestment] = useState(500000);
@@ -13,6 +21,10 @@ const Index = () => {
   const [timePeriod, setTimePeriod] = useState(10);
   const [finalValue, setFinalValue] = useState(0);
   const [withdrawalPercentage, setWithdrawalPercentage] = useState(1);
+  const [theme, setTheme] = useState<Theme>(() => {
+    const savedTheme = localStorage.getItem("theme") as Theme;
+    return savedTheme || "system";
+  });
   const [currency, setCurrency] = useState<CurrencyType>(() => {
     const savedCurrency = localStorage.getItem("selectedCurrency");
     return (savedCurrency as CurrencyType) || "INR";
@@ -22,6 +34,21 @@ const Index = () => {
   useEffect(() => {
     localStorage.setItem("selectedCurrency", currency);
   }, [currency]);
+
+  // Save and apply theme
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+    
+    const root = window.document.documentElement;
+    root.classList.remove('light', 'dark');
+
+    if (theme === 'system') {
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      root.classList.add(systemTheme);
+    } else {
+      root.classList.add(theme);
+    }
+  }, [theme]);
 
   // Calculate minimum monthly withdrawal (0.1% of total investment)
   const minMonthlyWithdrawal = Math.max(100, Math.round(totalInvestment * 0.001));
@@ -71,7 +98,6 @@ const Index = () => {
     setReturnRate(13);
     setTimePeriod(10);
     
-    // Show toast without progress bar
     toast({
       title: "Reset Complete",
       description: "All values reset to default",
@@ -79,20 +105,31 @@ const Index = () => {
     });
   };
 
+  const getThemeIcon = () => {
+    switch (theme) {
+      case 'light':
+        return <Sun className="h-4 w-4" />;
+      case 'dark':
+        return <Moon className="h-4 w-4" />;
+      default:
+        return <Monitor className="h-4 w-4" />;
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto space-y-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+          <h1 className="text-3xl font-bold text-foreground sm:text-4xl">
             SWP Calculator
           </h1>
-          <p className="mt-2 text-gray-600">
+          <p className="mt-2 text-muted-foreground">
             Calculate your Systematic Withdrawal Plan
           </p>
           <CurrencySelector value={currency} onChange={setCurrency} />
         </div>
 
-        <div className="bg-white rounded-xl shadow-lg p-6 space-y-6">
+        <div className="bg-card rounded-xl shadow-lg p-6 space-y-6">
           <SliderInput
             label="Total investment"
             value={totalInvestment}
@@ -103,6 +140,8 @@ const Index = () => {
             currency={currency}
             formatValue={true}
             maxLength={12}
+            isLocked={finalValue === 0}
+            lockDirection="decrement"
           />
 
           <div className="space-y-1">
@@ -117,8 +156,10 @@ const Index = () => {
               formatValue={true}
               dynamicMax={maxMonthlyWithdrawal}
               maxLength={10}
+              isLocked={finalValue === 0}
+              lockDirection="increment"
             />
-            <p className="text-base text-gray-600 ml-1">{withdrawalPercentage}% of Total investment</p>
+            <p className="text-base text-muted-foreground ml-1">{withdrawalPercentage}% of Total investment</p>
           </div>
 
           <SliderInput
@@ -130,6 +171,8 @@ const Index = () => {
             step={0.1}
             suffix="%"
             maxLength={2}
+            isLocked={finalValue === 0}
+            lockDirection="decrement"
           />
 
           <SliderInput
@@ -141,6 +184,8 @@ const Index = () => {
             step={1}
             suffix=" Yr"
             maxLength={2}
+            isLocked={finalValue === 0}
+            lockDirection="decrement"
           />
         </div>
 
@@ -162,7 +207,31 @@ const Index = () => {
           </Button>
         </div>
 
-        <footer className="text-center text-sm text-gray-600 pb-4">
+        <div className="flex justify-center">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon">
+                {getThemeIcon()}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setTheme('light')}>
+                <Sun className="h-4 w-4 mr-2" />
+                Light
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme('dark')}>
+                <Moon className="h-4 w-4 mr-2" />
+                Dark
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme('system')}>
+                <Monitor className="h-4 w-4 mr-2" />
+                System
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        <footer className="text-center text-sm text-muted-foreground pb-4">
           Made with ❤️ by{" "}
           <a 
             href="https://mutualfundjournal.in/" 
