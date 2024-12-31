@@ -10,7 +10,6 @@ export interface SliderInputProps {
   prefix?: string;
   suffix?: string;
   dynamicMax?: number;
-  dynamicMin?: number;
   isLocked?: boolean;
   lockDirection?: 'increment' | 'decrement';
   currency?: CurrencyType;

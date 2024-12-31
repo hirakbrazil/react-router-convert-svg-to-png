@@ -26,83 +26,42 @@ const Index = () => {
   // Calculate minimum monthly withdrawal (0.1% of total investment)
   const minMonthlyWithdrawal = Math.max(100, Math.round(totalInvestment * 0.001));
 
-  // Calculate maximum monthly withdrawal based on when final value would reach zero
-  const calculateMaxWithdrawal = () => {
-    let left = minMonthlyWithdrawal;
-    let right = Math.floor(totalInvestment / 12);
-    
-    while (left < right) {
-      const mid = Math.floor((left + right + 1) / 2);
-      const testValue = calculateFinalValue(totalInvestment, mid, returnRate, timePeriod);
-      
-      if (testValue > 0) {
-        left = mid;
-      } else {
-        right = mid - 1;
-      }
-    }
-    
-    return left;
-  };
-
-  // Calculate maximum time period based on when final value would reach zero
-  const calculateMaxTimePeriod = () => {
-    let left = 1;
-    let right = 50;
-    
-    while (left < right) {
-      const mid = Math.floor((left + right + 1) / 2);
-      const testValue = calculateFinalValue(totalInvestment, monthlyWithdrawal, returnRate, mid);
-      
-      if (testValue > 0) {
-        left = mid;
-      } else {
-        right = mid - 1;
-      }
-    }
-    
-    return left;
-  };
-
-  // Calculate maximum return rate that would keep final value above zero
-  const calculateMinReturnRate = () => {
-    let left = 1;
-    let right = returnRate;
-    
-    while (left < right) {
-      const mid = (left + right + 1) / 2;
-      const testValue = calculateFinalValue(totalInvestment, monthlyWithdrawal, mid, timePeriod);
-      
-      if (testValue > 0) {
-        left = mid;
-      } else {
-        right = mid - 1;
-      }
-    }
-    
-    return left;
-  };
+  // Calculate maximum monthly withdrawal (total investment / 12)
+  const maxMonthlyWithdrawal = Math.floor(totalInvestment / 12);
 
   // Calculate withdrawal percentage whenever total investment or monthly withdrawal changes
   useEffect(() => {
     const percentage = (monthlyWithdrawal / totalInvestment) * 100;
+    // Format to handle small decimals properly (up to 3 decimal places)
     setWithdrawalPercentage(Number(percentage.toFixed(3)));
   }, [totalInvestment, monthlyWithdrawal]);
 
-  const calculateFinalValue = (principal: number, withdrawal: number, rate: number, years: number) => {
-    const n = 12; // 12 months in a year
-    const r = rate / (n * 100); // Monthly return rate
-    const t = years; // Number of years
+  // Ensure monthly withdrawal stays within bounds when total investment changes
+  useEffect(() => {
+    if (monthlyWithdrawal < minMonthlyWithdrawal) {
+      setMonthlyWithdrawal(minMonthlyWithdrawal);
+    } else if (monthlyWithdrawal > maxMonthlyWithdrawal) {
+      setMonthlyWithdrawal(maxMonthlyWithdrawal);
+    }
+  }, [totalInvestment, minMonthlyWithdrawal, maxMonthlyWithdrawal]);
 
-    return Math.round(
-      (principal * Math.pow((1 + rate / 100), t)) -
-      (withdrawal * (Math.pow((1 + (Math.pow((1 + rate / 100), (1 / n)) - 1)), (t * n)) - 1) /
-        (Math.pow((1 + rate / 100), (1 / n)) - 1))
+  const calculateSWP = () => {
+    const n = 12; // 12 months in a year
+    const r = returnRate / (n * 100); // Monthly return rate
+    const t = timePeriod; // Number of years
+
+    // Future Value Calculation using the compound interest formula with monthly withdrawals
+    let result = Math.round(
+      (totalInvestment * Math.pow((1 + returnRate / 100), t)) -
+      (monthlyWithdrawal * (Math.pow((1 + (Math.pow((1 + returnRate / 100), (1 / n)) - 1)), (t * n)) - 1) /
+        (Math.pow((1 + returnRate / 100), (1 / n)) - 1))
     );
+
+    return Math.max(0, result);
   };
 
   useEffect(() => {
-    const result = calculateFinalValue(totalInvestment, monthlyWithdrawal, returnRate, timePeriod);
+    const result = calculateSWP();
     setFinalValue(result);
   }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod]);
 
@@ -112,17 +71,13 @@ const Index = () => {
     setReturnRate(13);
     setTimePeriod(10);
     
+    // Show toast without progress bar
     toast({
       title: "Reset Complete",
       description: "All values reset to default",
       duration: 5000,
     });
   };
-
-  // Calculate dynamic constraints
-  const maxWithdrawal = calculateMaxWithdrawal();
-  const maxTime = calculateMaxTimePeriod();
-  const minRate = calculateMinReturnRate();
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -157,12 +112,10 @@ const Index = () => {
               onChange={setMonthlyWithdrawal}
               min={minMonthlyWithdrawal}
               max={1000000}
-              dynamicMax={maxWithdrawal}
               step={100}
               currency={currency}
               formatValue={true}
-              isLocked={finalValue <= 0}
-              lockDirection="increment"
+              dynamicMax={maxMonthlyWithdrawal}
               maxLength={10}
             />
             <p className="text-base text-gray-600 ml-1">{withdrawalPercentage}% of Total investment</p>
@@ -174,11 +127,8 @@ const Index = () => {
             onChange={setReturnRate}
             min={1}
             max={50}
-            dynamicMin={minRate}
             step={0.1}
             suffix="%"
-            isLocked={finalValue <= 0}
-            lockDirection="decrement"
             maxLength={2}
           />
 
@@ -188,11 +138,8 @@ const Index = () => {
             onChange={setTimePeriod}
             min={1}
             max={50}
-            dynamicMax={maxTime}
             step={1}
             suffix=" Yr"
-            isLocked={finalValue <= 0}
-            lockDirection="increment"
             maxLength={2}
           />
         </div>
