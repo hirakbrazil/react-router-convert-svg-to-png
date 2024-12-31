@@ -5,7 +5,6 @@ import CurrencySelector, { CurrencyType } from "@/components/CurrencySelector";
 import { Button } from "@/components/ui/button";
 import { RefreshCw } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
-import { Progress } from "@/components/ui/progress";
 
 const Index = () => {
   const [totalInvestment, setTotalInvestment] = useState(500000);
@@ -32,7 +31,7 @@ const Index = () => {
 
   // Calculate withdrawal percentage whenever total investment or monthly withdrawal changes
   useEffect(() => {
-    const percentage = (monthlyWithdrawal * 12 / totalInvestment) * 100;
+    const percentage = (monthlyWithdrawal / totalInvestment) * 100;
     // Format to handle small decimals properly (up to 3 decimal places)
     setWithdrawalPercentage(Number(percentage.toFixed(3)));
   }, [totalInvestment, monthlyWithdrawal]);
@@ -72,15 +71,10 @@ const Index = () => {
     setReturnRate(13);
     setTimePeriod(10);
     
-    // Show toast with progress
+    // Show toast without progress bar
     toast({
       title: "Reset Complete",
-      description: (
-        <div className="space-y-2">
-          <p>All values reset to default</p>
-          <Progress value={100} className="h-2 transition-all duration-5000" />
-        </div>
-      ),
+      description: "All values reset to default",
       duration: 5000,
     });
   };
