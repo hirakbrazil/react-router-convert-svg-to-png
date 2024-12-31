@@ -39,22 +39,22 @@ const ResultCard = ({
   currency,
 }: ResultCardProps) => {
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 space-y-4">
+    <div className="bg-card dark:bg-card rounded-xl shadow-lg p-6 space-y-4">
       <div className="flex justify-between items-center">
-        <span className="text-gray-600">Total investment</span>
-        <span className="text-xl font-semibold">
+        <span className="text-gray-600 dark:text-gray-400">Total investment</span>
+        <span className="text-xl font-semibold text-foreground">
           {formatCurrency(totalInvestment, currency)}
         </span>
       </div>
       <div className="flex justify-between items-center">
-        <span className="text-gray-600">Total withdrawal</span>
-        <span className="text-xl font-semibold">
+        <span className="text-gray-600 dark:text-gray-400">Total withdrawal</span>
+        <span className="text-xl font-semibold text-foreground">
           {formatCurrency(totalWithdrawal, currency)}
         </span>
       </div>
       <div className="flex justify-between items-center">
-        <span className="text-gray-600">Final value</span>
-        <span className="text-xl font-semibold">
+        <span className="text-gray-600 dark:text-gray-400">Final value</span>
+        <span className={`text-xl font-semibold ${finalValue < 0 ? 'text-red-500 dark:text-red-400' : 'text-foreground'}`}>
           {formatCurrency(finalValue, currency)}
         </span>
       </div>
