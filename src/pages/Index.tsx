@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import SliderInput from "@/components/slider/SliderInput";
 import ResultCard from "@/components/ResultCard";
 import CurrencySelector, { CurrencyType } from "@/components/CurrencySelector";
+import { Button } from "@/components/ui/button";
+import { RefreshCw } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+import { Progress } from "@/components/ui/progress";
 
 const Index = () => {
   const [totalInvestment, setTotalInvestment] = useState(500000);
@@ -28,7 +32,7 @@ const Index = () => {
 
   // Calculate withdrawal percentage whenever total investment or monthly withdrawal changes
   useEffect(() => {
-    const percentage = (monthlyWithdrawal / totalInvestment) * 100;
+    const percentage = (monthlyWithdrawal * 12 / totalInvestment) * 100;
     // Format to handle small decimals properly (up to 3 decimal places)
     setWithdrawalPercentage(Number(percentage.toFixed(3)));
   }, [totalInvestment, monthlyWithdrawal]);
@@ -62,25 +66,23 @@ const Index = () => {
     setFinalValue(result);
   }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod]);
 
-  // Handle value changes with locking logic
-  const handleTotalInvestmentChange = (value: number) => {
-    if (finalValue === 0 && value < totalInvestment) return;
-    setTotalInvestment(value);
-  };
-
-  const handleMonthlyWithdrawalChange = (value: number) => {
-    if (finalValue === 0 && value > monthlyWithdrawal) return;
-    setMonthlyWithdrawal(value);
-  };
-
-  const handleReturnRateChange = (value: number) => {
-    if (finalValue === 0 && value < returnRate) return;
-    setReturnRate(value);
-  };
-
-  const handleTimePeriodChange = (value: number) => {
-    if (finalValue === 0 && value > timePeriod) return;
-    setTimePeriod(value);
+  const handleReset = () => {
+    setTotalInvestment(500000);
+    setMonthlyWithdrawal(5000);
+    setReturnRate(13);
+    setTimePeriod(10);
+    
+    // Show toast with progress
+    toast({
+      title: "Reset Complete",
+      description: (
+        <div className="space-y-2">
+          <p>All values reset to default</p>
+          <Progress value={100} className="h-2 transition-all duration-5000" />
+        </div>
+      ),
+      duration: 5000,
+    });
   };
 
   return (
@@ -100,14 +102,12 @@ const Index = () => {
           <SliderInput
             label="Total investment"
             value={totalInvestment}
-            onChange={handleTotalInvestmentChange}
+            onChange={setTotalInvestment}
             min={1000}
             max={500000000}
             step={1000}
             currency={currency}
             formatValue={true}
-            isLocked={finalValue === 0}
-            lockDirection="decrement"
             maxLength={12}
           />
 
@@ -115,15 +115,13 @@ const Index = () => {
             <SliderInput
               label="Withdrawal per month"
               value={monthlyWithdrawal}
-              onChange={handleMonthlyWithdrawalChange}
+              onChange={setMonthlyWithdrawal}
               min={minMonthlyWithdrawal}
               max={1000000}
               step={100}
               currency={currency}
               formatValue={true}
               dynamicMax={maxMonthlyWithdrawal}
-              isLocked={finalValue === 0}
-              lockDirection="increment"
               maxLength={10}
             />
             <p className="text-base text-gray-600 ml-1">{withdrawalPercentage}% of Total investment</p>
@@ -132,26 +130,22 @@ const Index = () => {
           <SliderInput
             label="Expected return rate (p.a)"
             value={returnRate}
-            onChange={handleReturnRateChange}
+            onChange={setReturnRate}
             min={1}
             max={50}
             step={0.1}
             suffix="%"
-            isLocked={finalValue === 0}
-            lockDirection="decrement"
             maxLength={2}
           />
 
           <SliderInput
             label="Time period"
             value={timePeriod}
-            onChange={handleTimePeriodChange}
+            onChange={setTimePeriod}
             min={1}
             max={50}
             step={1}
             suffix=" Yr"
-            isLocked={finalValue === 0}
-            lockDirection="increment"
             maxLength={2}
           />
         </div>
@@ -162,6 +156,17 @@ const Index = () => {
           finalValue={finalValue}
           currency={currency}
         />
+
+        <div className="flex justify-center">
+          <Button
+            onClick={handleReset}
+            variant="outline"
+            className="gap-2"
+          >
+            <RefreshCw className="h-4 w-4" />
+            Reset
+          </Button>
+        </div>
 
         <footer className="text-center text-sm text-gray-600 pb-4">
           Made with ❤️ by{" "}
