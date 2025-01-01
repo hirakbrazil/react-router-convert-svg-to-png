@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SliderInput from "@/components/slider/SliderInput";
 import { CurrencyType } from "@/components/CurrencySelector";
 
@@ -27,6 +27,13 @@ const CalculatorForm = ({
   withdrawalPercentage,
   currency,
 }: CalculatorFormProps) => {
+  // Effect to update monthly withdrawal when total investment changes
+  useEffect(() => {
+    if (monthlyWithdrawal > totalInvestment) {
+      setMonthlyWithdrawal(totalInvestment);
+    }
+  }, [totalInvestment, monthlyWithdrawal, setMonthlyWithdrawal]);
+
   return (
     <div className="bg-card dark:bg-card rounded-xl shadow-lg p-6 space-y-6">
       <SliderInput
@@ -38,7 +45,6 @@ const CalculatorForm = ({
         step={1000}
         currency={currency}
         formatValue={true}
-        maxLength={12}
       />
 
       <div className="space-y-1">
@@ -51,9 +57,8 @@ const CalculatorForm = ({
           step={100}
           currency={currency}
           formatValue={true}
-          maxLength={10}
         />
-        <p className="text-base text-muted-foreground ml-1">{withdrawalPercentage}% of Total investment</p>
+        <p className="text-base text-muted-foreground ml-1 dark:text-[#c1cbd6]">{withdrawalPercentage}% of Total investment</p>
       </div>
 
       <SliderInput
@@ -64,7 +69,7 @@ const CalculatorForm = ({
         max={50}
         step={0.1}
         suffix="%"
-        maxLength={2}
+        maxLength={4}
       />
 
       <SliderInput
@@ -75,7 +80,6 @@ const CalculatorForm = ({
         max={50}
         step={1}
         suffix=" Yr"
-        maxLength={2}
       />
     </div>
   );

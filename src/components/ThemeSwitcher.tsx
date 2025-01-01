@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Sun, Moon, Monitor } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "@/hooks/use-toast";
 
 type Theme = 'light' | 'dark' | 'system';
 
@@ -25,8 +26,11 @@ const ThemeSwitcher = () => {
     if (theme === 'system') {
       const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       root.classList.add(systemTheme);
+      toast({
+        title: "Theme Changed",
+        description: "Theme color set to System default",
+      });
 
-      // Only add listener if theme is 'system'
       const darkThemeMq = window.matchMedia('(prefers-color-scheme: dark)');
       const handleThemeChange = (e: MediaQueryListEvent) => {
         root.classList.remove('light', 'dark');
@@ -37,6 +41,10 @@ const ThemeSwitcher = () => {
       return () => darkThemeMq.removeEventListener('change', handleThemeChange);
     } else {
       root.classList.add(theme);
+      toast({
+        title: "Theme Changed",
+        description: `Theme color set to ${theme.charAt(0).toUpperCase() + theme.slice(1)}`,
+      });
     }
   }, [theme]);
 

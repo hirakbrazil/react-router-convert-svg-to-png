@@ -21,7 +21,6 @@ const SliderInput = ({
   maxLength,
 }: SliderInputProps) => {
   const [inputValue, setInputValue] = useState(value.toString());
-  const [currentMaxLength, setCurrentMaxLength] = useState(maxLength);
   const effectiveMax = dynamicMax !== undefined ? dynamicMax : max;
 
   useEffect(() => {
@@ -35,16 +34,6 @@ const SliderInput = ({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value.replace(/,/g, '');
     setInputValue(rawValue);
-    
-    // Update maxLength based on decimal point
-    if (rawValue.includes('.')) {
-      const [beforeDecimal] = rawValue.split('.');
-      if (beforeDecimal.length > 0) {
-        setCurrentMaxLength(beforeDecimal.length + 2); // One for dot, one for decimal
-      }
-    } else {
-      setCurrentMaxLength(maxLength);
-    }
     
     const numValue = parseFloat(rawValue);
     if (!isNaN(numValue)) {
@@ -73,7 +62,6 @@ const SliderInput = ({
       }
       onChange(clampedValue);
     }
-    setCurrentMaxLength(maxLength);
   };
 
   const handleSliderChange = (values: number[]) => {
@@ -89,7 +77,7 @@ const SliderInput = ({
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <label className="text-lg text-gray-700">{label}</label>
+        <label className="text-lg text-gray-700 dark:text-[#c1cbd6]">{label}</label>
         <div className="bg-secondary px-4 py-2 rounded-lg flex items-center gap-0 w-fit">
           {currency ? (
             <span className="text-xl font-semibold text-primary shrink-0">{getCurrencySymbol(currency)}</span>
@@ -105,7 +93,7 @@ const SliderInput = ({
             onBlur={handleInputBlur}
             min={min}
             max={effectiveMax}
-            maxLength={currentMaxLength}
+            maxLength={maxLength}
             className="text-xl font-semibold text-primary bg-transparent border-none focus-visible:ring-0 p-0 text-right"
             style={{
               width: `${Math.max(60, inputValue.length * 12)}px`,
