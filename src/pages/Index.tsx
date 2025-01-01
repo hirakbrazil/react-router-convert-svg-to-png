@@ -8,10 +8,26 @@ import ThemeSwitcher from "@/components/ThemeSwitcher";
 import CalculatorForm from "@/components/CalculatorForm";
 
 const Index = () => {
-  const [totalInvestment, setTotalInvestment] = useState(500000);
-  const [monthlyWithdrawal, setMonthlyWithdrawal] = useState(5000);
-  const [returnRate, setReturnRate] = useState(13);
-  const [timePeriod, setTimePeriod] = useState(10);
+  const [totalInvestment, setTotalInvestment] = useState(() => {
+    const saved = localStorage.getItem("totalInvestment");
+    return saved ? Number(saved) : 500000;
+  });
+  
+  const [monthlyWithdrawal, setMonthlyWithdrawal] = useState(() => {
+    const saved = localStorage.getItem("monthlyWithdrawal");
+    return saved ? Number(saved) : 5000;
+  });
+  
+  const [returnRate, setReturnRate] = useState(() => {
+    const saved = localStorage.getItem("returnRate");
+    return saved ? Number(saved) : 13;
+  });
+  
+  const [timePeriod, setTimePeriod] = useState(() => {
+    const saved = localStorage.getItem("timePeriod");
+    return saved ? Number(saved) : 10;
+  });
+
   const [finalValue, setFinalValue] = useState(0);
   const [withdrawalPercentage, setWithdrawalPercentage] = useState(1);
   const [currency, setCurrency] = useState<CurrencyType>(() => {
@@ -19,10 +35,43 @@ const Index = () => {
     return (savedCurrency as CurrencyType) || "INR";
   });
 
+  // Save inputs to localStorage
+  useEffect(() => {
+    localStorage.setItem("totalInvestment", totalInvestment.toString());
+    localStorage.setItem("monthlyWithdrawal", monthlyWithdrawal.toString());
+    localStorage.setItem("returnRate", returnRate.toString());
+    localStorage.setItem("timePeriod", timePeriod.toString());
+  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod]);
+
   // Save currency selection to localStorage
   useEffect(() => {
     localStorage.setItem("selectedCurrency", currency);
   }, [currency]);
+
+  // Update theme color based on theme
+  useEffect(() => {
+    const updateThemeColor = () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) {
+        meta.setAttribute('content', isDark ? '#000000' : '#07a36c');
+      } else {
+        const newMeta = document.createElement('meta');
+        newMeta.name = 'theme-color';
+        newMeta.content = isDark ? '#000000' : '#07a36c';
+        document.head.appendChild(newMeta);
+      }
+    };
+
+    updateThemeColor();
+    const observer = new MutationObserver(updateThemeColor);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   // Calculate withdrawal percentage whenever total investment or monthly withdrawal changes
   useEffect(() => {
@@ -56,11 +105,34 @@ const Index = () => {
     setReturnRate(13);
     setTimePeriod(10);
     
+    // Clear localStorage
+    localStorage.removeItem("totalInvestment");
+    localStorage.removeItem("monthlyWithdrawal");
+    localStorage.removeItem("returnRate");
+    localStorage.removeItem("timePeriod");
+    
     toast({
       title: "Reset Complete",
       description: "All values reset to default",
       duration: 5000,
     });
+  };
+
+  const handleCurrencyChange = (newCurrency: CurrencyType) => {
+    setCurrency(newCurrency);
+    toast({
+      title: "Currency Changed",
+      description: `Currency switched to ${newCurrency} ${getCurrencySymbol(newCurrency)}`,
+      duration: 5000,
+    });
+  };
+
+  const getCurrencySymbol = (currency: CurrencyType): string => {
+    const symbols: { [key in CurrencyType]: string } = {
+      INR: "₹", USD: "$", EUR: "€", JPY: "¥", GBP: "£",
+      CNY: "¥", AUD: "$", CAD: "$", CHF: "Fr", HKD: "$", SGD: "$"
+    };
+    return symbols[currency];
   };
 
   return (
@@ -73,7 +145,7 @@ const Index = () => {
           <p className="mt-2 text-muted-foreground">
             Calculate your Systematic Withdrawal Plan
           </p>
-          <CurrencySelector value={currency} onChange={setCurrency} />
+          <CurrencySelector value={currency} onChange={handleCurrencyChange} />
         </div>
 
         <CalculatorForm

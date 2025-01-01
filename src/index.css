@@ -60,7 +60,7 @@
 
   .dark {
     .bg-card {
-      background-color: #030a1c !important;
+      background-color: #05153b !important;
     }
     
     .text-gray-600 {
@@ -76,7 +76,7 @@
     }
 
     [role="listbox"] {
-      background-color: #030a1c !important;
+      background-color: #05153b !important;
     }
   }
 }

@@ -21,6 +21,7 @@ const SliderInput = ({
   maxLength,
 }: SliderInputProps) => {
   const [inputValue, setInputValue] = useState(value.toString());
+  const [currentMaxLength, setCurrentMaxLength] = useState(maxLength);
   const effectiveMax = dynamicMax !== undefined ? dynamicMax : max;
 
   useEffect(() => {
@@ -35,13 +36,18 @@ const SliderInput = ({
     const rawValue = e.target.value.replace(/,/g, '');
     setInputValue(rawValue);
     
+    // Update maxLength based on decimal point
+    if (rawValue.includes('.')) {
+      const [beforeDecimal] = rawValue.split('.');
+      if (beforeDecimal.length > 0) {
+        setCurrentMaxLength(beforeDecimal.length + 2); // One for dot, one for decimal
+      }
+    } else {
+      setCurrentMaxLength(maxLength);
+    }
+    
     const numValue = parseFloat(rawValue);
     if (!isNaN(numValue)) {
-      if (isLocked) {
-        if (lockDirection === 'increment' && numValue > value) return;
-        if (lockDirection === 'decrement' && numValue < value) return;
-      }
-      
       if (numValue >= min && numValue <= effectiveMax) {
         onChange(numValue);
       }
@@ -58,17 +64,7 @@ const SliderInput = ({
         setInputValue(value.toString());
       }
     } else {
-      let clampedValue = numValue;
-      
-      if (isLocked) {
-        if (lockDirection === 'increment') {
-          clampedValue = Math.min(value, Math.max(min, numValue));
-        } else if (lockDirection === 'decrement') {
-          clampedValue = Math.max(value, Math.min(effectiveMax, numValue));
-        }
-      } else {
-        clampedValue = Math.min(Math.max(numValue, min), effectiveMax);
-      }
+      let clampedValue = Math.min(Math.max(numValue, min), effectiveMax);
       
       if (formatValue && currency) {
         setInputValue(formatNumberByCurrency(clampedValue, currency));
@@ -77,14 +73,11 @@ const SliderInput = ({
       }
       onChange(clampedValue);
     }
+    setCurrentMaxLength(maxLength);
   };
 
   const handleSliderChange = (values: number[]) => {
     const newValue = values[0];
-    if (isLocked) {
-      if (lockDirection === 'increment' && newValue > value) return;
-      if (lockDirection === 'decrement' && newValue < value) return;
-    }
     onChange(newValue);
     if (formatValue && currency) {
       setInputValue(formatNumberByCurrency(newValue, currency));
@@ -112,7 +105,7 @@ const SliderInput = ({
             onBlur={handleInputBlur}
             min={min}
             max={effectiveMax}
-            maxLength={maxLength}
+            maxLength={currentMaxLength}
             className="text-xl font-semibold text-primary bg-transparent border-none focus-visible:ring-0 p-0 text-right"
             style={{
               width: `${Math.max(60, inputValue.length * 12)}px`,
@@ -129,7 +122,7 @@ const SliderInput = ({
         max={effectiveMax}
         min={min}
         step={step}
-        className={`py-4 ${isLocked ? 'opacity-50' : ''}`}
+        className="py-4"
       />
     </div>
   );
