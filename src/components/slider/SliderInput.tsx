@@ -94,7 +94,7 @@ const SliderInput = ({
             min={min}
             max={effectiveMax}
             maxLength={maxLength}
-            className="text-xl font-semibold text-primary bg-transparent border-none focus:ring-0 focus:outline-none p-0 text-right"
+            className="text-xl font-semibold text-primary bg-transparent border-none border-transparent focus:border-transparent focus:ring-0 p-0 text-right"
             style={{
               width: `${Math.max(60, inputValue.length * 12)}px`,
               minWidth: '60px',
