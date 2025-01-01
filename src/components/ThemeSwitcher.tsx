@@ -6,7 +6,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Sun, Moon, Monitor } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { toast } from "@/hooks/use-toast";
 
 type Theme = 'light' | 'dark' | 'system';
@@ -16,6 +16,7 @@ const ThemeSwitcher = () => {
     const savedTheme = localStorage.getItem("theme") as Theme;
     return savedTheme || "system";
   });
+  const isInitialMount = useRef(true);
 
   useEffect(() => {
     localStorage.setItem("theme", theme);
@@ -26,10 +27,13 @@ const ThemeSwitcher = () => {
     if (theme === 'system') {
       const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       root.classList.add(systemTheme);
-      toast({
-        title: "Theme Changed",
-        description: "Theme color set to System default",
-      });
+      
+      if (!isInitialMount.current) {
+        toast({
+          title: "Theme Changed",
+          description: "Theme color set to System default",
+        });
+      }
 
       const darkThemeMq = window.matchMedia('(prefers-color-scheme: dark)');
       const handleThemeChange = (e: MediaQueryListEvent) => {
@@ -41,11 +45,15 @@ const ThemeSwitcher = () => {
       return () => darkThemeMq.removeEventListener('change', handleThemeChange);
     } else {
       root.classList.add(theme);
-      toast({
-        title: "Theme Changed",
-        description: `Theme color set to ${theme.charAt(0).toUpperCase() + theme.slice(1)}`,
-      });
+      if (!isInitialMount.current) {
+        toast({
+          title: "Theme Changed",
+          description: `Theme color set to ${theme.charAt(0).toUpperCase() + theme.slice(1)}`,
+        });
+      }
     }
+    
+    isInitialMount.current = false;
   }, [theme]);
 
   const getThemeIcon = () => {
