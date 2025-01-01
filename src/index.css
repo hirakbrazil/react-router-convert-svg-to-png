@@ -78,5 +78,9 @@
     [role="listbox"] {
       background-color: #030c21 !important;
     }
+
+    [role="dialog"] {
+      background-color: #030c21 !important;
+    }
   }
 }

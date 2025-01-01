@@ -26,10 +26,6 @@ const ThemeSwitcher = () => {
     if (theme === 'system') {
       const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       root.classList.add(systemTheme);
-      toast({
-        title: "Theme Changed",
-        description: "Theme color set to System default",
-      });
 
       const darkThemeMq = window.matchMedia('(prefers-color-scheme: dark)');
       const handleThemeChange = (e: MediaQueryListEvent) => {
@@ -41,10 +37,6 @@ const ThemeSwitcher = () => {
       return () => darkThemeMq.removeEventListener('change', handleThemeChange);
     } else {
       root.classList.add(theme);
-      toast({
-        title: "Theme Changed",
-        description: `Theme color set to ${theme.charAt(0).toUpperCase() + theme.slice(1)}`,
-      });
     }
   }, [theme]);
 
@@ -59,6 +51,14 @@ const ThemeSwitcher = () => {
     }
   };
 
+  const handleThemeChange = (newTheme: Theme) => {
+    setTheme(newTheme);
+    toast({
+      title: "Theme Changed",
+      description: `Theme color set to ${newTheme === 'system' ? 'System default' : newTheme.charAt(0).toUpperCase() + newTheme.slice(1)}`,
+    });
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -68,15 +68,15 @@ const ThemeSwitcher = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-popover border-border">
-        <DropdownMenuItem onClick={() => setTheme('light')} className="gap-2">
+        <DropdownMenuItem onClick={() => handleThemeChange('light')} className="gap-2">
           <Sun className="h-4 w-4" />
           Light
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('dark')} className="gap-2">
+        <DropdownMenuItem onClick={() => handleThemeChange('dark')} className="gap-2">
           <Moon className="h-4 w-4" />
           Dark
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('system')} className="gap-2">
+        <DropdownMenuItem onClick={() => handleThemeChange('system')} className="gap-2">
           <Monitor className="h-4 w-4" />
           System
         </DropdownMenuItem>
