@@ -33,8 +33,8 @@
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 223 47% 11%;
+    --popover-foreground: 215 20.2% 65.1%;
     --primary: 152 55% 50%;
     --primary-foreground: 222.2 47.4% 11.2%;
     --secondary: 217.2 32.6% 17.5%;
@@ -56,5 +56,27 @@
 
   body {
     @apply bg-background text-foreground font-sans;
+  }
+
+  .dark {
+    .bg-card {
+      background-color: #05153b !important;
+    }
+    
+    .text-gray-600 {
+      color: #c1cbd6 !important;
+    }
+    
+    .text-gray-700 {
+      color: #c1cbd6 !important;
+    }
+
+    .bg-secondary {
+      background-color: #062b1f !important;
+    }
+
+    [role="listbox"] {
+      background-color: #05153b !important;
+    }
   }
 }

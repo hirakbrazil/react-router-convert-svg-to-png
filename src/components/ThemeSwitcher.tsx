@@ -25,6 +25,16 @@ const ThemeSwitcher = () => {
     if (theme === 'system') {
       const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       root.classList.add(systemTheme);
+
+      // Only add listener if theme is 'system'
+      const darkThemeMq = window.matchMedia('(prefers-color-scheme: dark)');
+      const handleThemeChange = (e: MediaQueryListEvent) => {
+        root.classList.remove('light', 'dark');
+        root.classList.add(e.matches ? 'dark' : 'light');
+      };
+
+      darkThemeMq.addEventListener('change', handleThemeChange);
+      return () => darkThemeMq.removeEventListener('change', handleThemeChange);
     } else {
       root.classList.add(theme);
     }
