@@ -37,11 +37,6 @@ const SliderInput = ({
     
     const numValue = parseFloat(rawValue);
     if (!isNaN(numValue)) {
-      if (isLocked) {
-        if (lockDirection === 'increment' && numValue > value) return;
-        if (lockDirection === 'decrement' && numValue < value) return;
-      }
-      
       if (numValue >= min && numValue <= effectiveMax) {
         onChange(numValue);
       }
@@ -58,17 +53,7 @@ const SliderInput = ({
         setInputValue(value.toString());
       }
     } else {
-      let clampedValue = numValue;
-      
-      if (isLocked) {
-        if (lockDirection === 'increment') {
-          clampedValue = Math.min(value, Math.max(min, numValue));
-        } else if (lockDirection === 'decrement') {
-          clampedValue = Math.max(value, Math.min(effectiveMax, numValue));
-        }
-      } else {
-        clampedValue = Math.min(Math.max(numValue, min), effectiveMax);
-      }
+      let clampedValue = Math.min(Math.max(numValue, min), effectiveMax);
       
       if (formatValue && currency) {
         setInputValue(formatNumberByCurrency(clampedValue, currency));
@@ -81,10 +66,6 @@ const SliderInput = ({
 
   const handleSliderChange = (values: number[]) => {
     const newValue = values[0];
-    if (isLocked) {
-      if (lockDirection === 'increment' && newValue > value) return;
-      if (lockDirection === 'decrement' && newValue < value) return;
-    }
     onChange(newValue);
     if (formatValue && currency) {
       setInputValue(formatNumberByCurrency(newValue, currency));
@@ -129,7 +110,7 @@ const SliderInput = ({
         max={effectiveMax}
         min={min}
         step={step}
-        className={`py-4 ${isLocked ? 'opacity-50' : ''}`}
+        className="py-4"
       />
     </div>
   );
