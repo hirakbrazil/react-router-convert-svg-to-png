@@ -38,7 +38,9 @@ const ResultCard = ({
   finalValue,
   currency,
 }: ResultCardProps) => {
-  const totalProfit = finalValue + totalWithdrawal - totalInvestment;
+  // Use 0 instead of negative values when calculating total profit
+  const finalValueForProfit = finalValue < 0 ? 0 : finalValue;
+  const totalProfit = finalValueForProfit + totalWithdrawal - totalInvestment;
   const displayProfit = totalProfit > 0 ? totalProfit : 0;
 
   return (
