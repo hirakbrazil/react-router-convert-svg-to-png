@@ -1,68 +1,8 @@
 import React, { useEffect, useState } from "react";
 import SliderInput from "@/components/slider/SliderInput";
-import { CurrencyType } from "@/components/CurrencySelector";
+import { CalculatorFormProps } from "./calculator/types";
+import { calculateFinalValue, getExhaustionDate } from "./calculator/utils";
 import { toast } from "@/hooks/use-toast";
-
-interface CalculatorFormProps {
-  totalInvestment: number;
-  setTotalInvestment: (value: number) => void;
-  monthlyWithdrawal: number;
-  setMonthlyWithdrawal: (value: number) => void;
-  returnRate: number;
-  setReturnRate: (value: number) => void;
-  timePeriod: number;
-  setTimePeriod: (value: number) => void;
-  withdrawalPercentage: number;
-  currency: CurrencyType;
-  finalValue: number;
-}
-
-const calculateFinalValue = (
-  totalInvestment: number,
-  monthlyWithdrawal: number,
-  returnRate: number,
-  timePeriod: number
-): number => {
-  const n = 12;
-  const r = returnRate / (n * 100);
-  const t = timePeriod;
-
-  return Math.round(
-    (totalInvestment * Math.pow((1 + returnRate / 100), t)) -
-    (monthlyWithdrawal * (Math.pow((1 + (Math.pow((1 + returnRate / 100), (1 / n)) - 1)), (t * n)) - 1) /
-      (Math.pow((1 + returnRate / 100), (1 / n)) - 1))
-  );
-};
-
-const getExhaustionDate = (
-  totalInvestment: number,
-  monthlyWithdrawal: number,
-  returnRate: number,
-  currentTimePeriod: number
-): { month: string; year: number } | null => {
-  const months = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
-  
-  const currentDate = new Date();
-  const startYear = currentDate.getFullYear();
-  
-  for (let month = 0; month < 12; month++) {
-    const timePeriod = currentTimePeriod + month / 12;
-    const value = calculateFinalValue(totalInvestment, monthlyWithdrawal, returnRate, timePeriod);
-    
-    if (value <= 0) {
-      const exhaustionDate = new Date(startYear + Math.floor(timePeriod), month, 1);
-      return {
-        month: months[exhaustionDate.getMonth()],
-        year: exhaustionDate.getFullYear()
-      };
-    }
-  }
-  
-  return null;
-};
 
 const CalculatorForm = ({
   totalInvestment,
@@ -117,66 +57,86 @@ const CalculatorForm = ({
   };
 
   const handleTimePeriodChange = (newValue: number) => {
-    const willExhaust = checkAndNotifyExhaustion(
-      totalInvestment,
-      monthlyWithdrawal,
-      returnRate,
-      newValue,
-      finalValue
-    );
+    // Only check exhaustion when decreasing time period
+    if (newValue < timePeriod || !isTimeperiodLocked) {
+      const willExhaust = checkAndNotifyExhaustion(
+        totalInvestment,
+        monthlyWithdrawal,
+        returnRate,
+        newValue,
+        finalValue
+      );
 
-    if (!willExhaust) {
-      setTimePeriod(newValue);
+      if (!willExhaust) {
+        setTimePeriod(newValue);
+      } else {
+        setIsTimeperiodLocked(true);
+      }
     } else {
-      setIsTimeperiodLocked(true);
+      setTimePeriod(newValue);
     }
   };
 
   const handleReturnRateChange = (newValue: number) => {
-    const willExhaust = checkAndNotifyExhaustion(
-      totalInvestment,
-      monthlyWithdrawal,
-      newValue,
-      timePeriod,
-      finalValue
-    );
+    // Only check exhaustion when decreasing return rate
+    if (newValue < returnRate || !isReturnRateLocked) {
+      const willExhaust = checkAndNotifyExhaustion(
+        totalInvestment,
+        monthlyWithdrawal,
+        newValue,
+        timePeriod,
+        finalValue
+      );
 
-    if (!willExhaust) {
-      setReturnRate(newValue);
+      if (!willExhaust) {
+        setReturnRate(newValue);
+      } else {
+        setIsReturnRateLocked(true);
+      }
     } else {
-      setIsReturnRateLocked(true);
+      setReturnRate(newValue);
     }
   };
 
   const handleWithdrawalChange = (newValue: number) => {
-    const willExhaust = checkAndNotifyExhaustion(
-      totalInvestment,
-      newValue,
-      returnRate,
-      timePeriod,
-      finalValue
-    );
+    // Only check exhaustion when increasing withdrawal
+    if (newValue > monthlyWithdrawal || !isWithdrawalLocked) {
+      const willExhaust = checkAndNotifyExhaustion(
+        totalInvestment,
+        newValue,
+        returnRate,
+        timePeriod,
+        finalValue
+      );
 
-    if (!willExhaust) {
-      setMonthlyWithdrawal(newValue);
+      if (!willExhaust) {
+        setMonthlyWithdrawal(newValue);
+      } else {
+        setIsWithdrawalLocked(true);
+      }
     } else {
-      setIsWithdrawalLocked(true);
+      setMonthlyWithdrawal(newValue);
     }
   };
 
   const handleInvestmentChange = (newValue: number) => {
-    const willExhaust = checkAndNotifyExhaustion(
-      newValue,
-      monthlyWithdrawal,
-      returnRate,
-      timePeriod,
-      finalValue
-    );
+    // Only check exhaustion when decreasing investment
+    if (newValue < totalInvestment || !isInvestmentLocked) {
+      const willExhaust = checkAndNotifyExhaustion(
+        newValue,
+        monthlyWithdrawal,
+        returnRate,
+        timePeriod,
+        finalValue
+      );
 
-    if (!willExhaust) {
-      setTotalInvestment(newValue);
+      if (!willExhaust) {
+        setTotalInvestment(newValue);
+      } else {
+        setIsInvestmentLocked(true);
+      }
     } else {
-      setIsInvestmentLocked(true);
+      setTotalInvestment(newValue);
     }
   };
 
