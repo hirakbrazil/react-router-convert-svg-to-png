@@ -6,6 +6,8 @@ import { RefreshCw } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import CalculatorForm from "@/components/CalculatorForm";
+import { useLastPositiveValues } from "@/hooks/useLastPositiveValues";
+import { calculateExhaustionDate } from "@/utils/dateUtils";
 
 const Index = () => {
   const [totalInvestment, setTotalInvestment] = useState(() => {
@@ -35,6 +37,25 @@ const Index = () => {
     return (savedCurrency as CurrencyType) || "INR";
   });
 
+  const { lastPositiveValues, isDisconnected } = useLastPositiveValues({
+    totalInvestment,
+    monthlyWithdrawal,
+    returnRate,
+    timePeriod,
+    finalValue
+  });
+
+  useEffect(() => {
+    if (isDisconnected) {
+      const { month, year } = calculateExhaustionDate(lastPositiveValues.timePeriod);
+      toast({
+        title: "Fund Exhaustion Alert",
+        description: `Funds exhausted by ${month}, ${year}`,
+        duration: 5000,
+      });
+    }
+  }, [isDisconnected, lastPositiveValues.timePeriod]);
+
   // Save inputs to localStorage
   useEffect(() => {
     localStorage.setItem("totalInvestment", totalInvestment.toString());
@@ -48,32 +69,7 @@ const Index = () => {
     localStorage.setItem("selectedCurrency", currency);
   }, [currency]);
 
-  // Update theme color based on theme
-  useEffect(() => {
-    const updateThemeColor = () => {
-      const isDark = document.documentElement.classList.contains('dark');
-      const meta = document.querySelector('meta[name="theme-color"]');
-      if (meta) {
-        meta.setAttribute('content', isDark ? '#000000' : '#07a36c');
-      } else {
-        const newMeta = document.createElement('meta');
-        newMeta.name = 'theme-color';
-        newMeta.content = isDark ? '#000000' : '#07a36c';
-        document.head.appendChild(newMeta);
-      }
-    };
-
-    updateThemeColor();
-    const observer = new MutationObserver(updateThemeColor);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class']
-    });
-
-    return () => observer.disconnect();
-  }, []);
-
-  // Calculate withdrawal percentage whenever total investment or monthly withdrawal changes
+  // Update withdrawal percentage whenever total investment or monthly withdrawal changes
   useEffect(() => {
     const percentage = (monthlyWithdrawal / totalInvestment) * 100;
     setWithdrawalPercentage(Number(percentage.toFixed(3)));
@@ -105,7 +101,6 @@ const Index = () => {
     setReturnRate(13);
     setTimePeriod(10);
     
-    // Clear localStorage
     localStorage.removeItem("totalInvestment");
     localStorage.removeItem("monthlyWithdrawal");
     localStorage.removeItem("returnRate");
@@ -122,17 +117,9 @@ const Index = () => {
     setCurrency(newCurrency);
     toast({
       title: "Currency Changed",
-      description: `Currency switched to ${newCurrency} ${getCurrencySymbol(newCurrency)}`,
+      description: `Currency switched to ${newCurrency}`,
       duration: 5000,
     });
-  };
-
-  const getCurrencySymbol = (currency: CurrencyType): string => {
-    const symbols: { [key in CurrencyType]: string } = {
-      INR: "₹", USD: "$", EUR: "€", JPY: "¥", GBP: "£",
-      CNY: "¥", AUD: "$", CAD: "$", CHF: "Fr", HKD: "$", SGD: "$"
-    };
-    return symbols[currency];
   };
 
   return (
@@ -162,9 +149,12 @@ const Index = () => {
         />
 
         <ResultCard
-          totalInvestment={totalInvestment}
-          totalWithdrawal={monthlyWithdrawal * timePeriod * 12}
-          finalValue={finalValue}
+          totalInvestment={isDisconnected ? lastPositiveValues.totalInvestment : totalInvestment}
+          totalWithdrawal={isDisconnected ? 
+            lastPositiveValues.monthlyWithdrawal * lastPositiveValues.timePeriod * 12 :
+            monthlyWithdrawal * timePeriod * 12
+          }
+          finalValue={isDisconnected ? lastPositiveValues.finalValue : finalValue}
           currency={currency}
         />
 
