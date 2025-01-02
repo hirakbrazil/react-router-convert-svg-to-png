@@ -48,31 +48,6 @@ const Index = () => {
     localStorage.setItem("selectedCurrency", currency);
   }, [currency]);
 
-  // Update theme color based on theme
-  useEffect(() => {
-    const updateThemeColor = () => {
-      const isDark = document.documentElement.classList.contains('dark');
-      const meta = document.querySelector('meta[name="theme-color"]');
-      if (meta) {
-        meta.setAttribute('content', isDark ? '#000000' : '#07a36c');
-      } else {
-        const newMeta = document.createElement('meta');
-        newMeta.name = 'theme-color';
-        newMeta.content = isDark ? '#000000' : '#07a36c';
-        document.head.appendChild(newMeta);
-      }
-    };
-
-    updateThemeColor();
-    const observer = new MutationObserver(updateThemeColor);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class']
-    });
-
-    return () => observer.disconnect();
-  }, []);
-
   // Calculate withdrawal percentage whenever total investment or monthly withdrawal changes
   useEffect(() => {
     const percentage = (monthlyWithdrawal / totalInvestment) * 100;
@@ -159,6 +134,7 @@ const Index = () => {
           setTimePeriod={setTimePeriod}
           withdrawalPercentage={withdrawalPercentage}
           currency={currency}
+          finalValue={finalValue}
         />
 
         <ResultCard
