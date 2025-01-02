@@ -38,6 +38,9 @@ const ResultCard = ({
   finalValue,
   currency,
 }: ResultCardProps) => {
+  const totalProfit = finalValue + totalWithdrawal - totalInvestment;
+  const displayProfit = totalProfit > 0 ? totalProfit : 0;
+
   return (
     <div className="bg-card dark:bg-card rounded-xl shadow-lg p-6 space-y-4">
       <div className="flex justify-between items-center">
@@ -56,6 +59,12 @@ const ResultCard = ({
         <span className="text-gray-600 dark:text-gray-400">Final value</span>
         <span className={`text-xl font-semibold ${finalValue < 0 ? 'text-red-500 dark:text-red-400' : 'text-foreground'}`}>
           {formatCurrency(finalValue, currency)}
+        </span>
+      </div>
+      <div className="flex justify-between items-center">
+        <span className="text-gray-600 dark:text-gray-400">Total profit</span>
+        <span className={`text-xl font-semibold ${totalProfit > 0 ? 'text-green-500 dark:text-green-400' : 'text-foreground'}`}>
+          {formatCurrency(displayProfit, currency)}
         </span>
       </div>
     </div>

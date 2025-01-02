@@ -67,7 +67,7 @@ const ThemeSwitcher = () => {
           {theme.charAt(0).toUpperCase() + theme.slice(1)}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-popover border-border">
+      <DropdownMenuContent align="end" className="bg-white dark:bg-[#030c21] border-border">
         <DropdownMenuItem onClick={() => handleThemeChange('light')} className="gap-2">
           <Sun className="h-4 w-4" />
           Light
