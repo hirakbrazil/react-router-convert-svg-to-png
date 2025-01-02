@@ -45,6 +45,7 @@ const CalculatorForm = ({
         step={1000}
         currency={currency}
         formatValue={true}
+        maxLength={12}
       />
 
       <div className="space-y-1">
@@ -57,6 +58,7 @@ const CalculatorForm = ({
           step={50}
           currency={currency}
           formatValue={true}
+          maxLength={12}
         />
         <p className="text-base text-muted-foreground ml-1 dark:text-[#c1cbd6]">{withdrawalPercentage}% of Total investment</p>
       </div>
@@ -80,6 +82,7 @@ const CalculatorForm = ({
         max={50}
         step={1}
         suffix=" Yr"
+        maxLength={2}
       />
     </div>
   );
