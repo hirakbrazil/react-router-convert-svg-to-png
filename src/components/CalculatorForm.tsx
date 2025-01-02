@@ -52,9 +52,9 @@ const CalculatorForm = ({
           label="Withdrawal per month"
           value={monthlyWithdrawal}
           onChange={setMonthlyWithdrawal}
-          min={100}
+          min={50}
           max={totalInvestment}
-          step={100}
+          step={50}
           currency={currency}
           formatValue={true}
         />
