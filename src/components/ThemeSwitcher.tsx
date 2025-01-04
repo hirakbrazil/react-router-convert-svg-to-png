@@ -54,14 +54,18 @@ const ThemeSwitcher = () => {
   };
 
   const handleThemeChange = (newTheme: Theme) => {
-    setTheme(newTheme);
-    toast({
-      title: "Theme Changed",
-      description: `Theme color set to ${
-        newTheme === "system" ? "System default" : newTheme.charAt(0).toUpperCase() + newTheme.slice(1)
-      }`,
-    });
-  };
+  if (newTheme === "system") {
+    localStorage.removeItem("theme"); // Remove theme from localStorage
+  } else {
+    localStorage.setItem("theme", newTheme);
+  }
+
+  setTheme(newTheme);
+  toast({
+    title: "Theme Changed",
+    description: `Theme color set to ${newTheme === "system" ? "System default" : newTheme.charAt(0).toUpperCase() + newTheme.slice(1)}`,
+  });
+};
 
   return (
     <DropdownMenu>
