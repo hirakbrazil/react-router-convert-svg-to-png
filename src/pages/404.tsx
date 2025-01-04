@@ -7,15 +7,27 @@ const NotFound = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check for dark mode preference
-    const isDark = localStorage.getItem("theme") === "dark" || 
-      (!localStorage.getItem("theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
-    
-    if (isDark) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    const updateTheme = () => {
+      const isDark =
+        localStorage.getItem("theme") === "dark" ||
+        (!localStorage.getItem("theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+      if (isDark) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    };
+
+    // Initial theme setup
+    updateTheme();
+
+    // Listen for changes in the system theme
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    mediaQuery.addEventListener("change", updateTheme);
+
+    // Cleanup listener on component unmount
+    return () => mediaQuery.removeEventListener("change", updateTheme);
   }, []);
 
   return (
