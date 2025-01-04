@@ -7,30 +7,15 @@ const NotFound = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const applyTheme = () => {
-      const isDark =
-        localStorage.getItem("theme") === "dark" ||
-        (!localStorage.getItem("theme") &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches);
-
-      if (isDark) {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
-    };
-
-    // Apply theme on load
-    applyTheme();
-
-    // Listen for system theme changes
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const handleChange = () => applyTheme();
-    mediaQuery.addEventListener("change", handleChange);
-
-    return () => {
-      mediaQuery.removeEventListener("change", handleChange);
-    };
+    // Check for dark mode preference
+    const isDark = localStorage.getItem("theme") === "dark" || 
+      (!localStorage.getItem("theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    
+    if (isDark) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
   }, []);
 
   return (
