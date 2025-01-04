@@ -23,6 +23,21 @@ const NotFound = () => {
           <Home className="h-4 w-4" />
           Go to Home
         </Button>
+        <div className="flex justify-center">
+          <ThemeSwitcher />
+        </div>
+
+        <footer className="text-center text-sm text-muted-foreground pb-4">
+          Made with ❤️ by{" "}
+          <a 
+            href="https://mutualfundjournal.in/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-primary hover:underline"
+          >
+            Mutual Fund Journal
+          </a>
+        </footer>
       </div>
     </div>
   );
