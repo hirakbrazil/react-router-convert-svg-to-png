@@ -3,6 +3,10 @@
   to = "https://swp-calculator.mutualfundjournal.in/:splat"
   status = 301
   force = true
+  [[redirects]]
+  from = "/404"
+  to = "/index.html"
+  status = 404
 [[redirects]]
   from = "https://swp-calculator.mutualfundjournal.in/*"
   to = "/index.html"
