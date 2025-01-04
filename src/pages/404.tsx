@@ -7,10 +7,11 @@ const NotFound = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const updateTheme = () => {
+    const applyTheme = () => {
       const isDark =
         localStorage.getItem("theme") === "dark" ||
-        (!localStorage.getItem("theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        (!localStorage.getItem("theme") &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches);
 
       if (isDark) {
         document.documentElement.classList.add("dark");
@@ -19,15 +20,17 @@ const NotFound = () => {
       }
     };
 
-    // Initial theme setup
-    updateTheme();
+    // Apply theme on load
+    applyTheme();
 
-    // Listen for changes in the system theme
+    // Listen for system theme changes
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    mediaQuery.addEventListener("change", updateTheme);
+    const handleChange = () => applyTheme();
+    mediaQuery.addEventListener("change", handleChange);
 
-    // Cleanup listener on component unmount
-    return () => mediaQuery.removeEventListener("change", updateTheme);
+    return () => {
+      mediaQuery.removeEventListener("change", handleChange);
+    };
   }, []);
 
   return (
