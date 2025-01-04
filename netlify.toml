@@ -1,10 +1,15 @@
 [[redirects]]
   from = "/*"
-  to = "/index.html"
+  to = "https://swp-calculator.mutualfundjournal.in/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/index.html"
+  to = "/"
   status = 200
 
 [[redirects]]
-  from = "https://swp-calculator.netlify.app"
-  to = "https://swp-calculator.mutualfundjournal.in/"
-  status = 301
-  force = true
+  from = "/404"
+  to = "/index.html"
+  status = 200
