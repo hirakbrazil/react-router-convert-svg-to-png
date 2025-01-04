@@ -18,16 +18,19 @@ const useTheme = () => {
     };
 
     const applyTheme = () => {
-      const theme = localStorage.getItem("theme") || "system";
+      const theme = localStorage.getItem("theme");
       const root = document.documentElement;
 
       root.classList.remove("light", "dark");
 
-      if (theme === "system") {
+      if (theme === "dark") {
+        root.classList.add("dark");
+      } else if (theme === "light") {
+        root.classList.add("light");
+      } else {
+        // Handle system theme
         const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
         root.classList.add(systemTheme);
-      } else {
-        root.classList.add(theme);
       }
 
       updateThemeColor();
@@ -37,7 +40,7 @@ const useTheme = () => {
 
     const darkThemeMq = window.matchMedia("(prefers-color-scheme: dark)");
     const handleThemeChange = (e: MediaQueryListEvent) => {
-      if (!localStorage.getItem("theme") || localStorage.getItem("theme") === "system") {
+      if (!localStorage.getItem("theme")) {
         const root = document.documentElement;
         root.classList.remove("light", "dark");
         root.classList.add(e.matches ? "dark" : "light");
