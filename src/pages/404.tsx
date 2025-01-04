@@ -2,6 +2,7 @@ import { Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import useTheme from "@/hooks/useTheme";
 
 const NotFound = () => {
   useTheme(); // Apply theme using the custom hook
