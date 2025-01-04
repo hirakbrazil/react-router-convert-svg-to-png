@@ -6,7 +6,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Sun, Moon, Monitor } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "@/hooks/use-toast";
 
 type Theme = 'light' | 'dark' | 'system';
@@ -18,33 +18,35 @@ const ThemeSwitcher = () => {
   });
 
   useEffect(() => {
-    localStorage.setItem("theme", theme);
-    
-    const root = window.document.documentElement;
-    root.classList.remove('light', 'dark');
+    const root = document.documentElement;
+    root.classList.remove("light", "dark");
 
-    if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    if (theme === "system") {
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
       root.classList.add(systemTheme);
 
-      const darkThemeMq = window.matchMedia('(prefers-color-scheme: dark)');
+      const darkThemeMq = window.matchMedia("(prefers-color-scheme: dark)");
       const handleThemeChange = (e: MediaQueryListEvent) => {
-        root.classList.remove('light', 'dark');
-        root.classList.add(e.matches ? 'dark' : 'light');
+        if (theme === "system") {
+          root.classList.remove("light", "dark");
+          root.classList.add(e.matches ? "dark" : "light");
+        }
       };
 
-      darkThemeMq.addEventListener('change', handleThemeChange);
-      return () => darkThemeMq.removeEventListener('change', handleThemeChange);
+      darkThemeMq.addEventListener("change", handleThemeChange);
+      return () => darkThemeMq.removeEventListener("change", handleThemeChange);
     } else {
       root.classList.add(theme);
     }
+
+    localStorage.setItem("theme", theme);
   }, [theme]);
 
   const getThemeIcon = () => {
     switch (theme) {
-      case 'light':
+      case "light":
         return <Sun className="h-4 w-4 mr-2" />;
-      case 'dark':
+      case "dark":
         return <Moon className="h-4 w-4 mr-2" />;
       default:
         return <Monitor className="h-4 w-4 mr-2" />;
@@ -55,7 +57,9 @@ const ThemeSwitcher = () => {
     setTheme(newTheme);
     toast({
       title: "Theme Changed",
-      description: `Theme color set to ${newTheme === 'system' ? 'System default' : newTheme.charAt(0).toUpperCase() + newTheme.slice(1)}`,
+      description: `Theme color set to ${
+        newTheme === "system" ? "System default" : newTheme.charAt(0).toUpperCase() + newTheme.slice(1)
+      }`,
     });
   };
 
@@ -68,15 +72,15 @@ const ThemeSwitcher = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-white dark:bg-[#030c21] border-border">
-        <DropdownMenuItem onClick={() => handleThemeChange('light')} className="gap-2">
+        <DropdownMenuItem onClick={() => handleThemeChange("light")} className="gap-2">
           <Sun className="h-4 w-4" />
           Light
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleThemeChange('dark')} className="gap-2">
+        <DropdownMenuItem onClick={() => handleThemeChange("dark")} className="gap-2">
           <Moon className="h-4 w-4" />
           Dark
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleThemeChange('system')} className="gap-2">
+        <DropdownMenuItem onClick={() => handleThemeChange("system")} className="gap-2">
           <Monitor className="h-4 w-4" />
           System
         </DropdownMenuItem>
