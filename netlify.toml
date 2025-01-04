@@ -1,10 +1,4 @@
 [[redirects]]
-  from = "/*"
-  to = "https://swp-calculator.mutualfundjournal.in/:splat"
-  status = 301
-  force = true
-
-[[redirects]]
   from = "/index.html"
   to = "/"
   status = 200
