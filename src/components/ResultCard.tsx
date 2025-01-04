@@ -41,14 +41,21 @@ const ResultCard = ({
   // Ensure final value doesn't go below 0
   const finalValue = Math.max(0, rawFinalValue);
 
-  // Calculate actual total withdrawal based on available funds
-  const monthlyWithdrawal = totalWithdrawal / (12 * Math.ceil(totalWithdrawal / finalValue));
-  const possibleMonths = Math.floor(totalInvestment / monthlyWithdrawal);
-  const actualTotalWithdrawal = Math.min(totalWithdrawal, possibleMonths * monthlyWithdrawal);
+  // Calculate monthly withdrawal
+  const monthlyWithdrawal = totalWithdrawal / (12 * 1); // 1 year for monthly calculation
+
+  // Calculate the actual total withdrawal based on investment and final value
+  let actualTotalWithdrawal = totalWithdrawal;
+  
+  // If final value is 0, it means funds are exhausted
+  if (finalValue === 0) {
+    // Calculate how many months of withdrawal are possible based on total investment
+    const possibleMonths = Math.floor(totalInvestment / monthlyWithdrawal);
+    actualTotalWithdrawal = possibleMonths * monthlyWithdrawal;
+  }
 
   // Calculate total profit using the adjusted values
-  const finalValueForProfit = finalValue;
-  const totalProfit = finalValueForProfit + actualTotalWithdrawal - totalInvestment;
+  const totalProfit = finalValue + actualTotalWithdrawal - totalInvestment;
   const displayProfit = totalProfit > 0 ? totalProfit : 0;
 
   return (
