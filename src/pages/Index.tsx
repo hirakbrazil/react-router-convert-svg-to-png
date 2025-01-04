@@ -6,8 +6,10 @@ import { RefreshCw } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import CalculatorForm from "@/components/CalculatorForm";
+import useTheme from "@/hooks/useTheme";
 
 const Index = () => {
+  useTheme(); // Apply theme using the custom hook
   const [totalInvestment, setTotalInvestment] = useState(() => {
     const saved = localStorage.getItem("totalInvestment");
     return saved ? Number(saved) : 500000;
@@ -47,31 +49,6 @@ const Index = () => {
   useEffect(() => {
     localStorage.setItem("selectedCurrency", currency);
   }, [currency]);
-
-  // Update theme color based on theme
-  useEffect(() => {
-    const updateThemeColor = () => {
-      const isDark = document.documentElement.classList.contains('dark');
-      const meta = document.querySelector('meta[name="theme-color"]');
-      if (meta) {
-        meta.setAttribute('content', isDark ? '#000000' : '#07a36c');
-      } else {
-        const newMeta = document.createElement('meta');
-        newMeta.name = 'theme-color';
-        newMeta.content = isDark ? '#000000' : '#07a36c';
-        document.head.appendChild(newMeta);
-      }
-    };
-
-    updateThemeColor();
-    const observer = new MutationObserver(updateThemeColor);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class']
-    });
-
-    return () => observer.disconnect();
-  }, []);
 
   // Calculate withdrawal percentage whenever total investment or monthly withdrawal changes
   useEffect(() => {
