@@ -35,12 +35,20 @@ const formatCurrency = (value: number, currency: CurrencyType): string => {
 const ResultCard = ({
   totalInvestment,
   totalWithdrawal,
-  finalValue,
+  finalValue: rawFinalValue,
   currency,
 }: ResultCardProps) => {
-  // Use 0 instead of negative values when calculating total profit
-  const finalValueForProfit = finalValue < 0 ? 0 : finalValue;
-  const totalProfit = finalValueForProfit + totalWithdrawal - totalInvestment;
+  // Ensure final value doesn't go below 0
+  const finalValue = Math.max(0, rawFinalValue);
+
+  // Calculate actual total withdrawal based on available funds
+  const monthlyWithdrawal = totalWithdrawal / (12 * Math.ceil(totalWithdrawal / finalValue));
+  const possibleMonths = Math.floor(totalInvestment / monthlyWithdrawal);
+  const actualTotalWithdrawal = Math.min(totalWithdrawal, possibleMonths * monthlyWithdrawal);
+
+  // Calculate total profit using the adjusted values
+  const finalValueForProfit = finalValue;
+  const totalProfit = finalValueForProfit + actualTotalWithdrawal - totalInvestment;
   const displayProfit = totalProfit > 0 ? totalProfit : 0;
 
   return (
@@ -54,12 +62,12 @@ const ResultCard = ({
       <div className="flex justify-between items-center">
         <span className="text-gray-600 dark:text-gray-400">Total withdrawal</span>
         <span className="text-xl font-semibold text-foreground">
-          {formatCurrency(totalWithdrawal, currency)}
+          {formatCurrency(actualTotalWithdrawal, currency)}
         </span>
       </div>
       <div className="flex justify-between items-center">
         <span className="text-gray-600 dark:text-gray-400">Final value</span>
-        <span className={`text-xl font-semibold ${finalValue < 0 ? 'text-red-500 dark:text-red-400' : 'text-foreground'}`}>
+        <span className={`text-xl font-semibold ${finalValue === 0 ? 'text-red-500 dark:text-red-400' : 'text-foreground'}`}>
           {formatCurrency(finalValue, currency)}
         </span>
       </div>
