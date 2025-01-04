@@ -3,7 +3,3 @@
   to = "https://swp-calculator.mutualfundjournal.in/"
   status = 301
   force = true
-[[redirects]]
-from = "/*"
-to = "/404.html"
-status = 404
