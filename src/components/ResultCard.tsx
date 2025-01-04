@@ -35,27 +35,12 @@ const formatCurrency = (value: number, currency: CurrencyType): string => {
 const ResultCard = ({
   totalInvestment,
   totalWithdrawal,
-  finalValue: rawFinalValue,
+  finalValue,
   currency,
 }: ResultCardProps) => {
-  // Ensure final value doesn't go below 0
-  const finalValue = Math.max(0, rawFinalValue);
-
-  // Calculate monthly withdrawal
-  const monthlyWithdrawal = totalWithdrawal / (12 * 1); // 1 year for monthly calculation
-
-  // Calculate the actual total withdrawal based on investment and final value
-  let actualTotalWithdrawal = totalWithdrawal;
-  
-  // If final value is 0, it means funds are exhausted
-  if (finalValue === 0) {
-    // Calculate how many months of withdrawal are possible based on total investment
-    const possibleMonths = Math.floor(totalInvestment / monthlyWithdrawal);
-    actualTotalWithdrawal = possibleMonths * monthlyWithdrawal;
-  }
-
-  // Calculate total profit using the adjusted values
-  const totalProfit = finalValue + actualTotalWithdrawal - totalInvestment;
+  // Use 0 instead of negative values when calculating total profit
+  const finalValueForProfit = finalValue < 0 ? 0 : finalValue;
+  const totalProfit = finalValueForProfit + totalWithdrawal - totalInvestment;
   const displayProfit = totalProfit > 0 ? totalProfit : 0;
 
   return (
@@ -69,12 +54,12 @@ const ResultCard = ({
       <div className="flex justify-between items-center">
         <span className="text-gray-600 dark:text-gray-400">Total withdrawal</span>
         <span className="text-xl font-semibold text-foreground">
-          {formatCurrency(actualTotalWithdrawal, currency)}
+          {formatCurrency(totalWithdrawal, currency)}
         </span>
       </div>
       <div className="flex justify-between items-center">
         <span className="text-gray-600 dark:text-gray-400">Final value</span>
-        <span className={`text-xl font-semibold ${finalValue === 0 ? 'text-red-500 dark:text-red-400' : 'text-foreground'}`}>
+        <span className={`text-xl font-semibold ${finalValue < 0 ? 'text-red-500 dark:text-red-400' : 'text-foreground'}`}>
           {formatCurrency(finalValue, currency)}
         </span>
       </div>
