@@ -4,19 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 const NotFound = () => {
+  useTheme(); // Apply theme using the custom hook
   const navigate = useNavigate();
-
-  useEffect(() => {
-    // Check for dark mode preference
-    const isDark = localStorage.getItem("theme") === "dark" || 
-      (!localStorage.getItem("theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
-    
-    if (isDark) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, []);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-background text-foreground">
