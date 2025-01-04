@@ -16,21 +16,6 @@ const NotFound = () => {
     } else {
       document.documentElement.classList.remove("dark");
     }
-
-    // Add system theme change listener if no theme is set in localStorage
-    if (!localStorage.getItem("theme")) {
-      const darkThemeMq = window.matchMedia("(prefers-color-scheme: dark)");
-      const handleThemeChange = (e: MediaQueryListEvent) => {
-        if (e.matches) {
-          document.documentElement.classList.add("dark");
-        } else {
-          document.documentElement.classList.remove("dark");
-        }
-      };
-
-      darkThemeMq.addEventListener("change", handleThemeChange);
-      return () => darkThemeMq.removeEventListener("change", handleThemeChange);
-    }
   }, []);
 
   return (
