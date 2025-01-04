@@ -5,5 +5,5 @@
   force = true
 [[redirects]]
 from = "/*"
-to = "/404.html"
+to = "/404.tsx"
 status = 404
