@@ -1,4 +1,9 @@
 [[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
   from = "https://swp-calculator.netlify.app"
   to = "https://swp-calculator.mutualfundjournal.in/"
   status = 301
