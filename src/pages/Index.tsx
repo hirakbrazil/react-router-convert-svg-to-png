@@ -120,12 +120,12 @@ const Index = () => {
         title="SWP Calculator - Systematic Withdrawal Plan Calculator"
         description="Calculate your Systematic Withdrawal Plan (SWP) easily with our free calculator. Plan your investment withdrawals effectively."
         canonicalUrl="https://swp-calculator.mutualfundjournal.in/"
-        socialMeta={{
-          url: "https://swp-calculator.mutualfundjournal.in/",
-          title: "SWP Calculator - Plan Your Withdrawals",
-          description: "Calculate your Systematic Withdrawal Plan (SWP) easily with our free calculator. Plan your investment withdrawals effectively.",
-          image: "https://swp-calculator.mutualfundjournal.in/banner.jpg",
-        }}
+        robots="index, follow"
+        ogTitle="SWP Calculator - Systematic Withdrawal Plan Calculator"
+        ogDescription="Calculate your Systematic Withdrawal Plan (SWP) easily with our free calculator. Plan your investment withdrawals effectively."
+        ogUrl="https://swp-calculator.mutualfundjournal.in/"
+        ogImage="https://swp-calculator.mutualfundjournal.in/banner.jpg"
+        ogType="website"  {/* Setting og:type as website for the homepage */}
       />
     <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto space-y-8">
