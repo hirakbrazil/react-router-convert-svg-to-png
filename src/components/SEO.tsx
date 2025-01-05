@@ -40,6 +40,7 @@ const SEO: React.FC<SEOProps> = ({
       {ogTitle && <meta property="og:title" content={ogTitle} />}
       {ogDescription && <meta property="og:description" content={ogDescription} />}
       {ogImage && <meta property="og:image" content={ogImage} />}
+      <meta property="og:site_name" content="SWP Calculator" />
     </Helmet>
   );
 };
