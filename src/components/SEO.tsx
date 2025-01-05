@@ -19,7 +19,7 @@ const SEO = ({ title, description, canonicalUrl, socialMeta, robots = "max-image
           <meta property="og:title" content={socialMeta.title} />
           <meta property="og:description" content={socialMeta.description} />
           <meta property="og:image" content={socialMeta.image} />
-          <meta property="og:site_name" content={socialMeta.siteName} />
+          <meta property="og:site_name" content="SWP Calculator" />
         </>
       )}
     </Helmet>
