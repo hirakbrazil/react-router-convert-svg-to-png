@@ -18,7 +18,7 @@ const Feedback = () => {
         ogDescription="We value your feedback! Share your thoughts, queries, or suggestions with us to help us improve."
         ogUrl="https://swp-calculator.mutualfundjournal.in/feedback"
         ogImage="https://swp-calculator.mutualfundjournal.in/banner.jpg"
-        ogType="article"  {/* Setting og:type as article for feedback page */}
+        ogType="article"
       />
     <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto space-y-8">
