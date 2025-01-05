@@ -43,6 +43,9 @@ const ResultCard = ({
   const totalProfit = finalValueForProfit + totalWithdrawal - totalInvestment;
   const displayProfit = totalProfit > 0 ? totalProfit : 0;
 
+  // If finalValue would be negative, don't display it
+  const displayFinalValue = finalValue < 0 ? 0 : finalValue;
+
   return (
     <div className="bg-card dark:bg-card rounded-xl shadow-lg p-6 space-y-4">
       <div className="flex justify-between items-center">
@@ -59,8 +62,8 @@ const ResultCard = ({
       </div>
       <div className="flex justify-between items-center">
         <span className="text-gray-600 dark:text-gray-400">Final value</span>
-        <span className={`text-xl font-semibold ${finalValue < 0 ? 'text-red-500 dark:text-red-400' : 'text-foreground'}`}>
-          {formatCurrency(finalValue, currency)}
+        <span className="text-xl font-semibold text-foreground">
+          {formatCurrency(displayFinalValue, currency)}
         </span>
       </div>
       <div className="flex justify-between items-center">

@@ -1,6 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import SliderInput from "@/components/slider/SliderInput";
 import { CurrencyType } from "@/components/CurrencySelector";
+import { toast } from "@/hooks/use-toast";
+import { addMonths, format } from "date-fns";
 
 interface CalculatorFormProps {
   totalInvestment: number;
@@ -27,12 +29,66 @@ const CalculatorForm = ({
   withdrawalPercentage,
   currency,
 }: CalculatorFormProps) => {
-  // Effect to update monthly withdrawal when total investment changes
+  const [lastPositiveFinalValue, setLastPositiveFinalValue] = useState<number | null>(null);
+  const [isDisconnected, setIsDisconnected] = useState(false);
+
+  const calculateFinalValue = (investment: number, withdrawal: number, rate: number, time: number) => {
+    const n = 12; // 12 months in a year
+    const r = rate / (n * 100); // Monthly return rate
+
+    return Math.round(
+      (investment * Math.pow((1 + rate / 100), time)) -
+      (withdrawal * (Math.pow((1 + (Math.pow((1 + rate / 100), (1 / n)) - 1)), (time * n)) - 1) /
+        (Math.pow((1 + rate / 100), (1 / n)) - 1))
+    );
+  };
+
+  const calculateExhaustionDate = (
+    investment: number,
+    withdrawal: number,
+    rate: number,
+    maxMonths: number = 600 // 50 years
+  ): Date | null => {
+    let currentValue = investment;
+    let monthlyRate = rate / 12 / 100;
+    let currentDate = new Date();
+
+    for (let month = 1; month <= maxMonths; month++) {
+      currentValue = currentValue * (1 + monthlyRate) - withdrawal;
+      
+      if (currentValue <= 0) {
+        return addMonths(currentDate, month - 1);
+      }
+    }
+    return null;
+  };
+
   useEffect(() => {
     if (monthlyWithdrawal > totalInvestment) {
       setMonthlyWithdrawal(totalInvestment);
     }
   }, [totalInvestment, monthlyWithdrawal, setMonthlyWithdrawal]);
+
+  useEffect(() => {
+    const newFinalValue = calculateFinalValue(totalInvestment, monthlyWithdrawal, returnRate, timePeriod);
+
+    if (newFinalValue > 0) {
+      setLastPositiveFinalValue(newFinalValue);
+      setIsDisconnected(false);
+    } else if (lastPositiveFinalValue !== null && !isDisconnected) {
+      setIsDisconnected(true);
+      const exhaustionDate = calculateExhaustionDate(totalInvestment, monthlyWithdrawal, returnRate);
+      
+      if (exhaustionDate) {
+        const formattedDate = format(exhaustionDate, 'MMMM, yyyy');
+        toast({
+          title: "Fund Exhaustion Alert",
+          description: `Fund exhausted by ${formattedDate}`,
+          duration: 5000,
+        });
+      }
+    }
+  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod]);
 
   return (
     <div className="bg-card dark:bg-card rounded-xl shadow-lg p-6 space-y-6">
