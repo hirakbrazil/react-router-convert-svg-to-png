@@ -58,25 +58,35 @@ const Index = () => {
     setWithdrawalPercentage(Number(percentage.toFixed(3)));
   }, [totalInvestment, monthlyWithdrawal]);
 
-  const calculateSWP = () => {
-    const n = 12; // 12 months in a year
-    const r = returnRate / (n * 100); // Monthly return rate
-    const t = timePeriod; // Number of years
+  const calculateSWP = (): { finalValue: number; totalWithdrawal: number } => {
+  const n = 12; // 12 months in a year
+  const r = returnRate / (n * 100); // Monthly return rate
+  const totalMonths = timePeriod * n;
 
-    // Future Value Calculation using the compound interest formula with monthly withdrawals
-    let result = Math.round(
-      (totalInvestment * Math.pow((1 + returnRate / 100), t)) -
-      (monthlyWithdrawal * (Math.pow((1 + (Math.pow((1 + returnRate / 100), (1 / n)) - 1)), (t * n)) - 1) /
-        (Math.pow((1 + returnRate / 100), (1 / n)) - 1))
-    );
+  let remainingInvestment = totalInvestment;
+  let totalWithdrawal = 0;
 
-    return result;
+  for (let i = 0; i < totalMonths; i++) {
+    if (remainingInvestment <= 0) break; // Stop withdrawals when funds are depleted
+
+    const interest = remainingInvestment * r; // Monthly interest
+    remainingInvestment += interest - monthlyWithdrawal;
+
+    if (remainingInvestment < 0) remainingInvestment = 0; // Ensure non-negative value
+    totalWithdrawal += monthlyWithdrawal;
+  }
+
+  return {
+    finalValue: Math.round(remainingInvestment),
+    totalWithdrawal: Math.round(totalWithdrawal),
   };
+};
 
-  useEffect(() => {
-    const result = calculateSWP();
-    setFinalValue(result);
-  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod]);
+useEffect(() => {
+  const { finalValue, totalWithdrawal } = calculateSWP();
+  setFinalValue(finalValue);
+  setTotalWithdrawal(totalWithdrawal); // Add this state
+}, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod]);
 
   const handleReset = () => {
     setTotalInvestment(500000);
@@ -153,11 +163,11 @@ const Index = () => {
         />
 
         <ResultCard
-          totalInvestment={totalInvestment}
-          totalWithdrawal={monthlyWithdrawal * timePeriod * 12}
-          finalValue={finalValue}
-          currency={currency}
-        />
+  totalInvestment={totalInvestment}
+  totalWithdrawal={totalWithdrawal} // Dynamically calculated
+  finalValue={finalValue} // Ensures non-negative final value
+  currency={currency}
+/>
 
         <div className="flex justify-center">
           <Button
