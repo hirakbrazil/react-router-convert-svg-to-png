@@ -17,7 +17,7 @@ const About = () => {
         ogDescription="Discover the purpose and features of SWP Calculator. Learn why our tool is essential for your financial planning."
         ogUrl="https://swp-calculator.mutualfundjournal.in/about"
         ogImage="https://swp-calculator.mutualfundjournal.in/banner.jpg"
-        ogType="article"  {/* Setting og:type as article for the About page */}
+        ogType="article"
       />
     <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto space-y-8">
