@@ -13,10 +13,8 @@ const SEO = ({ title, description, canonicalUrl, socialMeta, robots = "max-image
 
       {/* Open Graph / Social Meta */}
       {socialMeta && (
-        <>
           <meta property="og:url" content={socialMeta.url} />
           <meta property="og:image" content={socialMeta.image} />
-        </>
       )}
     </Helmet>
   );
