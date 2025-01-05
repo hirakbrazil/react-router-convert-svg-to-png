@@ -6,6 +6,8 @@ import ThemeSwitcher from "./ThemeSwitcher";
 const Footer = () => {
   const location = useLocation();
   const isHomePage = location.pathname === "/";
+  const isAboutPage = location.pathname === "/about";
+  const isFeedbackPage = location.pathname === "/feedback";
 
   return (
     <footer className="mt-8 space-y-8">
@@ -20,14 +22,18 @@ const Footer = () => {
             Home
           </Link>
         )}
-        <Link to="/about" className="inline-flex items-center gap-2 text-foreground hover:text-primary">
-          <Info className="h-4 w-4" />
-          About
-        </Link>
-        <Link to="/feedback" className="inline-flex items-center gap-2 text-foreground hover:text-primary">
-          <MessageSquare className="h-4 w-4" />
-          Feedback
-        </Link>
+        {!isAboutPage && (
+          <Link to="/about" className="inline-flex items-center gap-2 text-foreground hover:text-primary">
+            <Info className="h-4 w-4" />
+            About
+          </Link>
+        )}
+        {!isFeedbackPage && (
+          <Link to="/feedback" className="inline-flex items-center gap-2 text-foreground hover:text-primary">
+            <MessageSquare className="h-4 w-4" />
+            Feedback
+          </Link>
+        )}
       </nav>
 
       <div className="text-center text-sm text-muted-foreground">
