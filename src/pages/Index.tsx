@@ -120,7 +120,7 @@ const Index = () => {
         title="SWP Calculator - Systematic Withdrawal Plan Calculator"
         description="Calculate your Systematic Withdrawal Plan (SWP) easily with our free calculator. Plan your investment withdrawals effectively."
         canonicalUrl="https://swp-calculator.mutualfundjournal.in/"
-        robots="index, follow"
+        robots="max-image-preview:large"
         ogTitle="SWP Calculator - Systematic Withdrawal Plan Calculator"
         ogDescription="Calculate your Systematic Withdrawal Plan (SWP) easily with our free calculator. Plan your investment withdrawals effectively."
         ogUrl="https://swp-calculator.mutualfundjournal.in/"
