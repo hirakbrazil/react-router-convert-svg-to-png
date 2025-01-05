@@ -157,10 +157,6 @@ const Index = () => {
           </Button>
         </div>
 
-        <div className="flex justify-center">
-          <ThemeSwitcher />
-        </div>
-
         <Footer />
       </div>
     </div>
