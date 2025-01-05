@@ -1,41 +1,38 @@
-import React from "react";
-import SEO from "@/components/SEO";
+import { Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import useTheme from "@/hooks/useTheme";
+import SEO from "@/components/SEO";
 
 const NotFound = () => {
+  useTheme(); // Apply theme using the custom hook
   const navigate = useNavigate();
 
   return (
     <>
       <SEO
         title="404 - Page Not Found"
-        description="The page you are looking for does not exist."
+        description="The page you are looking for doesn't exist or has been moved."
         robots="follow, noindex"
-        canonicalUrl=""
       />
-      <div className="min-h-screen bg-background flex items-center justify-center px-4">
-        <div className="max-w-md w-full space-y-8 text-center">
-          <div>
-            <h1 className="text-6xl font-bold text-primary">404</h1>
-            <h2 className="mt-6 text-3xl font-bold text-foreground">
-              Page not found
-            </h2>
-            <p className="mt-2 text-lg text-muted-foreground">
-              The page you are looking for doesn't exist or has been moved.
-            </p>
-          </div>
-          <div className="mt-6">
-            <Button
-              onClick={() => navigate("/")}
-              className="inline-flex items-center"
-            >
-              Go back home
-            </Button>
-          </div>
-        </div>
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-background text-foreground">
+      <div className="text-center space-y-6 max-w-md">
+        <h1 className="text-6xl font-bold text-primary">404</h1>
+        <h2 className="text-2xl font-semibold">Page Not Found</h2>
+        <p className="text-muted-foreground">
+          The page you are looking for doesn't exist or has been moved.
+        </p>
+        <Button
+          onClick={() => navigate("/")}
+          className="inline-flex items-center gap-2"
+        >
+          <Home className="h-4 w-4" />
+          Go to Home
+        </Button>
       </div>
-    </>
+    </div>
+      </>
   );
 };
 
