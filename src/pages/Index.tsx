@@ -101,7 +101,7 @@ const Index = () => {
     setCurrency(newCurrency);
     toast({
       title: "Currency Changed",
-      description: `Currency switched to ${newCurrency} ${getCurrencySymbol(newCurrency)}`,
+      description: `Switched to ${newCurrency} ${getCurrencySymbol(newCurrency)}`,
       duration: 5000,
     });
   };
