@@ -17,7 +17,7 @@ const SEO: React.FC<SEOProps> = ({
   title,
   description,
   canonicalUrl,
-  robots = "index, follow",
+  robots = "max-image-preview:large",
   ogTitle,
   ogDescription,
   ogUrl,
