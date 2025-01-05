@@ -14,8 +14,6 @@ const About = () => {
         canonicalUrl="https://swp-calculator.mutualfundjournal.in/about"
         socialMeta={{
           url: "https://swp-calculator.mutualfundjournal.in/about",
-          title: "About SWP Calculator",
-          description: "Discover the purpose and features of SWP Calculator. Learn why our tool is essential for your financial planning.",
           image: "https://swp-calculator.mutualfundjournal.in/banner.jpg",
         }}
       />
