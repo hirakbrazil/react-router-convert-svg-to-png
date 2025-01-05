@@ -1,11 +1,25 @@
 import React from "react";
 import Footer from "@/components/Footer";
 import useTheme from "@/hooks/useTheme";
+import SEO from "@/components/SEO";  // Import SEO component
+
 
 const Feedback = () => {
   useTheme();
   
   return (
+    <>
+      <SEO
+        title="Feedback - SWP Calculator"
+        description="We value your feedback! Share your thoughts, queries, or suggestions with us to help us improve."
+        canonicalUrl="https://swp-calculator.mutualfundjournal.in/feedback"
+        robots="max-image-preview:large"
+        ogTitle="Feedback - SWP Calculator"
+        ogDescription="We value your feedback! Share your thoughts, queries, or suggestions with us to help us improve."
+        ogUrl="https://swp-calculator.mutualfundjournal.in/feedback"
+        ogImage="https://swp-calculator.mutualfundjournal.in/banner.jpg"
+        ogType="article"  {/* Setting og:type as article for feedback page */}
+      />
     <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto space-y-8">
         <div className="text-center">
@@ -56,6 +70,7 @@ const Feedback = () => {
         <Footer />
       </div>
     </div>
+      </>
   );
 };
 
