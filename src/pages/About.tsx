@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
+import Footer from "@/components/Footer";
 import useTheme from "@/hooks/useTheme";
 
 const About = () => {
@@ -14,38 +14,40 @@ const About = () => {
           </h1>
         </div>
 
-        <div className="prose dark:prose-invert max-w-none">
-          <p>
+        <div className="space-y-6">
+          <p className="text-lg">
             Welcome to our advanced Systematic Withdrawal Plan (SWP) Calculator, a comprehensive tool designed to make financial planning accessible for everyone.
           </p>
 
-          <h2>Why Choose Our SWP Calculator?</h2>
-          <p>
-            Our calculator stands out by offering advanced features in one place, completely free of charge. Unlike other calculators, we provide:
-          </p>
-          <ul>
-            <li>Multi-currency support for global investors</li>
-            <li>Real-time calculations with instant updates</li>
-            <li>Detailed withdrawal analysis and projections</li>
-            <li>User-friendly interface with dark/light mode</li>
-            <li>Responsive design for all devices</li>
-          </ul>
+          <div>
+            <h2 className="text-2xl font-semibold mb-4">Why Choose Our SWP Calculator?</h2>
+            <p className="mb-4">Our calculator stands out by offering advanced features in one place, completely free of charge. Unlike other calculators, we provide:</p>
+            <ul className="list-disc pl-6 space-y-2">
+              <li>Multi-currency support for global investors</li>
+              <li>Real-time calculations with instant updates</li>
+              <li>Detailed withdrawal analysis and projections</li>
+              <li>User-friendly interface with dark/light mode</li>
+              <li>Responsive design for all devices</li>
+            </ul>
+          </div>
 
-          <h2>Our Vision</h2>
-          <p>
-            We believe that financial planning should be accessible to everyone. Our mission is to empower individuals to make informed financial decisions by providing:
-          </p>
-          <ul>
-            <li>Free access to advanced financial tools</li>
-            <li>Clear and transparent calculations</li>
-            <li>Educational resources about SWP</li>
-            <li>Regular updates and improvements based on user feedback</li>
-          </ul>
+          <div>
+            <h2 className="text-2xl font-semibold mb-4">Our Vision</h2>
+            <p className="mb-4">We believe that financial planning should be accessible to everyone. Our mission is to empower individuals to make informed financial decisions by providing:</p>
+            <ul className="list-disc pl-6 space-y-2">
+              <li>Free access to advanced financial tools</li>
+              <li>Clear and transparent calculations</li>
+              <li>Educational resources about SWP</li>
+              <li>Regular updates and improvements based on user feedback</li>
+            </ul>
+          </div>
 
           <p>
             By making these tools freely available, we aim to help investors better understand and plan their systematic withdrawals, ultimately contributing to their financial well-being.
           </p>
         </div>
+
+        <Footer />
       </div>
     </div>
   );

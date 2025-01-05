@@ -8,23 +8,23 @@ const Footer = () => {
   const isHomePage = location.pathname === "/";
 
   return (
-    <footer className="mt-8 space-y-4">
+    <footer className="mt-8 space-y-8">
       <div className="flex justify-center">
         <ThemeSwitcher />
       </div>
       
       <nav className="flex justify-center gap-6">
         {!isHomePage && (
-          <Link to="/" className="inline-flex items-center gap-2 text-primary hover:underline">
+          <Link to="/" className="inline-flex items-center gap-2 text-foreground hover:text-primary">
             <Home className="h-4 w-4" />
             Home
           </Link>
         )}
-        <Link to="/about" className="inline-flex items-center gap-2 text-primary hover:underline">
+        <Link to="/about" className="inline-flex items-center gap-2 text-foreground hover:text-primary">
           <Info className="h-4 w-4" />
           About
         </Link>
-        <Link to="/feedback" className="inline-flex items-center gap-2 text-primary hover:underline">
+        <Link to="/feedback" className="inline-flex items-center gap-2 text-foreground hover:text-primary">
           <MessageSquare className="h-4 w-4" />
           Feedback
         </Link>
