@@ -125,7 +125,6 @@ const Index = () => {
           title: "SWP Calculator - Plan Your Withdrawals",
           description: "Calculate your Systematic Withdrawal Plan (SWP) easily with our free calculator. Plan your investment withdrawals effectively.",
           image: "https://swp-calculator.mutualfundjournal.in/banner.jpg",
-          siteName: "SWP Calculator",
         }}
       />
     <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
