@@ -100,6 +100,19 @@
   Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
-  for = "/index.html"
+  for = "/"
   [headers.values]
   Cache-Control = "public, max-age=600"
+  Content-Type = "text/html"
+
+[[headers]]
+  for = "/about"
+  [headers.values]
+  Cache-Control = "public, max-age=600"
+  Content-Type = "text/html"
+
+[[headers]]
+  for = "/feedback"
+  [headers.values]
+  Cache-Control = "public, max-age=600"
+  Content-Type = "text/html"
