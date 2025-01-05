@@ -1,11 +1,24 @@
 import React from "react";
 import Footer from "@/components/Footer";
 import useTheme from "@/hooks/useTheme";
+import SEO from "@/components/SEO";
 
 const About = () => {
   useTheme();
   
   return (
+    <>
+      <SEO
+        title="About SWP Calculator"
+        description="Discover the purpose and features of SWP Calculator. Learn why our tool is essential for your financial planning."
+        canonicalUrl="https://swp-calculator.mutualfundjournal.in/about"
+        socialMeta={{
+          url: "https://swp-calculator.mutualfundjournal.in/about",
+          title: "About SWP Calculator",
+          description: "Discover the purpose and features of SWP Calculator. Learn why our tool is essential for your financial planning.",
+          image: "https://swp-calculator.mutualfundjournal.in/banner.jpg",
+        }}
+      />
     <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto space-y-8">
         <div className="text-center">
@@ -50,6 +63,7 @@ const About = () => {
         <Footer />
       </div>
     </div>
+      </>
   );
 };
 
