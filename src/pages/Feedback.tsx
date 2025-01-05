@@ -1,7 +1,7 @@
 import React from "react";
 import Footer from "@/components/Footer";
 import useTheme from "@/hooks/useTheme";
-import SEO from "@/components/SEO";  // Import SEO component
+import SEO from "@/components/SEO";
 
 
 const Feedback = () => {
