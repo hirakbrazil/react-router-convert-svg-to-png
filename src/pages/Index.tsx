@@ -12,27 +12,29 @@ import SEO from "@/components/SEO";
 
 const Index = () => {
   useTheme(); // Apply theme using the custom hook
+
   const [totalInvestment, setTotalInvestment] = useState(() => {
     const saved = localStorage.getItem("totalInvestment");
     return saved ? Number(saved) : 500000;
   });
-  
+
   const [monthlyWithdrawal, setMonthlyWithdrawal] = useState(() => {
     const saved = localStorage.getItem("monthlyWithdrawal");
     return saved ? Number(saved) : 5000;
   });
-  
+
   const [returnRate, setReturnRate] = useState(() => {
     const saved = localStorage.getItem("returnRate");
     return saved ? Number(saved) : 13;
   });
-  
+
   const [timePeriod, setTimePeriod] = useState(() => {
     const saved = localStorage.getItem("timePeriod");
     return saved ? Number(saved) : 10;
   });
 
   const [finalValue, setFinalValue] = useState(0);
+  const [totalWithdrawal, setTotalWithdrawal] = useState(0); // Fixed totalWithdrawal state
   const [withdrawalPercentage, setWithdrawalPercentage] = useState(1);
   const [currency, setCurrency] = useState<CurrencyType>(() => {
     const savedCurrency = localStorage.getItem("selectedCurrency");
@@ -52,54 +54,55 @@ const Index = () => {
     localStorage.setItem("selectedCurrency", currency);
   }, [currency]);
 
-  // Calculate withdrawal percentage whenever total investment or monthly withdrawal changes
+  // Calculate withdrawal percentage
   useEffect(() => {
     const percentage = (monthlyWithdrawal / totalInvestment) * 100;
     setWithdrawalPercentage(Number(percentage.toFixed(3)));
   }, [totalInvestment, monthlyWithdrawal]);
 
   const calculateSWP = (): { finalValue: number; totalWithdrawal: number } => {
-  const n = 12; // 12 months in a year
-  const r = returnRate / (n * 100); // Monthly return rate
-  const totalMonths = timePeriod * n;
+    const n = 12; // Months in a year
+    const r = returnRate / (n * 100); // Monthly return rate
+    const totalMonths = timePeriod * n;
 
-  let remainingInvestment = totalInvestment;
-  let totalWithdrawal = 0;
+    let remainingInvestment = totalInvestment;
+    let totalWithdrawn = 0;
 
-  for (let i = 0; i < totalMonths; i++) {
-    if (remainingInvestment <= 0) break; // Stop withdrawals when funds are depleted
+    for (let i = 0; i < totalMonths; i++) {
+      if (remainingInvestment <= 0) break;
 
-    const interest = remainingInvestment * r; // Monthly interest
-    remainingInvestment += interest - monthlyWithdrawal;
+      const interest = remainingInvestment * r;
+      remainingInvestment += interest - monthlyWithdrawal;
 
-    if (remainingInvestment < 0) remainingInvestment = 0; // Ensure non-negative value
-    totalWithdrawal += monthlyWithdrawal;
-  }
+      if (remainingInvestment < 0) remainingInvestment = 0;
+      totalWithdrawn += monthlyWithdrawal;
+    }
 
-  return {
-    finalValue: Math.round(remainingInvestment),
-    totalWithdrawal: Math.round(totalWithdrawal),
+    return {
+      finalValue: Math.round(remainingInvestment),
+      totalWithdrawal: Math.round(totalWithdrawn),
+    };
   };
-};
 
-useEffect(() => {
-  const { finalValue, totalWithdrawal } = calculateSWP();
-  setFinalValue(finalValue);
-  setTotalWithdrawal(totalWithdrawal); // Add this state
-}, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod]);
+  // Recalculate values whenever inputs change
+  useEffect(() => {
+    const { finalValue, totalWithdrawal } = calculateSWP();
+    setFinalValue(finalValue);
+    setTotalWithdrawal(totalWithdrawal);
+  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod]);
 
   const handleReset = () => {
     setTotalInvestment(500000);
     setMonthlyWithdrawal(5000);
     setReturnRate(13);
     setTimePeriod(10);
-    
+
     // Clear localStorage
     localStorage.removeItem("totalInvestment");
     localStorage.removeItem("monthlyWithdrawal");
     localStorage.removeItem("returnRate");
     localStorage.removeItem("timePeriod");
-    
+
     toast({
       title: "Reset Complete",
       description: "All values reset to default",
@@ -118,8 +121,17 @@ useEffect(() => {
 
   const getCurrencySymbol = (currency: CurrencyType): string => {
     const symbols: { [key in CurrencyType]: string } = {
-      INR: "₹", USD: "$", EUR: "€", JPY: "¥", GBP: "£",
-      CNY: "¥", AUD: "$", CAD: "$", CHF: "Fr", HKD: "$", SGD: "$"
+      INR: "₹",
+      USD: "$",
+      EUR: "€",
+      JPY: "¥",
+      GBP: "£",
+      CNY: "¥",
+      AUD: "$",
+      CAD: "$",
+      CHF: "Fr",
+      HKD: "$",
+      SGD: "$",
     };
     return symbols[currency];
   };
@@ -137,53 +149,49 @@ useEffect(() => {
         ogImage="https://swp-calculator.mutualfundjournal.in/banner.jpg"
         ogType="website"
       />
-    <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto space-y-8">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-foreground sm:text-4xl">
-            SWP Calculator
-          </h1>
-          <p className="mt-2 text-muted-foreground">
-            Calculate your Systematic Withdrawal Plan
-          </p>
-          <CurrencySelector value={currency} onChange={handleCurrencyChange} />
+      <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto space-y-8">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-foreground sm:text-4xl">
+              SWP Calculator
+            </h1>
+            <p className="mt-2 text-muted-foreground">
+              Calculate your Systematic Withdrawal Plan
+            </p>
+            <CurrencySelector value={currency} onChange={handleCurrencyChange} />
+          </div>
+
+          <CalculatorForm
+            totalInvestment={totalInvestment}
+            setTotalInvestment={setTotalInvestment}
+            monthlyWithdrawal={monthlyWithdrawal}
+            setMonthlyWithdrawal={setMonthlyWithdrawal}
+            returnRate={returnRate}
+            setReturnRate={setReturnRate}
+            timePeriod={timePeriod}
+            setTimePeriod={setTimePeriod}
+            withdrawalPercentage={withdrawalPercentage}
+            currency={currency}
+          />
+
+          <ResultCard
+            totalInvestment={totalInvestment}
+            totalWithdrawal={totalWithdrawal} // Fixed state reference
+            finalValue={finalValue} // Fixed state reference
+            currency={currency}
+          />
+
+          <div className="flex justify-center">
+            <Button onClick={handleReset} variant="outline" className="gap-2">
+              <RefreshCw className="h-4 w-4" />
+              Reset
+            </Button>
+          </div>
+
+          <Footer />
         </div>
-
-        <CalculatorForm
-          totalInvestment={totalInvestment}
-          setTotalInvestment={setTotalInvestment}
-          monthlyWithdrawal={monthlyWithdrawal}
-          setMonthlyWithdrawal={setMonthlyWithdrawal}
-          returnRate={returnRate}
-          setReturnRate={setReturnRate}
-          timePeriod={timePeriod}
-          setTimePeriod={setTimePeriod}
-          withdrawalPercentage={withdrawalPercentage}
-          currency={currency}
-        />
-
-        <ResultCard
-  totalInvestment={totalInvestment}
-  totalWithdrawal={totalWithdrawal} // Dynamically calculated
-  finalValue={finalValue} // Ensures non-negative final value
-  currency={currency}
-/>
-
-        <div className="flex justify-center">
-          <Button
-            onClick={handleReset}
-            variant="outline"
-            className="gap-2"
-          >
-            <RefreshCw className="h-4 w-4" />
-            Reset
-          </Button>
-        </div>
-
-        <Footer />
       </div>
-    </div>
-   </>
+    </>
   );
 };
 
