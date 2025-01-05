@@ -12,10 +12,12 @@ const About = () => {
         title="About SWP Calculator"
         description="Discover the purpose and features of SWP Calculator. Learn why our tool is essential for your financial planning."
         canonicalUrl="https://swp-calculator.mutualfundjournal.in/about"
-        socialMeta={{
-          url: "https://swp-calculator.mutualfundjournal.in/about",
-          image: "https://swp-calculator.mutualfundjournal.in/banner.jpg",
-        }}
+        robots="max-image-preview:large"
+        ogTitle="About SWP Calculator"
+        ogDescription="Discover the purpose and features of SWP Calculator. Learn why our tool is essential for your financial planning."
+        ogUrl="https://swp-calculator.mutualfundjournal.in/about"
+        ogImage="https://swp-calculator.mutualfundjournal.in/banner.jpg"
+        ogType="article"  {/* Setting og:type as article for the About page */}
       />
     <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto space-y-8">
