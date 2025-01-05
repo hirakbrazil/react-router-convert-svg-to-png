@@ -20,7 +20,7 @@ const formatCurrency = (value: number, currency: CurrencyType): string => {
     CAD: { locale: "en-CA", currency: "CAD" },
     CHF: { locale: "de-CH", currency: "CHF" },
     HKD: { locale: "zh-HK", currency: "HKD" },
-    SGD: { locale: "en-SG", currency: "SGD" },
+    SGD: { locale: "en-SG", currency: "SGD" }
   };
 
   const format = currencyFormats[currency];
@@ -38,9 +38,10 @@ const ResultCard = ({
   finalValue,
   currency,
 }: ResultCardProps) => {
-  // Ensure final value and total profit are non-negative
-  const adjustedFinalValue = Math.max(0, finalValue);
-  const totalProfit = Math.max(0, adjustedFinalValue + totalWithdrawal - totalInvestment);
+  // Use 0 instead of negative values when calculating total profit
+  const finalValueForProfit = finalValue < 0 ? 0 : finalValue;
+  const totalProfit = finalValueForProfit + totalWithdrawal - totalInvestment;
+  const displayProfit = totalProfit > 0 ? totalProfit : 0;
 
   return (
     <div className="bg-card dark:bg-card rounded-xl shadow-lg p-6 space-y-4">
@@ -59,13 +60,13 @@ const ResultCard = ({
       <div className="flex justify-between items-center">
         <span className="text-gray-600 dark:text-gray-400">Final value</span>
         <span className={`text-xl font-semibold ${finalValue < 0 ? 'text-red-500 dark:text-red-400' : 'text-foreground'}`}>
-          {formatCurrency(adjustedFinalValue, currency)}
+          {formatCurrency(finalValue, currency)}
         </span>
       </div>
       <div className="flex justify-between items-center">
         <span className="text-gray-600 dark:text-gray-400">Total profit</span>
         <span className={`text-xl font-semibold ${totalProfit > 0 ? 'text-green-500 dark:text-green-400' : 'text-foreground'}`}>
-          {formatCurrency(totalProfit, currency)}
+          {formatCurrency(displayProfit, currency)}
         </span>
       </div>
     </div>
