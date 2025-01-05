@@ -7,6 +7,7 @@ import { toast } from "@/hooks/use-toast";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import CalculatorForm from "@/components/CalculatorForm";
 import useTheme from "@/hooks/useTheme";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   useTheme(); // Apply theme using the custom hook
@@ -160,17 +161,7 @@ const Index = () => {
           <ThemeSwitcher />
         </div>
 
-        <footer className="text-center text-sm text-muted-foreground pb-4">
-          Made with ❤️ by{" "}
-          <a 
-            href="https://mutualfundjournal.in/" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-primary hover:underline"
-          >
-            Mutual Fund Journal
-          </a>
-        </footer>
+        <Footer />
       </div>
     </div>
   );
