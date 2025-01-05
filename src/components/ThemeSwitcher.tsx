@@ -63,7 +63,7 @@ const ThemeSwitcher = () => {
   setTheme(newTheme);
   toast({
     title: "Theme Changed",
-    description: `Theme color set to ${newTheme === "system" ? "System default" : newTheme.charAt(0).toUpperCase() + newTheme.slice(1)}`,
+    description: `Color set to ${newTheme === "system" ? "System default" : newTheme.charAt(0).toUpperCase() + newTheme.slice(1)}`,
   });
 };
 
