@@ -38,9 +38,12 @@ const ResultCard = ({
   finalValue,
   currency,
 }: ResultCardProps) => {
+  // If finalValue is 0 or negative, adjust totalWithdrawal to not exceed totalInvestment
+  const adjustedTotalWithdrawal = finalValue <= 0 ? totalInvestment : totalWithdrawal;
+
   // Use 0 instead of negative values when calculating total profit
   const finalValueForProfit = finalValue < 0 ? 0 : finalValue;
-  const totalProfit = finalValueForProfit + totalWithdrawal - totalInvestment;
+  const totalProfit = finalValueForProfit + adjustedTotalWithdrawal - totalInvestment;
   const displayProfit = totalProfit > 0 ? totalProfit : 0;
 
   // If finalValue would be negative, don't display it
@@ -57,7 +60,7 @@ const ResultCard = ({
       <div className="flex justify-between items-center">
         <span className="text-gray-600 dark:text-gray-400">Total withdrawal</span>
         <span className="text-xl font-semibold text-foreground">
-          {formatCurrency(totalWithdrawal, currency)}
+          {formatCurrency(adjustedTotalWithdrawal, currency)}
         </span>
       </div>
       <div className="flex justify-between items-center">
