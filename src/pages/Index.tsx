@@ -139,7 +139,7 @@ const Index = () => {
             toast({
               title: "Values Restored",
               description: "Previous values have been restored",
-              duration: 3000,
+              duration: 5000,
             });
           }}
         >
