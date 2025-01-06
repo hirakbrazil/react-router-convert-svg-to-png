@@ -67,7 +67,7 @@ const ShareDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md rounded-xl">
+      <DialogContent className="sm:max-w-md w-11/12 rounded-xl">
         <DialogHeader>
           <DialogTitle>Sharing is caring 🥰</DialogTitle>
         </DialogHeader>
