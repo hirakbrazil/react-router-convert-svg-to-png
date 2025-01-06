@@ -20,14 +20,18 @@ const ShareDialog = ({
   returnRate,
   timePeriod,
 }: ShareDialogProps) => {
-  const generateShareableLink = () => {
+  const baseUrl = "https://swp-calculator.mutualfundjournal.in";
+
+  const generateShareableLink = (includeParams: boolean = true) => {
+    if (!includeParams) return baseUrl;
+    
     const params = new URLSearchParams({
       ti: totalInvestment.toString(),
       mw: monthlyWithdrawal.toString(),
       rr: returnRate.toString(),
       tp: timePeriod.toString(),
     });
-    return `${window.location.origin}?${params.toString()}`;
+    return `${baseUrl}?${params.toString()}`;
   };
 
   const handleShare = async () => {
@@ -36,7 +40,7 @@ const ShareDialog = ({
         await navigator.share({
           title: "SWP Calculator",
           text: "Check out my SWP calculation!",
-          url: generateShareableLink(),
+          url: generateShareableLink(false),
         });
       } catch (error) {
         console.error("Error sharing:", error);
@@ -45,7 +49,7 @@ const ShareDialog = ({
   };
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(generateShareableLink());
+    navigator.clipboard.writeText(generateShareableLink(false));
     toast({
       title: "Link copied to clipboard",
       duration: 3000,
@@ -53,7 +57,7 @@ const ShareDialog = ({
   };
 
   const handleShareCalculation = () => {
-    navigator.clipboard.writeText(generateShareableLink());
+    navigator.clipboard.writeText(generateShareableLink(true));
     toast({
       title: "Link copied to clipboard",
       description: "Share this link to show your current calculation",
@@ -63,7 +67,7 @@ const ShareDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md mx-4 rounded-xl">
         <DialogHeader>
           <DialogTitle>Share Calculator</DialogTitle>
         </DialogHeader>
