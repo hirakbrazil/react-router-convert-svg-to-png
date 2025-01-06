@@ -1,36 +1,33 @@
 import React, { useState, useEffect, useRef } from "react";
 import ResultCard from "@/components/ResultCard";
 import CurrencySelector, { CurrencyType } from "@/components/CurrencySelector";
-import { Button } from "@/components/ui/button";
-import { RefreshCw, Undo } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import CalculatorForm from "@/components/CalculatorForm";
 import useTheme from "@/hooks/useTheme";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import ActionButtons from "@/components/ActionButtons";
 
 const Index = () => {
-  useTheme(); // Apply theme using the custom hook
-  const [totalInvestment, setTotalInvestment] = useState(() => {
-    const saved = localStorage.getItem("totalInvestment");
-    return saved ? Number(saved) : 500000;
-  });
+  useTheme();
 
-  const [monthlyWithdrawal, setMonthlyWithdrawal] = useState(() => {
-    const saved = localStorage.getItem("monthlyWithdrawal");
-    return saved ? Number(saved) : 5000;
-  });
+  // Parse URL parameters on initial load
+  const getInitialValues = () => {
+    const params = new URLSearchParams(window.location.search);
+    return {
+      totalInvestment: Number(params.get("ti")) || 500000,
+      monthlyWithdrawal: Number(params.get("mw")) || 5000,
+      returnRate: Number(params.get("rr")) || 13,
+      timePeriod: Number(params.get("tp")) || 10,
+    };
+  };
 
-  const [returnRate, setReturnRate] = useState(() => {
-    const saved = localStorage.getItem("returnRate");
-    return saved ? Number(saved) : 13;
-  });
+  const initialValues = getInitialValues();
 
-  const [timePeriod, setTimePeriod] = useState(() => {
-    const saved = localStorage.getItem("timePeriod");
-    return saved ? Number(saved) : 10;
-  });
+  const [totalInvestment, setTotalInvestment] = useState(initialValues.totalInvestment);
+  const [monthlyWithdrawal, setMonthlyWithdrawal] = useState(initialValues.monthlyWithdrawal);
+  const [returnRate, setReturnRate] = useState(initialValues.returnRate);
+  const [timePeriod, setTimePeriod] = useState(initialValues.timePeriod);
 
   const [finalValue, setFinalValue] = useState(0);
   const [withdrawalPercentage, setWithdrawalPercentage] = useState(1);
@@ -39,7 +36,7 @@ const Index = () => {
     return (savedCurrency as CurrencyType) || "INR";
   });
 
-  // Use useRef to store previous values for undo functionality
+  // Store previous values for undo functionality
   const previousValuesRef = useRef({
     totalInvestment,
     monthlyWithdrawal,
@@ -60,18 +57,17 @@ const Index = () => {
     localStorage.setItem("selectedCurrency", currency);
   }, [currency]);
 
-  // Calculate withdrawal percentage whenever total investment or monthly withdrawal changes
+  // Calculate withdrawal percentage
   useEffect(() => {
     const percentage = (monthlyWithdrawal / totalInvestment) * 100;
     setWithdrawalPercentage(Number(percentage.toFixed(3)));
   }, [totalInvestment, monthlyWithdrawal]);
 
   const calculateSWP = () => {
-    const n = 12; // 12 months in a year
-    const r = returnRate / (n * 100); // Monthly return rate
-    const t = timePeriod; // Number of years
+    const n = 12;
+    const r = returnRate / (n * 100);
+    const t = timePeriod;
 
-    // Future Value Calculation using the compound interest formula with monthly withdrawals
     let result = Math.round(
       totalInvestment * Math.pow(1 + returnRate / 100, t) -
         (monthlyWithdrawal *
@@ -88,7 +84,6 @@ const Index = () => {
   }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod]);
 
   const handleReset = () => {
-    // Store current values for undo functionality
     previousValuesRef.current = {
       totalInvestment,
       monthlyWithdrawal,
@@ -96,84 +91,27 @@ const Index = () => {
       timePeriod,
     };
 
-    // Reset values
     setTotalInvestment(500000);
     setMonthlyWithdrawal(5000);
     setReturnRate(13);
     setTimePeriod(10);
 
-    // Clear localStorage
     localStorage.removeItem("totalInvestment");
     localStorage.removeItem("monthlyWithdrawal");
     localStorage.removeItem("returnRate");
     localStorage.removeItem("timePeriod");
-
-    toast({
-      title: "Reset Complete",
-      description: "All values reset to default",
-      duration: 5000,
-      action: (
-        <Button
-          variant="outline"
-          size="sm"
-          className="gap-2"
-          onClick={() => {
-            const { totalInvestment, monthlyWithdrawal, returnRate, timePeriod } =
-              previousValuesRef.current;
-
-            // Restore previous values
-            setTotalInvestment(totalInvestment);
-            setMonthlyWithdrawal(monthlyWithdrawal);
-            setReturnRate(returnRate);
-            setTimePeriod(timePeriod);
-
-            // Restore localStorage
-            localStorage.setItem("totalInvestment", totalInvestment.toString());
-            localStorage.setItem(
-              "monthlyWithdrawal",
-              monthlyWithdrawal.toString()
-            );
-            localStorage.setItem("returnRate", returnRate.toString());
-            localStorage.setItem("timePeriod", timePeriod.toString());
-
-            toast({
-              title: "Values Restored",
-              description: "Previous values have been restored",
-              duration: 5000,
-            });
-          }}
-        >
-          <Undo className="h-4 w-4" />
-          Undo
-        </Button>
-      ),
-    });
   };
 
-  const handleCurrencyChange = (newCurrency: CurrencyType) => {
-    setCurrency(newCurrency);
-    toast({
-      title: "Currency Changed",
-      description: `Switched to ${newCurrency} ${getCurrencySymbol(newCurrency)}`,
-      duration: 5000,
-    });
-  };
+  const handleRestore = (values: typeof previousValuesRef.current) => {
+    setTotalInvestment(values.totalInvestment);
+    setMonthlyWithdrawal(values.monthlyWithdrawal);
+    setReturnRate(values.returnRate);
+    setTimePeriod(values.timePeriod);
 
-  const getCurrencySymbol = (currency: CurrencyType): string => {
-    const symbols: { [key in CurrencyType]: string } = {
-      INR: "₹",
-      USD: "$",
-      EUR: "€",
-      JPY: "¥",
-      GBP: "£",
-      CNY: "¥",
-      AUD: "$",
-      CAD: "$",
-      CHF: "Fr",
-      HKD: "$",
-      SGD: "$",
-    };
-    return symbols[currency];
+    localStorage.setItem("totalInvestment", values.totalInvestment.toString());
+    localStorage.setItem("monthlyWithdrawal", values.monthlyWithdrawal.toString());
+    localStorage.setItem("returnRate", values.returnRate.toString());
+    localStorage.setItem("timePeriod", values.timePeriod.toString());
   };
 
   return (
@@ -198,7 +136,7 @@ const Index = () => {
             <p className="mt-2 text-muted-foreground">
               Calculate your Systematic Withdrawal Plan
             </p>
-            <CurrencySelector value={currency} onChange={handleCurrencyChange} />
+            <CurrencySelector value={currency} onChange={setCurrency} />
           </div>
 
           <CalculatorForm
@@ -221,16 +159,17 @@ const Index = () => {
             currency={currency}
           />
 
-          <div className="flex justify-center">
-            <Button
-              onClick={handleReset}
-              variant="outline"
-              className="gap-2"
-            >
-              <RefreshCw className="h-4 w-4" />
-              Reset
-            </Button>
-          </div>
+          <ActionButtons
+            onReset={handleReset}
+            previousValues={previousValuesRef.current}
+            currentValues={{
+              totalInvestment,
+              monthlyWithdrawal,
+              returnRate,
+              timePeriod,
+            }}
+            onRestore={handleRestore}
+          />
 
           <Footer />
         </div>
