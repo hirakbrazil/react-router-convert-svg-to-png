@@ -44,7 +44,7 @@ const ActionButtons = ({
     toast({
       title: "Reset Complete",
       description: "All values reset to default",
-      duration: 6000,
+      duration: 7000,
       action: (
         <Button
           variant="outline"
