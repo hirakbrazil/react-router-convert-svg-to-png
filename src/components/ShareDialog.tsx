@@ -20,7 +20,7 @@ const ShareDialog = ({
   returnRate,
   timePeriod,
 }: ShareDialogProps) => {
-  const baseUrl = "https://swp-calculator.mutualfundjournal.in";
+  const baseUrl = "https://swp-calculator.mutualfundjournal.in/";
 
   const generateShareableLink = (includeParams: boolean = true) => {
     if (!includeParams) return baseUrl;
