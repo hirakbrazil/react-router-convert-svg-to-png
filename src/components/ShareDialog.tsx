@@ -61,7 +61,7 @@ const ShareDialog = ({
     toast({
       title: "Link copied to clipboard",
       description: "Share this link to show your current calculation",
-      duration: 5000,
+      duration: 7000,
     });
   };
 
