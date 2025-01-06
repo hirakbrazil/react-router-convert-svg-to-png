@@ -52,7 +52,7 @@ const ShareDialog = ({
     navigator.clipboard.writeText(generateShareableLink(false));
     toast({
       title: "Link copied to clipboard",
-      duration: 5000,
+      duration: 4000,
     });
   };
 
