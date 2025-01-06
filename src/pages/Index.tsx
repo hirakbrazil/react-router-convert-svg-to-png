@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ResultCard from "@/components/ResultCard";
 import CurrencySelector, { CurrencyType } from "@/components/CurrencySelector";
 import { Button } from "@/components/ui/button";
@@ -16,17 +16,17 @@ const Index = () => {
     const saved = localStorage.getItem("totalInvestment");
     return saved ? Number(saved) : 500000;
   });
-  
+
   const [monthlyWithdrawal, setMonthlyWithdrawal] = useState(() => {
     const saved = localStorage.getItem("monthlyWithdrawal");
     return saved ? Number(saved) : 5000;
   });
-  
+
   const [returnRate, setReturnRate] = useState(() => {
     const saved = localStorage.getItem("returnRate");
     return saved ? Number(saved) : 13;
   });
-  
+
   const [timePeriod, setTimePeriod] = useState(() => {
     const saved = localStorage.getItem("timePeriod");
     return saved ? Number(saved) : 10;
@@ -39,13 +39,13 @@ const Index = () => {
     return (savedCurrency as CurrencyType) || "INR";
   });
 
-  // State to store previous values for Undo
-  const [previousValues, setPreviousValues] = useState<{
-    totalInvestment: number;
-    monthlyWithdrawal: number;
-    returnRate: number;
-    timePeriod: number;
-  } | null>(null);
+  // Use useRef to store previous values for undo functionality
+  const previousValuesRef = useRef({
+    totalInvestment,
+    monthlyWithdrawal,
+    returnRate,
+    timePeriod,
+  });
 
   // Save inputs to localStorage
   useEffect(() => {
@@ -66,17 +66,17 @@ const Index = () => {
     setWithdrawalPercentage(Number(percentage.toFixed(3)));
   }, [totalInvestment, monthlyWithdrawal]);
 
-  // SWP Calculation logic
   const calculateSWP = () => {
     const n = 12; // 12 months in a year
     const r = returnRate / (n * 100); // Monthly return rate
     const t = timePeriod; // Number of years
 
+    // Future Value Calculation using the compound interest formula with monthly withdrawals
     let result = Math.round(
       totalInvestment * Math.pow(1 + returnRate / 100, t) -
-      (monthlyWithdrawal *
-        (Math.pow(1 + Math.pow(1 + returnRate / 100, 1 / n) - 1, t * n) - 1)) /
-        (Math.pow(1 + returnRate / 100, 1 / n) - 1)
+        (monthlyWithdrawal *
+          (Math.pow(1 + Math.pow(1 + returnRate / 100, 1 / n) - 1, t * n) - 1)) /
+          (Math.pow(1 + returnRate / 100, 1 / n) - 1)
     );
 
     return result;
@@ -88,15 +88,15 @@ const Index = () => {
   }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod]);
 
   const handleReset = () => {
-    // Store current values for Undo
-    setPreviousValues({
+    // Store current values for undo functionality
+    previousValuesRef.current = {
       totalInvestment,
       monthlyWithdrawal,
       returnRate,
       timePeriod,
-    });
+    };
 
-    // Reset values to defaults
+    // Reset values
     setTotalInvestment(500000);
     setMonthlyWithdrawal(5000);
     setReturnRate(13);
@@ -108,49 +108,39 @@ const Index = () => {
     localStorage.removeItem("returnRate");
     localStorage.removeItem("timePeriod");
 
-    // Show toast with Undo action
     toast({
       title: "Reset Complete",
       description: "All values reset to default",
       duration: 5000,
-      action: previousValues && (
+      action: (
         <Button
           variant="outline"
           size="sm"
           className="gap-2"
           onClick={() => {
+            const { totalInvestment, monthlyWithdrawal, returnRate, timePeriod } =
+              previousValuesRef.current;
+
             // Restore previous values
-            setTotalInvestment(previousValues.totalInvestment);
-            setMonthlyWithdrawal(previousValues.monthlyWithdrawal);
-            setReturnRate(previousValues.returnRate);
-            setTimePeriod(previousValues.timePeriod);
+            setTotalInvestment(totalInvestment);
+            setMonthlyWithdrawal(monthlyWithdrawal);
+            setReturnRate(returnRate);
+            setTimePeriod(timePeriod);
 
             // Restore localStorage
-            localStorage.setItem(
-              "totalInvestment",
-              previousValues.totalInvestment.toString()
-            );
+            localStorage.setItem("totalInvestment", totalInvestment.toString());
             localStorage.setItem(
               "monthlyWithdrawal",
-              previousValues.monthlyWithdrawal.toString()
+              monthlyWithdrawal.toString()
             );
-            localStorage.setItem(
-              "returnRate",
-              previousValues.returnRate.toString()
-            );
-            localStorage.setItem(
-              "timePeriod",
-              previousValues.timePeriod.toString()
-            );
+            localStorage.setItem("returnRate", returnRate.toString());
+            localStorage.setItem("timePeriod", timePeriod.toString());
 
             toast({
               title: "Values Restored",
               description: "Previous values have been restored",
-              duration: 5000,
+              duration: 3000,
             });
-
-            // Clear previous values to avoid restoring multiple times
-            setPreviousValues(null);
           }}
         >
           <Undo className="h-4 w-4" />
