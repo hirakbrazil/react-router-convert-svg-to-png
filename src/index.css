@@ -106,7 +106,7 @@
     }
   /* Dark mode scrollbar styles */
   ::-webkit-scrollbar-thumb {
-    background: #030c21;
+    background: #05112e;
   }
   ::-webkit-scrollbar-thumb:hover {
     background: #122040;
