@@ -35,7 +35,12 @@ const ActionButtons = ({
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
 
   const handleReset = () => {
+    // Store current values before reset
+    const valuesToRestore = { ...currentValues };
+    
+    // Perform reset
     onReset();
+    
     toast({
       title: "Reset Complete",
       description: "All values reset to default",
@@ -46,7 +51,7 @@ const ActionButtons = ({
           size="sm"
           className="gap-2"
           onClick={() => {
-            onRestore(previousValues);
+            onRestore(valuesToRestore);
             toast({
               title: "Values Restored",
               description: "Previous values have been restored",
