@@ -39,7 +39,7 @@ const ShareDialog = ({
       try {
         await navigator.share({
           title: "SWP Calculator",
-          text: "Check out my SWP calculation!",
+          text: "SWP Calculator - Systematic Withdrawal Plan Calculator",
           url: generateShareableLink(false),
         });
       } catch (error) {
@@ -52,7 +52,7 @@ const ShareDialog = ({
     navigator.clipboard.writeText(generateShareableLink(false));
     toast({
       title: "Link copied to clipboard",
-      duration: 3000,
+      duration: 5000,
     });
   };
 
@@ -61,7 +61,7 @@ const ShareDialog = ({
     toast({
       title: "Link copied to clipboard",
       description: "Share this link to show your current calculation",
-      duration: 3000,
+      duration: 5000,
     });
   };
 
@@ -69,7 +69,7 @@ const ShareDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md mx-4 rounded-xl">
         <DialogHeader>
-          <DialogTitle>Share Calculator</DialogTitle>
+          <DialogTitle>Sharing is caring 🥰</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-4">
           {navigator.share && (
