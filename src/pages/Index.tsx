@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ResultCard from "@/components/ResultCard";
 import CurrencySelector, { CurrencyType } from "@/components/CurrencySelector";
 import { Button } from "@/components/ui/button";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, Undo } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import CalculatorForm from "@/components/CalculatorForm";
@@ -58,27 +58,16 @@ const Index = () => {
     setWithdrawalPercentage(Number(percentage.toFixed(3)));
   }, [totalInvestment, monthlyWithdrawal]);
 
-  const calculateSWP = () => {
-    const n = 12; // 12 months in a year
-    const r = returnRate / (n * 100); // Monthly return rate
-    const t = timePeriod; // Number of years
-
-    // Future Value Calculation using the compound interest formula with monthly withdrawals
-    let result = Math.round(
-      (totalInvestment * Math.pow((1 + returnRate / 100), t)) -
-      (monthlyWithdrawal * (Math.pow((1 + (Math.pow((1 + returnRate / 100), (1 / n)) - 1)), (t * n)) - 1) /
-        (Math.pow((1 + returnRate / 100), (1 / n)) - 1))
-    );
-
-    return result;
-  };
-
-  useEffect(() => {
-    const result = calculateSWP();
-    setFinalValue(result);
-  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod]);
-
   const handleReset = () => {
+    // Store current values for undo functionality
+    const previousValues = {
+      totalInvestment,
+      monthlyWithdrawal,
+      returnRate,
+      timePeriod
+    };
+
+    // Reset values
     setTotalInvestment(500000);
     setMonthlyWithdrawal(5000);
     setReturnRate(13);
@@ -94,6 +83,34 @@ const Index = () => {
       title: "Reset Complete",
       description: "All values reset to default",
       duration: 5000,
+      action: (
+        <Button
+          variant="outline"
+          size="sm"
+          className="gap-2"
+          onClick={() => {
+            setTotalInvestment(previousValues.totalInvestment);
+            setMonthlyWithdrawal(previousValues.monthlyWithdrawal);
+            setReturnRate(previousValues.returnRate);
+            setTimePeriod(previousValues.timePeriod);
+            
+            // Restore localStorage
+            localStorage.setItem("totalInvestment", previousValues.totalInvestment.toString());
+            localStorage.setItem("monthlyWithdrawal", previousValues.monthlyWithdrawal.toString());
+            localStorage.setItem("returnRate", previousValues.returnRate.toString());
+            localStorage.setItem("timePeriod", previousValues.timePeriod.toString());
+            
+            toast({
+              title: "Values Restored",
+              description: "Previous values have been restored",
+              duration: 3000,
+            });
+          }}
+        >
+          <Undo className="h-4 w-4" />
+          Undo
+        </Button>
+      ),
     });
   };
 
@@ -127,53 +144,53 @@ const Index = () => {
         ogImage="https://swp-calculator.mutualfundjournal.in/banner.jpg"
         ogType="website"
       />
-    <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto space-y-8">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-foreground sm:text-4xl">
-            SWP Calculator
-          </h1>
-          <p className="mt-2 text-muted-foreground">
-            Calculate your Systematic Withdrawal Plan
-          </p>
-          <CurrencySelector value={currency} onChange={handleCurrencyChange} />
+      <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto space-y-8">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-foreground sm:text-4xl">
+              SWP Calculator
+            </h1>
+            <p className="mt-2 text-muted-foreground">
+              Calculate your Systematic Withdrawal Plan
+            </p>
+            <CurrencySelector value={currency} onChange={handleCurrencyChange} />
+          </div>
+
+          <CalculatorForm
+            totalInvestment={totalInvestment}
+            setTotalInvestment={setTotalInvestment}
+            monthlyWithdrawal={monthlyWithdrawal}
+            setMonthlyWithdrawal={setMonthlyWithdrawal}
+            returnRate={returnRate}
+            setReturnRate={setReturnRate}
+            timePeriod={timePeriod}
+            setTimePeriod={setTimePeriod}
+            withdrawalPercentage={withdrawalPercentage}
+            currency={currency}
+          />
+
+          <ResultCard
+            totalInvestment={totalInvestment}
+            totalWithdrawal={monthlyWithdrawal * timePeriod * 12}
+            finalValue={finalValue}
+            currency={currency}
+          />
+
+          <div className="flex justify-center">
+            <Button
+              onClick={handleReset}
+              variant="outline"
+              className="gap-2"
+            >
+              <RefreshCw className="h-4 w-4" />
+              Reset
+            </Button>
+          </div>
+
+          <Footer />
         </div>
-
-        <CalculatorForm
-          totalInvestment={totalInvestment}
-          setTotalInvestment={setTotalInvestment}
-          monthlyWithdrawal={monthlyWithdrawal}
-          setMonthlyWithdrawal={setMonthlyWithdrawal}
-          returnRate={returnRate}
-          setReturnRate={setReturnRate}
-          timePeriod={timePeriod}
-          setTimePeriod={setTimePeriod}
-          withdrawalPercentage={withdrawalPercentage}
-          currency={currency}
-        />
-
-        <ResultCard
-          totalInvestment={totalInvestment}
-          totalWithdrawal={monthlyWithdrawal * timePeriod * 12}
-          finalValue={finalValue}
-          currency={currency}
-        />
-
-        <div className="flex justify-center">
-          <Button
-            onClick={handleReset}
-            variant="outline"
-            className="gap-2"
-          >
-            <RefreshCw className="h-4 w-4" />
-            Reset
-          </Button>
-        </div>
-
-        <Footer />
       </div>
-    </div>
-   </>
+    </>
   );
 };
 
