@@ -14,11 +14,16 @@ const Index = () => {
   // Parse URL parameters on initial load
   const getInitialValues = () => {
     const params = new URLSearchParams(window.location.search);
+    const savedTotalInvestment = localStorage.getItem("totalInvestment");
+    const savedMonthlyWithdrawal = localStorage.getItem("monthlyWithdrawal");
+    const savedReturnRate = localStorage.getItem("returnRate");
+    const savedTimePeriod = localStorage.getItem("timePeriod");
+
     return {
-      totalInvestment: Number(params.get("ti")) || 500000,
-      monthlyWithdrawal: Number(params.get("mw")) || 5000,
-      returnRate: Number(params.get("rr")) || 13,
-      timePeriod: Number(params.get("tp")) || 10,
+      totalInvestment: Number(params.get("ti")) || Number(savedTotalInvestment) || 500000,
+      monthlyWithdrawal: Number(params.get("mw")) || Number(savedMonthlyWithdrawal) || 5000,
+      returnRate: Number(params.get("rr")) || Number(savedReturnRate) || 13,
+      timePeriod: Number(params.get("tp")) || Number(savedTimePeriod) || 10,
     };
   };
 
@@ -44,7 +49,7 @@ const Index = () => {
     timePeriod,
   });
 
-  // Save inputs to localStorage
+  // Save inputs to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem("totalInvestment", totalInvestment.toString());
     localStorage.setItem("monthlyWithdrawal", monthlyWithdrawal.toString());
