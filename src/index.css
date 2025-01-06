@@ -58,6 +58,32 @@
     @apply bg-background text-foreground font-sans;
   }
 
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.22);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+@media screen and (min-width: 768px) {
+  ::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 8px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+  }
+}
+  ::-webkit-scrollbar-thumb:active {
+  background: rgba(0, 0, 0, 0.35);
+}
+  
   .dark {
     .bg-card {
       background-color: #030c21 !important;
@@ -78,6 +104,16 @@
     [role="listbox"] {
       background-color: #030c21 !important;
     }
+  /* Dark mode scrollbar styles */
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+  ::-webkit-scrollbar-thumb:active {
+    background: rgba(255, 255, 255, 0.3);
+  }
   }
   input {
     outline: none !important; /* Removes the default browser outline */
