@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { RefreshCw, Share2, Undo } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import ShareDialog from "./ShareDialog";
 
 interface ActionButtonsProps {
@@ -34,10 +34,16 @@ const ActionButtons = ({
 }: ActionButtonsProps) => {
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
   const [isResetDisabled, setIsResetDisabled] = useState(false);
+  const resetTimeoutRef = useRef<NodeJS.Timeout | null>(null); // Ref to store timeout ID
 
   const handleReset = () => {
     // Store current values before reset
     const valuesToRestore = { ...currentValues };
+
+    // Clear any existing timeout
+    if (resetTimeoutRef.current) {
+      clearTimeout(resetTimeoutRef.current);
+    }
 
     // Disable the Reset button
     setIsResetDisabled(true);
@@ -73,8 +79,8 @@ const ActionButtons = ({
       ),
     });
 
-    // Re-enable the Reset button after 7 seconds, if not already enabled by Undo
-    setTimeout(() => {
+    // Start a new timeout for 7 seconds
+    resetTimeoutRef.current = setTimeout(() => {
       setIsResetDisabled(false);
     }, 7000);
   };
