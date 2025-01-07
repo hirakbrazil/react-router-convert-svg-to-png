@@ -78,7 +78,6 @@ useEffect(() => {
 }, [totalInvestment, monthlyWithdrawal]);
 
 const calculateSWP = () => {
-  // Determine the compounding frequency
   let n;
   switch (withdrawalFrequency) {
     case "Quarterly":
@@ -97,10 +96,10 @@ const calculateSWP = () => {
   const r = returnRate / (n * 100); // Rate per period
   const t = timePeriod; // Time in years
 
-  // Corrected formula for future value calculation
+  // The corrected formula for future value calculation with the right compounding frequency
   let result = Math.round(
     (totalInvestment * Math.pow(1 + r, t * n)) - 
-    (monthlyWithdrawal * (Math.pow(1 + r, t * n) - 1)) / r
+    (monthlyWithdrawal * (Math.pow(1 + r, t * n) - 1) / r)
   );
 
   return result;
