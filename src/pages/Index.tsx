@@ -146,7 +146,7 @@ const Index = () => {
     localStorage.setItem("monthlyWithdrawal", values.monthlyWithdrawal.toString());
     localStorage.setItem("returnRate", values.returnRate.toString());
     localStorage.setItem("timePeriod", values.timePeriod.toString());
-    localStorage.setItem("withdrawalFrequency", values.withdrawalFrequency);
+    localStorage.setItem("withdrawalFrequency", values.withdrawalFrequency.toString());
   };
 
   return (
