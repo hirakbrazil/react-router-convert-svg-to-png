@@ -6,18 +6,56 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "@/hooks/use-toast";
 
-export type CurrencyType = "INR" | "USD" | "EUR" | "JPY" | "GBP" | "CNY" | "AUD" | "CAD" | "CHF" | "HKD" | "SGD";
+export type CurrencyType =
+  | "INR"
+  | "USD"
+  | "EUR"
+  | "JPY"
+  | "GBP"
+  | "CNY"
+  | "AUD"
+  | "CAD"
+  | "CHF"
+  | "HKD"
+  | "SGD";
 
 interface CurrencySelectorProps {
   value: CurrencyType;
   onChange: (value: CurrencyType) => void;
 }
 
+const getCurrencySymbol = (currency: CurrencyType): string => {
+  const symbols: { [key in CurrencyType]: string } = {
+    INR: "₹",
+    USD: "$",
+    EUR: "€",
+    JPY: "¥",
+    GBP: "£",
+    CNY: "¥",
+    AUD: "$",
+    CAD: "$",
+    CHF: "Fr",
+    HKD: "$",
+    SGD: "$",
+  };
+  return symbols[currency];
+};
+
 const CurrencySelector = ({ value, onChange }: CurrencySelectorProps) => {
+  const handleCurrencyChange = (newCurrency: CurrencyType) => {
+    onChange(newCurrency); // Call the parent's onChange handler
+    toast({
+      title: "Currency Changed",
+      description: `Currency switched to ${newCurrency} ${getCurrencySymbol(newCurrency)}`,
+      duration: 5000,
+    });
+  };
+
   return (
     <div className="flex items-center justify-center mt-5 mb-6">
-      <Select value={value} onValueChange={onChange}>
+      <Select value={value} onValueChange={handleCurrencyChange}>
         <SelectTrigger className="w-[80px]">
           <SelectValue />
         </SelectTrigger>
