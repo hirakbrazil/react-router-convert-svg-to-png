@@ -78,32 +78,30 @@ const Index = () => {
   }, [totalInvestment, monthlyWithdrawal]);
 
   const calculateSWP = () => {
-    // Determine the compounding frequency
-    let n;
-    switch (withdrawalFrequency) {
-      case "Quarterly":
-        n = 4; // Quarterly compounding
-        break;
-      case "Half-yearly":
-        n = 2; // Half-yearly compounding
-        break;
-      case "Yearly":
-        n = 1; // Yearly compounding
-        break;
-      default:
-        n = 12; // Default to monthly compounding
-    }
+  let n; // compounding frequency
+  switch (withdrawalFrequency) {
+    case "Quarterly":
+      n = 4; // Quarterly compounding
+      break;
+    case "Half-yearly":
+      n = 2; // Half-yearly compounding
+      break;
+    case "Yearly":
+      n = 1; // Yearly compounding
+      break;
+    default:
+      n = 12; // Monthly compounding
+  }
 
-    const r = returnRate / (n * 100); // Rate per period
-    const t = timePeriod; // Time in years
+  const r = returnRate / 100; // Annual return rate as decimal
+  const t = timePeriod; // Time period in years
+  const PMT = withdrawalFrequency === "Monthly" ? monthlyWithdrawal : withdrawalPerFrequency;
 
-    let result = Math.round(
-      totalInvestment * Math.pow(1 + r, t * n) -
-        (monthlyWithdrawal * (Math.pow(1 + r, t * n) - 1)) / r
-    );
+  // Future Value Calculation using the compound interest formula with periodic withdrawals
+  const futureValue = totalInvestment * Math.pow(1 + r / n, n * t) - (PMT * (Math.pow(1 + r / n, n * t) - 1)) / (r / n);
 
-    return result;
-  };
+  return Math.round(futureValue);
+};
 
   useEffect(() => {
     const result = calculateSWP();
