@@ -79,30 +79,46 @@ useEffect(() => {
 
 const calculateSWP = () => {
   let n;
-  switch (withdrawalFrequency) {
-    case "Quarterly":
-      n = 4; // Quarterly compounding
-      break;
-    case "Half-yearly":
-      n = 2; // Half-yearly compounding
-      break;
-    case "Yearly":
-      n = 1; // Yearly compounding
-      break;
-    default:
-      n = 12; // Default to monthly compounding
+  if (withdrawalFrequency === "Monthly") {
+    // Use old monthly formula when frequency is monthly
+    n = 12;
+    const r = returnRate / 100; // Annual return rate for monthly withdrawals
+    const t = timePeriod;
+    
+    let result = Math.round(
+      (totalInvestment * Math.pow(1 + r, t)) -
+      (monthlyWithdrawal * (Math.pow(1 + (Math.pow(1 + r, (1 / n)) - 1)), (t * n)) - 1) /
+      (Math.pow(1 + r, (1 / n)) - 1)
+    );
+    
+    return result;
+  } else {
+    // Use adjusted formula for other frequencies
+    switch (withdrawalFrequency) {
+      case "Quarterly":
+        n = 4;
+        break;
+      case "Half-yearly":
+        n = 2;
+        break;
+      case "Yearly":
+        n = 1;
+        break;
+      default:
+        n = 12;
+        break;
+    }
+
+    const r = returnRate / (n * 100);
+    const t = timePeriod;
+
+    let result = Math.round(
+      (totalInvestment * Math.pow(1 + r, t * n)) - 
+      (monthlyWithdrawal * (Math.pow(1 + r, t * n) - 1) / r)
+    );
+
+    return result;
   }
-
-  const r = returnRate / (n * 100); // Rate per period
-  const t = timePeriod; // Time in years
-
-  // The corrected formula for future value calculation with the right compounding frequency
-  let result = Math.round(
-    (totalInvestment * Math.pow(1 + r, t * n)) - 
-    (monthlyWithdrawal * (Math.pow(1 + r, t * n) - 1) / r)
-  );
-
-  return result;
 };
 
 useEffect(() => {
