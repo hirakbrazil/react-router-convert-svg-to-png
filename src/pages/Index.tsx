@@ -7,7 +7,6 @@ import useTheme from "@/hooks/useTheme";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import ActionButtons from "@/components/ActionButtons";
-import { WithdrawalFrequency } from "@/types/calculator";
 
 const Index = () => {
   useTheme();
@@ -19,14 +18,12 @@ const Index = () => {
     const savedMonthlyWithdrawal = localStorage.getItem("monthlyWithdrawal");
     const savedReturnRate = localStorage.getItem("returnRate");
     const savedTimePeriod = localStorage.getItem("timePeriod");
-    const savedWithdrawalFrequency = localStorage.getItem("withdrawalFrequency") as WithdrawalFrequency;
 
     return {
       totalInvestment: Number(params.get("ti")) || Number(savedTotalInvestment) || 500000,
       monthlyWithdrawal: Number(params.get("mw")) || Number(savedMonthlyWithdrawal) || 5000,
       returnRate: Number(params.get("rr")) || Number(savedReturnRate) || 13,
       timePeriod: Number(params.get("tp")) || Number(savedTimePeriod) || 10,
-      withdrawalFrequency: savedWithdrawalFrequency || "Monthly",
     };
   };
 
@@ -36,7 +33,6 @@ const Index = () => {
   const [monthlyWithdrawal, setMonthlyWithdrawal] = useState(initialValues.monthlyWithdrawal);
   const [returnRate, setReturnRate] = useState(initialValues.returnRate);
   const [timePeriod, setTimePeriod] = useState(initialValues.timePeriod);
-  const [withdrawalFrequency, setWithdrawalFrequency] = useState<WithdrawalFrequency>(initialValues.withdrawalFrequency);
 
   const [finalValue, setFinalValue] = useState(0);
   const [withdrawalPercentage, setWithdrawalPercentage] = useState(1);
@@ -59,8 +55,7 @@ const Index = () => {
     localStorage.setItem("monthlyWithdrawal", monthlyWithdrawal.toString());
     localStorage.setItem("returnRate", returnRate.toString());
     localStorage.setItem("timePeriod", timePeriod.toString());
-    localStorage.setItem("withdrawalFrequency", withdrawalFrequency);
-  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency]);
+  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod]);
 
   // Save currency selection to localStorage
   useEffect(() => {
@@ -73,32 +68,14 @@ const Index = () => {
     setWithdrawalPercentage(Number(percentage.toFixed(3)));
   }, [totalInvestment, monthlyWithdrawal]);
 
-  const getAnnualWithdrawal = () => {
-    switch (withdrawalFrequency) {
-      case "Weekly":
-        return monthlyWithdrawal * 52;
-      case "Monthly":
-        return monthlyWithdrawal * 12;
-      case "Quarterly":
-        return monthlyWithdrawal * 4;
-      case "Half-yearly":
-        return monthlyWithdrawal * 2;
-      case "Yearly":
-        return monthlyWithdrawal;
-      default:
-        return monthlyWithdrawal * 12;
-    }
-  };
-
   const calculateSWP = () => {
     const n = 12;
     const r = returnRate / (n * 100);
     const t = timePeriod;
-    const annualWithdrawal = getAnnualWithdrawal();
 
     let result = Math.round(
       totalInvestment * Math.pow(1 + returnRate / 100, t) -
-        (annualWithdrawal *
+        (monthlyWithdrawal *
           (Math.pow(1 + Math.pow(1 + returnRate / 100, 1 / n) - 1, t * n) - 1)) /
           (Math.pow(1 + returnRate / 100, 1 / n) - 1)
     );
@@ -109,7 +86,7 @@ const Index = () => {
   useEffect(() => {
     const result = calculateSWP();
     setFinalValue(result);
-  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency]);
+  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod]);
 
   const handleReset = () => {
     previousValuesRef.current = {
@@ -123,13 +100,11 @@ const Index = () => {
     setMonthlyWithdrawal(5000);
     setReturnRate(13);
     setTimePeriod(10);
-    setWithdrawalFrequency("Monthly");
 
     localStorage.removeItem("totalInvestment");
     localStorage.removeItem("monthlyWithdrawal");
     localStorage.removeItem("returnRate");
     localStorage.removeItem("timePeriod");
-    localStorage.removeItem("withdrawalFrequency");
   };
 
   const handleRestore = (values: typeof previousValuesRef.current) => {
@@ -180,13 +155,11 @@ const Index = () => {
             setTimePeriod={setTimePeriod}
             withdrawalPercentage={withdrawalPercentage}
             currency={currency}
-            withdrawalFrequency={withdrawalFrequency}
-            setWithdrawalFrequency={setWithdrawalFrequency}
           />
 
           <ResultCard
             totalInvestment={totalInvestment}
-            totalWithdrawal={getAnnualWithdrawal() * timePeriod}
+            totalWithdrawal={monthlyWithdrawal * timePeriod * 12}
             finalValue={finalValue}
             currency={currency}
           />
