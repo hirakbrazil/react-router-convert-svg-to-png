@@ -69,7 +69,7 @@ const Index = () => {
   }, [totalInvestment, monthlyWithdrawal]);
 
   const calculateSWP = () => {
-    const n = 4;
+    const n = 2;
     const r = returnRate / (n * 100);
     const t = timePeriod;
 
