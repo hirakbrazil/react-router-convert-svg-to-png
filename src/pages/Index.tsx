@@ -146,7 +146,7 @@ const Index = () => {
     localStorage.setItem("monthlyWithdrawal", values.monthlyWithdrawal.toString());
     localStorage.setItem("returnRate", values.returnRate.toString());
     localStorage.setItem("timePeriod", values.timePeriod.toString());
-    localStorage.setItem("withdrawalFrequency", values.withdrawalFrequency.toString());
+    localStorage.setItem("withdrawalFrequency", values.withdrawalFrequency);
   };
 
   return (
@@ -206,6 +206,7 @@ const Index = () => {
               monthlyWithdrawal,
               returnRate,
               timePeriod,
+              withdrawalFrequency,
             }}
             onRestore={handleRestore}
           />
