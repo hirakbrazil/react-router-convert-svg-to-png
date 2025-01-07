@@ -1,11 +1,14 @@
 import React from "react";
 import { CurrencyType } from "./CurrencySelector";
+import { WithdrawalFrequency } from "@/types/calculator";
 
 interface ResultCardProps {
   totalInvestment: number;
-  totalWithdrawal: number;
+  monthlyWithdrawal: number;
   finalValue: number;
   currency: CurrencyType;
+  withdrawalFrequency: WithdrawalFrequency;
+  timePeriod: number;
 }
 
 const formatCurrency = (value: number, currency: CurrencyType): string => {
@@ -32,12 +35,27 @@ const formatCurrency = (value: number, currency: CurrencyType): string => {
   return formatter.format(value);
 };
 
+const calculateTotalWithdrawal = (monthlyWithdrawal: number, frequency: WithdrawalFrequency, timePeriod: number): number => {
+  const withdrawalsPerYear = {
+    "Monthly": 12,
+    "Quarterly": 4,
+    "Half-yearly": 2,
+    "Yearly": 1
+  };
+
+  return monthlyWithdrawal * withdrawalsPerYear[frequency] * timePeriod;
+};
+
 const ResultCard = ({
   totalInvestment,
-  totalWithdrawal,
+  monthlyWithdrawal,
   finalValue,
   currency,
+  withdrawalFrequency,
+  timePeriod,
 }: ResultCardProps) => {
+  const totalWithdrawal = calculateTotalWithdrawal(monthlyWithdrawal, withdrawalFrequency, timePeriod);
+  
   // Use 0 instead of negative values when calculating total profit
   const finalValueForProfit = finalValue < 0 ? 0 : finalValue;
   const totalProfit = finalValueForProfit + totalWithdrawal - totalInvestment;

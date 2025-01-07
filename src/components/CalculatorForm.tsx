@@ -43,7 +43,6 @@ const CalculatorForm = ({
 }: CalculatorFormProps) => {
   const { toast } = useToast();
 
-  // Effect to update monthly withdrawal when total investment changes
   useEffect(() => {
     if (monthlyWithdrawal > totalInvestment) {
       setMonthlyWithdrawal(totalInvestment);
@@ -52,8 +51,6 @@ const CalculatorForm = ({
 
   const getWithdrawalLabel = () => {
     switch (withdrawalFrequency) {
-      case "Weekly":
-        return "Withdrawal per week";
       case "Monthly":
         return "Withdrawal per month";
       case "Quarterly":

@@ -81,9 +81,6 @@ const Index = () => {
     // Determine the compounding frequency
     let n;
     switch (withdrawalFrequency) {
-      case "Weekly":
-        n = 52; // Weekly compounding
-        break;
       case "Quarterly":
         n = 4; // Quarterly compounding
         break;
@@ -188,9 +185,11 @@ const Index = () => {
 
           <ResultCard
             totalInvestment={totalInvestment}
-            totalWithdrawal={monthlyWithdrawal * timePeriod * 12}
+            monthlyWithdrawal={monthlyWithdrawal}
             finalValue={finalValue}
             currency={currency}
+            withdrawalFrequency={withdrawalFrequency}
+            timePeriod={timePeriod}
           />
 
           <ActionButtons
