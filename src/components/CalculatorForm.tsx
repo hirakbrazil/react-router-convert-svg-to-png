@@ -23,6 +23,8 @@ interface CalculatorFormProps {
   setTimePeriod: (value: number) => void;
   withdrawalPercentage: number;
   currency: CurrencyType;
+  withdrawalFrequency: WithdrawalFrequency;
+  setWithdrawalFrequency: (frequency: WithdrawalFrequency) => void;
 }
 
 const CalculatorForm = ({
@@ -36,12 +38,10 @@ const CalculatorForm = ({
   setTimePeriod,
   withdrawalPercentage,
   currency,
+  withdrawalFrequency,
+  setWithdrawalFrequency,
 }: CalculatorFormProps) => {
   const { toast } = useToast();
-  const [withdrawalFrequency, setWithdrawalFrequency] = React.useState<WithdrawalFrequency>(() => {
-    const saved = localStorage.getItem("withdrawalFrequency");
-    return (saved as WithdrawalFrequency) || "Monthly";
-  });
 
   // Effect to update monthly withdrawal when total investment changes
   useEffect(() => {
@@ -49,11 +49,6 @@ const CalculatorForm = ({
       setMonthlyWithdrawal(totalInvestment);
     }
   }, [totalInvestment, monthlyWithdrawal, setMonthlyWithdrawal]);
-
-  // Save withdrawal frequency to localStorage
-  useEffect(() => {
-    localStorage.setItem("withdrawalFrequency", withdrawalFrequency);
-  }, [withdrawalFrequency]);
 
   const getWithdrawalLabel = () => {
     switch (withdrawalFrequency) {
@@ -95,7 +90,7 @@ const CalculatorForm = ({
                 {withdrawalFrequency} <ChevronDown className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent className="bg-white dark:bg-[#030c21]">
               {withdrawalFrequencies.map((frequency) => (
                 <DropdownMenuItem
                   key={frequency}
