@@ -74,42 +74,47 @@ const Index = () => {
   }, [totalInvestment, monthlyWithdrawal]);
 
   const getAnnualWithdrawal = () => {
-    switch (withdrawalFrequency) {
-      case "Weekly":
-        return monthlyWithdrawal * 52;
-      case "Monthly":
-        return monthlyWithdrawal * 12;
-      case "Quarterly":
-        return monthlyWithdrawal * 4;
-      case "Half-yearly":
-        return monthlyWithdrawal * 2;
-      case "Yearly":
-        return monthlyWithdrawal;
-      default:
-        return monthlyWithdrawal * 12;
-    }
-  };
+  switch (withdrawalFrequency) {
+    case "Weekly":
+      return monthlyWithdrawal * 52 / 12; // Convert weekly withdrawal to monthly scale
+    case "Monthly":
+      return monthlyWithdrawal; // Already monthly
+    case "Quarterly":
+      return monthlyWithdrawal / 3; // Convert quarterly withdrawal to monthly scale
+    case "Half-yearly":
+      return monthlyWithdrawal / 6; // Convert half-yearly withdrawal to monthly scale
+    case "Yearly":
+      return monthlyWithdrawal / 12; // Convert yearly withdrawal to monthly scale
+    default:
+      return monthlyWithdrawal;
+  }
+};
 
-  const calculateSWP = () => {
-    const n = 12;
-    const r = returnRate / (n * 100);
-    const t = timePeriod;
-    const annualWithdrawal = getAnnualWithdrawal();
+const calculateSWP = () => {
+  const frequencyFactor = {
+    Weekly: 52,
+    Monthly: 12,
+    Quarterly: 4,
+    "Half-yearly": 2,
+    Yearly: 1,
+  }[withdrawalFrequency];
 
-    let result = Math.round(
-      totalInvestment * Math.pow(1 + returnRate / 100, t) -
-        (annualWithdrawal *
-          (Math.pow(1 + Math.pow(1 + returnRate / 100, 1 / n) - 1, t * n) - 1)) /
-          (Math.pow(1 + returnRate / 100, 1 / n) - 1)
-    );
+  const n = frequencyFactor; // Frequency of compounding
+  const r = returnRate / (n * 100); // Periodic rate of return
+  const t = timePeriod; // Total time in years
 
-    return result;
-  };
+  let result = Math.round(
+    totalInvestment * Math.pow(1 + r, t * n) -
+      (monthlyWithdrawal * n * ((Math.pow(1 + r, t * n) - 1) / r))
+  );
 
-  useEffect(() => {
-    const result = calculateSWP();
-    setFinalValue(result);
-  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency]);
+  return Math.max(result, 0); // Prevent negative results
+};
+
+useEffect(() => {
+  const result = calculateSWP();
+  setFinalValue(result);
+}, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency]);
 
   const handleReset = () => {
     previousValuesRef.current = {
