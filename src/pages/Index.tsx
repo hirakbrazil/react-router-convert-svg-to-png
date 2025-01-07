@@ -72,13 +72,14 @@ const Index = () => {
   }, [currency]);
 
   // Calculate withdrawal percentage
-  useEffect(() => {
-    const percentage = (monthlyWithdrawal / totalInvestment) * 100;
-    setWithdrawalPercentage(Number(percentage.toFixed(3)));
-  }, [totalInvestment, monthlyWithdrawal]);
+useEffect(() => {
+  const percentage = (monthlyWithdrawal / totalInvestment) * 100;
+  setWithdrawalPercentage(Number(percentage.toFixed(3)));
+}, [totalInvestment, monthlyWithdrawal]);
 
-  const calculateSWP = () => {
-  let n; // compounding frequency
+const calculateSWP = () => {
+  // Determine the compounding frequency
+  let n;
   switch (withdrawalFrequency) {
     case "Quarterly":
       n = 4; // Quarterly compounding
@@ -90,23 +91,25 @@ const Index = () => {
       n = 1; // Yearly compounding
       break;
     default:
-      n = 12; // Monthly compounding
+      n = 12; // Default to monthly compounding
   }
 
-  const r = returnRate / 100; // Annual return rate as decimal
-  const t = timePeriod; // Time period in years
-  const PMT = withdrawalFrequency === "Monthly" ? monthlyWithdrawal : withdrawalPerFrequency;
+  const r = returnRate / (n * 100); // Rate per period
+  const t = timePeriod; // Time in years
 
-  // Future Value Calculation using the compound interest formula with periodic withdrawals
-  const futureValue = totalInvestment * Math.pow(1 + r / n, n * t) - (PMT * (Math.pow(1 + r / n, n * t) - 1)) / (r / n);
+  // Corrected formula for future value calculation
+  let result = Math.round(
+    (totalInvestment * Math.pow(1 + r, t * n)) - 
+    (monthlyWithdrawal * (Math.pow(1 + r, t * n) - 1)) / r
+  );
 
-  return Math.round(futureValue);
+  return result;
 };
 
-  useEffect(() => {
-    const result = calculateSWP();
-    setFinalValue(result);
-  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency]);
+useEffect(() => {
+  const result = calculateSWP();
+  setFinalValue(result);
+}, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency]);
 
   const handleReset = () => {
     previousValuesRef.current = {
