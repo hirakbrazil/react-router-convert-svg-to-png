@@ -96,6 +96,7 @@ const CalculatorForm = ({
                     toast({
                       title: "Withdrawal frequency updated",
                       description: `Changed to ${frequency.toLowerCase()}`,
+                      duration: 5000,
                     });
                   }}
                 >
