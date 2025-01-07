@@ -33,14 +33,19 @@ const ActionButtons = ({
   onRestore,
 }: ActionButtonsProps) => {
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
+  const [isResetDisabled, setIsResetDisabled] = useState(false);
 
   const handleReset = () => {
     // Store current values before reset
     const valuesToRestore = { ...currentValues };
-    
+
+    // Disable the Reset button
+    setIsResetDisabled(true);
+
     // Perform reset
     onReset();
-    
+
+    // Show toast notification
     toast({
       title: "Reset Complete",
       description: "All values reset to default",
@@ -51,7 +56,10 @@ const ActionButtons = ({
           size="sm"
           className="gap-2"
           onClick={() => {
+            // Restore values and re-enable Reset button
             onRestore(valuesToRestore);
+            setIsResetDisabled(false);
+
             toast({
               title: "Values Restored",
               description: "Previous values have been restored",
@@ -64,11 +72,21 @@ const ActionButtons = ({
         </Button>
       ),
     });
+
+    // Re-enable the Reset button after 7 seconds, if not already enabled by Undo
+    setTimeout(() => {
+      setIsResetDisabled(false);
+    }, 7000);
   };
 
   return (
     <div className="flex justify-center gap-4">
-      <Button onClick={handleReset} variant="outline" className="gap-2">
+      <Button
+        onClick={handleReset}
+        variant="outline"
+        className="gap-2"
+        disabled={isResetDisabled}
+      >
         <RefreshCw className="h-4 w-4" />
         Reset
       </Button>
