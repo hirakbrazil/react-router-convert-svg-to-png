@@ -83,7 +83,7 @@ const CalculatorForm = ({
           <label className="text-lg text-gray-700 dark:text-[#c1cbd6]">Withdrawal frequency</label>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="flex items-center gap-2">
+              <Button variant="outline" className="flex items-center gap-2 dark:bg-[#030c21]">
                 {withdrawalFrequency} <ChevronDown className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
