@@ -78,52 +78,54 @@ const Index = () => {
   }, [totalInvestment, monthlyWithdrawal]);
 
   const calculateSWP = () => {
-    let n; // Compounding frequency
-    let w; // Number of withdrawals per year
+  let n; // Compounding frequency
+  let w; // Withdrawal frequency
 
-    // Determine compounding and withdrawal frequency
-    switch (withdrawalFrequency) {
-        case "Weekly":
-            n = 52; // Weekly compounding
-            w = 52; // Weekly withdrawals
-            break;
-        case "Quarterly":
-            n = 4; // Quarterly compounding
-            w = 4; // Quarterly withdrawals
-            break;
-        case "Half-yearly":
-            n = 2; // Half-yearly compounding
-            w = 2; // Half-yearly withdrawals
-            break;
-        case "Yearly":
-            n = 1; // Yearly compounding
-            w = 1; // Yearly withdrawals
-            break;
-        default:
-            n = 12; // Default to monthly compounding
-            w = 12; // Monthly withdrawals
-    }
+  // Determine compounding and withdrawal frequency
+  switch (withdrawalFrequency) {
+    case "Weekly":
+      n = 52; // Weekly compounding
+      w = 52; // Weekly withdrawals
+      break;
+    case "Quarterly":
+      n = 4; // Quarterly compounding
+      w = 4; // Quarterly withdrawals
+      break;
+    case "Half-yearly":
+      n = 2; // Half-yearly compounding
+      w = 2; // Half-yearly withdrawals
+      break;
+    case "Yearly":
+      n = 1; // Yearly compounding
+      w = 1; // Yearly withdrawals
+      break;
+    default:
+      n = 12; // Default to monthly compounding
+      w = 12; // Monthly withdrawals
+  }
 
-    const r = returnRate / (n * 100); // Rate per compounding period
-    const t = timePeriod; // Number of years
+  const r = returnRate / (n * 100); // Interest rate per compounding period
+  const t = timePeriod; // Number of years
 
-    // Adjust monthly withdrawal for the actual frequency
-    const withdrawalPerPeriod = (monthlyWithdrawal * 12) / w;
+  // Adjust withdrawal amount for the frequency
+  const withdrawalPerPeriod = (monthlyWithdrawal * 12) / w;
 
-    // Future Value Calculation using proper compounding formula
-    let result = Math.round(
-        totalInvestment * Math.pow((1 + returnRate / 100), t) - // Growth of the initial investment
-        (withdrawalPerPeriod *
-            (Math.pow(
-                (1 + Math.pow((1 + returnRate / 100), 1 / n) - 1),
-                t * n
-            ) - 1)) /
-            (Math.pow((1 + returnRate / 100), 1 / n) - 1) // Effect of periodic withdrawals
-    );
+  // Compounded future value of initial investment
+  const futureValue = totalInvestment * Math.pow(1 + r, t * n);
 
-    return result;
+  // Withdrawal effect calculation
+  const periodicRate = Math.pow(1 + returnRate / 100, 1 / n) - 1;
+  const withdrawalEffect =
+    (withdrawalPerPeriod *
+      (Math.pow(1 + periodicRate, t * n) - 1)) /
+    periodicRate;
+
+  // Final Value
+  const result = Math.round(futureValue - withdrawalEffect);
+
+  return result;
 };
-
+  
   useEffect(() => {
     const result = calculateSWP();
     setFinalValue(result);
