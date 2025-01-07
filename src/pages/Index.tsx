@@ -145,6 +145,23 @@ const Index = () => {
     localStorage.setItem("timePeriod", values.timePeriod.toString());
   };
 
+  const handleCurrencyChange = (newCurrency: CurrencyType) => {
+    setCurrency(newCurrency);
+    toast({
+      title: "Currency Changed",
+      description: `Currency switched to ${newCurrency} ${getCurrencySymbol(newCurrency)}`,
+      duration: 5000,
+    });
+  };
+
+  const getCurrencySymbol = (currency: CurrencyType): string => {
+    const symbols: { [key in CurrencyType]: string } = {
+      INR: "₹", USD: "$", EUR: "€", JPY: "¥", GBP: "£",
+      CNY: "¥", AUD: "$", CAD: "$", CHF: "Fr", HKD: "$", SGD: "$"
+    };
+    return symbols[currency];
+  };
+
   return (
     <>
       <SEO
