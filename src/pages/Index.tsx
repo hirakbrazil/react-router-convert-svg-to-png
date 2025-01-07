@@ -80,21 +80,27 @@ const Index = () => {
   const calculateSWP = () => {
     // Determine the compounding frequency
     let n;
+    let adjustedWithdrawal; // Withdrawal amount per compounding period
     switch (withdrawalFrequency) {
       case "Weekly":
         n = 52; // Weekly compounding
+        adjustedWithdrawal = monthlyWithdrawal * 12 / 52; // Scale monthly to weekly
         break;
       case "Quarterly":
         n = 4; // Quarterly compounding
+        adjustedWithdrawal = monthlyWithdrawal * 12 / 4; // Scale monthly to quarterly
         break;
       case "Half-yearly":
         n = 2; // Half-yearly compounding
+        adjustedWithdrawal = monthlyWithdrawal * 12 / 2; // Scale monthly to half-yearly
         break;
       case "Yearly":
         n = 1; // Yearly compounding
+        adjustedWithdrawal = monthlyWithdrawal * 12; // Scale monthly to yearly
         break;
       default:
         n = 12; // Default to monthly compounding
+        adjustedWithdrawal = monthlyWithdrawal; // No scaling needed
     }
 
     const r = returnRate / (n * 100); // Rate per period
@@ -102,11 +108,11 @@ const Index = () => {
 
     let result = Math.round(
       totalInvestment * Math.pow(1 + r, t * n) -
-        (monthlyWithdrawal * (Math.pow(1 + r, t * n) - 1)) / r
+        (adjustedWithdrawal * (Math.pow(1 + r, t * n) - 1)) / r
     );
 
     return result;
-  };
+};
 
   useEffect(() => {
     const result = calculateSWP();
