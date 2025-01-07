@@ -51,6 +51,7 @@ const Index = () => {
     monthlyWithdrawal,
     returnRate,
     timePeriod,
+    withdrawalFrequency,
   });
 
   // Save withdrawal frequency to localStorage
@@ -118,6 +119,7 @@ const Index = () => {
       monthlyWithdrawal,
       returnRate,
       timePeriod,
+      withdrawalFrequency,
     };
 
     setTotalInvestment(500000);
@@ -138,11 +140,13 @@ const Index = () => {
     setMonthlyWithdrawal(values.monthlyWithdrawal);
     setReturnRate(values.returnRate);
     setTimePeriod(values.timePeriod);
+    setWithdrawalFrequency(values.withdrawalFrequency);
 
     localStorage.setItem("totalInvestment", values.totalInvestment.toString());
     localStorage.setItem("monthlyWithdrawal", values.monthlyWithdrawal.toString());
     localStorage.setItem("returnRate", values.returnRate.toString());
     localStorage.setItem("timePeriod", values.timePeriod.toString());
+    localStorage.setItem("withdrawalFrequency", values.withdrawalFrequency);
   };
 
   return (
