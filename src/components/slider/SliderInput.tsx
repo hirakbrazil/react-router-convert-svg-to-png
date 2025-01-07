@@ -80,9 +80,9 @@ const SliderInput = ({
         <label className="text-lg text-gray-700 dark:text-[#c1cbd6]">{label}</label>
         <div className="bg-secondary px-4 py-2 rounded-lg flex items-center gap-0 w-fit">
           {currency ? (
-            <span className="text-xl font-semibold text-primary shrink-0">{getCurrencySymbol(currency)}</span>
+            <span className="text-xl md:text-2xl font-semibold text-primary shrink-0">{getCurrencySymbol(currency)}</span>
           ) : (
-            prefix && <span className="text-xl font-semibold text-primary shrink-0">{prefix}</span>
+            prefix && <span className="text-xl md:text-2xl font-semibold text-primary shrink-0">{prefix}</span>
           )}
           <Input
             type="text"
@@ -94,14 +94,14 @@ const SliderInput = ({
             min={min}
             max={effectiveMax}
             maxLength={maxLength}
-            className="text-xl font-semibold text-primary bg-transparent border-none focus-visible:ring-0 p-0 text-right"
+            className="text-xl md:text-2xl font-semibold text-primary bg-transparent border-none focus-visible:ring-0 p-0 text-right"
             style={{
               width: `${Math.max(60, inputValue.length * 12)}px`,
               minWidth: '60px',
               maxWidth: '300px'
             }}
           />
-          {suffix && <span className="text-xl font-semibold text-primary shrink-0 ml-1">{suffix}</span>}
+          {suffix && <span className="text-xl md:text-2xl font-semibold text-primary shrink-0 ml-1">{suffix}</span>}
         </div>
       </div>
       <Slider
