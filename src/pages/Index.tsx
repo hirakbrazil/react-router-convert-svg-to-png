@@ -108,17 +108,14 @@ const Index = () => {
   const t = timePeriod; // Total time in years
 
   // Adjust withdrawal amount for the selected frequency
-  const withdrawalPerPeriod = (monthlyWithdrawal * 12) / w;
+  const withdrawalPerPeriod = monthlyWithdrawal * (12 / w);
 
-  // Calculate future value using proper compounding
-  const futureValue = totalInvestment * Math.pow(1 + returnRate / 100, t);
+  // Future value with compounding
+  const futureValue = totalInvestment * Math.pow(1 + r, t * n);
 
-  // Calculate withdrawal effect
-  const periodicRate = Math.pow(1 + returnRate / 100, 1 / n) - 1;
-  const withdrawalEffect =
-    (withdrawalPerPeriod *
-      (Math.pow(1 + periodicRate, t * n) - 1)) /
-    periodicRate;
+  // Withdrawal effect calculation using present value of withdrawals
+  const withdrawalEffect = 
+    withdrawalPerPeriod * ((Math.pow(1 + r, t * n) - 1) / r) * (1 / Math.pow(1 + r, 1));
 
   // Final value after considering withdrawals
   const result = Math.round(futureValue - withdrawalEffect);
