@@ -28,17 +28,16 @@ export default defineConfig(({ mode }) => ({
           const domContentLoadedScript = `
             <script>
               document.addEventListener('DOMContentLoaded', function() {
+              ${cssHref ? `var link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.crossOrigin = 'anonymous';
+                link.href = '${cssHref}';
+                document.head.appendChild(link);` : ""}
                 ${jsSrc ? `var script = document.createElement('script');
                 script.type = 'module';
                 script.crossOrigin = 'anonymous';
                 script.src = '${jsSrc}';
                 document.head.appendChild(script);` : ""}
-                
-                ${cssHref ? `var link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.crossOrigin = 'anonymous';
-                link.href = '${cssHref}';
-                document.head.appendChild(link);` : ""}
               });
             </script>
           `;
