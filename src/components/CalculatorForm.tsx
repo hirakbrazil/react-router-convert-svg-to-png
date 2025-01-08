@@ -114,12 +114,13 @@ const CalculatorForm = ({
       </div>
 
       <div className="space-y-4">
-        <div className="flex items-center">
+        <SliderInput
+          label={
+          <div className="flex items-center">
           <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">Time period</span>
           <InfoTooltip content="The total duration for which you plan to keep your investment and make periodic withdrawals. This is measured in years." />
         </div>
-        <SliderInput
-          label=""
+      }
           value={timePeriod}
           onChange={setTimePeriod}
           min={1}
