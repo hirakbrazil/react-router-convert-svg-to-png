@@ -75,11 +75,11 @@ const SliderInput = ({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="w-full space-y-4">
       {label && (
-        <div className="flex justify-between items-center">
-          <label className="text-lg text-gray-700 dark:text-[#c1cbd6]">{label}</label>
-          <div className="bg-secondary px-4 py-2 rounded-lg flex items-center gap-0 w-fit">
+        <div className="flex justify-between items-center gap-4">
+          <label className="text-lg text-gray-700 dark:text-[#c1cbd6] whitespace-nowrap">{label}</label>
+          <div className="bg-secondary px-4 py-2 rounded-lg flex items-center gap-0 w-fit min-w-[120px]">
             {currency ? (
               <span className="text-xl md:text-2xl font-semibold text-primary shrink-0">{getCurrencySymbol(currency)}</span>
             ) : (
@@ -107,7 +107,7 @@ const SliderInput = ({
         </div>
       )}
       {!label && (
-        <div className="bg-secondary px-4 py-2 rounded-lg flex items-center gap-0 w-fit ml-auto">
+        <div className="bg-secondary px-4 py-2 rounded-lg flex items-center gap-0 w-fit min-w-[120px]">
           {currency ? (
             <span className="text-xl md:text-2xl font-semibold text-primary shrink-0">{getCurrencySymbol(currency)}</span>
           ) : (
