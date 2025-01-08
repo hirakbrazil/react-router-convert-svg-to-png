@@ -70,8 +70,10 @@ export const useCalculator = () => {
     const t = timePeriod;
 
     let result = Math.round(
-      totalInvestment * Math.pow(1 + r, t * n) -
-        (monthlyWithdrawal * (Math.pow(1 + r, t * n) - 1)) / r
+      totalInvestment * Math.pow(1 + returnRate / 100, t) -
+        (monthlyWithdrawal *
+          (Math.pow(1 + Math.pow(1 + returnRate / 100, 1 / n) - 1, t * n) - 1)) /
+          (Math.pow(1 + returnRate / 100, 1 / n) - 1)
     );
 
     return result;
