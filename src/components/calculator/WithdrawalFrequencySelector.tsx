@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { WithdrawalFrequency, withdrawalFrequencies } from "@/types/calculator";
 import { useToast } from "@/components/ui/use-toast";
-import InfoTooltip from "./InfoTooltip";
 
 interface WithdrawalFrequencySelectorProps {
   withdrawalFrequency: WithdrawalFrequency;
@@ -26,7 +25,6 @@ const WithdrawalFrequencySelector = ({
     <div className="flex items-center justify-between">
       <label className="text-lg text-gray-700 dark:text-[#c1cbd6]">
         Withdrawal frequency
-        <InfoTooltip content="If you want to get payment every month like a job or pension, select Monthly. Quarterly means get payment once every 3 months. Half-yearly means 2 payment / withdrawal in a year or every 6 months. Yearly / Annually means 1 withdrawal or payment in a year." />
       </label>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
