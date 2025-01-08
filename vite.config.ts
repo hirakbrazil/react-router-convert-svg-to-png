@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => ({
         return html
           .replace(
             /<script type="module" crossorigin src="(.*?)"><\/script>/,
-            `<script async type="module" crossorigin src="$1"></script>`
+            `<script type="module" crossorigin defer src="$1"></script>`
           )
           .replace(
             /<link rel="stylesheet" crossorigin href="(.*?)">/,
