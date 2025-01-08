@@ -3,6 +3,8 @@ import { RefreshCw, Share2, Undo } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useState, useRef } from "react";
 import ShareDialog from "./ShareDialog";
+import { CurrencyType } from "./CurrencySelector";
+import { WithdrawalFrequency } from "@/types/calculator";
 
 interface ActionButtonsProps {
   onReset: () => void;
@@ -11,21 +13,22 @@ interface ActionButtonsProps {
     monthlyWithdrawal: number;
     returnRate: number;
     timePeriod: number;
-    withdrawalFrequency: string;
+    withdrawalFrequency: WithdrawalFrequency;
   };
   currentValues: {
     totalInvestment: number;
     monthlyWithdrawal: number;
     returnRate: number;
     timePeriod: number;
-    withdrawalFrequency: string;
+    withdrawalFrequency: WithdrawalFrequency;
+    currency: CurrencyType;
   };
   onRestore: (values: {
     totalInvestment: number;
     monthlyWithdrawal: number;
     returnRate: number;
     timePeriod: number;
-    withdrawalFrequency: string;
+    withdrawalFrequency: WithdrawalFrequency;
   }) => void;
 }
 
@@ -37,24 +40,18 @@ const ActionButtons = ({
 }: ActionButtonsProps) => {
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
   const [isResetDisabled, setIsResetDisabled] = useState(false);
-  const resetTimeoutRef = useRef<NodeJS.Timeout | null>(null); // Ref to store timeout ID
+  const resetTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleReset = () => {
-    // Store current values before reset
     const valuesToRestore = { ...currentValues };
 
-    // Clear any existing timeout
     if (resetTimeoutRef.current) {
       clearTimeout(resetTimeoutRef.current);
     }
 
-    // Disable the Reset button
     setIsResetDisabled(true);
-
-    // Perform reset
     onReset();
 
-    // Show toast notification
     toast({
       title: "Reset Complete",
       description: "All values reset to default",
@@ -65,7 +62,6 @@ const ActionButtons = ({
           size="sm"
           className="gap-2"
           onClick={() => {
-            // Restore values and re-enable Reset button
             onRestore(valuesToRestore);
             setIsResetDisabled(false);
 
@@ -82,7 +78,6 @@ const ActionButtons = ({
       ),
     });
 
-    // Start a new timeout for 7 seconds
     resetTimeoutRef.current = setTimeout(() => {
       setIsResetDisabled(false);
     }, 7000);

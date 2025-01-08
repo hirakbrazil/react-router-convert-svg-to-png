@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import ResultCard from "@/components/ResultCard";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import CalculatorForm from "@/components/CalculatorForm";
@@ -29,52 +29,16 @@ const Index = () => {
     setCurrency,
   } = useCalculator();
 
-  // Store previous values for undo functionality
-  const previousValuesRef = useRef({
-    totalInvestment,
-    monthlyWithdrawal,
-    returnRate,
-    timePeriod,
-    withdrawalFrequency,
-  });
-
   const handleReset = () => {
-    previousValuesRef.current = {
-      totalInvestment,
-      monthlyWithdrawal,
-      returnRate,
-      timePeriod,
-      withdrawalFrequency,
-    };
-
     setTotalInvestment(500000);
     setMonthlyWithdrawal(5000);
     setReturnRate(13);
     setTimePeriod(10);
     setWithdrawalFrequency("Monthly");
+    setCurrency("INR");
 
-    localStorage.removeItem("totalInvestment");
-    localStorage.removeItem("monthlyWithdrawal");
-    localStorage.removeItem("returnRate");
-    localStorage.removeItem("timePeriod");
-    localStorage.removeItem("withdrawalFrequency");
-    
     // Clear URL parameters
     window.history.replaceState({}, '', window.location.pathname);
-  };
-
-  const handleRestore = (values: typeof previousValuesRef.current) => {
-    setTotalInvestment(values.totalInvestment);
-    setMonthlyWithdrawal(values.monthlyWithdrawal);
-    setReturnRate(values.returnRate);
-    setTimePeriod(values.timePeriod);
-    setWithdrawalFrequency(values.withdrawalFrequency);
-
-    localStorage.setItem("totalInvestment", values.totalInvestment.toString());
-    localStorage.setItem("monthlyWithdrawal", values.monthlyWithdrawal.toString());
-    localStorage.setItem("returnRate", values.returnRate.toString());
-    localStorage.setItem("timePeriod", values.timePeriod.toString());
-    localStorage.setItem("withdrawalFrequency", values.withdrawalFrequency);
   };
 
   return (
@@ -120,15 +84,28 @@ const Index = () => {
 
           <ActionButtons
             onReset={handleReset}
-            previousValues={previousValuesRef.current}
-            currentValues={{
+            previousValues={{
               totalInvestment,
               monthlyWithdrawal,
               returnRate,
               timePeriod,
               withdrawalFrequency,
             }}
-            onRestore={handleRestore}
+            currentValues={{
+              totalInvestment,
+              monthlyWithdrawal,
+              returnRate,
+              timePeriod,
+              withdrawalFrequency,
+              currency,
+            }}
+            onRestore={(values) => {
+              setTotalInvestment(values.totalInvestment);
+              setMonthlyWithdrawal(values.monthlyWithdrawal);
+              setReturnRate(values.returnRate);
+              setTimePeriod(values.timePeriod);
+              setWithdrawalFrequency(values.withdrawalFrequency);
+            }}
           />
 
           <Footer />
