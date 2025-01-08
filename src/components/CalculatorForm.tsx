@@ -71,10 +71,6 @@ const CalculatorForm = ({
 
       <div className="space-y-4">
         <div className="flex flex-col space-y-4">
-          <div className="flex items-center">
-            <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">Withdrawal frequency</span>
-            <InfoTooltip content="If you want to get payment every month like a job or pension, select Monthly. Quarterly means get payment once every 3 months. Half-yearly means 2 payment / withdrawal in a year or every 6 months. Yearly / Annually means 1 withdrawal or payment in a year." />
-          </div>
           <WithdrawalFrequencySelector
             withdrawalFrequency={withdrawalFrequency}
             setWithdrawalFrequency={setWithdrawalFrequency}
