@@ -15,7 +15,7 @@ const InfoTooltip = ({ content }: InfoTooltipProps) => {
     <HoverCard openDelay={0} closeDelay={0}>
       <HoverCardTrigger asChild>
         <button 
-          className="inline-flex items-center focus:outline-none flex-shrink-0"
+          className="inline-flex items-center justify-center focus:outline-none flex-shrink-0"
           onClick={(e) => e.preventDefault()}
           aria-label="Show information"
         >
