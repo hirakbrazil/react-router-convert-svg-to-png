@@ -11,47 +11,8 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
-    mode === "development" && componentTagger(),
-    {
-      name: "html-transform",
-      transformIndexHtml: (html) => {
-        const jsRegex = /<script type="module" crossorigin src="(.*?)"><\/script>/;
-        const cssRegex = /<link rel="stylesheet" crossorigin href="(.*?)">/;
-
-        const jsMatch = html.match(jsRegex);
-        const cssMatch = html.match(cssRegex);
-
-        const jsSrc = jsMatch ? jsMatch[1] : null;
-        const cssHref = cssMatch ? cssMatch[1] : null;
-
-        if (jsSrc || cssHref) {
-          const domContentLoadedScript = `
-            <script>
-              document.addEventListener('DOMContentLoaded', function() {
-              ${cssHref ? `var link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.crossOrigin = 'anonymous';
-                link.href = '${cssHref}';
-                document.head.appendChild(link);` : ""}
-                ${jsSrc ? `var script = document.createElement('script');
-                script.type = 'module';
-                script.crossOrigin = 'anonymous';
-                script.src = '${jsSrc}';
-                document.head.appendChild(script);` : ""}
-              });
-            </script>
-          `;
-
-          // Remove the original tags and inject the new <script> tag
-          return html
-            .replace(jsRegex, "")
-            .replace(cssRegex, "")
-            .replace("</head>", `${domContentLoadedScript}</head>`);
-        }
-
-        return html;
-      },
-    },
+    mode === 'development' &&
+    componentTagger(),
   ].filter(Boolean),
   resolve: {
     alias: {
