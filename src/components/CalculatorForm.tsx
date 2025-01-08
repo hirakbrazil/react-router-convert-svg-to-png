@@ -70,12 +70,15 @@ const CalculatorForm = ({
       />
 
       <div className="space-y-4">
-        <div className="flex items-center">
+        <div className="flex flex-col space-y-4">
+          <div className="flex items-center">
+            <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">Withdrawal frequency</span>
+            <InfoTooltip content="If you want to get payment every month like a job or pension, select Monthly. Quarterly means get payment once every 3 months. Half-yearly means 2 payment / withdrawal in a year or every 6 months. Yearly / Annually means 1 withdrawal or payment in a year." />
+          </div>
           <WithdrawalFrequencySelector
             withdrawalFrequency={withdrawalFrequency}
             setWithdrawalFrequency={setWithdrawalFrequency}
           />
-          <InfoTooltip content="If you want to get payment every month like a job or pension, select Monthly. Quarterly means get payment once every 3 months. Half-yearly means 2 payment / withdrawal in a year or every 6 months. Yearly / Annually means 1 withdrawal or payment in a year." />
         </div>
 
         <div className="space-y-1">
@@ -98,34 +101,36 @@ const CalculatorForm = ({
 
       <div className="space-y-4">
         <div className="flex items-center">
-          <SliderInput
-            label="Expected return rate (p.a)"
-            value={returnRate}
-            onChange={setReturnRate}
-            min={1}
-            max={50}
-            step={0.1}
-            suffix="%"
-            maxLength={4}
-          />
+          <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">Expected return rate (p.a)</span>
           <InfoTooltip content="The expected annual return rate on your investment. This is the percentage by which your investment is expected to grow each year before withdrawals." />
         </div>
+        <SliderInput
+          label=""
+          value={returnRate}
+          onChange={setReturnRate}
+          min={1}
+          max={50}
+          step={0.1}
+          suffix="%"
+          maxLength={4}
+        />
       </div>
 
       <div className="space-y-4">
         <div className="flex items-center">
-          <SliderInput
-            label="Time period"
-            value={timePeriod}
-            onChange={setTimePeriod}
-            min={1}
-            max={50}
-            step={1}
-            suffix=" Yr"
-            maxLength={2}
-          />
+          <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">Time period</span>
           <InfoTooltip content="The total duration for which you plan to keep your investment and make periodic withdrawals. This is measured in years." />
         </div>
+        <SliderInput
+          label=""
+          value={timePeriod}
+          onChange={setTimePeriod}
+          min={1}
+          max={50}
+          step={1}
+          suffix=" Yr"
+          maxLength={2}
+        />
       </div>
     </div>
   );
