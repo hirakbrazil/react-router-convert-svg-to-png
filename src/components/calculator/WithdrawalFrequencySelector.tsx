@@ -23,6 +23,9 @@ const WithdrawalFrequencySelector = ({
 
   return (
     <div className="flex items-center justify-between">
+      <label className="text-lg text-gray-700 dark:text-[#c1cbd6]">
+        Withdrawal frequency
+      </label>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="flex items-center gap-2 bg-white dark:bg-[#030c21]">
