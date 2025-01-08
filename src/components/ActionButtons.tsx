@@ -11,18 +11,21 @@ interface ActionButtonsProps {
     monthlyWithdrawal: number;
     returnRate: number;
     timePeriod: number;
+    withdrawalFrequency: string;
   };
   currentValues: {
     totalInvestment: number;
     monthlyWithdrawal: number;
     returnRate: number;
     timePeriod: number;
+    withdrawalFrequency: string;
   };
   onRestore: (values: {
     totalInvestment: number;
     monthlyWithdrawal: number;
     returnRate: number;
     timePeriod: number;
+    withdrawalFrequency: string;
   }) => void;
 }
 
