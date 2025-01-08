@@ -96,7 +96,7 @@ const CalculatorForm = ({
       </div>
 
       <div className="space-y-4">
-        <div className="flex items-center">
+        <div className="flex items-center space-x-1">
           <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">Expected return rate (p.a)</span>
           <InfoTooltip content="The expected annual return rate on your investment. This is the percentage by which your investment is expected to grow each year before withdrawals." />
         </div>
