@@ -1,3 +1,4 @@
+// CalculatorForm.tsx
 import React, { useEffect } from "react";
 import SliderInput from "@/components/slider/SliderInput";
 import { CurrencyType } from "@/components/CurrencySelector";
@@ -113,7 +114,7 @@ const CalculatorForm = ({
       </div>
 
       <div className="space-y-4">
-        <div className="flex items-center">
+        <div className="flex items-center space-x-1">
           <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">Time period</span>
           <InfoTooltip content="The total duration for which you plan to keep your investment and make periodic withdrawals. This is measured in years." />
         </div>
