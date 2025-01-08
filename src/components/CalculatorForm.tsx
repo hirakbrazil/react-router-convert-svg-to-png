@@ -1,4 +1,3 @@
-// CalculatorForm.tsx
 import React, { useEffect } from "react";
 import SliderInput from "@/components/slider/SliderInput";
 import { CurrencyType } from "@/components/CurrencySelector";
