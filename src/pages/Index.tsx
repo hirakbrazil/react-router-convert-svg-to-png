@@ -58,6 +58,9 @@ const Index = () => {
     localStorage.removeItem("returnRate");
     localStorage.removeItem("timePeriod");
     localStorage.removeItem("withdrawalFrequency");
+    
+    // Clear URL parameters
+    window.history.replaceState({}, '', window.location.pathname);
   };
 
   const handleRestore = (values: typeof previousValuesRef.current) => {

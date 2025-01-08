@@ -6,17 +6,38 @@ export const useCalculator = () => {
   const getInitialValues = () => {
     const params = new URLSearchParams(window.location.search);
     const savedTotalInvestment = localStorage.getItem("totalInvestment");
-    const savedMonthlyWithdrawal = localStorage.getItem("monthlyWithdrawal");
     const savedReturnRate = localStorage.getItem("returnRate");
     const savedTimePeriod = localStorage.getItem("timePeriod");
     const savedWithdrawalFrequency = localStorage.getItem("withdrawalFrequency") as WithdrawalFrequency;
+    const savedCurrency = localStorage.getItem("selectedCurrency") as CurrencyType;
+
+    // Determine withdrawal frequency and amount from URL parameters
+    let initialWithdrawalFrequency: WithdrawalFrequency = "Monthly";
+    let initialWithdrawalAmount = 0;
+
+    if (params.has("mw")) {
+      initialWithdrawalFrequency = "Monthly";
+      initialWithdrawalAmount = Number(params.get("mw"));
+    } else if (params.has("qw")) {
+      initialWithdrawalFrequency = "Quarterly";
+      initialWithdrawalAmount = Number(params.get("qw"));
+    } else if (params.has("hyw")) {
+      initialWithdrawalFrequency = "Half-yearly";
+      initialWithdrawalAmount = Number(params.get("hyw"));
+    } else if (params.has("yw")) {
+      initialWithdrawalFrequency = "Yearly";
+      initialWithdrawalAmount = Number(params.get("yw"));
+    }
 
     return {
       totalInvestment: Number(params.get("ti")) || Number(savedTotalInvestment) || 500000,
-      monthlyWithdrawal: Number(params.get("mw")) || Number(savedMonthlyWithdrawal) || 5000,
+      monthlyWithdrawal: initialWithdrawalAmount || Number(localStorage.getItem("monthlyWithdrawal")) || 5000,
       returnRate: Number(params.get("rr")) || Number(savedReturnRate) || 13,
       timePeriod: Number(params.get("tp")) || Number(savedTimePeriod) || 10,
-      withdrawalFrequency: savedWithdrawalFrequency || "Monthly",
+      withdrawalFrequency: params.has("mw") || params.has("qw") || params.has("hyw") || params.has("yw") 
+        ? initialWithdrawalFrequency 
+        : savedWithdrawalFrequency || "Monthly",
+      currency: (params.get("cs") as CurrencyType) || savedCurrency || "INR"
     };
   };
 
@@ -29,10 +50,15 @@ export const useCalculator = () => {
   const [withdrawalFrequency, setWithdrawalFrequency] = useState<WithdrawalFrequency>(initialValues.withdrawalFrequency);
   const [finalValue, setFinalValue] = useState(0);
   const [withdrawalPercentage, setWithdrawalPercentage] = useState(1);
-  const [currency, setCurrency] = useState<CurrencyType>(() => {
-    const savedCurrency = localStorage.getItem("selectedCurrency");
-    return (savedCurrency as CurrencyType) || "INR";
-  });
+  const [currency, setCurrency] = useState<CurrencyType>(initialValues.currency);
+
+  // Clear URL parameters when values change
+  useEffect(() => {
+    const hasUrlParams = window.location.search !== "";
+    if (hasUrlParams) {
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency, currency]);
 
   // Save to localStorage
   useEffect(() => {

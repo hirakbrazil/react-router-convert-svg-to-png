@@ -2,6 +2,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Share2, Link, Calculator } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { CurrencyType } from "./CurrencySelector";
+import { WithdrawalFrequency } from "@/types/calculator";
 
 interface ShareDialogProps {
   open: boolean;
@@ -10,6 +12,8 @@ interface ShareDialogProps {
   monthlyWithdrawal: number;
   returnRate: number;
   timePeriod: number;
+  currency: CurrencyType;
+  withdrawalFrequency: WithdrawalFrequency;
 }
 
 const ShareDialog = ({
@@ -19,6 +23,8 @@ const ShareDialog = ({
   monthlyWithdrawal,
   returnRate,
   timePeriod,
+  currency,
+  withdrawalFrequency,
 }: ShareDialogProps) => {
   const baseUrl = "https://swp-calculator.mutualfundjournal.in/";
 
@@ -27,10 +33,27 @@ const ShareDialog = ({
     
     const params = new URLSearchParams({
       ti: totalInvestment.toString(),
-      mw: monthlyWithdrawal.toString(),
+      cs: currency,
       rr: returnRate.toString(),
       tp: timePeriod.toString(),
     });
+
+    // Add withdrawal amount based on frequency
+    switch (withdrawalFrequency) {
+      case "Monthly":
+        params.append("mw", monthlyWithdrawal.toString());
+        break;
+      case "Quarterly":
+        params.append("qw", monthlyWithdrawal.toString());
+        break;
+      case "Half-yearly":
+        params.append("hyw", monthlyWithdrawal.toString());
+        break;
+      case "Yearly":
+        params.append("yw", monthlyWithdrawal.toString());
+        break;
+    }
+
     return `${baseUrl}?${params.toString()}`;
   };
 
