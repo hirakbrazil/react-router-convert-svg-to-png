@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { WithdrawalFrequency, withdrawalFrequencies } from "@/types/calculator";
 import { useToast } from "@/components/ui/use-toast";
+import InfoTooltip from "../InfoTooltip";
 
 interface WithdrawalFrequencySelectorProps {
   withdrawalFrequency: WithdrawalFrequency;
