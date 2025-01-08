@@ -11,8 +11,21 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
-    mode === 'development' &&
-    componentTagger(),
+    mode === "development" && componentTagger(),
+    {
+      name: "html-transform",
+      transformIndexHtml: (html) => {
+        return html
+          .replace(
+            /<script type="module" crossorigin src="(.*?)"><\/script>/,
+            `<script async type="module" crossorigin src="$1"></script>`
+          )
+          .replace(
+            /<link rel="stylesheet" crossorigin href="(.*?)">/,
+            `<link rel="preload" as="style" crossorigin href="$1" onload="this.onload=null;this.rel='stylesheet';">`
+          );
+      },
+    },
   ].filter(Boolean),
   resolve: {
     alias: {
