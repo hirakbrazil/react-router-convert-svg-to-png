@@ -12,41 +12,9 @@
     <link rel="manifest" href="/manifest.json" />
     <link rel="icon" href="/icon.jpg" />
     <link rel="apple-touch-icon" href="/icon.jpg" />
-    <!-- Custom Spinner CSS -->
-    <style>
-      /* Centering the loader in the middle of the page */
-      #root {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        background-color: #f4f4f4;
-      }
-
-      /* Custom Spinner Style */
-      .loader {
-        width: 48px;
-        height: 48px;
-        border: 5px solid #FFF;
-        border-bottom-color: #FF3D00;
-        border-radius: 50%;
-        display: inline-block;
-        box-sizing: border-box;
-        animation: rotation 1s linear infinite;
-      }
-      @keyframes rotation {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-    </style>
   </head>
   <body>
-    <div id="root"><span class="loader"></span></div>
+    <div id="root"></div>
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
