@@ -15,11 +15,11 @@ const InfoTooltip = ({ content }: InfoTooltipProps) => {
     <HoverCard openDelay={0} closeDelay={0}>
       <HoverCardTrigger asChild>
         <button 
-          className="inline-flex items-center justify-center focus:outline-none flex-shrink-0"
+          className="inline-flex items-center focus:outline-none"
           onClick={(e) => e.preventDefault()}
           aria-label="Show information"
         >
-          <Info className="h-4 w-4 cursor-help text-muted-foreground hover:text-foreground transition-colors" />
+          <Info className="h-4 w-4 inline-block ml-1 cursor-help text-muted-foreground hover:text-foreground transition-colors" />
         </button>
       </HoverCardTrigger>
       <HoverCardContent 
