@@ -3,6 +3,7 @@ import SliderInput from "@/components/slider/SliderInput";
 import { CurrencyType } from "@/components/CurrencySelector";
 import { WithdrawalFrequency } from "@/types/calculator";
 import WithdrawalFrequencySelector from "./calculator/WithdrawalFrequencySelector";
+import InfoTooltip from "./InfoTooltip";
 
 interface CalculatorFormProps {
   totalInvestment: number;
@@ -69,10 +70,13 @@ const CalculatorForm = ({
       />
 
       <div className="space-y-4">
-        <WithdrawalFrequencySelector
-          withdrawalFrequency={withdrawalFrequency}
-          setWithdrawalFrequency={setWithdrawalFrequency}
-        />
+        <div className="flex items-center">
+          <WithdrawalFrequencySelector
+            withdrawalFrequency={withdrawalFrequency}
+            setWithdrawalFrequency={setWithdrawalFrequency}
+          />
+          <InfoTooltip content="If you want to get payment every month like a job or pension, select Monthly. Quarterly means get payment once every 3 months. Half-yearly means 2 payment / withdrawal in a year or every 6 months. Yearly / Annually means 1 withdrawal or payment in a year." />
+        </div>
 
         <div className="space-y-1">
           <SliderInput
@@ -92,27 +96,37 @@ const CalculatorForm = ({
         </div>
       </div>
 
-      <SliderInput
-        label="Expected return rate (p.a)"
-        value={returnRate}
-        onChange={setReturnRate}
-        min={1}
-        max={50}
-        step={0.1}
-        suffix="%"
-        maxLength={4}
-      />
+      <div className="space-y-4">
+        <div className="flex items-center">
+          <SliderInput
+            label="Expected return rate (p.a)"
+            value={returnRate}
+            onChange={setReturnRate}
+            min={1}
+            max={50}
+            step={0.1}
+            suffix="%"
+            maxLength={4}
+          />
+          <InfoTooltip content="The expected annual return rate on your investment. This is the percentage by which your investment is expected to grow each year before withdrawals." />
+        </div>
+      </div>
 
-      <SliderInput
-        label="Time period"
-        value={timePeriod}
-        onChange={setTimePeriod}
-        min={1}
-        max={50}
-        step={1}
-        suffix=" Yr"
-        maxLength={2}
-      />
+      <div className="space-y-4">
+        <div className="flex items-center">
+          <SliderInput
+            label="Time period"
+            value={timePeriod}
+            onChange={setTimePeriod}
+            min={1}
+            max={50}
+            step={1}
+            suffix=" Yr"
+            maxLength={2}
+          />
+          <InfoTooltip content="The total duration for which you plan to keep your investment and make periodic withdrawals. This is measured in years." />
+        </div>
+      </div>
     </div>
   );
 };

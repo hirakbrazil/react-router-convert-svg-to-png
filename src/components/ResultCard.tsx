@@ -1,6 +1,7 @@
 import React from "react";
 import { CurrencyType } from "./CurrencySelector";
 import { WithdrawalFrequency } from "@/types/calculator";
+import InfoTooltip from "./InfoTooltip";
 
 interface ResultCardProps {
   totalInvestment: number;
@@ -70,19 +71,28 @@ const ResultCard = ({
         </span>
       </div>
       <div className="flex justify-between items-center">
-        <span className="text-gray-600 dark:text-gray-400">Total withdrawal</span>
+        <div className="flex items-center">
+          <span className="text-gray-600 dark:text-gray-400">Total withdrawal</span>
+          <InfoTooltip content="The total amount you will withdraw over the entire investment period. This is calculated based on your periodic withdrawal amount and frequency." />
+        </div>
         <span className="text-xl font-semibold text-foreground">
           {formatCurrency(totalWithdrawal, currency)}
         </span>
       </div>
       <div className="flex justify-between items-center">
-        <span className="text-gray-600 dark:text-gray-400">Final value</span>
+        <div className="flex items-center">
+          <span className="text-gray-600 dark:text-gray-400">Final value</span>
+          <InfoTooltip content="The remaining balance in your investment after all periodic withdrawals and accounting for returns. This is what you'll have left at the end of your investment period." />
+        </div>
         <span className={`text-xl font-semibold ${finalValue < 0 ? 'text-red-500 dark:text-red-400' : 'text-foreground'}`}>
           {formatCurrency(finalValue, currency)}
         </span>
       </div>
       <div className="flex justify-between items-center">
-        <span className="text-gray-600 dark:text-gray-400">Total profit</span>
+        <div className="flex items-center">
+          <span className="text-gray-600 dark:text-gray-400">Total profit</span>
+          <InfoTooltip content="The total returns earned on your investment. This includes both the withdrawn amount and the final value, minus your initial investment." />
+        </div>
         <span className={`text-xl font-semibold ${totalProfit > 0 ? 'text-green-500 dark:text-green-400' : 'text-foreground'}`}>
           {formatCurrency(displayProfit, currency)}
         </span>
