@@ -19,7 +19,7 @@ const InfoTooltip = ({ content }: InfoTooltipProps) => {
           onClick={(e) => e.preventDefault()}
           aria-label="Show information"
         >
-          <Info className="h-4 w-4 inline-block ml-1 cursor-help text-muted-foreground hover:text-foreground transition-colors" />
+          <Info className="h-4 w-4 inline-block ml-1 cursor-help text-muted-foreground hover:text-foreground transition-colors text-gray-700 dark:text-[#c1cbd6]" />
         </button>
       </HoverCardTrigger>
       <HoverCardContent 
