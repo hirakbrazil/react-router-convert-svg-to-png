@@ -71,7 +71,7 @@ const ResultCard = ({
         </span>
       </div>
       <div className="flex justify-between items-center">
-        <div className="flex items-center">
+        <div className="flex flex-wrap items-center gap-x-1">
           <span className="text-gray-600 dark:text-gray-400">
             Total
           </span>
