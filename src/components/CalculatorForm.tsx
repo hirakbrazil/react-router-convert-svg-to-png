@@ -98,13 +98,11 @@ const CalculatorForm = ({
       <div className="space-y-4">
         <SliderInput
           label={
-            <div className="flex items-center gap-x-1">
-              <div className="flex flex-wrap items-center gap-x-1">
-                <span className="text-lg text-gray-700 dark:text-[#c1cbd6] whitespace-nowrap">Expected return rate (p.a)</span>
-                <span className="text-lg text-gray-700 dark:text-[#c1cbd6] flex items-center whitespace-nowrap">
-                  <InfoTooltip content="The expected annual return rate on your investment. This is the percentage by which your investment is expected to grow each year before withdrawals." />
-                </span>
-              </div>
+            <div className="flex items-center gap-x-1 whitespace-nowrap">
+              <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">
+                Expected return rate (p.a)
+              </span>
+              <InfoTooltip content="The expected annual return rate on your investment. This is the percentage by which your investment is expected to grow each year before withdrawals." />
             </div>
           }
           value={returnRate}
