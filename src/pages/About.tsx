@@ -2,6 +2,7 @@ import React from "react";
 import Footer from "@/components/Footer";
 import useTheme from "@/hooks/useTheme";
 import SEO from "@/components/SEO";
+import AdSenseResponsive from "@/components/AdSenseResponsive";
 
 const About = () => {
   useTheme();
@@ -21,6 +22,7 @@ const About = () => {
       />
     <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto space-y-8">
+        <AdSenseResponsive />
         <div className="text-center">
           <h1 className="text-3xl font-bold text-foreground sm:text-4xl">
             About SWP Calculator
