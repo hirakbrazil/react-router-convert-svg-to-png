@@ -85,8 +85,8 @@ const ResultCard = ({
         </span>
       </div>
       <div className="flex justify-between items-center">
-        <div className="flex flex-wrap items-center">
-          <span className="text-gray-600 dark:text-gray-400">Final&nbsp;</span>
+        <div className="flex flex-wrap items-center gap-x-1">
+          <span className="text-gray-600 dark:text-gray-400">Final</span>
           <span className="text-gray-600 dark:text-gray-400">value</span>
           <InfoTooltip content="The remaining balance in your investment after all periodic withdrawals and accounting for returns. This is what you'll have left at the end of your investment period." />
         </div>
@@ -96,7 +96,8 @@ const ResultCard = ({
       </div>
       <div className="flex justify-between items-center">
         <div className="flex flex-wrap items-center gap-x-1">
-          <span className="text-gray-600 dark:text-gray-400">Total profit</span>
+          <span className="text-gray-600 dark:text-gray-400">Total</span>
+          <span className="text-gray-600 dark:text-gray-400">profit</span>
           <InfoTooltip content="The total returns earned on your investment. This includes both the withdrawn amount and the final value, minus your initial investment." />
         </div>
         <span className={`text-xl font-semibold ${totalProfit > 0 ? 'text-green-500 dark:text-green-400' : 'text-foreground'}`}>
