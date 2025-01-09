@@ -86,7 +86,7 @@ const ResultCard = ({
       </div>
       <div className="flex justify-between items-center">
         <div className="flex flex-wrap items-center">
-          <span className="text-gray-600 dark:text-gray-400">Final &nbsp;</span>
+          <span className="text-gray-600 dark:text-gray-400">Final&nbsp;</span>
           <span className="text-gray-600 dark:text-gray-400">value</span>
           <InfoTooltip content="The remaining balance in your investment after all periodic withdrawals and accounting for returns. This is what you'll have left at the end of your investment period." />
         </div>
