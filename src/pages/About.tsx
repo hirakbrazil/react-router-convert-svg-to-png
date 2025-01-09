@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import useTheme from "@/hooks/useTheme";
 import SEO from "@/components/SEO";
 import AdSenseHorizontal from "@/components/AdSenseHorizontal";
+import AdSenseResponsive from "@/components/AdSenseResponsive";
 
 const About = () => {
   useTheme();
@@ -61,7 +62,7 @@ const About = () => {
             By making these tools freely available, we aim to help investors better understand and plan their systematic withdrawals, ultimately contributing to their financial well-being.
           </p>
         </div>
-
+        <AdSenseResponsive />
         <Footer />
       </div>
     </div>
