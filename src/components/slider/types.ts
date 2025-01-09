@@ -1,7 +1,7 @@
-import { CurrencyType } from "../CurrencySelector";
+import { CurrencyType } from "@/components/CurrencySelector";
 
 export interface SliderInputProps {
-  label: string;
+  label: string | JSX.Element;
   value: number;
   onChange: (value: number) => void;
   min: number;
