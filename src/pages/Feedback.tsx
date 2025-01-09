@@ -3,7 +3,7 @@ import Footer from "@/components/Footer";
 import useTheme from "@/hooks/useTheme";
 import SEO from "@/components/SEO";
 import AdSenseHorizontal from "@/components/AdSenseHorizontal";
-
+import AdSenseResponsive from "@/components/AdSenseResponsive";
 
 const Feedback = () => {
   useTheme();
@@ -68,7 +68,7 @@ const Feedback = () => {
             We appreciate your support in making this tool better for everyone!
           </p>
         </div>
-
+        <AdSenseResponsive />
         <Footer />
       </div>
     </div>
