@@ -41,6 +41,9 @@ const SEO: React.FC<SEOProps> = ({
       {ogDescription && <meta property="og:description" content={ogDescription} />}
       {ogImage && <meta property="og:image" content={ogImage} />}
       <meta property="og:site_name" content="SWP Calculator" />
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5161705954627943" crossorigin="anonymous"></script>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-RG2EBW5W0Y"></script>
+      <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-RG2EBW5W0Y')</script>
     </Helmet>
   );
 };
