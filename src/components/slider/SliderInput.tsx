@@ -77,7 +77,7 @@ const SliderInput = ({
   return (
     <div className="space-y-4">
       {label && (
-        <div className="flex justify-between items-start">
+        <div className="flex justify-between items-center">
           <div className="flex-1">
             {typeof label === 'string' ? (
               <label className="text-lg text-gray-700 dark:text-[#c1cbd6]">{label}</label>

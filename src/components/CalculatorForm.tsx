@@ -98,12 +98,14 @@ const CalculatorForm = ({
       <div className="space-y-4">
         <SliderInput
           label={
-            <div className="flex flex-wrap items-center gap-x-1">
-              <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">Expected return rate</span>
-              <span className="text-lg text-gray-700 dark:text-[#c1cbd6] flex items-center whitespace-nowrap">
-                (p.a)
-                <InfoTooltip content="The expected annual return rate on your investment. This is the percentage by which your investment is expected to grow each year before withdrawals." />
-              </span>
+            <div className="flex items-center gap-x-1">
+              <div className="flex flex-wrap items-center gap-x-1">
+                <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">Expected return rate</span>
+                <span className="text-lg text-gray-700 dark:text-[#c1cbd6] flex items-center">
+                  (p.a)
+                  <InfoTooltip content="The expected annual return rate on your investment. This is the percentage by which your investment is expected to grow each year before withdrawals." />
+                </span>
+              </div>
             </div>
           }
           value={returnRate}
@@ -119,7 +121,7 @@ const CalculatorForm = ({
       <div className="space-y-4">
         <SliderInput
           label={
-            <div className="flex flex-wrap items-center gap-x-1">
+            <div className="flex items-center gap-x-1">
               <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">Time period</span>
               <InfoTooltip content="The total duration for which you plan to keep your investment and make periodic withdrawals. This is measured in years." />
             </div>
