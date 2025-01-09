@@ -98,10 +98,13 @@ const CalculatorForm = ({
       <div className="space-y-4">
         <SliderInput
           label={
-      <div className="flex items-center">
-          <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">Expected return rate (p.a)</span>
-          <InfoTooltip content="The expected annual return rate on your investment. This is the percentage by which your investment is expected to grow each year before withdrawals." />
-        </div>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-1">
+              <span className="text-lg text-gray-700 dark:text-[#c1cbd6] whitespace-nowrap">Expected return rate</span>
+              <span className="text-lg text-gray-700 dark:text-[#c1cbd6] whitespace-nowrap flex items-center">
+                (p.a)
+                <InfoTooltip content="The expected annual return rate on your investment. This is the percentage by which your investment is expected to grow each year before withdrawals." />
+              </span>
+            </div>
           }
           value={returnRate}
           onChange={setReturnRate}
@@ -116,11 +119,11 @@ const CalculatorForm = ({
       <div className="space-y-4">
         <SliderInput
           label={
-          <div className="flex items-center">
-          <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">Time period</span>
-          <InfoTooltip content="The total duration for which you plan to keep your investment and make periodic withdrawals. This is measured in years." />
-        </div>
-      }
+            <div className="flex flex-col sm:flex-row sm:items-center gap-1">
+              <span className="text-lg text-gray-700 dark:text-[#c1cbd6] whitespace-nowrap">Time period</span>
+              <InfoTooltip content="The total duration for which you plan to keep your investment and make periodic withdrawals. This is measured in years." />
+            </div>
+          }
           value={timePeriod}
           onChange={setTimePeriod}
           min={1}
