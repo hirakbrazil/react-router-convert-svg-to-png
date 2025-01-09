@@ -86,7 +86,8 @@ const ResultCard = ({
       </div>
       <div className="flex justify-between items-center">
         <div className="flex flex-wrap items-center gap-x-1">
-          <span className="text-gray-600 dark:text-gray-400">Final value</span>
+          <span className="text-gray-600 dark:text-gray-400">Final </span>
+          <span className="text-gray-600 dark:text-gray-400">value</span>
           <InfoTooltip content="The remaining balance in your investment after all periodic withdrawals and accounting for returns. This is what you'll have left at the end of your investment period." />
         </div>
         <span className={`text-xl font-semibold ${finalValue < 0 ? 'text-red-500 dark:text-red-400' : 'text-foreground'}`}>
