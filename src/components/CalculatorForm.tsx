@@ -100,9 +100,8 @@ const CalculatorForm = ({
           label={
             <div className="flex items-center gap-x-1">
               <div className="flex flex-wrap items-center gap-x-1">
-                <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">Expected return rate</span>
+                <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">Expected return rate (p.a)</span>
                 <span className="text-lg text-gray-700 dark:text-[#c1cbd6] flex items-center">
-                  (p.a)
                   <InfoTooltip content="The expected annual return rate on your investment. This is the percentage by which your investment is expected to grow each year before withdrawals." />
                 </span>
               </div>
