@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Home, Info, MessageSquare } from "lucide-react";
 import ThemeSwitcher from "./ThemeSwitcher";
-import AdSenseHorizontal from "./AdSenseHorizontal";
+import AdSenseResponsive from "./AdSenseResponsive";
 
 const Footer = () => {
   const location = useLocation();
@@ -12,7 +12,7 @@ const Footer = () => {
 
   return (
     <footer className="mt-8 space-y-8">
-      <AdSenseHorizontal />
+      <AdSenseResponsive />
       <div className="flex justify-center">
         <ThemeSwitcher />
       </div>
