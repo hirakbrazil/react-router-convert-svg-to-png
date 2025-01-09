@@ -75,7 +75,6 @@ const Index = () => {
             withdrawalFrequency={withdrawalFrequency}
             setWithdrawalFrequency={setWithdrawalFrequency}
           />
-<AdSenseResponsive />
           <ResultCard
             totalInvestment={totalInvestment}
             monthlyWithdrawal={monthlyWithdrawal}
@@ -84,7 +83,7 @@ const Index = () => {
             withdrawalFrequency={withdrawalFrequency}
             timePeriod={timePeriod}
           />
-
+          <AdSenseResponsive />
           <ActionButtons
             onReset={handleReset}
             previousValues={{
