@@ -72,8 +72,12 @@ const ResultCard = ({
       </div>
       <div className="flex justify-between items-center">
         <div className="flex items-center">
-          <span className="text-gray-600 dark:text-gray-400">Total</span>
-          <span className="text-gray-600 dark:text-gray-400">withdrawal</span>
+          <span className="text-gray-600 dark:text-gray-400">
+            Total
+          </span>
+          <span className="text-gray-600 dark:text-gray-400">
+            withdrawal
+          </span>
           <InfoTooltip content="The total amount you will withdraw over the entire investment period. This is calculated based on your periodic withdrawal amount and frequency." />
         </div>
         <span className="text-xl font-semibold text-foreground">
