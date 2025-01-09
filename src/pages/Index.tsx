@@ -8,6 +8,8 @@ import SEO from "@/components/SEO";
 import ActionButtons from "@/components/ActionButtons";
 import { useCalculator } from "@/hooks/useCalculator";
 import CalculatorHeader from "@/components/calculator/CalculatorHeader";
+import AdSenseHorizontal from "@/components/AdSenseHorizontal";
+import AdSenseResponsive from "@/components/AdSenseResponsive";
 
 const Index = () => {
   useTheme();
@@ -56,6 +58,7 @@ const Index = () => {
       />
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto space-y-8">
+          <AdSenseHorizontal />
           <CalculatorHeader currency={currency} onCurrencyChange={setCurrency} />
 
           <CalculatorForm
@@ -72,7 +75,7 @@ const Index = () => {
             withdrawalFrequency={withdrawalFrequency}
             setWithdrawalFrequency={setWithdrawalFrequency}
           />
-
+<AdSenseResponsive />
           <ResultCard
             totalInvestment={totalInvestment}
             monthlyWithdrawal={monthlyWithdrawal}
