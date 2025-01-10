@@ -1,20 +1,25 @@
 import { CurrencyType } from "@/components/CurrencySelector";
 
 export const formatLargeNumber = (value: number, currency: CurrencyType): string => {
+  const removeTrailingZero = (num: number): string => {
+    // Remove trailing zero if the number is a whole number
+    return num % 1 === 0 ? num.toFixed(0) : num.toFixed(1);
+  };
+
   if (currency === "INR") {
     if (value >= 10000000) {
       const croreValue = value / 10000000;
-      return `${croreValue.toFixed(croreValue < 100 ? 1 : 0)} Crore`;
+      return `${removeTrailingZero(croreValue)} Crore`;
     } else if (value >= 100000) {
-      return `${(value / 100000).toFixed(0)} Lakh`;
+      return `${removeTrailingZero(value / 100000)} Lakh`;
     }
   } else {
     if (value >= 1000000000) {
-      return `${(value / 1000000000).toFixed(1)}B`;
+      return `${removeTrailingZero(value / 1000000000)}B`;
     } else if (value >= 1000000) {
-      return `${(value / 1000000).toFixed(1)}M`;
+      return `${removeTrailingZero(value / 1000000)}M`;
     } else if (value >= 1000) {
-      return `${(value / 1000).toFixed(1)}K`;
+      return `${removeTrailingZero(value / 1000)}K`;
     }
   }
   return value.toLocaleString(currency === "INR" ? "en-IN" : undefined);
