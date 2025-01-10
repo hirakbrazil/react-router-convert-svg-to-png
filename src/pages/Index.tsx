@@ -37,7 +37,6 @@ const Index = () => {
     setReturnRate(13);
     setTimePeriod(10);
     setWithdrawalFrequency("Monthly");
-    setCurrency("INR");
 
     // Clear URL parameters
     window.history.replaceState({}, '', window.location.pathname);
