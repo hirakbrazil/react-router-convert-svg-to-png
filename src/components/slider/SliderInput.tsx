@@ -21,7 +21,15 @@ const SliderInput = ({
   maxLength,
 }: SliderInputProps) => {
   const [inputValue, setInputValue] = useState(value.toString());
+  const [isMobile, setIsMobile] = useState(false);
   const effectiveMax = dynamicMax !== undefined ? dynamicMax : max;
+
+  useEffect(() => {
+    const updateIsMobile = () => setIsMobile(window.innerWidth < 768); // Define mobile as less than 768px
+    updateIsMobile(); // Set initial value
+    window.addEventListener("resize", updateIsMobile);
+    return () => window.removeEventListener("resize", updateIsMobile);
+  }, []);
 
   useEffect(() => {
     if (formatValue && currency) {
@@ -34,7 +42,7 @@ const SliderInput = ({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value.replace(/,/g, '');
     setInputValue(rawValue);
-    
+
     const numValue = parseFloat(rawValue);
     if (!isNaN(numValue)) {
       if (numValue >= min && numValue <= effectiveMax) {
@@ -54,7 +62,7 @@ const SliderInput = ({
       }
     } else {
       let clampedValue = Math.min(Math.max(numValue, min), effectiveMax);
-      
+
       if (formatValue && currency) {
         setInputValue(formatNumberByCurrency(clampedValue, currency));
       } else {
@@ -76,12 +84,21 @@ const SliderInput = ({
 
   // Calculate input width based on content length and screen size
   const getInputWidth = () => {
-    const baseWidth = Math.max(60, inputValue.length * 12); // Increased base multiplier
-    return {
-      width: `${baseWidth}px`,
-      minWidth: '60px', // Increased minimum width
-      maxWidth: '300px' // Increased maximum width for desktop
-    };
+    if (isMobile) {
+      const baseWidth = Math.max(60, inputValue.length * 12); // Mobile width calculation
+      return {
+        width: `${baseWidth}px`,
+        minWidth: '60px',
+        maxWidth: '300px',
+      };
+    } else {
+      const baseWidth = Math.max(80, inputValue.length * 14); // Desktop width calculation
+      return {
+        width: `${baseWidth}px`,
+        minWidth: '80px',
+        maxWidth: '200px',
+      };
+    }
   };
 
   return (
