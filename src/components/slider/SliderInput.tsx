@@ -74,44 +74,48 @@ const SliderInput = ({
     }
   };
 
+  // Calculate input width based on content length and screen size
+  const getInputWidth = () => {
+    const baseWidth = Math.max(80, inputValue.length * 14); // Increased base multiplier
+    return {
+      width: `${baseWidth}px`,
+      minWidth: '80px', // Increased minimum width
+      maxWidth: '200px' // Increased maximum width for desktop
+    };
+  };
+
   return (
     <div className="space-y-4">
-      {label && (
-        <div className="flex justify-between items-center">
-          <div className="flex-1">
-            {typeof label === 'string' ? (
-              <label className="text-lg text-gray-700 dark:text-[#c1cbd6]">{label}</label>
-            ) : (
-              label
-            )}
-          </div>
-          <div className="bg-secondary px-4 py-2 rounded-lg flex items-center gap-0 w-fit">
-            {currency ? (
-              <span className="text-xl md:text-2xl font-semibold text-primary shrink-0">{getCurrencySymbol(currency)}</span>
-            ) : (
-              prefix && <span className="text-xl md:text-2xl font-semibold text-primary shrink-0">{prefix}</span>
-            )}
-            <Input
-              type="text"
-              inputMode="numeric"
-              pattern="[0-9,]*"
-              value={inputValue}
-              onChange={handleInputChange}
-              onBlur={handleInputBlur}
-              min={min}
-              max={effectiveMax}
-              maxLength={maxLength}
-              className="text-xl md:text-2xl font-semibold text-primary bg-transparent border-none focus-visible:ring-0 p-0 text-right"
-              style={{
-                width: `${Math.max(60, inputValue.length * 12)}px`,
-                minWidth: '60px',
-                maxWidth: '300px'
-              }}
-            />
-            {suffix && <span className="text-xl md:text-2xl font-semibold text-primary shrink-0 ml-1">{suffix}</span>}
-          </div>
+      <div className="flex justify-between items-center">
+        <div className="flex-1">
+          {typeof label === 'string' ? (
+            <label className="text-lg text-gray-700 dark:text-[#c1cbd6]">{label}</label>
+          ) : (
+            label
+          )}
         </div>
-      )}
+        <div className="bg-secondary px-4 py-2 rounded-lg flex items-center gap-0 w-fit">
+          {currency ? (
+            <span className="text-xl md:text-2xl font-semibold text-primary shrink-0">{getCurrencySymbol(currency)}</span>
+          ) : (
+            prefix && <span className="text-xl md:text-2xl font-semibold text-primary shrink-0">{prefix}</span>
+          )}
+          <Input
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9,]*"
+            value={inputValue}
+            onChange={handleInputChange}
+            onBlur={handleInputBlur}
+            min={min}
+            max={effectiveMax}
+            maxLength={maxLength}
+            className="text-xl md:text-2xl font-semibold text-primary bg-transparent border-none focus-visible:ring-0 p-0 text-right"
+            style={getInputWidth()}
+          />
+          {suffix && <span className="text-xl md:text-2xl font-semibold text-primary shrink-0 ml-1">{suffix}</span>}
+        </div>
+      </div>
       <Slider
         value={[value]}
         onValueChange={handleSliderChange}
