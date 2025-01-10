@@ -2,6 +2,11 @@ import { CurrencyType } from "@/components/CurrencySelector";
 
 export const formatLargeNumber = (value: number, currency: CurrencyType): string => {
   const removeTrailingZero = (num: number, currency: CurrencyType): string => {
+    // If the number is a whole number, return without decimal places
+    if (num % 1 === 0) {
+      return num.toFixed(0);
+    }
+
     // For INR, use 2 decimal places, else use 1 decimal place
     return currency === "INR" ? num.toFixed(2) : num.toFixed(1);
   };
