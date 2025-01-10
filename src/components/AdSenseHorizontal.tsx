@@ -2,8 +2,12 @@ import React, { useEffect } from 'react';
 
 const AdSenseHorizontal: React.FC = () => {
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    try {
+      if (typeof window !== 'undefined') {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      }
+    } catch (err) {
+      console.error('AdSense error:', err);
     }
   }, []);
 
