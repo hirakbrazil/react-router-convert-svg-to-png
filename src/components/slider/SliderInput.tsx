@@ -76,11 +76,11 @@ const SliderInput = ({
 
   // Calculate input width based on content length and screen size
   const getInputWidth = () => {
-    const baseWidth = Math.max(80, inputValue.length * 14); // Increased base multiplier
+    const baseWidth = Math.max(80, inputValue.length * 14);
     return {
       width: `${baseWidth}px`,
-      minWidth: '80px', // Increased minimum width
-      maxWidth: '200px' // Increased maximum width for desktop
+      minWidth: '80px',
+      maxWidth: '200px'
     };
   };
 
@@ -94,11 +94,11 @@ const SliderInput = ({
             label
           )}
         </div>
-        <div className="bg-secondary px-4 py-2 rounded-lg flex items-center gap-0 w-fit">
+        <div className="bg-secondary px-4 py-2 rounded-lg flex items-center w-fit">
           {currency ? (
-            <span className="text-xl md:text-2xl font-semibold text-primary shrink-0">{getCurrencySymbol(currency)}</span>
+            <span className="text-xl md:text-2xl font-semibold text-primary">{getCurrencySymbol(currency)}</span>
           ) : (
-            prefix && <span className="text-xl md:text-2xl font-semibold text-primary shrink-0">{prefix}</span>
+            prefix && <span className="text-xl md:text-2xl font-semibold text-primary">{prefix}</span>
           )}
           <Input
             type="text"
@@ -113,7 +113,7 @@ const SliderInput = ({
             className="text-xl md:text-2xl font-semibold text-primary bg-transparent border-none focus-visible:ring-0 p-0 text-right"
             style={getInputWidth()}
           />
-          {suffix && <span className="text-xl md:text-2xl font-semibold text-primary shrink-0 ml-1">{suffix}</span>}
+          {suffix && <span className="text-xl md:text-2xl font-semibold text-primary ml-1">{suffix}</span>}
         </div>
       </div>
       <Slider
