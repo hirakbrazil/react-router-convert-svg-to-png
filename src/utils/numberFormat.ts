@@ -1,10 +1,14 @@
 import { CurrencyType } from "@/components/CurrencySelector";
 
 export const formatLargeNumber = (value: number, currency: CurrencyType): string => {
-  const removeTrailingZero = (num: number): string => {
-    // Remove trailing zero if the number is a whole number
-    return num % 1 === 0 ? num.toFixed(0) : num.toFixed(2);
-  };
+  const removeTrailingZero = (num: number, currency: CurrencyType): string => {
+  // For INR, use 2 decimal places, else use 1 decimal place
+  return num % 1 === 0
+    ? num.toFixed(0)
+    : currency === "INR"
+    ? num.toFixed(2)
+    : num.toFixed(1);
+};
 
   if (currency === "INR") {
     if (value >= 10000000) {
