@@ -3,6 +3,7 @@ import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { SliderInputProps } from "./types";
 import { formatNumberByCurrency, getCurrencySymbol } from "./utils";
+import { formatLargeNumber, shouldFormatAsLargeNumber } from "@/utils/numberFormat";
 
 const SliderInput = ({
   label,
@@ -25,8 +26,8 @@ const SliderInput = ({
   const effectiveMax = dynamicMax !== undefined ? dynamicMax : max;
 
   useEffect(() => {
-    const updateIsMobile = () => setIsMobile(window.innerWidth < 768); // Define mobile as less than 768px
-    updateIsMobile(); // Set initial value
+    const updateIsMobile = () => setIsMobile(window.innerWidth < 768);
+    updateIsMobile();
     window.addEventListener("resize", updateIsMobile);
     return () => window.removeEventListener("resize", updateIsMobile);
   }, []);
@@ -82,23 +83,31 @@ const SliderInput = ({
     }
   };
 
-  // Calculate input width based on content length and screen size
   const getInputWidth = () => {
     if (isMobile) {
-      const baseWidth = Math.max(60, inputValue.length * 12); // Mobile width calculation
+      const baseWidth = Math.max(60, inputValue.length * 12);
       return {
         width: `${baseWidth}px`,
         minWidth: '60px',
         maxWidth: '300px',
       };
     } else {
-      const baseWidth = Math.max(80, inputValue.length * 14); // Desktop width calculation
+      const baseWidth = Math.max(80, inputValue.length * 14);
       return {
         width: `${baseWidth}px`,
         minWidth: '80px',
         maxWidth: '200px',
       };
     }
+  };
+
+  const formatMinMaxValue = (value: number, isMax: boolean) => {
+    if (currency && shouldFormatAsLargeNumber(value, isMax)) {
+      return `${getCurrencySymbol(currency)}${formatLargeNumber(value, currency)}`;
+    }
+    return currency 
+      ? `${getCurrencySymbol(currency)}${formatNumberByCurrency(value, currency)}`
+      : `${value}${suffix}`;
   };
 
   return (
@@ -133,14 +142,24 @@ const SliderInput = ({
           {suffix && <span className="text-xl md:text-2xl font-semibold text-primary shrink-0 ml-1">{suffix}</span>}
         </div>
       </div>
-      <Slider
-        value={[value]}
-        onValueChange={handleSliderChange}
-        max={effectiveMax}
-        min={min}
-        step={step}
-        className="py-4"
-      />
+      <div className="space-y-2">
+        <Slider
+          value={[value]}
+          onValueChange={handleSliderChange}
+          max={effectiveMax}
+          min={min}
+          step={step}
+          className="py-4"
+        />
+        <div className="flex justify-between px-2">
+          <span className="text-sm text-gray-500 dark:text-gray-400">
+            {formatMinMaxValue(min, false)}
+          </span>
+          <span className="text-sm text-gray-500 dark:text-gray-400">
+            {formatMinMaxValue(effectiveMax, true)}
+          </span>
+        </div>
+      </div>
     </div>
   );
 };
