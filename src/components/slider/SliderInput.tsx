@@ -152,10 +152,10 @@ const SliderInput = ({
           className="py-4"
         />
         <div className="flex justify-between px-2">
-          <span className="text-sm text-gray-500 dark:text-gray-400">
+          <span className="text-base text-gray-500 dark:text-gray-400">
             {formatMinMaxValue(min, false)}
           </span>
-          <span className="text-sm text-gray-500 dark:text-gray-400">
+          <span className="text-base text-gray-500 dark:text-gray-400">
             {formatMinMaxValue(effectiveMax, true)}
           </span>
         </div>
