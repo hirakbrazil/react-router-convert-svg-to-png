@@ -3,7 +3,8 @@ import { CurrencyType } from "@/components/CurrencySelector";
 export const formatLargeNumber = (value: number, currency: CurrencyType): string => {
   if (currency === "INR") {
     if (value >= 10000000) {
-      return `${(value / 10000000).toFixed(0)} Crore`;
+      const croreValue = value / 10000000;
+      return `${croreValue.toFixed(croreValue < 100 ? 1 : 0)} Crore`;
     } else if (value >= 100000) {
       return `${(value / 100000).toFixed(0)} Lakh`;
     }
