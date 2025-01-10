@@ -3,7 +3,7 @@ import { CurrencyType } from "@/components/CurrencySelector";
 export const formatLargeNumber = (value: number, currency: CurrencyType): string => {
   const removeTrailingZero = (num: number): string => {
     // Remove trailing zero if the number is a whole number
-    return num % 1 === 0 ? num.toFixed(0) : num.toFixed(1);
+    return num % 1 === 0 ? num.toFixed(0) : num.toFixed(2);
   };
 
   if (currency === "INR") {
