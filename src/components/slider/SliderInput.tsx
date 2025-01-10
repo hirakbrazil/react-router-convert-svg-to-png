@@ -76,11 +76,11 @@ const SliderInput = ({
 
   // Calculate input width based on content length and screen size
   const getInputWidth = () => {
-    const baseWidth = Math.max(80, inputValue.length * 14); // Increased base multiplier
+    const baseWidth = Math.max(60, inputValue.length * 12); // Increased base multiplier
     return {
       width: `${baseWidth}px`,
-      minWidth: '80px', // Increased minimum width
-      maxWidth: '200px' // Increased maximum width for desktop
+      minWidth: '60px', // Increased minimum width
+      maxWidth: '300px' // Increased maximum width for desktop
     };
   };
 
