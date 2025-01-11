@@ -4,6 +4,7 @@ import { CurrencyType } from "@/components/CurrencySelector";
 import { WithdrawalFrequency } from "@/types/calculator";
 import WithdrawalFrequencySelector from "./calculator/WithdrawalFrequencySelector";
 import InfoTooltip from "./InfoTooltip";
+import { format, addYears } from "date-fns";
 
 interface CalculatorFormProps {
   totalInvestment: number;
@@ -55,6 +56,11 @@ const CalculatorForm = ({
     }
   };
 
+  const getFutureDate = (years: number) => {
+    const futureDate = addYears(new Date(), years);
+    return format(futureDate, "MMMM, yyyy");
+  };
+
   return (
     <div className="bg-card dark:bg-card rounded-xl shadow-lg p-6 space-y-6">
       <SliderInput
@@ -99,19 +105,19 @@ const CalculatorForm = ({
         <SliderInput
           label={
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-wrap items-center gap-x-1">
-          <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">
-            Expected return
-          </span>
-          <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">
-          rate
-          </span>
-          <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">
-          (p.a)
-          </span>
-          <InfoTooltip content="The expected annual return rate on your investment. This is the percentage by which your investment is expected to grow each year before withdrawals." />
-        </div>
-      </div>
+              <div className="flex flex-wrap items-center gap-x-1">
+                <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">
+                  Expected return
+                </span>
+                <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">
+                  rate
+                </span>
+                <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">
+                  (p.a)
+                </span>
+                <InfoTooltip content="The expected annual return rate on your investment. This is the percentage by which your investment is expected to grow each year before withdrawals." />
+              </div>
+            </div>
           }
           value={returnRate}
           onChange={setReturnRate}
@@ -139,6 +145,9 @@ const CalculatorForm = ({
           suffix=" Yr"
           maxLength={2}
         />
+        <p className="text-base text-muted-foreground ml-1 dark:text-[#c1cbd6]">
+          {getFutureDate(timePeriod)}
+        </p>
       </div>
     </div>
   );
