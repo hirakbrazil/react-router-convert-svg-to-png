@@ -4,8 +4,8 @@
   "description": "Calculate your Systematic Withdrawal Plan (SWP) easily with our free calculator",
   "icons": [
     {
-      "src": "icon.jpg",
-      "type": "image/jpeg",
+      "src": "icon.png",
+      "type": "image/png",
       "sizes": "512x512"
     }
   ],
