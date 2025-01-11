@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.mutualfundjournal.swpcalculator",
+        "sha256_cert_fingerprints": ["88:EE:50:53:2B:33:85:34:96:D6:4C:A9:06:3C:EB:54:C5:5A:5C:82:3D:5F:F4:D7:0F:97:26:34:F8:8A:71:7D"]
+      }
+    }]
