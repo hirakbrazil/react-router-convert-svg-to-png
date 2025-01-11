@@ -122,7 +122,7 @@ const ResultCard = ({
           <span className={`text-xl font-semibold ${totalProfit > 0 ? 'text-green-500 dark:text-green-400' : 'text-foreground'}`}>
             {formatCurrency(displayProfit, currency)}
           </span>
-          <span className={`text-sm ${totalProfit > 0 ? 'text-green-500 dark:text-green-400' : 'text-foreground'}`}>
+          <span className={`text-base font-medium ${totalProfit > 0 ? 'text-green-500 dark:text-green-400' : 'text-foreground'}`}>
             ({displayProfitPercentage.toFixed(2)}%)
           </span>
         </div>
