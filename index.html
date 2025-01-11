@@ -12,42 +12,6 @@
     <link rel="manifest" href="/manifest.json" />
     <link rel="icon" href="/icon.jpg" />
     <link rel="apple-touch-icon" href="/icon.jpg" />
-
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js', { scope: '/' })
-            .then(registration => {
-              console.log('ServiceWorker registration successful with scope:', registration.scope);
-              
-              // Check for updates
-              registration.addEventListener('updatefound', () => {
-                const newWorker = registration.installing;
-                newWorker.addEventListener('statechange', () => {
-                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                    // New content is available
-                    if (confirm('New version available! Click OK to update.')) {
-                      registration.waiting.postMessage('skipWaiting');
-                      window.location.reload();
-                    }
-                  }
-                });
-              });
-            })
-            .catch(error => {
-              console.error('ServiceWorker registration failed:', error);
-            });
-        });
-
-        let refreshing = false;
-        navigator.serviceWorker.addEventListener('controllerchange', () => {
-          if (!refreshing) {
-            refreshing = true;
-            window.location.reload();
-          }
-        });
-      }
-    </script>
     </head>
   <body>
     <div id="root"></div>

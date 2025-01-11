@@ -6,16 +6,13 @@
     {
       "src": "icon.jpg",
       "type": "image/jpeg",
-      "sizes": "512x512",
-      "purpose": "any maskable"
+      "sizes": "512x512"
     }
   ],
-  "id": "/",
-  "start_url": "/",
+  "start_url": ".",
   "display": "standalone",
   "theme_color": "#07a36c",
   "background_color": "#ffffff",
   "categories": ["finance"],
-  "orientation": "portrait",
-  "prefer_related_applications": false
+  "orientation": "portrait"
 }
