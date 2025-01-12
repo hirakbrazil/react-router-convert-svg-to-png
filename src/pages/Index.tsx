@@ -31,39 +31,15 @@ const Index = () => {
     setCurrency,
   } = useCalculator();
 
-  // Add state for advanced options
-  const [showAdvancedOptions, setShowAdvancedOptions] = React.useState(() => {
-    const saved = localStorage.getItem("showAdvancedOptions");
-    return saved ? JSON.parse(saved) : false;
-  });
-
-  const [adjustForInflation, setAdjustForInflation] = React.useState(() => {
-    const saved = localStorage.getItem("adjustForInflation");
-    return saved ? JSON.parse(saved) : false;
-  });
-
-  const [inflationRate, setInflationRate] = React.useState(() => {
-    const saved = localStorage.getItem("inflationRate");
-    return saved ? JSON.parse(saved) : 6;
-  });
-
   const handleReset = () => {
     setTotalInvestment(500000);
     setMonthlyWithdrawal(5000);
     setReturnRate(13);
     setTimePeriod(10);
     setWithdrawalFrequency("Monthly");
-    setShowAdvancedOptions(false);
-    setAdjustForInflation(false);
-    setInflationRate(6);
 
     // Clear URL parameters
     window.history.replaceState({}, '', window.location.pathname);
-
-    // Clear localStorage
-    localStorage.removeItem("showAdvancedOptions");
-    localStorage.removeItem("adjustForInflation");
-    localStorage.removeItem("inflationRate");
   };
 
   return (
@@ -97,12 +73,6 @@ const Index = () => {
             currency={currency}
             withdrawalFrequency={withdrawalFrequency}
             setWithdrawalFrequency={setWithdrawalFrequency}
-            showAdvancedOptions={showAdvancedOptions}
-            setShowAdvancedOptions={setShowAdvancedOptions}
-            adjustForInflation={adjustForInflation}
-            setAdjustForInflation={setAdjustForInflation}
-            inflationRate={inflationRate}
-            setInflationRate={setInflationRate}
           />
           <ResultCard
             totalInvestment={totalInvestment}
@@ -111,8 +81,6 @@ const Index = () => {
             currency={currency}
             withdrawalFrequency={withdrawalFrequency}
             timePeriod={timePeriod}
-            adjustForInflation={adjustForInflation}
-            inflationRate={inflationRate}
           />
           <AdSenseResponsive />
           <ActionButtons
@@ -123,9 +91,6 @@ const Index = () => {
               returnRate,
               timePeriod,
               withdrawalFrequency,
-              showAdvancedOptions,
-              adjustForInflation,
-              inflationRate,
             }}
             currentValues={{
               totalInvestment,
@@ -134,9 +99,6 @@ const Index = () => {
               timePeriod,
               withdrawalFrequency,
               currency,
-              showAdvancedOptions,
-              adjustForInflation,
-              inflationRate,
             }}
             onRestore={(values) => {
               setTotalInvestment(values.totalInvestment);
@@ -144,9 +106,6 @@ const Index = () => {
               setReturnRate(values.returnRate);
               setTimePeriod(values.timePeriod);
               setWithdrawalFrequency(values.withdrawalFrequency);
-              setShowAdvancedOptions(values.showAdvancedOptions);
-              setAdjustForInflation(values.adjustForInflation);
-              setInflationRate(values.inflationRate);
             }}
           />
 

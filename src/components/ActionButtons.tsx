@@ -1,30 +1,35 @@
-import React from "react";
 import { Button } from "@/components/ui/button";
-import { WithdrawalFrequency } from "@/types/calculator";
-import { CurrencyType } from "./CurrencySelector";
-import { Share2 } from "lucide-react";
+import { RefreshCw, Share2, Undo } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+import { useState, useRef } from "react";
 import ShareDialog from "./ShareDialog";
-
-interface Values {
-  totalInvestment: number;
-  monthlyWithdrawal: number;
-  returnRate: number;
-  timePeriod: number;
-  withdrawalFrequency: WithdrawalFrequency;
-  showAdvancedOptions: boolean;
-  adjustForInflation: boolean;
-  inflationRate: number;
-}
-
-interface CurrentValues extends Values {
-  currency: CurrencyType;
-}
+import { CurrencyType } from "./CurrencySelector";
+import { WithdrawalFrequency } from "@/types/calculator";
 
 interface ActionButtonsProps {
   onReset: () => void;
-  previousValues: Values;
-  currentValues: CurrentValues;
-  onRestore: (values: Values) => void;
+  previousValues: {
+    totalInvestment: number;
+    monthlyWithdrawal: number;
+    returnRate: number;
+    timePeriod: number;
+    withdrawalFrequency: WithdrawalFrequency;
+  };
+  currentValues: {
+    totalInvestment: number;
+    monthlyWithdrawal: number;
+    returnRate: number;
+    timePeriod: number;
+    withdrawalFrequency: WithdrawalFrequency;
+    currency: CurrencyType;
+  };
+  onRestore: (values: {
+    totalInvestment: number;
+    monthlyWithdrawal: number;
+    returnRate: number;
+    timePeriod: number;
+    withdrawalFrequency: WithdrawalFrequency;
+  }) => void;
 }
 
 const ActionButtons = ({
@@ -33,28 +38,74 @@ const ActionButtons = ({
   currentValues,
   onRestore,
 }: ActionButtonsProps) => {
-  const [showShareDialog, setShowShareDialog] = React.useState(false);
+  const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
+  const [isResetDisabled, setIsResetDisabled] = useState(false);
+  const resetTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleShare = () => {
-    setShowShareDialog(true);
+  const handleReset = () => {
+    const valuesToRestore = { ...currentValues };
+
+    if (resetTimeoutRef.current) {
+      clearTimeout(resetTimeoutRef.current);
+    }
+
+    setIsResetDisabled(true);
+    onReset();
+
+    toast({
+      title: "Reset Complete",
+      description: "All values reset to default",
+      duration: 7000,
+      action: (
+        <Button
+          variant="outline"
+          size="sm"
+          className="gap-2"
+          onClick={() => {
+            onRestore(valuesToRestore);
+            setIsResetDisabled(false);
+
+            toast({
+              title: "Values Restored",
+              description: "Previous values have been restored",
+              duration: 5000,
+            });
+          }}
+        >
+          <Undo className="h-4 w-4" />
+          Undo
+        </Button>
+      ),
+    });
+
+    resetTimeoutRef.current = setTimeout(() => {
+      setIsResetDisabled(false);
+    }, 7000);
   };
 
   return (
-    <div className="flex flex-wrap gap-4 justify-center">
-      <Button variant="outline" onClick={onReset}>
+    <div className="flex justify-center gap-4">
+      <Button
+        onClick={handleReset}
+        variant="outline"
+        className="gap-2"
+        disabled={isResetDisabled}
+      >
+        <RefreshCw className="h-4 w-4" />
         Reset
       </Button>
-      <Button variant="outline" onClick={() => onRestore(previousValues)}>
-        Undo
-      </Button>
-      <Button variant="outline" onClick={handleShare}>
-        <Share2 className="mr-2 h-4 w-4" />
+      <Button
+        onClick={() => setIsShareDialogOpen(true)}
+        variant="outline"
+        className="gap-2"
+      >
+        <Share2 className="h-4 w-4" />
         Share
       </Button>
       <ShareDialog
-        open={showShareDialog}
-        onOpenChange={setShowShareDialog}
-        values={currentValues}
+        open={isShareDialogOpen}
+        onOpenChange={setIsShareDialogOpen}
+        {...currentValues}
       />
     </div>
   );

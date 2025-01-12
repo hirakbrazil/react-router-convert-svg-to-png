@@ -5,8 +5,6 @@ import { WithdrawalFrequency } from "@/types/calculator";
 import WithdrawalFrequencySelector from "./calculator/WithdrawalFrequencySelector";
 import InfoTooltip from "./InfoTooltip";
 import { format, addYears } from "date-fns";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 
 interface CalculatorFormProps {
   totalInvestment: number;
@@ -21,12 +19,6 @@ interface CalculatorFormProps {
   currency: CurrencyType;
   withdrawalFrequency: WithdrawalFrequency;
   setWithdrawalFrequency: (frequency: WithdrawalFrequency) => void;
-  showAdvancedOptions: boolean;
-  setShowAdvancedOptions: (value: boolean) => void;
-  adjustForInflation: boolean;
-  setAdjustForInflation: (value: boolean) => void;
-  inflationRate: number;
-  setInflationRate: (value: number) => void;
 }
 
 const CalculatorForm = ({
@@ -42,12 +34,6 @@ const CalculatorForm = ({
   currency,
   withdrawalFrequency,
   setWithdrawalFrequency,
-  showAdvancedOptions,
-  setShowAdvancedOptions,
-  adjustForInflation,
-  setAdjustForInflation,
-  inflationRate,
-  setInflationRate,
 }: CalculatorFormProps) => {
   useEffect(() => {
     if (monthlyWithdrawal > totalInvestment) {
@@ -74,13 +60,6 @@ const CalculatorForm = ({
     const futureDate = addYears(new Date(), years);
     return format(futureDate, "MMMM, yyyy");
   };
-
-  // Save preferences to localStorage when they change
-  useEffect(() => {
-    localStorage.setItem("showAdvancedOptions", JSON.stringify(showAdvancedOptions));
-    localStorage.setItem("adjustForInflation", JSON.stringify(adjustForInflation));
-    localStorage.setItem("inflationRate", JSON.stringify(inflationRate));
-  }, [showAdvancedOptions, adjustForInflation, inflationRate]);
 
   return (
     <div className="bg-card dark:bg-card rounded-xl shadow-lg p-6 space-y-6">
@@ -169,58 +148,6 @@ const CalculatorForm = ({
         <p className="text-base text-muted-foreground ml-1 dark:text-[#c1cbd6]">
           {getFutureDate(timePeriod)}
         </p>
-      </div>
-
-      <div className="space-y-4 pt-2 border-t">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Label htmlFor="advanced-options" className="text-lg text-gray-700 dark:text-[#c1cbd6]">
-              Advanced options
-            </Label>
-            <InfoTooltip content="Enable advanced options like inflation adjustment for more detailed calculations." />
-          </div>
-          <Switch
-            id="advanced-options"
-            checked={showAdvancedOptions}
-            onCheckedChange={setShowAdvancedOptions}
-          />
-        </div>
-
-        {showAdvancedOptions && (
-          <div className="space-y-4 pl-4 border-l-2 border-gray-200 dark:border-gray-700">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Label htmlFor="adjust-inflation" className="text-lg text-gray-700 dark:text-[#c1cbd6]">
-                  Adjust for Inflation
-                </Label>
-                <InfoTooltip content="Enable this to adjust withdrawal amounts for inflation over time." />
-              </div>
-              <Switch
-                id="adjust-inflation"
-                checked={adjustForInflation}
-                onCheckedChange={setAdjustForInflation}
-              />
-            </div>
-
-            {adjustForInflation && (
-              <SliderInput
-                label={
-                  <div className="flex items-center gap-x-1">
-                    <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">Inflation rate</span>
-                    <InfoTooltip content="The expected annual inflation rate used to adjust withdrawal amounts over time." />
-                  </div>
-                }
-                value={inflationRate}
-                onChange={setInflationRate}
-                min={0.1}
-                max={30}
-                step={0.1}
-                suffix="%"
-                maxLength={4}
-              />
-            )}
-          </div>
-        )}
       </div>
     </div>
   );
