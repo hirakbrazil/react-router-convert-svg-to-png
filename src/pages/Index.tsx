@@ -29,12 +29,6 @@ const Index = () => {
     withdrawalPercentage,
     currency,
     setCurrency,
-    showAdvancedOptions,
-    setShowAdvancedOptions,
-    adjustForInflation,
-    setAdjustForInflation,
-    inflationRate,
-    setInflationRate,
   } = useCalculator();
 
   const handleReset = () => {
@@ -43,9 +37,6 @@ const Index = () => {
     setReturnRate(13);
     setTimePeriod(10);
     setWithdrawalFrequency("Monthly");
-    setShowAdvancedOptions(false);
-    setAdjustForInflation(false);
-    setInflationRate(6);
 
     // Clear URL parameters
     window.history.replaceState({}, '', window.location.pathname);
@@ -82,12 +73,6 @@ const Index = () => {
             currency={currency}
             withdrawalFrequency={withdrawalFrequency}
             setWithdrawalFrequency={setWithdrawalFrequency}
-            showAdvancedOptions={showAdvancedOptions}
-            setShowAdvancedOptions={setShowAdvancedOptions}
-            adjustForInflation={adjustForInflation}
-            setAdjustForInflation={setAdjustForInflation}
-            inflationRate={inflationRate}
-            setInflationRate={setInflationRate}
           />
           <ResultCard
             totalInvestment={totalInvestment}
@@ -96,8 +81,6 @@ const Index = () => {
             currency={currency}
             withdrawalFrequency={withdrawalFrequency}
             timePeriod={timePeriod}
-            adjustForInflation={adjustForInflation}
-            inflationRate={inflationRate}
           />
           <AdSenseResponsive />
           <ActionButtons
@@ -108,9 +91,6 @@ const Index = () => {
               returnRate,
               timePeriod,
               withdrawalFrequency,
-              showAdvancedOptions,
-              adjustForInflation,
-              inflationRate,
             }}
             currentValues={{
               totalInvestment,
@@ -119,9 +99,6 @@ const Index = () => {
               timePeriod,
               withdrawalFrequency,
               currency,
-              showAdvancedOptions,
-              adjustForInflation,
-              inflationRate,
             }}
             onRestore={(values) => {
               setTotalInvestment(values.totalInvestment);
@@ -129,9 +106,6 @@ const Index = () => {
               setReturnRate(values.returnRate);
               setTimePeriod(values.timePeriod);
               setWithdrawalFrequency(values.withdrawalFrequency);
-              setShowAdvancedOptions(values.showAdvancedOptions);
-              setAdjustForInflation(values.adjustForInflation);
-              setInflationRate(values.inflationRate);
             }}
           />
 
