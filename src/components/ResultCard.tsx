@@ -92,14 +92,6 @@ const ResultCard = ({
           {formatCurrency(totalWithdrawal, currency)}
         </span>
       </div>
-
-      <DonutChart
-        totalInvestment={totalInvestment}
-        totalWithdrawal={totalWithdrawal}
-        currency={currency}
-        formatCurrency={formatCurrency}
-      />
-
       <div className="flex justify-between items-center">
         <div className="flex flex-wrap items-center gap-x-1">
           <span className="text-gray-600 dark:text-gray-400">Final</span>
@@ -136,6 +128,13 @@ const ResultCard = ({
           </span>
         </div>
       </div>
+
+      <DonutChart
+        totalInvestment={totalInvestment}
+        totalWithdrawal={totalWithdrawal}
+        currency={currency}
+        formatCurrency={formatCurrency}
+      />
     </div>
   );
 };
