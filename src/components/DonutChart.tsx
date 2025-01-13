@@ -91,7 +91,8 @@ const DonutChart: React.FC<DonutChartProps> = ({
           </Pie>
           <Tooltip 
             content={<CustomTooltip />}
-            wrapperStyle={{ outline: 'none' }}
+            wrapperStyle={{ outline: 'none', pointerEvents: 'none' }}
+            cursor={false}
           />
         </PieChart>
       </div>
