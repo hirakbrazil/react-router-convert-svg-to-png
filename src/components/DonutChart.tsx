@@ -19,11 +19,16 @@ const DonutChart: React.FC<DonutChartProps> = ({
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const data = [
-    { name: "Total Investment", value: totalInvestment },
     { name: "Total Withdrawal", value: totalWithdrawal },
+    { name: "Total Investment", value: totalInvestment },
   ];
 
-  const COLORS = ["#e6f5ef", "#10B981"]; // Lighter version of primary color for investment
+  // Use CSS variables to handle dark mode colors
+  const isDarkMode = document.documentElement.classList.contains('dark');
+  const COLORS = [
+    "#10B981", // Primary color for Total Withdrawal
+    isDarkMode ? "#062b1f" : "#e6f5ef", // Dark/Light version for Total Investment
+  ];
 
   const onPieEnter = (_: any, index: number) => {
     setActiveIndex(index);
@@ -59,6 +64,8 @@ const DonutChart: React.FC<DonutChartProps> = ({
             outerRadius={80}
             paddingAngle={2}
             dataKey="value"
+            startAngle={90}
+            endAngle={450}
             onMouseEnter={onPieEnter}
             onMouseLeave={onPieLeave}
           >
