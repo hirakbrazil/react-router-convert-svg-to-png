@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import { CurrencyType } from "./CurrencySelector";
 import { Circle } from "lucide-react";
@@ -30,6 +30,18 @@ const DonutChart: React.FC<DonutChartProps> = ({
     isDarkMode ? "#062b1f" : "#e6f5ef", // Dark/Light version for Total Investment
   ];
 
+  // Handle click outside
+  useEffect(() => {
+    const handleClickOutside = () => {
+      setActiveIndex(null);
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
   const onPieEnter = (_: any, index: number) => {
     setActiveIndex(index);
   };
@@ -41,7 +53,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-white dark:bg-card p-2 rounded-lg shadow-lg border border-border">
+        <div className="bg-background dark:bg-card p-2 rounded-lg shadow-lg border border-border">
           <p className="text-sm font-medium text-foreground">{payload[0].name}</p>
           <p className="text-sm font-semibold text-foreground">
             {formatCurrency(payload[0].value, currency)}
@@ -77,7 +89,10 @@ const DonutChart: React.FC<DonutChartProps> = ({
               />
             ))}
           </Pie>
-          <Tooltip content={<CustomTooltip />} />
+          <Tooltip 
+            content={<CustomTooltip />}
+            wrapperStyle={{ outline: 'none' }}
+          />
         </PieChart>
       </div>
       <div className="flex justify-center gap-6">
