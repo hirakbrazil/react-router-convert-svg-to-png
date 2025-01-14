@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import { CurrencyType } from "./CurrencySelector";
 import { Circle } from "lucide-react";
@@ -20,6 +20,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
   const [isDarkMode, setIsDarkMode] = useState<boolean>(
     document.documentElement.classList.contains("dark")
   );
+  const lastInteractionPosition = useRef<{ x: number; y: number } | null>(null);
 
   const data = [
     { name: "Total Withdrawal", value: totalWithdrawal },
@@ -44,32 +45,74 @@ const DonutChart: React.FC<DonutChartProps> = ({
     });
 
     const handleOutsideInteraction = () => {
-    setActiveIndex(null);
-  };
+      setActiveIndex(null);
+      lastInteractionPosition.current = null;
+    };
 
-  // List of events to handle interactions
-  const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'wheel', 'click'];
+    // List of events to handle interactions
+    const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'wheel', 'click'];
 
-  // Add event listeners
-  events.forEach((event) => {
-    document.addEventListener(event, handleOutsideInteraction);
-  });
+    // Add event listeners
+    events.forEach((event) => {
+      document.addEventListener(event, handleOutsideInteraction);
+    });
     
     return () => {
       observer.disconnect();
       // Cleanup event listeners
-    events.forEach((event) => {
-      document.removeEventListener(event, handleOutsideInteraction);
-    });
+      events.forEach((event) => {
+        document.removeEventListener(event, handleOutsideInteraction);
+      });
     };
   }, []);
+
+  // Effect to handle data updates while tooltip is active
+  useEffect(() => {
+    if (activeIndex !== null && lastInteractionPosition.current) {
+      const chartElement = document.querySelector('.recharts-wrapper');
+      if (chartElement) {
+        // Create both mouse and touch events to support both interaction types
+        const mouseEvent = new MouseEvent('mousemove', {
+          clientX: lastInteractionPosition.current.x,
+          clientY: lastInteractionPosition.current.y,
+          bubbles: true
+        });
+
+        const touchEvent = new TouchEvent('touchmove', {
+          bubbles: true,
+          touches: [
+            new Touch({
+              identifier: Date.now(),
+              target: chartElement,
+              clientX: lastInteractionPosition.current.x,
+              clientY: lastInteractionPosition.current.y,
+              screenX: lastInteractionPosition.current.x,
+              screenY: lastInteractionPosition.current.y,
+            })
+          ]
+        });
+
+        // Dispatch both events to ensure tooltip updates in all contexts
+        chartElement.dispatchEvent(mouseEvent);
+        chartElement.dispatchEvent(touchEvent);
+      }
+    }
+  }, [totalInvestment, totalWithdrawal]);
   
-  const onPieEnter = (_: any, index: number) => {
+  const onPieEnter = (event: any, index: number) => {
     setActiveIndex(index);
+    // Store the interaction position when entering a pie segment
+    if ('touches' in event) {
+      const touch = event.touches[0];
+      lastInteractionPosition.current = { x: touch.clientX, y: touch.clientY };
+    } else {
+      lastInteractionPosition.current = { x: event.clientX, y: event.clientY };
+    }
   };
 
   const onPieLeave = () => {
     setActiveIndex(null);
+    lastInteractionPosition.current = null;
   };
 
   const renderTooltipContent = (props: any) => {
@@ -104,8 +147,12 @@ const DonutChart: React.FC<DonutChartProps> = ({
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-center items-center">
-        <PieChart width={260} height={260}>
+      <div className="flex justify-center items-center touch-none">
+        <PieChart 
+          width={260} 
+          height={260}
+          onTouchStart={(e) => e.stopPropagation()} // Prevent unwanted touch behaviors
+        >
           <Pie
             data={data}
             cx={125}
@@ -118,6 +165,9 @@ const DonutChart: React.FC<DonutChartProps> = ({
             endAngle={450}
             onMouseEnter={onPieEnter}
             onMouseLeave={onPieLeave}
+            onTouchStart={onPieEnter}
+            onTouchMove={onPieEnter}
+            onTouchEnd={onPieLeave}
             stroke="transparent"
           >
             {data.map((_, index) => (
