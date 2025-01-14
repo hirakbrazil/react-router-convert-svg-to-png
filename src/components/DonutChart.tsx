@@ -63,6 +63,11 @@ const DonutChart: React.FC<DonutChartProps> = ({
     });
     };
   }, []);
+
+  // Reset activeIndex when totalInvestment or totalWithdrawal changes
+  useEffect(() => {
+    setActiveIndex(null); // This forces the tooltip to update
+  }, [totalInvestment, totalWithdrawal]);
   
   const onPieEnter = (_: any, index: number) => {
     setActiveIndex(index);
