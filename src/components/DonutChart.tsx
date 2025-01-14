@@ -50,6 +50,36 @@ const DonutChart: React.FC<DonutChartProps> = ({
     setActiveIndex(null);
   };
 
+  const renderTooltipContent = (props: any) => {
+    const { payload } = props;
+    if (payload && payload.length > 0) {
+      const data = payload[0];
+      return (
+        <div
+          className="bg-background dark:bg-card p-3 rounded-lg shadow-lg border border-border"
+          style={{
+            backgroundColor: isDarkMode ? '#030c21' : '#fff',
+            border: `1px solid ${isDarkMode ? '#122040' : '#e2e8f0'}`,
+          }}
+        >
+          <div className="flex items-center gap-2 mb-1">
+            <div
+              className="w-3 h-3 rounded-sm"
+              style={{ backgroundColor: data.payload.fill }}
+            />
+            <p className="text-base font-medium text-foreground">
+              {data.name}
+            </p>
+          </div>
+          <p className="text-base font-semibold text-foreground pl-5">
+            {formatCurrency(data.value, currency)}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex justify-center items-center">
@@ -78,20 +108,8 @@ const DonutChart: React.FC<DonutChartProps> = ({
             ))}
           </Pie>
           <Tooltip 
-            formatter={(value: number) => formatCurrency(value, currency)}
-            contentStyle={{
-              backgroundColor: isDarkMode ? '#030c21' : '#fff',
-              border: `1px solid ${isDarkMode ? '#122040' : '#e2e8f0'}`,
-              borderRadius: '0.5rem',
-              padding: '0.5rem',
-            }}
-            itemStyle={{
-              color: isDarkMode ? '#c1cbd6' : '#1f2937',
-            }}
-            labelStyle={{
-              color: isDarkMode ? '#c1cbd6' : '#1f2937',
-              fontWeight: 500,
-            }}
+            content={renderTooltipContent}
+            wrapperStyle={{ outline: 'none' }}
           />
         </PieChart>
       </div>
