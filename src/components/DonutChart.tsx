@@ -32,14 +32,13 @@ const DonutChart: React.FC<DonutChartProps> = ({
 
   // Handle click outside
   useEffect(() => {
-    const handleClickOutside = () => {
-      setActiveIndex(null);
-    };
+    document.addEventListener('click', handleClickOutside); // For mouse interactions
+  document.addEventListener('pointerdown', handleClickOutside); // For unified touch and mouse events
 
-    document.addEventListener('click', handleClickOutside);
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
+  return () => {
+    document.removeEventListener('click', handleClickOutside);
+    document.removeEventListener('pointerdown', handleClickOutside);
+  };
   }, []);
 
   const onPieEnter = (_: any, index: number) => {
