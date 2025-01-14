@@ -70,7 +70,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
         <PieChart width={260} height={260}>
           <Pie
             data={data}
-            cx={130}
+            cx={125}
             cy={130}
             innerRadius={75}
             outerRadius={115}
