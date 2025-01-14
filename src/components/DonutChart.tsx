@@ -30,17 +30,17 @@ const DonutChart: React.FC<DonutChartProps> = ({
     isDarkMode ? "#062b1f" : "#e6f5ef", // Dark/Light version for Total Investment
   ];
 
-  useEffect(() => {
+  // Handle click and touch outside
+useEffect(() => {
   const handleClickOutside = () => {
     setActiveIndex(null);
   };
 
-  document.addEventListener('click', handleClickOutside); // For mouse interactions
-  document.addEventListener('pointerdown', handleClickOutside); // For unified touch and mouse events
-
+  document.addEventListener('click', handleClickOutside);
+  document.addEventListener('touchstart', handleClickOutside); // Add touchstart for mobile devices
   return () => {
     document.removeEventListener('click', handleClickOutside);
-    document.removeEventListener('pointerdown', handleClickOutside);
+    document.removeEventListener('touchstart', handleClickOutside); // Cleanup
   };
 }, []);
 
