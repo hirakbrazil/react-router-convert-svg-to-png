@@ -43,14 +43,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
       attributeFilter: ["class"],
     });
 
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-  // Handle interactions outside the chart
-useEffect(() => {
-  const handleOutsideInteraction = () => {
+    const handleOutsideInteraction = () => {
     setActiveIndex(null);
   };
 
@@ -61,14 +54,15 @@ useEffect(() => {
   events.forEach((event) => {
     document.addEventListener(event, handleOutsideInteraction);
   });
-
-  return () => {
-    // Cleanup event listeners
+    
+    return () => {
+      observer.disconnect();
+      // Cleanup event listeners
     events.forEach((event) => {
       document.removeEventListener(event, handleOutsideInteraction);
     });
-  };
-}, []);
+    };
+  }, []);
   
   const onPieEnter = (_: any, index: number) => {
     setActiveIndex(index);
