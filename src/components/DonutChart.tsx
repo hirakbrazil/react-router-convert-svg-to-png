@@ -30,16 +30,19 @@ const DonutChart: React.FC<DonutChartProps> = ({
     isDarkMode ? "#062b1f" : "#e6f5ef", // Dark/Light version for Total Investment
   ];
 
-  // Handle click outside
   useEffect(() => {
-    document.addEventListener('click', handleClickOutside); // For mouse interactions
+  const handleClickOutside = () => {
+    setActiveIndex(null);
+  };
+
+  document.addEventListener('click', handleClickOutside); // For mouse interactions
   document.addEventListener('pointerdown', handleClickOutside); // For unified touch and mouse events
 
   return () => {
     document.removeEventListener('click', handleClickOutside);
     document.removeEventListener('pointerdown', handleClickOutside);
   };
-  }, []);
+}, []);
 
   const onPieEnter = (_: any, index: number) => {
     setActiveIndex(index);
