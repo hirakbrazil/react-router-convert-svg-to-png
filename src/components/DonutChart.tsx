@@ -48,6 +48,28 @@ const DonutChart: React.FC<DonutChartProps> = ({
     };
   }, []);
 
+  // Handle interactions outside the chart
+useEffect(() => {
+  const handleOutsideInteraction = () => {
+    setActiveIndex(null);
+  };
+
+  // List of events to handle interactions
+  const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'wheel', 'click'];
+
+  // Add event listeners
+  events.forEach((event) => {
+    document.addEventListener(event, handleOutsideInteraction);
+  });
+
+  return () => {
+    // Cleanup event listeners
+    events.forEach((event) => {
+      document.removeEventListener(event, handleOutsideInteraction);
+    });
+  };
+}, []);
+  
   const onPieEnter = (_: any, index: number) => {
     setActiveIndex(index);
   };
