@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import { CurrencyType } from "./CurrencySelector";
 import { Circle } from "lucide-react";
@@ -17,15 +17,13 @@ const DonutChart: React.FC<DonutChartProps> = ({
   formatCurrency,
 }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const chartRef = useRef<HTMLDivElement | null>(null);
 
   const data = [
     { name: "Total Withdrawal", value: totalWithdrawal },
     { name: "Total Investment", value: totalInvestment },
   ];
 
-  // Use CSS variables to handle dark mode colors
-  const isDarkMode = document.documentElement.classList.contains('dark');
+  const isDarkMode = document.documentElement.classList.contains("dark");
   const COLORS = [
     "#10B981", // Primary color for Total Withdrawal
     isDarkMode ? "#062b1f" : "#e6f5ef", // Dark/Light version for Total Investment
@@ -41,6 +39,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
 
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
+      // Dynamically show the latest values from `payload`
       return (
         <div className="bg-background dark:bg-card p-2 rounded-lg shadow-lg border border-border">
           <p className="text-base font-medium text-foreground">{payload[0].name}</p>
@@ -53,20 +52,8 @@ const DonutChart: React.FC<DonutChartProps> = ({
     return null;
   };
 
-  // Handle clicks outside the chart to close tooltip
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (chartRef.current && !chartRef.current.contains(event.target as Node)) {
-        setActiveIndex(null); // Close the tooltip when clicking outside
-      }
-    };
-
-    // Add event listener
-    document.addEventListener("mousedown", handleClickOutside);
-  }, []);
-
   return (
-    <div className="space-y-4" ref={chartRef}>
+    <div className="space-y-4">
       <div className="flex justify-center items-center">
         <PieChart width={260} height={260}>
           <Pie
@@ -93,22 +80,16 @@ const DonutChart: React.FC<DonutChartProps> = ({
             ))}
           </Pie>
           <Tooltip 
-            content={<CustomTooltip />}
-            wrapperStyle={{ outline: 'none' }}
+            content={<CustomTooltip />} // Pass updated tooltip
+            wrapperStyle={{ outline: "none" }}
           />
         </PieChart>
       </div>
       <div className="flex justify-center gap-6">
         {data.map((entry, index) => (
           <div key={entry.name} className="flex items-center gap-2">
-            <Circle
-              size={12}
-              fill={COLORS[index]}
-              className="text-transparent"
-            />
-            <span className="text-sm text-gray-600 dark:text-gray-400">
-              {entry.name}
-            </span>
+            <Circle size={12} fill={COLORS[index]} className="text-transparent" />
+            <span className="text-sm text-gray-600 dark:text-gray-400">{entry.name}</span>
           </div>
         ))}
       </div>
