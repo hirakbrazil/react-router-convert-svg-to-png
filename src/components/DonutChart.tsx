@@ -37,7 +37,7 @@ useEffect(() => {
   };
 
   // List of events to handle interactions
-  const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'wheel', 'click'];
+  const events = ['touchstart', 'touchend', 'mousemove', 'mousedown', 'keydown', 'wheel', 'click'];
 
   // Add event listeners
   events.forEach((event) => {
@@ -105,9 +105,7 @@ useEffect(() => {
             startAngle={90}
             endAngle={450}
             onMouseEnter={onPieEnter}
-            onTouchStart={onPieEnter}
             onMouseLeave={onPieLeave}
-            onTouchEnd={onPieLeave}
             stroke="transparent"
           >
             {data.map((_, index) => (
