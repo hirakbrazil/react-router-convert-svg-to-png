@@ -50,20 +50,6 @@ const DonutChart: React.FC<DonutChartProps> = ({
     setActiveIndex(null);
   };
 
-  const CustomTooltip = ({ active, payload }: any) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-background dark:bg-card p-2 rounded-lg shadow-lg border border-border">
-          <p className="text-base font-medium text-foreground">{payload[0].name}</p>
-          <p className="text-base font-semibold text-foreground">
-            {formatCurrency(payload[0].value, currency)}
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
-
   return (
     <div className="space-y-4">
       <div className="flex justify-center items-center">
@@ -92,8 +78,20 @@ const DonutChart: React.FC<DonutChartProps> = ({
             ))}
           </Pie>
           <Tooltip 
-            content={<CustomTooltip />}
-            wrapperStyle={{ outline: 'none' }}
+            formatter={(value: number) => formatCurrency(value, currency)}
+            contentStyle={{
+              backgroundColor: isDarkMode ? '#030c21' : '#fff',
+              border: `1px solid ${isDarkMode ? '#122040' : '#e2e8f0'}`,
+              borderRadius: '0.5rem',
+              padding: '0.5rem',
+            }}
+            itemStyle={{
+              color: isDarkMode ? '#c1cbd6' : '#1f2937',
+            }}
+            labelStyle={{
+              color: isDarkMode ? '#c1cbd6' : '#1f2937',
+              fontWeight: 500,
+            }}
           />
         </PieChart>
       </div>
