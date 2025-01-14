@@ -67,27 +67,27 @@ const DonutChart: React.FC<DonutChartProps> = ({
   return (
     <div className="space-y-4">
       <div className="flex justify-center items-center">
-        <PieChart width={200} height={200}>
+        <PieChart width={300} height={300}>
           <Pie
             data={data}
-            cx={100}
-            cy={100}
-            innerRadius={55}
-            outerRadius={85}
+            cx={150}
+            cy={150}
+            innerRadius={85}
+            outerRadius={130}
             paddingAngle={2}
             dataKey="value"
             startAngle={90}
             endAngle={450}
             onMouseEnter={onPieEnter}
             onMouseLeave={onPieLeave}
-            stroke="transparent" // Set stroke to transparent to hide the border
+            stroke="transparent"
           >
             {data.map((_, index) => (
               <Cell
                 key={`cell-${index}`}
                 fill={COLORS[index]}
                 opacity={activeIndex === null || activeIndex === index ? 1 : 0.7}
-                stroke="transparent" // Set stroke to transparent for each cell
+                stroke="transparent"
               />
             ))}
           </Pie>
