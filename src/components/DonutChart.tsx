@@ -63,11 +63,6 @@ const DonutChart: React.FC<DonutChartProps> = ({
 
     // Add event listener
     document.addEventListener("mousedown", handleClickOutside);
-
-    // Clean up event listener on component unmount
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
   }, []);
 
   return (
