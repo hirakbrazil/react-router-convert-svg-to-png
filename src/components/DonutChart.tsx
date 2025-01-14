@@ -37,9 +37,6 @@ const DonutChart: React.FC<DonutChartProps> = ({
     };
 
     document.addEventListener('click', handleClickOutside);
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
   }, []);
 
   const onPieEnter = (_: any, index: number) => {
