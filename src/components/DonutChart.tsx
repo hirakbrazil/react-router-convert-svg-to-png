@@ -67,13 +67,13 @@ const DonutChart: React.FC<DonutChartProps> = ({
   return (
     <div className="space-y-4">
       <div className="flex justify-center items-center">
-        <PieChart width={300} height={300}>
+        <PieChart width={260} height={260}>
           <Pie
             data={data}
-            cx={150}
-            cy={150}
-            innerRadius={85}
-            outerRadius={130}
+            cx={130}
+            cy={130}
+            innerRadius={75}
+            outerRadius={115}
             paddingAngle={2}
             dataKey="value"
             startAngle={90}
