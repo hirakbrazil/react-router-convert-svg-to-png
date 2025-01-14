@@ -54,8 +54,8 @@ const DonutChart: React.FC<DonutChartProps> = ({
     if (active && payload && payload.length) {
       return (
         <div className="bg-background dark:bg-card p-2 rounded-lg shadow-lg border border-border">
-          <p className="text-sm font-medium text-foreground">{payload[0].name}</p>
-          <p className="text-sm font-semibold text-foreground">
+          <p className="text-base font-medium text-foreground">{payload[0].name}</p>
+          <p className="text-base font-semibold text-foreground">
             {formatCurrency(payload[0].value, currency)}
           </p>
         </div>
