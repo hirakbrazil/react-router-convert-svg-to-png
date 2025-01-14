@@ -101,7 +101,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
             <Circle
               size={12}
               fill={COLORS[index]}
-              className="text-transparent"
+              className="text-transparent border border-transparent dark:border-[#030c21] rounded-full"
             />
             <span className="text-sm text-gray-600 dark:text-gray-400">
               {entry.name}
