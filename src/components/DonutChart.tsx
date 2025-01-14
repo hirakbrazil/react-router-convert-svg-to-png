@@ -17,40 +17,36 @@ const DonutChart: React.FC<DonutChartProps> = ({
   formatCurrency,
 }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(
+    document.documentElement.classList.contains("dark")
+  );
 
   const data = [
     { name: "Total Withdrawal", value: totalWithdrawal },
     { name: "Total Investment", value: totalInvestment },
   ];
 
-  // Use CSS variables to handle dark mode colors
-  const isDarkMode = document.documentElement.classList.contains('dark');
   const COLORS = [
     "#10B981", // Primary color for Total Withdrawal
     isDarkMode ? "#062b1f" : "#e6f5ef", // Dark/Light version for Total Investment
   ];
 
-  // Handle interactions outside the chart
-useEffect(() => {
-  const handleOutsideInteraction = () => {
-    setActiveIndex(null);
-  };
+  useEffect(() => {
+    const handleThemeChange = () => {
+      setIsDarkMode(document.documentElement.classList.contains("dark"));
+    };
 
-  // List of events to handle interactions
-  const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'wheel', 'click'];
-
-  // Add event listeners
-  events.forEach((event) => {
-    document.addEventListener(event, handleOutsideInteraction);
-  });
-
-  return () => {
-    // Cleanup event listeners
-    events.forEach((event) => {
-      document.removeEventListener(event, handleOutsideInteraction);
+    // Watch for class changes on the <html> element
+    const observer = new MutationObserver(() => handleThemeChange());
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
     });
-  };
-}, []);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   const onPieEnter = (_: any, index: number) => {
     setActiveIndex(index);
@@ -68,8 +64,8 @@ useEffect(() => {
         <div
           className="bg-background dark:bg-card p-3 rounded-lg shadow-lg border border-border"
           style={{
-            backgroundColor: isDarkMode ? '#030c21' : '#fff',
-            border: `1px solid ${isDarkMode ? '#122040' : '#e2e8f0'}`,
+            backgroundColor: isDarkMode ? "#030c21" : "#fff",
+            border: `1px solid ${isDarkMode ? "#122040" : "#e2e8f0"}`,
           }}
         >
           <div className="flex items-center gap-2 mb-1">
@@ -114,13 +110,13 @@ useEffect(() => {
                 fill={COLORS[index]}
                 opacity={activeIndex === null || activeIndex === index ? 1 : 0.7}
                 stroke="transparent"
-                style={{outline: 'none'}}
+                style={{ outline: "none" }}
               />
             ))}
           </Pie>
-          <Tooltip 
+          <Tooltip
             content={renderTooltipContent}
-            wrapperStyle={{ outline: 'none' }}
+            wrapperStyle={{ outline: "none" }}
           />
         </PieChart>
       </div>
