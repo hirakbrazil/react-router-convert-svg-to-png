@@ -121,7 +121,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
               fill={COLORS[index]}
               className="text-transparent"
             />
-            <span className="text-base text-gray-600 dark:text-gray-400">
+            <span className="text-base text-gray-600 dark:text-gray-400 whitespace-nowrap">
               {entry.name}
             </span>
           </div>
