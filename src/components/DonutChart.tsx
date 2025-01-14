@@ -70,10 +70,10 @@ const DonutChart: React.FC<DonutChartProps> = ({
         <PieChart width={200} height={200}>
           <Pie
             data={data}
-            cx={100}
-            cy={100}
-            innerRadius={58}
-            outerRadius={82}
+            cx={110}
+            cy={110}
+            innerRadius={56}
+            outerRadius={84}
             paddingAngle={2}
             dataKey="value"
             startAngle={90}
