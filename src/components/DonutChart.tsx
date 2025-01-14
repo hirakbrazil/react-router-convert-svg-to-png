@@ -104,6 +104,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
                 fill={COLORS[index]}
                 opacity={activeIndex === null || activeIndex === index ? 1 : 0.7}
                 stroke="transparent"
+                style={{outline: 'none'}}
               />
             ))}
           </Pie>
