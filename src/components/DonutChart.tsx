@@ -117,11 +117,11 @@ const DonutChart: React.FC<DonutChartProps> = ({
         {data.map((entry, index) => (
           <div key={entry.name} className="flex items-center gap-2">
             <Circle
-              size={12}
+              size={14}
               fill={COLORS[index]}
               className="text-transparent"
             />
-            <span className="text-sm text-gray-600 dark:text-gray-400">
+            <span className="text-base text-gray-600 dark:text-gray-400">
               {entry.name}
             </span>
           </div>
