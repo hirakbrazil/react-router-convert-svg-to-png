@@ -52,9 +52,9 @@ useEffect(() => {
   };
 }, []);
 
-  const onPieEnter = (_: any, index: number) => {
-    setActiveIndex(index);
-  };
+  const onPieEnter = (_: React.TouchEvent<SVGPathElement>, index: number) => {
+  setActiveIndex(index);
+};
 
   const onPieLeave = () => {
     setActiveIndex(null);
