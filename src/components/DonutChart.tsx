@@ -30,18 +30,6 @@ const DonutChart: React.FC<DonutChartProps> = ({
     isDarkMode ? "#062b1f" : "#e6f5ef", // Dark/Light version for Total Investment
   ];
 
-  // Handle click outside
-  useEffect(() => {
-    const handleClickOutside = () => {
-      setActiveIndex(null);
-    };
-
-    document.addEventListener('click', handleClickOutside);
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, []);
-
   const onPieEnter = (_: any, index: number) => {
     setActiveIndex(index);
   };
