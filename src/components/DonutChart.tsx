@@ -80,12 +80,14 @@ const DonutChart: React.FC<DonutChartProps> = ({
             endAngle={450}
             onMouseEnter={onPieEnter}
             onMouseLeave={onPieLeave}
+            stroke="transparent" // Set stroke to transparent to hide the border
           >
             {data.map((_, index) => (
               <Cell
                 key={`cell-${index}`}
                 fill={COLORS[index]}
                 opacity={activeIndex === null || activeIndex === index ? 1 : 0.7}
+                stroke="transparent" // Set stroke to transparent for each cell
               />
             ))}
           </Pie>
