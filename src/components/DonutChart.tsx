@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import { CurrencyType } from "./CurrencySelector";
 import { Circle } from "lucide-react";
@@ -20,6 +20,9 @@ const DonutChart: React.FC<DonutChartProps> = ({
   const [isDarkMode, setIsDarkMode] = useState<boolean>(
     document.documentElement.classList.contains("dark")
   );
+  
+  // Create a ref to store the current mouse position
+  const mousePositionRef = useRef<{ x: number; y: number } | null>(null);
 
   const data = [
     { name: "Total Withdrawal", value: totalWithdrawal },
@@ -36,7 +39,6 @@ const DonutChart: React.FC<DonutChartProps> = ({
       setIsDarkMode(document.documentElement.classList.contains("dark"));
     };
 
-    // Watch for class changes on the <html> element
     const observer = new MutationObserver(() => handleThemeChange());
     observer.observe(document.documentElement, {
       attributes: true,
@@ -44,37 +46,49 @@ const DonutChart: React.FC<DonutChartProps> = ({
     });
 
     const handleOutsideInteraction = () => {
-    setActiveIndex(null);
-  };
+      setActiveIndex(null);
+      mousePositionRef.current = null;
+    };
 
-  // List of events to handle interactions
-  const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'wheel', 'click'];
+    const events = ['mousedown', 'keydown', 'touchstart', 'wheel'];
+    events.forEach((event) => {
+      document.addEventListener(event, handleOutsideInteraction);
+    });
 
-  // Add event listeners
-  events.forEach((event) => {
-    document.addEventListener(event, handleOutsideInteraction);
-  });
-    
     return () => {
       observer.disconnect();
-      // Cleanup event listeners
-    events.forEach((event) => {
-      document.removeEventListener(event, handleOutsideInteraction);
-    });
+      events.forEach((event) => {
+        document.removeEventListener(event, handleOutsideInteraction);
+      });
     };
   }, []);
 
-  // Reset activeIndex when totalInvestment or totalWithdrawal changes
+  // Effect to handle data updates while tooltip is active
   useEffect(() => {
-    setActiveIndex(null); // This forces the tooltip to update
-  }, [totalInvestment, totalWithdrawal]);
-  
+    if (activeIndex !== null && mousePositionRef.current) {
+      // Find and trigger the tooltip update by simulating a mouse event
+      const chartElement = document.querySelector('.recharts-wrapper');
+      if (chartElement) {
+        const event = new MouseEvent('mousemove', {
+          clientX: mousePositionRef.current.x,
+          clientY: mousePositionRef.current.y,
+          bubbles: true
+        });
+        chartElement.dispatchEvent(event);
+      }
+    }
+  }, [totalInvestment, totalWithdrawal, activeIndex]);
+
   const onPieEnter = (_: any, index: number) => {
     setActiveIndex(index);
+    // Store the current mouse position when entering a pie segment
+    const event = _ as React.MouseEvent;
+    mousePositionRef.current = { x: event.clientX, y: event.clientY };
   };
 
   const onPieLeave = () => {
     setActiveIndex(null);
+    mousePositionRef.current = null;
   };
 
   const renderTooltipContent = (props: any) => {
