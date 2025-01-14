@@ -54,10 +54,12 @@ useEffect(() => {
 
   const onPieEnter = (_: any, index: number) => {
     setActiveIndex(index);
+    alert("Touch started");
   };
 
   const onPieLeave = () => {
     setActiveIndex(null);
+    alert("Touch ended");
   };
 
   const renderTooltipContent = (props: any) => {
