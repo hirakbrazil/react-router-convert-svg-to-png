@@ -37,7 +37,7 @@ useEffect(() => {
   };
 
   // List of events to handle interactions
-  const events = ['touchstart', 'touchend', 'mousemove', 'mousedown', 'keydown', 'wheel', 'click'];
+  const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'wheel', 'click'];
 
   // Add event listeners
   events.forEach((event) => {
