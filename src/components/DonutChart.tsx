@@ -17,11 +17,15 @@ const DonutChart: React.FC<DonutChartProps> = ({
   formatCurrency,
 }) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [chartData, setChartData] = useState<Array<{ name: string; value: number }>>([]);
 
-  const data = [
-    { name: "Total Withdrawal", value: totalWithdrawal },
-    { name: "Total Investment", value: totalInvestment },
-  ];
+  // Update chart data when props change
+  useEffect(() => {
+    setChartData([
+      { name: "Total Withdrawal", value: totalWithdrawal },
+      { name: "Total Investment", value: totalInvestment },
+    ]);
+  }, [totalInvestment, totalWithdrawal]);
 
   // Use CSS variables to handle dark mode colors
   const isDarkMode = document.documentElement.classList.contains('dark');
@@ -67,13 +71,13 @@ const DonutChart: React.FC<DonutChartProps> = ({
   return (
     <div className="space-y-4">
       <div className="flex justify-center items-center">
-        <PieChart width={260} height={260}>
+        <PieChart width={300} height={300}>
           <Pie
-            data={data}
-            cx={125}
-            cy={130}
-            innerRadius={75}
-            outerRadius={115}
+            data={chartData}
+            cx={150}
+            cy={150}
+            innerRadius={85}
+            outerRadius={130}
             paddingAngle={2}
             dataKey="value"
             startAngle={90}
@@ -82,7 +86,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
             onMouseLeave={onPieLeave}
             stroke="transparent"
           >
-            {data.map((_, index) => (
+            {chartData.map((_, index) => (
               <Cell
                 key={`cell-${index}`}
                 fill={COLORS[index]}
@@ -98,7 +102,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
         </PieChart>
       </div>
       <div className="flex justify-center gap-6">
-        {data.map((entry, index) => (
+        {chartData.map((entry, index) => (
           <div key={entry.name} className="flex items-center gap-2">
             <Circle
               size={12}
