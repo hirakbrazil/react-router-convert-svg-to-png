@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import { CurrencyType } from "./CurrencySelector";
 import { Circle } from "lucide-react";
@@ -23,8 +23,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
     { name: "Total Investment", value: totalInvestment },
   ];
 
-  // Use CSS variables to handle dark mode colors
-  const isDarkMode = document.documentElement.classList.contains('dark');
+  const isDarkMode = document.documentElement.classList.contains("dark");
   const COLORS = [
     "#10B981", // Primary color for Total Withdrawal
     isDarkMode ? "#062b1f" : "#e6f5ef", // Dark/Light version for Total Investment
@@ -79,9 +78,10 @@ const DonutChart: React.FC<DonutChartProps> = ({
               />
             ))}
           </Pie>
-          <Tooltip 
+          <Tooltip
             content={<CustomTooltip />}
-            wrapperStyle={{ outline: 'none' }}
+            wrapperStyle={{ outline: "none" }}
+            active={activeIndex !== null} // Fix: Manage tooltip visibility
           />
         </PieChart>
       </div>
