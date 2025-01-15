@@ -14,6 +14,9 @@ interface ShareDialogProps {
   timePeriod: number;
   currency: CurrencyType;
   withdrawalFrequency: WithdrawalFrequency;
+  showAdvancedOptions: boolean;
+  adjustForInflation: boolean;
+  inflationRate: number;
 }
 
 const ShareDialog = ({
@@ -25,6 +28,9 @@ const ShareDialog = ({
   timePeriod,
   currency,
   withdrawalFrequency,
+  showAdvancedOptions,
+  adjustForInflation,
+  inflationRate,
 }: ShareDialogProps) => {
   const baseUrl = "https://swp-calculator.mutualfundjournal.in/";
 
@@ -36,6 +42,9 @@ const ShareDialog = ({
       cs: currency,
       rr: returnRate.toString(),
       tp: timePeriod.toString(),
+      ao: showAdvancedOptions.toString(),
+      ai: adjustForInflation.toString(),
+      ir: inflationRate.toString(),
     });
 
     // Add withdrawal amount based on frequency

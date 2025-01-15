@@ -14,6 +14,9 @@ interface ActionButtonsProps {
     returnRate: number;
     timePeriod: number;
     withdrawalFrequency: WithdrawalFrequency;
+    showAdvancedOptions: boolean;
+    adjustForInflation: boolean;
+    inflationRate: number;
   };
   currentValues: {
     totalInvestment: number;
@@ -22,6 +25,9 @@ interface ActionButtonsProps {
     timePeriod: number;
     withdrawalFrequency: WithdrawalFrequency;
     currency: CurrencyType;
+    showAdvancedOptions: boolean;
+    adjustForInflation: boolean;
+    inflationRate: number;
   };
   onRestore: (values: {
     totalInvestment: number;
@@ -29,6 +35,9 @@ interface ActionButtonsProps {
     returnRate: number;
     timePeriod: number;
     withdrawalFrequency: WithdrawalFrequency;
+    showAdvancedOptions: boolean;
+    adjustForInflation: boolean;
+    inflationRate: number;
   }) => void;
 }
 
