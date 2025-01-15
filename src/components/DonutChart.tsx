@@ -20,7 +20,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
   const [isDarkMode, setIsDarkMode] = useState<boolean>(
     document.documentElement.classList.contains("dark")
   );
-  const [tooltipKey, setTooltipKey] = useState<number>(0); // New state to force tooltip re-render
+  const [tooltipKey, setTooltipKey] = useState(0);
 
   const data = [
     { name: "Total Withdrawal", value: totalWithdrawal },
@@ -37,36 +37,19 @@ const DonutChart: React.FC<DonutChartProps> = ({
       setIsDarkMode(document.documentElement.classList.contains("dark"));
     };
 
-    // Watch for class changes on the <html> element
     const observer = new MutationObserver(() => handleThemeChange());
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ["class"],
     });
 
-    const handleOutsideInteraction = () => {
-      setActiveIndex(null);
-    };
-
-    // List of events to handle interactions
-    const events = ["mousemove", "mousedown", "keydown", "touchstart", "wheel", "click"];
-
-    // Add event listeners
-    events.forEach((event) => {
-      document.addEventListener(event, handleOutsideInteraction);
-    });
-
     return () => {
       observer.disconnect();
-      // Cleanup event listeners
-      events.forEach((event) => {
-        document.removeEventListener(event, handleOutsideInteraction);
-      });
     };
   }, []);
 
-  // Re-render tooltip content when totalInvestment or totalWithdrawal changes
   useEffect(() => {
+    // Reset tooltip to refresh content
     setTooltipKey((prevKey) => prevKey + 1);
   }, [totalInvestment, totalWithdrawal]);
 
@@ -95,7 +78,9 @@ const DonutChart: React.FC<DonutChartProps> = ({
               className="w-3 h-3 rounded-sm"
               style={{ backgroundColor: data.payload.fill }}
             />
-            <p className="text-base font-medium text-foreground">{data.name}</p>
+            <p className="text-base font-medium text-foreground">
+              {data.name}
+            </p>
           </div>
           <p className="text-base font-semibold text-foreground pl-5">
             {formatCurrency(data.value, currency)}
@@ -109,7 +94,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
   return (
     <div className="space-y-4">
       <div className="flex justify-center items-center">
-        <PieChart width={260} height={260}>
+        <PieChart width={260} height={260} key={tooltipKey}>
           <Pie
             data={data}
             cx={125}
@@ -135,7 +120,6 @@ const DonutChart: React.FC<DonutChartProps> = ({
             ))}
           </Pie>
           <Tooltip
-            key={tooltipKey} // Force re-render using tooltipKey
             content={renderTooltipContent}
             wrapperStyle={{ outline: "none" }}
           />
