@@ -211,12 +211,11 @@ const DonutChart: React.FC<DonutChartProps> = ({
           />
         </PieChart>
       </div>
-      <div className="flex justify-center gap-6 touch-none">
+      <div className="flex justify-center gap-6">
         {data.map((entry, index) => (
           <div 
             key={entry.name} 
-            className="flex items-center gap-2 cursor-pointer"
-            onClick={(e) => handleClick(e, index)}
+            className="flex items-center gap-2"
           >
             <Circle
               size={16}
