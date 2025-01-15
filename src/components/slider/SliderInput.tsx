@@ -96,7 +96,7 @@ const SliderInput = ({
       return {
         width: `${baseWidth}px`,
         minWidth: '80px',
-        maxWidth: '200px',
+        maxWidth: '500px',
       };
     }
   };
