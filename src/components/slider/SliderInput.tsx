@@ -84,18 +84,22 @@ const SliderInput = ({
   };
 
   const getInputWidth = () => {
-  // Use text length for base width
-  const baseWidth = Math.max(isMobile ? 60 : 80, inputValue.length * (isMobile ? 12 : 14));
-  
-  // Adjust max width based on screen size
-  const maxWidth = isMobile ? 300 : window.innerWidth > 1440 ? 400 : 300;
-
-  return {
-    width: `${baseWidth}px`,
-    minWidth: isMobile ? '60px' : '80px',
-    maxWidth: `${maxWidth}px`, // Dynamically set maxWidth
+    if (isMobile) {
+      const baseWidth = Math.max(60, inputValue.length * 12);
+      return {
+        width: `${baseWidth}px`,
+        minWidth: '60px',
+        maxWidth: '300px',
+      };
+    } else {
+      const baseWidth = Math.max(80, inputValue.length * 14);
+      return {
+        width: `${baseWidth}px`,
+        minWidth: '80px',
+        maxWidth: '200px',
+      };
+    }
   };
-};
 
   const formatMinMaxValue = (value: number, isMax: boolean) => {
     if (currency && shouldFormatAsLargeNumber(value, isMax)) {
