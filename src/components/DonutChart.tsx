@@ -47,20 +47,13 @@ const DonutChart: React.FC<DonutChartProps> = ({
     setActiveIndex(null);
   };
 
-  // List of events to handle interactions
-  const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'wheel', 'click', 'input', 'change'];
+  document.addEventListener('mousedown', handleOutsideInteraction);
+    document.addEventListener('touchstart', handleOutsideInteraction);
 
-  // Add event listeners
-  events.forEach((event) => {
-    document.addEventListener(event, handleOutsideInteraction);
-  });
-    
     return () => {
       observer.disconnect();
-      // Cleanup event listeners
-    events.forEach((event) => {
-      document.removeEventListener(event, handleOutsideInteraction);
-    });
+      document.removeEventListener('mousedown', handleOutsideInteraction);
+      document.removeEventListener('touchstart', handleOutsideInteraction);
     };
   }, []);
   
