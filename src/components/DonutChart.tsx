@@ -93,7 +93,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
       const deltaY = Math.abs(touch.clientY - touchStartRef.current.y);
       
       // If the touch movement is small enough, consider it a tap
-      if (deltaX < 1 && deltaY < 1) {
+      if (deltaX < 10 && deltaY < 10) {
         if (isTooltipLocked && activeIndex === index) {
           setIsTooltipLocked(false);
           setActiveIndex(null);
@@ -211,7 +211,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
           />
         </PieChart>
       </div>
-      <div className="flex justify-center gap-6">
+      <div className="flex justify-center gap-6 touch-none">
         {data.map((entry, index) => (
           <div 
             key={entry.name} 
