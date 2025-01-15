@@ -177,7 +177,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
         <PieChart 
           width={260} 
           height={260}
-          onClick={(e: React.MouseEvent) => e.stopPropagation()}
+          onClick={() => {}}
         >
           <Pie
             data={data}
