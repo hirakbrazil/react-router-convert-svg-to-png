@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { SliderInputProps } from "./types";
@@ -23,6 +23,7 @@ const SliderInput = ({
 }: SliderInputProps) => {
   const [inputValue, setInputValue] = useState(value.toString());
   const [isMobile, setIsMobile] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
   const effectiveMax = dynamicMax !== undefined ? dynamicMax : max;
 
   useEffect(() => {
@@ -110,6 +111,12 @@ const SliderInput = ({
       : `${value}${suffix}`;
   };
 
+  const handleContainerClick = () => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -120,13 +127,17 @@ const SliderInput = ({
             label
           )}
         </div>
-        <div className="bg-secondary px-4 py-2 rounded-lg flex items-center gap-0 w-fit">
+        <div 
+          className="bg-secondary px-4 py-2 rounded-lg flex items-center gap-0 w-fit cursor-text" 
+          onClick={handleContainerClick}
+        >
           {currency ? (
-            <span className="text-xl md:text-2xl font-semibold text-primary shrink-0">{getCurrencySymbol(currency)}</span>
+            <span className="text-xl md:text-2xl font-semibold text-primary shrink-0 select-none">{getCurrencySymbol(currency)}</span>
           ) : (
-            prefix && <span className="text-xl md:text-2xl font-semibold text-primary shrink-0">{prefix}</span>
+            prefix && <span className="text-xl md:text-2xl font-semibold text-primary shrink-0 select-none">{prefix}</span>
           )}
           <Input
+            ref={inputRef}
             type="text"
             inputMode="numeric"
             pattern="[0-9,]*"
@@ -139,7 +150,7 @@ const SliderInput = ({
             className="text-xl md:text-2xl font-semibold text-primary bg-transparent border-none focus-visible:ring-0 p-0 text-right"
             style={getInputWidth()}
           />
-          {suffix && <span className="text-xl md:text-2xl font-semibold text-primary shrink-0 ml-1">{suffix}</span>}
+          {suffix && <span className="text-xl md:text-2xl font-semibold text-primary shrink-0 ml-1 select-none">{suffix}</span>}
         </div>
       </div>
       <div className="space-y-2">
