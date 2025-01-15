@@ -111,6 +111,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
             endAngle={450}
             onMouseEnter={onPieEnter}
             onMouseLeave={onPieLeave}
+            onScroll={onPieLeave}
             stroke="transparent"
           >
             {data.map((_, index) => (
