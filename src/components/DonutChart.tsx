@@ -48,11 +48,13 @@ const DonutChart: React.FC<DonutChartProps> = ({
   };
 
   document.addEventListener('mousedown', handleOutsideInteraction);
+    document.addEventListener('scroll', handleOutsideInteraction);
     document.addEventListener('touchstart', handleOutsideInteraction);
 
     return () => {
       observer.disconnect();
       document.removeEventListener('mousedown', handleOutsideInteraction);
+      document.removeEventListener('scroll', handleOutsideInteraction);
       document.removeEventListener('touchstart', handleOutsideInteraction);
     };
   }, []);
@@ -111,7 +113,6 @@ const DonutChart: React.FC<DonutChartProps> = ({
             endAngle={450}
             onMouseEnter={onPieEnter}
             onMouseLeave={onPieLeave}
-            onScroll={onPieLeave}
             stroke="transparent"
           >
             {data.map((_, index) => (
