@@ -4,6 +4,7 @@ import useTheme from "@/hooks/useTheme";
 import SEO from "@/components/SEO";
 import AdSenseHorizontal from "@/components/AdSenseHorizontal";
 import AdSenseResponsive from "@/components/AdSenseResponsive";
+import DesktopSidebar from "@/components/DesktopSidebar";
 
 const About = () => {
   useTheme();
@@ -22,7 +23,7 @@ const About = () => {
         ogType="article"
       />
     <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto space-y-8">
+      <div className="max-w-3xl mx-auto space-y-8 lg:mr-[300px]">
         <AdSenseHorizontal />
         <div className="text-center">
           <h1 className="text-3xl font-bold text-foreground sm:text-4xl">
@@ -65,8 +66,9 @@ const About = () => {
         <AdSenseResponsive />
         <Footer />
       </div>
+      <DesktopSidebar />
     </div>
-      </>
+    </>
   );
 };
 

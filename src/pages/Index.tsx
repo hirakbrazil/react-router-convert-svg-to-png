@@ -10,6 +10,7 @@ import { useCalculator } from "@/hooks/useCalculator";
 import CalculatorHeader from "@/components/calculator/CalculatorHeader";
 import AdSenseHorizontal from "@/components/AdSenseHorizontal";
 import AdSenseResponsive from "@/components/AdSenseResponsive";
+import DesktopSidebar from "@/components/DesktopSidebar";
 
 const Index = () => {
   useTheme();
@@ -37,8 +38,6 @@ const Index = () => {
     setReturnRate(13);
     setTimePeriod(10);
     setWithdrawalFrequency("Monthly");
-
-    // Clear URL parameters
     window.history.replaceState({}, '', window.location.pathname);
   };
 
@@ -56,7 +55,7 @@ const Index = () => {
         ogType="website"
       />
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto space-y-8">
+        <div className="max-w-3xl mx-auto space-y-8 lg:mr-[300px]">
           <AdSenseHorizontal />
           <CalculatorHeader currency={currency} onCurrencyChange={setCurrency} />
 
@@ -108,9 +107,9 @@ const Index = () => {
               setWithdrawalFrequency(values.withdrawalFrequency);
             }}
           />
-
           <Footer />
         </div>
+        <DesktopSidebar />
       </div>
     </>
   );
