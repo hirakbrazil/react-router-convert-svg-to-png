@@ -48,7 +48,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
   };
 
   // List of events to handle interactions
-  const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'wheel', 'click', 'input'];
+  const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'wheel', 'click', 'input', 'change'];
 
   // Add event listeners
   events.forEach((event) => {
