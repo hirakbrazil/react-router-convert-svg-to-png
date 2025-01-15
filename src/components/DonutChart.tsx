@@ -22,9 +22,9 @@ const DonutChart: React.FC<DonutChartProps> = ({
   );
   const [isTooltipLocked, setIsTooltipLocked] = useState<boolean>(false);
   
-  // Refs for tracking interactions
   const interactionPositionRef = useRef<{ x: number; y: number } | null>(null);
   const chartRef = useRef<HTMLDivElement>(null);
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
   const data = [
     { name: "Total Withdrawal", value: totalWithdrawal },
@@ -32,8 +32,8 @@ const DonutChart: React.FC<DonutChartProps> = ({
   ];
 
   const COLORS = [
-    "#10B981", // Primary color for Total Withdrawal
-    isDarkMode ? "#062b1f" : "#e6f5ef", // Dark/Light version for Total Investment
+    "#10B981",
+    isDarkMode ? "#062b1f" : "#e6f5ef",
   ];
 
   useEffect(() => {
@@ -47,7 +47,6 @@ const DonutChart: React.FC<DonutChartProps> = ({
       attributeFilter: ["class"],
     });
 
-    // Handle clicks outside the chart
     const handleOutsideInteraction = (e: Event) => {
       if (!chartRef.current?.contains(e.target as Node)) {
         setIsTooltipLocked(false);
@@ -66,7 +65,6 @@ const DonutChart: React.FC<DonutChartProps> = ({
     };
   }, []);
 
-  // Effect to handle data updates while tooltip is active
   useEffect(() => {
     if ((activeIndex !== null || isTooltipLocked) && interactionPositionRef.current) {
       const chartElement = document.querySelector('.recharts-wrapper');
@@ -81,25 +79,46 @@ const DonutChart: React.FC<DonutChartProps> = ({
     }
   }, [totalInvestment, totalWithdrawal, activeIndex, isTooltipLocked]);
 
-  const handleClick = (event: React.MouseEvent | React.TouchEvent, index: number) => {
+  const handleTouchStart = (event: React.TouchEvent, index: number) => {
+    const touch = event.touches[0];
+    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+  };
+
+  const handleTouchEnd = (event: React.TouchEvent, index: number) => {
+    event.preventDefault();
+    
+    if (touchStartRef.current) {
+      const touch = event.changedTouches[0];
+      const deltaX = Math.abs(touch.clientX - touchStartRef.current.x);
+      const deltaY = Math.abs(touch.clientY - touchStartRef.current.y);
+      
+      // If the touch movement is small enough, consider it a tap
+      if (deltaX < 10 && deltaY < 10) {
+        if (isTooltipLocked && activeIndex === index) {
+          setIsTooltipLocked(false);
+          setActiveIndex(null);
+        } else {
+          setIsTooltipLocked(true);
+          setActiveIndex(index);
+          interactionPositionRef.current = { x: touch.clientX, y: touch.clientY };
+        }
+      }
+    }
+    
+    touchStartRef.current = null;
+  };
+
+  const handleClick = (event: React.MouseEvent, index: number) => {
     event.preventDefault();
     event.stopPropagation();
     
-    // Toggle tooltip lock for the clicked segment
     if (isTooltipLocked && activeIndex === index) {
       setIsTooltipLocked(false);
       setActiveIndex(null);
     } else {
       setIsTooltipLocked(true);
       setActiveIndex(index);
-      
-      // Store the interaction position
-      if ('touches' in event) {
-        const touch = event.touches[0];
-        interactionPositionRef.current = { x: touch.clientX, y: touch.clientY };
-      } else {
-        interactionPositionRef.current = { x: event.clientX, y: event.clientY };
-      }
+      interactionPositionRef.current = { x: event.clientX, y: event.clientY };
     }
   };
 
@@ -151,7 +170,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
     <div className="space-y-4">
       <div 
         ref={chartRef}
-        className="flex justify-center items-center touch-none"
+        className="flex justify-center items-center"
       >
         <PieChart 
           width={260} 
@@ -169,7 +188,8 @@ const DonutChart: React.FC<DonutChartProps> = ({
             startAngle={90}
             endAngle={450}
             onClick={handleClick}
-            onTouchStart={handleClick}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
             onMouseEnter={handleHover}
             onMouseLeave={handleHoverExit}
             stroke="transparent"
