@@ -20,25 +20,23 @@ const DonutChart: React.FC<DonutChartProps> = ({
   const [isDarkMode, setIsDarkMode] = useState<boolean>(
     document.documentElement.classList.contains("dark")
   );
-  const [chartData, setChartData] = useState([
+
+  const data = [
     { name: "Total Withdrawal", value: totalWithdrawal },
     { name: "Total Investment", value: totalInvestment },
-  ]);
+  ];
 
-  // Update chart data when props change
-  useEffect(() => {
-    setChartData([
-      { name: "Total Withdrawal", value: totalWithdrawal },
-      { name: "Total Investment", value: totalInvestment },
-    ]);
-    console.log("Chart data updated:", { totalWithdrawal, totalInvestment });
-  }, [totalWithdrawal, totalInvestment]);
+  const COLORS = [
+    "#10B981", // Primary color for Total Withdrawal
+    isDarkMode ? "#062b1f" : "#e6f5ef", // Dark/Light version for Total Investment
+  ];
 
   useEffect(() => {
     const handleThemeChange = () => {
       setIsDarkMode(document.documentElement.classList.contains("dark"));
     };
 
+    // Watch for class changes on the <html> element
     const observer = new MutationObserver(() => handleThemeChange());
     observer.observe(document.documentElement, {
       attributes: true,
@@ -46,27 +44,25 @@ const DonutChart: React.FC<DonutChartProps> = ({
     });
 
     const handleOutsideInteraction = () => {
-      setActiveIndex(null);
-    };
+    setActiveIndex(null);
+  };
 
-    const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'wheel', 'click'];
+  // List of events to handle interactions
+  const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'wheel', 'click'];
 
-    events.forEach((event) => {
-      document.addEventListener(event, handleOutsideInteraction);
-    });
+  // Add event listeners
+  events.forEach((event) => {
+    document.addEventListener(event, handleOutsideInteraction);
+  });
     
     return () => {
       observer.disconnect();
-      events.forEach((event) => {
-        document.removeEventListener(event, handleOutsideInteraction);
-      });
+      // Cleanup event listeners
+    events.forEach((event) => {
+      document.removeEventListener(event, handleOutsideInteraction);
+    });
     };
   }, []);
-
-  const COLORS = [
-    "#10B981",
-    isDarkMode ? "#062b1f" : "#e6f5ef",
-  ];
   
   const onPieEnter = (_: any, index: number) => {
     setActiveIndex(index);
@@ -111,7 +107,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
       <div className="flex justify-center items-center">
         <PieChart width={260} height={260}>
           <Pie
-            data={chartData}
+            data={data}
             cx={125}
             cy={130}
             innerRadius={75}
@@ -124,7 +120,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
             onMouseLeave={onPieLeave}
             stroke="transparent"
           >
-            {chartData.map((_, index) => (
+            {data.map((_, index) => (
               <Cell
                 key={`cell-${index}`}
                 fill={COLORS[index]}
@@ -141,7 +137,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
         </PieChart>
       </div>
       <div className="flex justify-center gap-6">
-        {chartData.map((entry, index) => (
+        {data.map((entry, index) => (
           <div key={entry.name} className="flex items-center gap-2">
             <Circle
               size={16}
