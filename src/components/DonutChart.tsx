@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import { CurrencyType } from "./CurrencySelector";
 import { Circle } from "lucide-react";
@@ -20,7 +20,11 @@ const DonutChart: React.FC<DonutChartProps> = ({
   const [isDarkMode, setIsDarkMode] = useState<boolean>(
     document.documentElement.classList.contains("dark")
   );
-  const [tooltipKey, setTooltipKey] = useState(0);
+  const [isTooltipLocked, setIsTooltipLocked] = useState<boolean>(false);
+  
+  // Refs for tracking interactions
+  const interactionPositionRef = useRef<{ x: number; y: number } | null>(null);
+  const chartRef = useRef<HTMLDivElement>(null);
 
   const data = [
     { name: "Total Withdrawal", value: totalWithdrawal },
@@ -43,22 +47,74 @@ const DonutChart: React.FC<DonutChartProps> = ({
       attributeFilter: ["class"],
     });
 
+    // Handle clicks outside the chart
+    const handleOutsideInteraction = (e: Event) => {
+      if (!chartRef.current?.contains(e.target as Node)) {
+        setIsTooltipLocked(false);
+        setActiveIndex(null);
+        interactionPositionRef.current = null;
+      }
+    };
+
+    document.addEventListener('mousedown', handleOutsideInteraction);
+    document.addEventListener('touchstart', handleOutsideInteraction);
+
     return () => {
       observer.disconnect();
+      document.removeEventListener('mousedown', handleOutsideInteraction);
+      document.removeEventListener('touchstart', handleOutsideInteraction);
     };
   }, []);
 
+  // Effect to handle data updates while tooltip is active
   useEffect(() => {
-    // Reset tooltip to refresh content
-    setTooltipKey((prevKey) => prevKey + 1);
-  }, [totalInvestment, totalWithdrawal]);
+    if ((activeIndex !== null || isTooltipLocked) && interactionPositionRef.current) {
+      const chartElement = document.querySelector('.recharts-wrapper');
+      if (chartElement) {
+        const mouseEvent = new MouseEvent('mousemove', {
+          clientX: interactionPositionRef.current.x,
+          clientY: interactionPositionRef.current.y,
+          bubbles: true
+        });
+        chartElement.dispatchEvent(mouseEvent);
+      }
+    }
+  }, [totalInvestment, totalWithdrawal, activeIndex, isTooltipLocked]);
 
-  const onPieEnter = (_: any, index: number) => {
-    setActiveIndex(index);
+  const handleClick = (event: React.MouseEvent | React.TouchEvent, index: number) => {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    // Toggle tooltip lock for the clicked segment
+    if (isTooltipLocked && activeIndex === index) {
+      setIsTooltipLocked(false);
+      setActiveIndex(null);
+    } else {
+      setIsTooltipLocked(true);
+      setActiveIndex(index);
+      
+      // Store the interaction position
+      if ('touches' in event) {
+        const touch = event.touches[0];
+        interactionPositionRef.current = { x: touch.clientX, y: touch.clientY };
+      } else {
+        interactionPositionRef.current = { x: event.clientX, y: event.clientY };
+      }
+    }
   };
 
-  const onPieLeave = () => {
-    setActiveIndex(null);
+  const handleHover = (event: React.MouseEvent, index: number) => {
+    if (!isTooltipLocked) {
+      setActiveIndex(index);
+      interactionPositionRef.current = { x: event.clientX, y: event.clientY };
+    }
+  };
+
+  const handleHoverExit = () => {
+    if (!isTooltipLocked) {
+      setActiveIndex(null);
+      interactionPositionRef.current = null;
+    }
   };
 
   const renderTooltipContent = (props: any) => {
@@ -93,8 +149,15 @@ const DonutChart: React.FC<DonutChartProps> = ({
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-center items-center">
-        <PieChart width={260} height={260} key={tooltipKey}>
+      <div 
+        ref={chartRef}
+        className="flex justify-center items-center touch-none"
+      >
+        <PieChart 
+          width={260} 
+          height={260}
+          onClick={(e) => e.stopPropagation()}
+        >
           <Pie
             data={data}
             cx={125}
@@ -105,8 +168,10 @@ const DonutChart: React.FC<DonutChartProps> = ({
             dataKey="value"
             startAngle={90}
             endAngle={450}
-            onMouseEnter={onPieEnter}
-            onMouseLeave={onPieLeave}
+            onClick={handleClick}
+            onTouchStart={handleClick}
+            onMouseEnter={handleHover}
+            onMouseLeave={handleHoverExit}
             stroke="transparent"
           >
             {data.map((_, index) => (
@@ -115,19 +180,24 @@ const DonutChart: React.FC<DonutChartProps> = ({
                 fill={COLORS[index]}
                 opacity={activeIndex === null || activeIndex === index ? 1 : 0.7}
                 stroke="transparent"
-                style={{ outline: "none" }}
+                style={{ outline: "none", cursor: "pointer" }}
               />
             ))}
           </Pie>
           <Tooltip
             content={renderTooltipContent}
             wrapperStyle={{ outline: "none" }}
+            active={activeIndex !== null || isTooltipLocked}
           />
         </PieChart>
       </div>
       <div className="flex justify-center gap-6">
         {data.map((entry, index) => (
-          <div key={entry.name} className="flex items-center gap-2">
+          <div 
+            key={entry.name} 
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={(e) => handleClick(e, index)}
+          >
             <Circle
               size={16}
               fill={COLORS[index]}
