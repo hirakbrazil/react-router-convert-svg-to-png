@@ -21,6 +21,12 @@ const DonutChart: React.FC<DonutChartProps> = ({
     document.documentElement.classList.contains("dark")
   );
 
+  const [isTooltipLocked, setIsTooltipLocked] = useState<boolean>(false);
+  
+  const interactionPositionRef = useRef<{ x: number; y: number } | null>(null);
+  const chartRef = useRef<HTMLDivElement>(null);
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+
   const data = [
     { name: "Total Withdrawal", value: totalWithdrawal },
     { name: "Total Investment", value: totalInvestment },
@@ -43,17 +49,21 @@ const DonutChart: React.FC<DonutChartProps> = ({
       attributeFilter: ["class"],
     });
 
-    const handleOutsideInteraction = () => {
-    setActiveIndex(null);
-  };
+    const handleOutsideInteraction = (e: Event) => {
+      if (!chartRef.current?.contains(e.target as Node)) {
+        setIsTooltipLocked(false);
+        setActiveIndex(null);
+        interactionPositionRef.current = null;
+      }
+    };
 
-  document.addEventListener('mousedown', handleOutsideInteraction);
-    document.addEventListener('touchend', handleOutsideInteraction);
+    document.addEventListener('mousedown', handleOutsideInteraction);
+    document.addEventListener('touchstart', handleOutsideInteraction);
 
     return () => {
       observer.disconnect();
       document.removeEventListener('mousedown', handleOutsideInteraction);
-      document.removeEventListener('touchend', handleOutsideInteraction);
+      document.removeEventListener('touchstart', handleOutsideInteraction);
     };
   }, []);
   
@@ -97,7 +107,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-center items-center">
+      <div ref={chartRef} className="flex justify-center items-center">
         <PieChart width={260} height={260}>
           <Pie
             data={data}
