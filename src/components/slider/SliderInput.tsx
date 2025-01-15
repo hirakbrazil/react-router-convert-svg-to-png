@@ -96,7 +96,7 @@ const SliderInput = ({
       return {
         width: `${baseWidth}px`,
         minWidth: '80px',
-        maxWidth: '500px',
+        maxWidth: '200px',
       };
     }
   };
@@ -137,7 +137,7 @@ const SliderInput = ({
             max={effectiveMax}
             maxLength={maxLength}
             className="text-xl md:text-2xl font-semibold text-primary bg-transparent border-none focus-visible:ring-0 p-0 text-right"
-            style={getInputWidth()}
+            style={{ ...getInputWidth(), padding: '0px 10px' }}
           />
           {suffix && <span className="text-xl md:text-2xl font-semibold text-primary shrink-0 ml-1">{suffix}</span>}
         </div>
