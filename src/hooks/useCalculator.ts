@@ -10,6 +10,9 @@ export const useCalculator = () => {
     const savedTimePeriod = localStorage.getItem("timePeriod");
     const savedWithdrawalFrequency = localStorage.getItem("withdrawalFrequency") as WithdrawalFrequency;
     const savedCurrency = localStorage.getItem("selectedCurrency") as CurrencyType;
+    const savedShowAdvancedOptions = localStorage.getItem("showAdvancedOptions") === "true";
+    const savedAdjustForInflation = localStorage.getItem("adjustForInflation") === "true";
+    const savedInflationRate = localStorage.getItem("inflationRate");
 
     // Determine withdrawal frequency and amount from URL parameters
     let initialWithdrawalFrequency: WithdrawalFrequency = "Monthly";
@@ -37,7 +40,10 @@ export const useCalculator = () => {
       withdrawalFrequency: params.has("mw") || params.has("qw") || params.has("hyw") || params.has("yw") 
         ? initialWithdrawalFrequency 
         : savedWithdrawalFrequency || "Monthly",
-      currency: (params.get("cs") as CurrencyType) || savedCurrency || "INR"
+      currency: (params.get("cs") as CurrencyType) || savedCurrency || "INR",
+      showAdvancedOptions: savedShowAdvancedOptions || false,
+      adjustForInflation: savedAdjustForInflation || false,
+      inflationRate: Number(savedInflationRate) || 6,
     };
   };
 
@@ -51,6 +57,9 @@ export const useCalculator = () => {
   const [finalValue, setFinalValue] = useState(0);
   const [withdrawalPercentage, setWithdrawalPercentage] = useState(1);
   const [currency, setCurrency] = useState<CurrencyType>(initialValues.currency);
+  const [showAdvancedOptions, setShowAdvancedOptions] = useState(initialValues.showAdvancedOptions);
+  const [adjustForInflation, setAdjustForInflation] = useState(initialValues.adjustForInflation);
+  const [inflationRate, setInflationRate] = useState(initialValues.inflationRate);
 
   // Clear URL parameters when values change
   useEffect(() => {
@@ -68,7 +77,20 @@ export const useCalculator = () => {
     localStorage.setItem("timePeriod", timePeriod.toString());
     localStorage.setItem("withdrawalFrequency", withdrawalFrequency);
     localStorage.setItem("selectedCurrency", currency);
-  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency, currency]);
+    localStorage.setItem("showAdvancedOptions", showAdvancedOptions.toString());
+    localStorage.setItem("adjustForInflation", adjustForInflation.toString());
+    localStorage.setItem("inflationRate", inflationRate.toString());
+  }, [
+    totalInvestment,
+    monthlyWithdrawal,
+    returnRate,
+    timePeriod,
+    withdrawalFrequency,
+    currency,
+    showAdvancedOptions,
+    adjustForInflation,
+    inflationRate,
+  ]);
 
   // Calculate withdrawal percentage
   useEffect(() => {
@@ -126,5 +148,11 @@ export const useCalculator = () => {
     withdrawalPercentage,
     currency,
     setCurrency,
+    showAdvancedOptions,
+    setShowAdvancedOptions,
+    adjustForInflation,
+    setAdjustForInflation,
+    inflationRate,
+    setInflationRate,
   };
 };

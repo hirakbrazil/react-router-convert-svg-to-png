@@ -3,6 +3,7 @@ import { CurrencyType } from "./CurrencySelector";
 import { WithdrawalFrequency } from "@/types/calculator";
 import InfoTooltip from "./InfoTooltip";
 import DonutChart from "./DonutChart";
+import { format, addMonths, addYears } from "date-fns";
 
 interface ResultCardProps {
   totalInvestment: number;
@@ -11,6 +12,8 @@ interface ResultCardProps {
   currency: CurrencyType;
   withdrawalFrequency: WithdrawalFrequency;
   timePeriod: number;
+  adjustForInflation: boolean;
+  inflationRate: number;
 }
 
 const formatCurrency = (value: number, currency: CurrencyType): string => {
@@ -37,7 +40,13 @@ const formatCurrency = (value: number, currency: CurrencyType): string => {
   return formatter.format(value);
 };
 
-const calculateTotalWithdrawal = (monthlyWithdrawal: number, frequency: WithdrawalFrequency, timePeriod: number): number => {
+const calculateTotalWithdrawal = (
+  monthlyWithdrawal: number,
+  frequency: WithdrawalFrequency,
+  timePeriod: number,
+  adjustForInflation: boolean,
+  inflationRate: number
+): number => {
   const withdrawalsPerYear = {
     "Monthly": 12,
     "Quarterly": 4,
@@ -45,7 +54,34 @@ const calculateTotalWithdrawal = (monthlyWithdrawal: number, frequency: Withdraw
     "Yearly": 1
   };
 
-  return monthlyWithdrawal * withdrawalsPerYear[frequency] * timePeriod;
+  const n = withdrawalsPerYear[frequency];
+  let total = 0;
+
+  if (adjustForInflation) {
+    for (let year = 0; year < timePeriod; year++) {
+      const inflationFactor = Math.pow(1 + inflationRate / 100, year);
+      const adjustedWithdrawal = monthlyWithdrawal * inflationFactor;
+      total += adjustedWithdrawal * n;
+    }
+  } else {
+    total = monthlyWithdrawal * n * timePeriod;
+  }
+
+  return Math.round(total);
+};
+
+const calculateLastSWP = (
+  monthlyWithdrawal: number,
+  timePeriod: number,
+  inflationRate: number
+): number => {
+  const inflationFactor = Math.pow(1 + inflationRate / 100, timePeriod);
+  return Math.round(monthlyWithdrawal * inflationFactor);
+};
+
+const getWithdrawalDate = (timePeriod: number, isFirst: boolean): string => {
+  const date = isFirst ? new Date() : addYears(new Date(), timePeriod);
+  return format(date, "MMMM, yyyy");
 };
 
 const ResultCard = ({
@@ -55,9 +91,21 @@ const ResultCard = ({
   currency,
   withdrawalFrequency,
   timePeriod,
+  adjustForInflation,
+  inflationRate,
 }: ResultCardProps) => {
-  const totalWithdrawal = calculateTotalWithdrawal(monthlyWithdrawal, withdrawalFrequency, timePeriod);
+  const totalWithdrawal = calculateTotalWithdrawal(
+    monthlyWithdrawal,
+    withdrawalFrequency,
+    timePeriod,
+    adjustForInflation,
+    inflationRate
+  );
   
+  const lastSWP = adjustForInflation
+    ? calculateLastSWP(monthlyWithdrawal, timePeriod, inflationRate)
+    : monthlyWithdrawal;
+
   // Use 0 instead of negative values when calculating total profit
   const finalValueForProfit = finalValue < 0 ? 0 : finalValue;
   const totalProfit = finalValueForProfit + totalWithdrawal - totalInvestment;
@@ -78,6 +126,37 @@ const ResultCard = ({
           {formatCurrency(totalInvestment, currency)}
         </span>
       </div>
+
+      {adjustForInflation && (
+        <>
+          <div className="flex justify-between items-center">
+            <div className="flex flex-wrap items-center gap-x-1">
+              <span className="text-gray-600 dark:text-gray-400">First SWP</span>
+              <span className="text-gray-600 dark:text-gray-400">
+                ({getWithdrawalDate(timePeriod, true)})
+              </span>
+              <InfoTooltip content="The initial withdrawal amount at the start of your investment period." />
+            </div>
+            <span className="text-xl font-semibold text-foreground">
+              {formatCurrency(monthlyWithdrawal, currency)}
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <div className="flex flex-wrap items-center gap-x-1">
+              <span className="text-gray-600 dark:text-gray-400">Last SWP</span>
+              <span className="text-gray-600 dark:text-gray-400">
+                ({getWithdrawalDate(timePeriod, false)})
+              </span>
+              <InfoTooltip content="The final withdrawal amount adjusted for inflation at the end of your investment period." />
+            </div>
+            <span className="text-xl font-semibold text-foreground">
+              {formatCurrency(lastSWP, currency)}
+            </span>
+          </div>
+        </>
+      )}
+
       <div className="flex justify-between items-center">
         <div className="flex flex-wrap items-center gap-x-1">
           <span className="text-gray-600 dark:text-gray-400">
@@ -92,6 +171,7 @@ const ResultCard = ({
           {formatCurrency(totalWithdrawal, currency)}
         </span>
       </div>
+
       <div className="flex justify-between items-center">
         <div className="flex flex-wrap items-center gap-x-1">
           <span className="text-gray-600 dark:text-gray-400">Final</span>

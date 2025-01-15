@@ -5,6 +5,7 @@ import { WithdrawalFrequency } from "@/types/calculator";
 import WithdrawalFrequencySelector from "./calculator/WithdrawalFrequencySelector";
 import InfoTooltip from "./InfoTooltip";
 import { format, addYears } from "date-fns";
+import AdvancedOptions from "./calculator/AdvancedOptions";
 
 interface CalculatorFormProps {
   totalInvestment: number;
@@ -19,6 +20,12 @@ interface CalculatorFormProps {
   currency: CurrencyType;
   withdrawalFrequency: WithdrawalFrequency;
   setWithdrawalFrequency: (frequency: WithdrawalFrequency) => void;
+  showAdvancedOptions: boolean;
+  setShowAdvancedOptions: (value: boolean) => void;
+  adjustForInflation: boolean;
+  setAdjustForInflation: (value: boolean) => void;
+  inflationRate: number;
+  setInflationRate: (value: number) => void;
 }
 
 const CalculatorForm = ({
@@ -34,6 +41,12 @@ const CalculatorForm = ({
   currency,
   withdrawalFrequency,
   setWithdrawalFrequency,
+  showAdvancedOptions,
+  setShowAdvancedOptions,
+  adjustForInflation,
+  setAdjustForInflation,
+  inflationRate,
+  setInflationRate,
 }: CalculatorFormProps) => {
   useEffect(() => {
     if (monthlyWithdrawal > totalInvestment) {
@@ -149,6 +162,15 @@ const CalculatorForm = ({
           {getFutureDate(timePeriod)}
         </p>
       </div>
+
+      <AdvancedOptions
+        showAdvancedOptions={showAdvancedOptions}
+        setShowAdvancedOptions={setShowAdvancedOptions}
+        adjustForInflation={adjustForInflation}
+        setAdjustForInflation={setAdjustForInflation}
+        inflationRate={inflationRate}
+        setInflationRate={setInflationRate}
+      />
     </div>
   );
 };
