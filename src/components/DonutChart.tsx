@@ -56,12 +56,12 @@ const DonutChart: React.FC<DonutChartProps> = ({
     };
 
     document.addEventListener('mousedown', handleOutsideInteraction);
-    document.addEventListener('touchstart', handleOutsideInteraction);
+    document.addEventListener('click', handleOutsideInteraction);
 
     return () => {
       observer.disconnect();
       document.removeEventListener('mousedown', handleOutsideInteraction);
-      document.removeEventListener('touchstart', handleOutsideInteraction);
+      document.removeEventListener('click', handleOutsideInteraction);
     };
   }, []);
 
