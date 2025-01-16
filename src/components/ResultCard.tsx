@@ -75,13 +75,42 @@ const calculateLastSWP = (
   timePeriod: number,
   inflationRate: number
 ): number => {
-  const inflationFactor = Math.pow(1 + inflationRate / 100, timePeriod);
+  // Calculate for one month less than the total period to get the correct last SWP
+  const adjustedTimePeriod = timePeriod - (1/12);
+  const inflationFactor = Math.pow(1 + inflationRate / 100, adjustedTimePeriod);
   return Math.round(monthlyWithdrawal * inflationFactor);
 };
 
 const getWithdrawalDate = (timePeriod: number, isFirst: boolean): string => {
-  const date = isFirst ? new Date() : addYears(new Date(), timePeriod);
-  return format(date, "MMMM, yyyy");
+  const currentDate = new Date();
+  let date;
+  
+  if (isFirst) {
+    // First SWP will be next month
+    date = addMonths(currentDate, 1);
+  } else {
+    // Last SWP will be one month before the end of the period
+    const totalMonths = timePeriod * 12;
+    date = addMonths(currentDate, totalMonths);
+    date = addMonths(date, -1);
+  }
+  
+  return format(date, "MMM yyyy");
+};
+
+const getFrequencyText = (frequency: WithdrawalFrequency): string => {
+  switch (frequency) {
+    case "Monthly":
+      return "Monthly";
+    case "Quarterly":
+      return "Quarterly";
+    case "Half-yearly":
+      return "Half-yearly";
+    case "Yearly":
+      return "Yearly";
+    default:
+      return "Monthly";
+  }
 };
 
 const ResultCard = ({
@@ -104,6 +133,11 @@ const ResultCard = ({
   
   const lastSWP = adjustForInflation
     ? calculateLastSWP(monthlyWithdrawal, timePeriod, inflationRate)
+    : monthlyWithdrawal;
+
+  // Calculate final withdrawal amount (one month after lastSWP)
+  const finalWithdrawalAmount = adjustForInflation
+    ? Math.round(monthlyWithdrawal * Math.pow(1 + inflationRate / 100, timePeriod))
     : monthlyWithdrawal;
 
   // Use 0 instead of negative values when calculating total profit
@@ -150,9 +184,14 @@ const ResultCard = ({
               </span>
               <InfoTooltip content="The final withdrawal amount adjusted for inflation at the end of your investment period." />
             </div>
-            <span className="text-xl font-semibold text-foreground">
-              {formatCurrency(lastSWP, currency)}
-            </span>
+            <div className="flex flex-col items-end">
+              <span className="text-xl font-semibold text-foreground">
+                {formatCurrency(lastSWP, currency)}
+              </span>
+              <span className="text-sm text-gray-600 dark:text-gray-400">
+                {getFrequencyText(withdrawalFrequency)} expense after {timePeriod} years is {formatCurrency(finalWithdrawalAmount, currency)}
+              </span>
+            </div>
           </div>
         </>
       )}
