@@ -75,7 +75,6 @@ const calculateLastSWP = (
   timePeriod: number,
   inflationRate: number
 ): number => {
-  // Using the compound growth formula: Last SWP = First SWP × (1 + Inflation Rate)^(timePeriod-1)
   const inflationFactor = Math.pow(1 + inflationRate / 100, timePeriod - 1);
   return Math.round(monthlyWithdrawal * inflationFactor);
 };
@@ -99,8 +98,22 @@ const getFirstWithdrawalDate = (frequency: WithdrawalFrequency): Date => {
 
 const getLastWithdrawalDate = (frequency: WithdrawalFrequency, timePeriod: number): Date => {
   const firstDate = getFirstWithdrawalDate(frequency);
-  // For the last withdrawal, we add (timePeriod - 1) years to the first withdrawal date
-  return addYears(firstDate, timePeriod - 1);
+  
+  // Calculate the last withdrawal date based on frequency
+  switch (frequency) {
+    case "Monthly":
+      // For monthly, go to January of the last year
+      return addMonths(addYears(firstDate, timePeriod - 1), -1);
+    case "Quarterly":
+    case "Half-yearly":
+      // For quarterly and half-yearly, go to January of the end year
+      return addYears(new Date(firstDate.getFullYear(), 0, firstDate.getDate()), timePeriod);
+    case "Yearly":
+      // For yearly, add timePeriod - 1 years to first date
+      return addYears(firstDate, timePeriod - 1);
+    default:
+      return addYears(firstDate, timePeriod - 1);
+  }
 };
 
 const getWithdrawalDate = (frequency: WithdrawalFrequency, timePeriod: number, isFirst: boolean): string => {
@@ -145,21 +158,15 @@ const ResultCard = ({
     ? calculateLastSWP(monthlyWithdrawal, timePeriod, inflationRate)
     : monthlyWithdrawal;
 
-  // Calculate final withdrawal amount (one period after lastSWP)
   const finalWithdrawalAmount = adjustForInflation
     ? Math.round(monthlyWithdrawal * Math.pow(1 + inflationRate / 100, timePeriod))
     : monthlyWithdrawal;
 
-  // Use 0 instead of negative values when calculating total profit
   const finalValueForProfit = finalValue < 0 ? 0 : finalValue;
   const totalProfit = finalValueForProfit + totalWithdrawal - totalInvestment;
   const displayProfit = totalProfit > 0 ? totalProfit : 0;
-
-  // Calculate profit percentage
   const profitPercentage = (totalProfit / totalInvestment) * 100;
   const displayProfitPercentage = profitPercentage > 0 ? profitPercentage : 0;
-
-  // Calculate total value generated (total withdrawal + final value)
   const totalValueGenerated = totalWithdrawal + (finalValue < 0 ? 0 : finalValue);
 
   return (
@@ -198,10 +205,11 @@ const ResultCard = ({
               <span className="text-xl font-semibold text-foreground">
                 {formatCurrency(lastSWP, currency)}
               </span>
-              <span className="text-sm text-gray-600 dark:text-gray-400">
-                {getFrequencyText(withdrawalFrequency)} expense after {timePeriod} years is {formatCurrency(finalWithdrawalAmount, currency)}
-              </span>
             </div>
+          </div>
+          
+          <div className="text-sm text-gray-600 dark:text-gray-400">
+            {getFrequencyText(withdrawalFrequency)} expense after {timePeriod} years is {formatCurrency(finalWithdrawalAmount, currency)}
           </div>
         </>
       )}
