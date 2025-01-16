@@ -98,21 +98,24 @@ const getFirstWithdrawalDate = (frequency: WithdrawalFrequency): Date => {
 
 const getLastWithdrawalDate = (frequency: WithdrawalFrequency, timePeriod: number): Date => {
   const firstDate = getFirstWithdrawalDate(frequency);
-  
-  // Calculate the last withdrawal date based on frequency
+  const totalIntervals = {
+    "Monthly": 12 * timePeriod - 1,
+    "Quarterly": 4 * timePeriod - 1,
+    "Half-yearly": 2 * timePeriod - 1,
+    "Yearly": timePeriod - 1
+  }[frequency];
+
   switch (frequency) {
     case "Monthly":
-      // For monthly, go to January of the end year
-      return addYears(new Date(firstDate.getFullYear(), 0, firstDate.getDate()), timePeriod);
+      return addMonths(firstDate, totalIntervals);
     case "Quarterly":
+      return addQuarters(firstDate, totalIntervals);
     case "Half-yearly":
-      // For quarterly and half-yearly, go to January of the end year
-      return addYears(new Date(firstDate.getFullYear(), 0, firstDate.getDate()), timePeriod);
+      return addMonths(firstDate, totalIntervals * 6);
     case "Yearly":
-      // For yearly, add timePeriod - 1 years to first date
-      return addYears(firstDate, timePeriod - 1);
+      return addYears(firstDate, totalIntervals);
     default:
-      return addYears(firstDate, timePeriod - 1);
+      return addMonths(firstDate, totalIntervals); // Default to monthly
   }
 };
 
