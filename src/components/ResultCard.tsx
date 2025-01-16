@@ -75,9 +75,8 @@ const calculateLastSWP = (
   timePeriod: number,
   inflationRate: number
 ): number => {
-  // Calculate for the last month of the period (timePeriod - 1/12 to get to the last month)
-  const adjustedTimePeriod = timePeriod - (1/12);
-  const inflationFactor = Math.pow(1 + inflationRate / 100, adjustedTimePeriod);
+  // Using the compound growth formula: Last SWP = First SWP × (1 + Inflation Rate)^(timePeriod-1)
+  const inflationFactor = Math.pow(1 + inflationRate / 100, timePeriod - 1);
   return Math.round(monthlyWithdrawal * inflationFactor);
 };
 
@@ -100,8 +99,8 @@ const getFirstWithdrawalDate = (frequency: WithdrawalFrequency): Date => {
 
 const getLastWithdrawalDate = (frequency: WithdrawalFrequency, timePeriod: number): Date => {
   const firstDate = getFirstWithdrawalDate(frequency);
-  const lastDate = addYears(firstDate, timePeriod);
-  return addMonths(lastDate, -1); // Subtract one month to get to the last withdrawal
+  // For the last withdrawal, we add (timePeriod - 1) years to the first withdrawal date
+  return addYears(firstDate, timePeriod - 1);
 };
 
 const getWithdrawalDate = (frequency: WithdrawalFrequency, timePeriod: number, isFirst: boolean): string => {
