@@ -102,8 +102,8 @@ const getLastWithdrawalDate = (frequency: WithdrawalFrequency, timePeriod: numbe
   // Calculate the last withdrawal date based on frequency
   switch (frequency) {
     case "Monthly":
-      // For monthly, go to January of the last year
-      return addMonths(addYears(firstDate, timePeriod - 1), -1);
+      // For monthly, go to January of the end year
+      return addYears(new Date(firstDate.getFullYear(), 0, firstDate.getDate()), timePeriod);
     case "Quarterly":
     case "Half-yearly":
       // For quarterly and half-yearly, go to January of the end year
