@@ -81,6 +81,7 @@ const calculateLastSWP = (
 
 const getFirstWithdrawalDate = (frequency: WithdrawalFrequency): Date => {
   const currentDate = new Date();
+  
   switch (frequency) {
     case "Monthly":
       return addMonths(currentDate, 1);
@@ -155,7 +156,7 @@ const ResultCard = ({
     adjustForInflation,
     inflationRate
   );
-
+  
   const lastSWP = adjustForInflation
     ? calculateLastSWP(monthlyWithdrawal, timePeriod, inflationRate)
     : monthlyWithdrawal;
@@ -164,16 +165,12 @@ const ResultCard = ({
     ? Math.round(monthlyWithdrawal * Math.pow(1 + inflationRate / 100, timePeriod))
     : monthlyWithdrawal;
 
-  // Adjust final value for inflation if enabled
-  const inflationAdjustedFinalValue = adjustForInflation
-    ? Math.round(finalValue / Math.pow(1 + inflationRate / 100, timePeriod))
-    : finalValue;
-
-  const totalProfit = inflationAdjustedFinalValue + totalWithdrawal - totalInvestment;
+  const finalValueForProfit = finalValue < 0 ? 0 : finalValue;
+  const totalProfit = finalValueForProfit + totalWithdrawal - totalInvestment;
   const displayProfit = totalProfit > 0 ? totalProfit : 0;
   const profitPercentage = (totalProfit / totalInvestment) * 100;
   const displayProfitPercentage = profitPercentage > 0 ? profitPercentage : 0;
-  const totalValueGenerated = totalWithdrawal + inflationAdjustedFinalValue;
+  const totalValueGenerated = totalWithdrawal + (finalValue < 0 ? 0 : finalValue);
 
   return (
     <div className="bg-card dark:bg-card rounded-xl shadow-lg p-6 space-y-4">
@@ -239,15 +236,12 @@ const ResultCard = ({
         <div className="flex flex-wrap items-center gap-x-1">
           <span className="text-gray-600 dark:text-gray-400">Final</span>
           <span className="text-gray-600 dark:text-gray-400">Value</span>
-          <InfoTooltip content="The remaining balance in your investment after all periodic withdrawals and accounting for returns. Adjusted for inflation to reflect real purchasing power." />
+          <InfoTooltip content="The remaining balance in your investment after all periodic withdrawals and accounting for returns. This is what you'll have left in your portfolio at the end of the investment period." />
         </div>
         <span className={`text-xl font-semibold ${finalValue < 0 ? 'text-red-500 dark:text-red-400' : 'text-foreground'}`}>
-          {adjustForInflation
-            ? `${formatCurrency(inflationAdjustedFinalValue, currency)} (Adjusted)`
-            : formatCurrency(finalValue, currency)}
+          {formatCurrency(finalValue, currency)}
         </span>
       </div>
-      
       <div className="flex justify-between items-center">
         <div className="flex flex-wrap items-center gap-x-1">
           <span className="text-gray-600 dark:text-gray-400">Total</span>
@@ -258,24 +252,27 @@ const ResultCard = ({
           {formatCurrency(totalValueGenerated, currency)}
         </span>
       </div>
-
       <div className="flex justify-between items-center">
         <div className="flex flex-wrap items-center gap-x-1">
+          <span className="text-gray-600 dark:text-gray-400">Total</span>
           <span className="text-gray-600 dark:text-gray-400">Profit</span>
-          <InfoTooltip content="Your profit is calculated as the total wealth generated minus your total investment. This reflects the overall growth of your investment portfolio." />
+          <InfoTooltip content="The estimated returns on your investment, shown both as an absolute value and as a percentage of your total investment. This includes both the withdrawn amount and the final value, minus your total investment." />
         </div>
-        <span className={`text-xl font-semibold ${displayProfit > 0 ? 'text-green-500 dark:text-green-400' : 'text-red-500 dark:text-red-400'}`}>
-          {`${formatCurrency(displayProfit, currency)} (${displayProfitPercentage.toFixed(2)}%)`}
-        </span>
+        <div className="flex flex-col items-end">
+          <span className={`text-xl font-semibold ${totalProfit > 0 ? 'text-green-500 dark:text-green-400' : 'text-foreground'}`}>
+            {formatCurrency(displayProfit, currency)}
+          </span>
+          <span className={`text-base font-medium ${totalProfit > 0 ? 'text-green-500 dark:text-green-400' : 'text-foreground'}`}>
+            ({displayProfitPercentage.toFixed(2)}%)
+          </span>
+        </div>
       </div>
 
       <DonutChart
         totalInvestment={totalInvestment}
         totalWithdrawal={totalWithdrawal}
-        finalValue={finalValue}
         currency={currency}
-        inflationAdjustedFinalValue={inflationAdjustedFinalValue}
-        adjustForInflation={adjustForInflation}
+        formatCurrency={formatCurrency}
       />
     </div>
   );
