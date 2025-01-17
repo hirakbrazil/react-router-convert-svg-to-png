@@ -167,7 +167,7 @@ const ResultCard = ({
 
   // Apply inflation to final value if adjustForInflation is true
   const adjustedFinalValue = adjustForInflation
-    ? Math.round(finalValue / Math.pow(1 + inflationRate / 100, timePeriod))
+    ? Math.round(finalValue * Math.pow(1 / (1 + inflationRate / 100), timePeriod))
     : finalValue;
 
   const finalValueForProfit = adjustedFinalValue < 0 ? 0 : adjustedFinalValue;
