@@ -14,7 +14,6 @@ interface ResultCardProps {
   timePeriod: number;
   adjustForInflation: boolean;
   inflationRate: number;
-  returnRate: number;
 }
 
 const formatCurrency = (value: number, currency: CurrencyType): string => {
@@ -39,41 +38,6 @@ const formatCurrency = (value: number, currency: CurrencyType): string => {
     maximumFractionDigits: 0,
   });
   return formatter.format(value);
-};
-
-const calculateFinalValueWithInflation = (
-  initialInvestment: number,
-  initialMonthlyWithdrawal: number,
-  returnRate: number,
-  inflationRate: number,
-  timePeriod: number,
-  withdrawalFrequency: WithdrawalFrequency
-): number => {
-  const monthlyReturnRate = Math.pow(1 + returnRate / 100, 1 / 12) - 1;
-  const withdrawalsPerYear = {
-    "Monthly": 12,
-    "Quarterly": 4,
-    "Half-yearly": 2,
-    "Yearly": 1
-  };
-
-  const n = withdrawalsPerYear[withdrawalFrequency];
-  const monthsPerWithdrawal = 12 / n;
-  let corpus = initialInvestment;
-  
-  for (let year = 0; year < timePeriod; year++) {
-    const inflationFactor = Math.pow(1 + inflationRate / 100, year);
-    const adjustedWithdrawal = initialMonthlyWithdrawal * inflationFactor;
-
-    for (let withdrawal = 0; withdrawal < n; withdrawal++) {
-      for (let month = 0; month < monthsPerWithdrawal; month++) {
-        corpus *= (1 + monthlyReturnRate);
-      }
-      corpus -= adjustedWithdrawal;
-    }
-  }
-
-  return Math.round(corpus);
 };
 
 const calculateTotalWithdrawal = (
@@ -151,7 +115,7 @@ const getLastWithdrawalDate = (frequency: WithdrawalFrequency, timePeriod: numbe
     case "Yearly":
       return addYears(firstDate, totalIntervals);
     default:
-      return addMonths(firstDate, totalIntervals);
+      return addMonths(firstDate, totalIntervals); // Default to monthly
   }
 };
 
@@ -184,19 +148,14 @@ const ResultCard = ({
   timePeriod,
   adjustForInflation,
   inflationRate,
-  returnRate,
 }: ResultCardProps) => {
-  // Calculate final value with inflation if required
-  const calculatedFinalValue = adjustForInflation
-    ? calculateFinalValueWithInflation(
-        totalInvestment,
-        monthlyWithdrawal,
-        returnRate,
-        inflationRate,
-        timePeriod,
-        withdrawalFrequency
-      )
-    : finalValue;
+// Store the original finalValue
+  const initialFinalValue = finalValue;
+
+  // Adjust finalValue for inflation if required
+  finalValue = adjustForInflation
+    ? Math.round(initialFinalValue / Math.pow(1 + inflationRate / 100, timePeriod))
+    : initialFinalValue;
   
   const totalWithdrawal = calculateTotalWithdrawal(
     monthlyWithdrawal,
@@ -214,12 +173,12 @@ const ResultCard = ({
     ? Math.round(monthlyWithdrawal * Math.pow(1 + inflationRate / 100, timePeriod))
     : monthlyWithdrawal;
 
-  const finalValueForProfit = calculatedFinalValue < 0 ? 0 : calculatedFinalValue;
+  const finalValueForProfit = finalValue < 0 ? 0 : finalValue;
   const totalProfit = finalValueForProfit + totalWithdrawal - totalInvestment;
   const displayProfit = totalProfit > 0 ? totalProfit : 0;
   const profitPercentage = (totalProfit / totalInvestment) * 100;
   const displayProfitPercentage = profitPercentage > 0 ? profitPercentage : 0;
-  const totalValueGenerated = totalWithdrawal + (calculatedFinalValue < 0 ? 0 : calculatedFinalValue);
+  const totalValueGenerated = totalWithdrawal + (finalValue < 0 ? 0 : finalValue);
 
   return (
     <div className="bg-card dark:bg-card rounded-xl shadow-lg p-6 space-y-4">
@@ -268,8 +227,12 @@ const ResultCard = ({
 
       <div className="flex justify-between items-center">
         <div className="flex flex-wrap items-center gap-x-1">
-          <span className="text-gray-600 dark:text-gray-400">Total</span>
-          <span className="text-gray-600 dark:text-gray-400">Withdrawal</span>
+          <span className="text-gray-600 dark:text-gray-400">
+            Total
+          </span>
+          <span className="text-gray-600 dark:text-gray-400">
+            Withdrawal
+          </span>
           <InfoTooltip content="The total amount you will withdraw over the entire investment period. This is calculated based on your periodic withdrawal amount and frequency." />
         </div>
         <span className="text-xl font-semibold text-foreground">
@@ -283,11 +246,10 @@ const ResultCard = ({
           <span className="text-gray-600 dark:text-gray-400">Value</span>
           <InfoTooltip content="The remaining balance in your investment after all periodic withdrawals and accounting for returns. This is what you'll have left in your portfolio at the end of the investment period." />
         </div>
-        <span className={`text-xl font-semibold ${calculatedFinalValue < 0 ? 'text-red-500 dark:text-red-400' : 'text-foreground'}`}>
-          {formatCurrency(calculatedFinalValue, currency)}
+        <span className={`text-xl font-semibold ${finalValue < 0 ? 'text-red-500 dark:text-red-400' : 'text-foreground'}`}>
+          {formatCurrency(finalValue, currency)}
         </span>
       </div>
-
       <div className="flex justify-between items-center">
         <div className="flex flex-wrap items-center gap-x-1">
           <span className="text-gray-600 dark:text-gray-400">Total</span>
@@ -298,7 +260,6 @@ const ResultCard = ({
           {formatCurrency(totalValueGenerated, currency)}
         </span>
       </div>
-
       <div className="flex justify-between items-center">
         <div className="flex flex-wrap items-center gap-x-1">
           <span className="text-gray-600 dark:text-gray-400">Total</span>
