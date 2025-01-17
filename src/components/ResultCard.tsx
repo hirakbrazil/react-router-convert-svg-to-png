@@ -148,37 +148,59 @@ const ResultCard = ({
   timePeriod,
   adjustForInflation,
   inflationRate,
+  expectedReturnRate, // Expected annual return rate
 }: ResultCardProps) => {
-// Store the original finalValue
+  // Store the original finalValue for reference
   const initialFinalValue = finalValue;
 
-  // Adjust finalValue for inflation if required
+  // Function to calculate the inflation-adjusted withdrawals over time
+  const calculateInflationAdjustedWithdrawals = (
+    monthlyWithdrawal: number,
+    inflationRate: number,
+    timePeriod: number,
+    withdrawalFrequency: WithdrawalFrequency
+  ) => {
+    let totalWithdrawn = 0;
+    const withdrawalsPerYear = {
+      "Monthly": 12,
+      "Quarterly": 4,
+      "Half-yearly": 2,
+      "Yearly": 1,
+    };
+
+    const n = withdrawalsPerYear[withdrawalFrequency];
+    for (let year = 0; year < timePeriod; year++) {
+      const inflationFactor = Math.pow(1 + inflationRate / 100, year);
+      const adjustedWithdrawal = monthlyWithdrawal * inflationFactor;
+      totalWithdrawn += adjustedWithdrawal * n;
+    }
+    return totalWithdrawn;
+  };
+
+  // Apply inflation adjustment for withdrawals
+  const totalWithdrawal = adjustForInflation
+    ? calculateInflationAdjustedWithdrawals(monthlyWithdrawal, inflationRate, timePeriod, withdrawalFrequency)
+    : calculateTotalWithdrawal(monthlyWithdrawal, withdrawalFrequency, timePeriod, adjustForInflation, inflationRate);
+
+  // Adjust final value for inflation
   finalValue = adjustForInflation
     ? Math.round(initialFinalValue / Math.pow(1 + inflationRate / 100, timePeriod))
     : initialFinalValue;
-  
-  const totalWithdrawal = calculateTotalWithdrawal(
-    monthlyWithdrawal,
-    withdrawalFrequency,
-    timePeriod,
-    adjustForInflation,
-    inflationRate
-  );
-  
-  const lastSWP = adjustForInflation
-    ? calculateLastSWP(monthlyWithdrawal, timePeriod, inflationRate)
-    : monthlyWithdrawal;
 
-  const finalWithdrawalAmount = adjustForInflation
-    ? Math.round(monthlyWithdrawal * Math.pow(1 + inflationRate / 100, timePeriod))
-    : monthlyWithdrawal;
+  // Adjust the expected final value with compounded returns over time (account for inflation)
+  const finalValueWithReturns = adjustForInflation
+    ? Math.round(
+        totalInvestment *
+          Math.pow(1 + expectedReturnRate / 100, timePeriod) -
+          totalWithdrawal // Total withdrawals adjusted for inflation
+      )
+    : finalValue;
 
-  const finalValueForProfit = finalValue < 0 ? 0 : finalValue;
-  const totalProfit = finalValueForProfit + totalWithdrawal - totalInvestment;
+  const totalProfit = finalValueWithReturns + totalWithdrawal - totalInvestment;
   const displayProfit = totalProfit > 0 ? totalProfit : 0;
   const profitPercentage = (totalProfit / totalInvestment) * 100;
   const displayProfitPercentage = profitPercentage > 0 ? profitPercentage : 0;
-  const totalValueGenerated = totalWithdrawal + (finalValue < 0 ? 0 : finalValue);
+  const totalValueGenerated = totalWithdrawal + finalValueWithReturns;
 
   return (
     <div className="bg-card dark:bg-card rounded-xl shadow-lg p-6 space-y-4">
@@ -218,7 +240,7 @@ const ResultCard = ({
               </span>
             </div>
           </div>
-          
+
           <div className="text-sm text-gray-600 dark:text-gray-400">
             {getFrequencyText(withdrawalFrequency)} expense after {timePeriod} years is {formatCurrency(finalWithdrawalAmount, currency)}
           </div>
@@ -250,6 +272,7 @@ const ResultCard = ({
           {formatCurrency(finalValue, currency)}
         </span>
       </div>
+
       <div className="flex justify-between items-center">
         <div className="flex flex-wrap items-center gap-x-1">
           <span className="text-gray-600 dark:text-gray-400">Total</span>
@@ -260,6 +283,7 @@ const ResultCard = ({
           {formatCurrency(totalValueGenerated, currency)}
         </span>
       </div>
+
       <div className="flex justify-between items-center">
         <div className="flex flex-wrap items-center gap-x-1">
           <span className="text-gray-600 dark:text-gray-400">Total</span>
