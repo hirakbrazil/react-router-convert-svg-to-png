@@ -70,13 +70,73 @@ const calculateTotalWithdrawal = (
   return Math.round(total);
 };
 
-const calculateSWPForYear = (
+const calculateLastSWP = (
   monthlyWithdrawal: number,
-  year: number,
+  timePeriod: number,
   inflationRate: number
 ): number => {
-  const inflationFactor = Math.pow(1 + inflationRate / 100, year);
-  return monthlyWithdrawal * inflationFactor;
+  const inflationFactor = Math.pow(1 + inflationRate / 100, timePeriod - 1);
+  return Math.round(monthlyWithdrawal * inflationFactor);
+};
+
+const getFirstWithdrawalDate = (frequency: WithdrawalFrequency): Date => {
+  const currentDate = new Date();
+  
+  switch (frequency) {
+    case "Monthly":
+      return addMonths(currentDate, 1);
+    case "Quarterly":
+      return addQuarters(currentDate, 1);
+    case "Half-yearly":
+      return addMonths(currentDate, 6);
+    case "Yearly":
+      return addYears(currentDate, 1);
+    default:
+      return addMonths(currentDate, 1);
+  }
+};
+
+const getLastWithdrawalDate = (frequency: WithdrawalFrequency, timePeriod: number): Date => {
+  const firstDate = getFirstWithdrawalDate(frequency);
+  const totalIntervals = {
+    "Monthly": 12 * timePeriod - 1,
+    "Quarterly": 4 * timePeriod - 1,
+    "Half-yearly": 2 * timePeriod - 1,
+    "Yearly": timePeriod - 1
+  }[frequency];
+
+  switch (frequency) {
+    case "Monthly":
+      return addMonths(firstDate, totalIntervals);
+    case "Quarterly":
+      return addQuarters(firstDate, totalIntervals);
+    case "Half-yearly":
+      return addMonths(firstDate, totalIntervals * 6);
+    case "Yearly":
+      return addYears(firstDate, totalIntervals);
+    default:
+      return addMonths(firstDate, totalIntervals); // Default to monthly
+  }
+};
+
+const getWithdrawalDate = (frequency: WithdrawalFrequency, timePeriod: number, isFirst: boolean): string => {
+  const date = isFirst ? getFirstWithdrawalDate(frequency) : getLastWithdrawalDate(frequency, timePeriod);
+  return format(date, "MMM yyyy");
+};
+
+const getFrequencyText = (frequency: WithdrawalFrequency): string => {
+  switch (frequency) {
+    case "Monthly":
+      return "Monthly";
+    case "Quarterly":
+      return "Quarterly";
+    case "Half-yearly":
+      return "Half-yearly";
+    case "Yearly":
+      return "Yearly";
+    default:
+      return "Monthly";
+  }
 };
 
 const ResultCard = ({
@@ -89,15 +149,14 @@ const ResultCard = ({
   adjustForInflation,
   inflationRate,
 }: ResultCardProps) => {
-  let totalSWP = 0;
-  let adjustedSWP = monthlyWithdrawal;
+// Store the original finalValue
+  const initialFinalValue = finalValue;
 
-  // Adjust the total SWP over time considering inflation
-  for (let year = 0; year < timePeriod; year++) {
-    adjustedSWP = calculateSWPForYear(monthlyWithdrawal, year, inflationRate);
-    totalSWP += adjustedSWP * 12; // assuming monthly withdrawal
-  }
-
+  // Adjust finalValue for inflation if required
+  finalValue = adjustForInflation
+    ? Math.round(initialFinalValue / Math.pow(1 + inflationRate / 100, timePeriod))
+    : initialFinalValue;
+  
   const totalWithdrawal = calculateTotalWithdrawal(
     monthlyWithdrawal,
     withdrawalFrequency,
@@ -105,8 +164,17 @@ const ResultCard = ({
     adjustForInflation,
     inflationRate
   );
+  
+  const lastSWP = adjustForInflation
+    ? calculateLastSWP(monthlyWithdrawal, timePeriod, inflationRate)
+    : monthlyWithdrawal;
 
-  const totalProfit = finalValue + totalWithdrawal - totalInvestment;
+  const finalWithdrawalAmount = adjustForInflation
+    ? Math.round(monthlyWithdrawal * Math.pow(1 + inflationRate / 100, timePeriod))
+    : monthlyWithdrawal;
+
+  const finalValueForProfit = finalValue < 0 ? 0 : finalValue;
+  const totalProfit = finalValueForProfit + totalWithdrawal - totalInvestment;
   const displayProfit = totalProfit > 0 ? totalProfit : 0;
   const profitPercentage = (totalProfit / totalInvestment) * 100;
   const displayProfitPercentage = profitPercentage > 0 ? profitPercentage : 0;
@@ -127,7 +195,7 @@ const ResultCard = ({
             <div className="flex flex-wrap items-center gap-x-1">
               <span className="text-gray-600 dark:text-gray-400">First SWP</span>
               <span className="text-gray-600 dark:text-gray-400">
-                ({format(new Date(), "MMM yyyy")})
+                ({getWithdrawalDate(withdrawalFrequency, timePeriod, true)})
               </span>
               <InfoTooltip content="The initial withdrawal amount at the start of your investment period." />
             </div>
@@ -140,15 +208,19 @@ const ResultCard = ({
             <div className="flex flex-wrap items-center gap-x-1">
               <span className="text-gray-600 dark:text-gray-400">Last SWP</span>
               <span className="text-gray-600 dark:text-gray-400">
-                ({format(new Date(), "MMM yyyy")})
+                ({getWithdrawalDate(withdrawalFrequency, timePeriod, false)})
               </span>
               <InfoTooltip content="The final withdrawal amount adjusted for inflation at the end of your investment period." />
             </div>
             <div className="flex flex-col items-end">
               <span className="text-xl font-semibold text-foreground">
-                {formatCurrency(adjustedSWP, currency)}
+                {formatCurrency(lastSWP, currency)}
               </span>
             </div>
+          </div>
+          
+          <div className="text-sm text-gray-600 dark:text-gray-400">
+            {getFrequencyText(withdrawalFrequency)} expense after {timePeriod} years is {formatCurrency(finalWithdrawalAmount, currency)}
           </div>
         </>
       )}
@@ -161,7 +233,7 @@ const ResultCard = ({
           <span className="text-gray-600 dark:text-gray-400">
             Withdrawal
           </span>
-          <InfoTooltip content="The total amount you will withdraw over the entire investment period." />
+          <InfoTooltip content="The total amount you will withdraw over the entire investment period. This is calculated based on your periodic withdrawal amount and frequency." />
         </div>
         <span className="text-xl font-semibold text-foreground">
           {formatCurrency(totalWithdrawal, currency)}
@@ -172,29 +244,27 @@ const ResultCard = ({
         <div className="flex flex-wrap items-center gap-x-1">
           <span className="text-gray-600 dark:text-gray-400">Final</span>
           <span className="text-gray-600 dark:text-gray-400">Value</span>
-          <InfoTooltip content="The remaining balance in your investment after all periodic withdrawals and accounting for returns." />
+          <InfoTooltip content="The remaining balance in your investment after all periodic withdrawals and accounting for returns. This is what you'll have left in your portfolio at the end of the investment period." />
         </div>
         <span className={`text-xl font-semibold ${finalValue < 0 ? 'text-red-500 dark:text-red-400' : 'text-foreground'}`}>
           {formatCurrency(finalValue, currency)}
         </span>
       </div>
-
       <div className="flex justify-between items-center">
         <div className="flex flex-wrap items-center gap-x-1">
           <span className="text-gray-600 dark:text-gray-400">Total</span>
           <span className="text-gray-600 dark:text-gray-400">Value</span>
-          <InfoTooltip content="The total wealth generated by your investment, combining both what you withdrew and what remains." />
+          <InfoTooltip content="The total wealth generated by your investment, combining both what you withdrew and what remains. This represents the sum of all withdrawals plus the final portfolio value." />
         </div>
         <span className="text-xl font-semibold text-foreground">
           {formatCurrency(totalValueGenerated, currency)}
         </span>
       </div>
-
       <div className="flex justify-between items-center">
         <div className="flex flex-wrap items-center gap-x-1">
           <span className="text-gray-600 dark:text-gray-400">Total</span>
           <span className="text-gray-600 dark:text-gray-400">Profit</span>
-          <InfoTooltip content="The estimated returns on your investment, shown both as an absolute value and as a percentage of your total investment." />
+          <InfoTooltip content="The estimated returns on your investment, shown both as an absolute value and as a percentage of your total investment. This includes both the withdrawn amount and the final value, minus your total investment." />
         </div>
         <div className="flex flex-col items-end">
           <span className={`text-xl font-semibold ${totalProfit > 0 ? 'text-green-500 dark:text-green-400' : 'text-foreground'}`}>

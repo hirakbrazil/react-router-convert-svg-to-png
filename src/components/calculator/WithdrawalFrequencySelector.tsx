@@ -26,11 +26,15 @@ const WithdrawalFrequencySelector = ({
     <div className="flex items-center justify-between">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap items-center gap-x-1">
-          <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">Withdrawal</span>
-          <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">frequency</span>
+          <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">
+            Withdrawal
+          </span>
+          <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">
+          frequency
+          </span>
           <InfoTooltip content="If you want to receive withdrawals every month, like a salary or pension, select Monthly. Quarterly means receiving withdrawals once every 3 months. Half-yearly means receiving 2 withdrawals per year, or one every 6 months. Yearly/Annually means receiving 1 withdrawal per year." />
         </div>
-      </div>
+</div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="flex items-center gap-2 bg-white dark:bg-[#030c21]">
