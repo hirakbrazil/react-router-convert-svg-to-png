@@ -142,21 +142,35 @@ const getFrequencyText = (frequency: WithdrawalFrequency): string => {
 const ResultCard = ({
   totalInvestment,
   monthlyWithdrawal,
-  finalValue,
+  finalValue: initialFinalValue,
   currency,
   withdrawalFrequency,
   timePeriod,
   adjustForInflation,
   inflationRate,
 }: ResultCardProps) => {
-// Store the original finalValue
-  const initialFinalValue = finalValue;
-
-  // Adjust finalValue for inflation if required
-  finalValue = adjustForInflation
-    ? Math.round(initialFinalValue / Math.pow(1 + inflationRate / 100, timePeriod))
-    : initialFinalValue;
+  // Calculate final value considering inflation-adjusted withdrawals
+  let finalValue = initialFinalValue;
   
+  if (adjustForInflation) {
+    const withdrawalsPerYear = {
+      "Monthly": 12,
+      "Quarterly": 4,
+      "Half-yearly": 2,
+      "Yearly": 1
+    }[withdrawalFrequency];
+
+    let totalInflationAdjustedWithdrawals = 0;
+    for (let year = 0; year < timePeriod; year++) {
+      const inflationFactor = Math.pow(1 + inflationRate / 100, year);
+      const adjustedWithdrawal = monthlyWithdrawal * inflationFactor;
+      totalInflationAdjustedWithdrawals += adjustedWithdrawal * withdrawalsPerYear;
+    }
+
+    // Adjust final value based on total inflation-adjusted withdrawals
+    finalValue = Math.round(totalInvestment * Math.pow(1 + inflationRate / 100, timePeriod) - totalInflationAdjustedWithdrawals);
+  }
+
   const totalWithdrawal = calculateTotalWithdrawal(
     monthlyWithdrawal,
     withdrawalFrequency,
