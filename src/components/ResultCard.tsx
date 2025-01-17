@@ -165,12 +165,17 @@ const ResultCard = ({
     ? Math.round(monthlyWithdrawal * Math.pow(1 + inflationRate / 100, timePeriod))
     : monthlyWithdrawal;
 
-  const finalValueForProfit = finalValue < 0 ? 0 : finalValue;
+  // Apply inflation to final value if adjustForInflation is true
+  const adjustedFinalValue = adjustForInflation
+    ? Math.round(finalValue / Math.pow(1 + inflationRate / 100, timePeriod))
+    : finalValue;
+
+  const finalValueForProfit = adjustedFinalValue < 0 ? 0 : adjustedFinalValue;
   const totalProfit = finalValueForProfit + totalWithdrawal - totalInvestment;
   const displayProfit = totalProfit > 0 ? totalProfit : 0;
   const profitPercentage = (totalProfit / totalInvestment) * 100;
   const displayProfitPercentage = profitPercentage > 0 ? profitPercentage : 0;
-  const totalValueGenerated = totalWithdrawal + (finalValue < 0 ? 0 : finalValue);
+  const totalValueGenerated = totalWithdrawal + (adjustedFinalValue < 0 ? 0 : adjustedFinalValue);
 
   return (
     <div className="bg-card dark:bg-card rounded-xl shadow-lg p-6 space-y-4">
