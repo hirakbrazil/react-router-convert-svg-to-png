@@ -165,6 +165,13 @@ const ResultCard = ({
     ? Math.round(monthlyWithdrawal * Math.pow(1 + inflationRate / 100, timePeriod))
     : monthlyWithdrawal;
 
+  const initialFinalValue = finalValue; // The original final value passed via props
+
+// Inflation-adjusted final value
+const finalValue = adjustForInflation
+  ? Math.round(initialFinalValue / Math.pow(1 + inflationRate / 100, timePeriod))
+  : initialFinalValue;
+
   const finalValueForProfit = finalValue < 0 ? 0 : finalValue;
   const totalProfit = finalValueForProfit + totalWithdrawal - totalInvestment;
   const displayProfit = totalProfit > 0 ? totalProfit : 0;
