@@ -58,16 +58,64 @@ const calculateTotalWithdrawal = (
   let total = 0;
 
   if (adjustForInflation) {
+    let currentWithdrawal = monthlyWithdrawal;
     for (let year = 0; year < timePeriod; year++) {
       const inflationFactor = Math.pow(1 + inflationRate / 100, year);
-      const adjustedWithdrawal = monthlyWithdrawal * inflationFactor;
+      const adjustedWithdrawal = currentWithdrawal * inflationFactor;
       total += adjustedWithdrawal * n;
+      currentWithdrawal = adjustedWithdrawal; // Adjust the withdrawal for next year
     }
   } else {
     total = monthlyWithdrawal * n * timePeriod;
   }
 
   return Math.round(total);
+};
+
+const calculateFinalValue = (
+  totalInvestment: number,
+  monthlyWithdrawal: number,
+  frequency: WithdrawalFrequency,
+  timePeriod: number,
+  returnRate: number,
+  adjustForInflation: boolean,
+  inflationRate: number
+): number => {
+  const withdrawalsPerYear = {
+    "Monthly": 12,
+    "Quarterly": 4,
+    "Half-yearly": 2,
+    "Yearly": 1
+  };
+
+  const n = withdrawalsPerYear[frequency];
+  let finalValue = totalInvestment;
+
+  if (adjustForInflation) {
+    let currentWithdrawal = monthlyWithdrawal;
+
+    // Apply inflation adjustment year by year
+    for (let year = 0; year < timePeriod; year++) {
+      const inflationFactor = Math.pow(1 + inflationRate / 100, year);
+      currentWithdrawal = monthlyWithdrawal * inflationFactor;
+
+      // Calculate the returns after each year while considering inflation-adjusted withdrawals
+      for (let month = 0; month < n; month++) {
+        finalValue *= (1 + returnRate / 100 / 12); // Monthly compounded interest
+        finalValue -= currentWithdrawal; // Subtract monthly withdrawal
+      }
+    }
+  } else {
+    // If no inflation adjustment, apply returns directly
+    for (let year = 0; year < timePeriod; year++) {
+      for (let month = 0; month < n; month++) {
+        finalValue *= (1 + returnRate / 100 / 12); // Monthly compounded interest
+        finalValue -= monthlyWithdrawal; // Subtract monthly withdrawal
+      }
+    }
+  }
+
+  return Math.round(finalValue);
 };
 
 const calculateLastSWP = (
