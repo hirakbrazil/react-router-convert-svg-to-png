@@ -99,39 +99,42 @@ export const useCalculator = () => {
   }, [totalInvestment, monthlyWithdrawal]);
 
   const calculateSWP = () => {
-    let n;
-    switch (withdrawalFrequency) {
-      case "Quarterly":
-        n = 4;
-        break;
-      case "Half-yearly":
-        n = 2;
-        break;
-      case "Yearly":
-        n = 1;
-        break;
-      default:
-        n = 12;
+    let currentCapital = totalInvestment;
+    const withdrawalsPerYear = {
+      "Monthly": 12,
+      "Quarterly": 4,
+      "Half-yearly": 2,
+      "Yearly": 1
+    }[withdrawalFrequency];
+
+    for (let year = 0; year < timePeriod; year++) {
+      // Calculate interest earned for the year
+      const interestEarned = currentCapital * (returnRate / 100);
+      console.log(`Year ${year + 1} - Interest Earned: ${interestEarned}`);
+
+      // Calculate withdrawal for the year, adjusted for inflation if enabled
+      let yearlyWithdrawal;
+      if (adjustForInflation) {
+        const inflationFactor = Math.pow(1 + inflationRate / 100, year);
+        yearlyWithdrawal = monthlyWithdrawal * withdrawalsPerYear * inflationFactor;
+      } else {
+        yearlyWithdrawal = monthlyWithdrawal * withdrawalsPerYear;
+      }
+      console.log(`Year ${year + 1} - Yearly Withdrawal: ${yearlyWithdrawal}`);
+
+      // Calculate end of year capital
+      currentCapital = Math.round(currentCapital + interestEarned - yearlyWithdrawal);
+      console.log(`Year ${year + 1} - End Capital: ${currentCapital}`);
     }
 
-    const r = returnRate / (n * 100);
-    const t = timePeriod;
-
-    let result = Math.round(
-      totalInvestment * Math.pow(1 + returnRate / 100, t) -
-        (monthlyWithdrawal *
-          (Math.pow(1 + Math.pow(1 + returnRate / 100, 1 / n) - 1, t * n) - 1)) /
-          (Math.pow(1 + returnRate / 100, 1 / n) - 1)
-    );
-
-    return result;
+    return currentCapital;
   };
 
   // Calculate final value
   useEffect(() => {
     const result = calculateSWP();
     setFinalValue(result);
-  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency]);
+  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency, adjustForInflation, inflationRate]);
 
   return {
     totalInvestment,
