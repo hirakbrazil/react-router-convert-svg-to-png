@@ -149,6 +149,14 @@ const ResultCard = ({
   adjustForInflation,
   inflationRate,
 }: ResultCardProps) => {
+// Store the original finalValue
+  const initialFinalValue = finalValue;
+
+  // Adjust finalValue for inflation if required
+  finalValue = adjustForInflation
+    ? Math.round(initialFinalValue / Math.pow(1 + inflationRate / 100, timePeriod))
+    : initialFinalValue;
+  
   const totalWithdrawal = calculateTotalWithdrawal(
     monthlyWithdrawal,
     withdrawalFrequency,
