@@ -107,24 +107,35 @@ export const useCalculator = () => {
       "Yearly": 1
     }[withdrawalFrequency];
 
+    console.log('Initial capital:', currentCapital);
+    console.log('Withdrawal frequency:', withdrawalFrequency);
+    console.log('Withdrawals per year:', withdrawalsPerYear);
+    console.log('Monthly withdrawal:', monthlyWithdrawal);
+    console.log('Return rate:', returnRate);
+    console.log('Inflation adjustment:', adjustForInflation ? 'enabled' : 'disabled');
+    console.log('Inflation rate:', inflationRate);
+
     for (let year = 0; year < timePeriod; year++) {
       // Calculate interest earned for the year
       const interestEarned = currentCapital * (returnRate / 100);
-      console.log(`Year ${year + 1} - Interest Earned: ${interestEarned}`);
+      console.log(`\nYear ${year + 1}:`);
+      console.log(`Starting capital: ${currentCapital}`);
+      console.log(`Interest earned (${returnRate}%): ${interestEarned}`);
 
-      // Calculate withdrawal for the year, adjusted for inflation if enabled
+      // Calculate withdrawal for the year
       let yearlyWithdrawal;
       if (adjustForInflation) {
         const inflationFactor = Math.pow(1 + inflationRate / 100, year);
         yearlyWithdrawal = monthlyWithdrawal * withdrawalsPerYear * inflationFactor;
+        console.log(`Inflation factor (${inflationRate}%): ${inflationFactor}`);
       } else {
         yearlyWithdrawal = monthlyWithdrawal * withdrawalsPerYear;
       }
-      console.log(`Year ${year + 1} - Yearly Withdrawal: ${yearlyWithdrawal}`);
+      console.log(`Yearly withdrawal: ${yearlyWithdrawal}`);
 
       // Calculate end of year capital
       currentCapital = Math.round(currentCapital + interestEarned - yearlyWithdrawal);
-      console.log(`Year ${year + 1} - End Capital: ${currentCapital}`);
+      console.log(`End of year capital: ${currentCapital}`);
     }
 
     return currentCapital;
