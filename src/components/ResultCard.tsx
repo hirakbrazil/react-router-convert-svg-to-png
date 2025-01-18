@@ -149,35 +149,6 @@ const ResultCard = ({
   adjustForInflation,
   inflationRate,
 }: ResultCardProps) => {
-// Store the original finalValue
-  const initialFinalValue = finalValue;
-
-  // Adjust finalValue for inflation if required
-  if (adjustForInflation) {
-    const withdrawalsPerYear = {
-      "Monthly": 12,
-      "Quarterly": 4,
-      "Half-yearly": 2,
-      "Yearly": 1,
-    };
-    const n = withdrawalsPerYear[withdrawalFrequency];
-    let capital = totalInvestment;
-
-    for (let year = 0; year < timePeriod; year++) {
-      const yearlyReturn = capital * (inflationRate / 100); // Yearly growth
-      const inflationFactor = Math.pow(1 + inflationRate / 100, year);
-      const adjustedWithdrawal = monthlyWithdrawal * n * inflationFactor; // Inflation-adjusted withdrawals
-      capital = capital + yearlyReturn - adjustedWithdrawal;
-
-      // Stop if the capital becomes zero or negative
-      if (capital <= 0) {
-        capital = 0;
-        break;
-      }
-    }
-    finalValue = Math.round(capital);
-  }
-  
   const totalWithdrawal = calculateTotalWithdrawal(
     monthlyWithdrawal,
     withdrawalFrequency,
