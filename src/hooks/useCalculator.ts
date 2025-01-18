@@ -114,35 +114,24 @@ export const useCalculator = () => {
         n = 12;
     }
 
-    if (!adjustForInflation) {
-      const r = returnRate / (n * 100);
-      return Math.round(
-        totalInvestment * Math.pow(1 + returnRate / 100, timePeriod) -
-          (monthlyWithdrawal *
-            (Math.pow(1 + Math.pow(1 + returnRate / 100, 1 / n) - 1, timePeriod * n) - 1)) /
-            (Math.pow(1 + returnRate / 100, 1 / n) - 1)
-      );
-    }
+    const r = returnRate / (n * 100);
+    const t = timePeriod;
 
-    // With inflation adjustment
-    let currentCapital = totalInvestment;
-    let currentWithdrawal = monthlyWithdrawal;
+    let result = Math.round(
+      totalInvestment * Math.pow(1 + returnRate / 100, t) -
+        (monthlyWithdrawal *
+          (Math.pow(1 + Math.pow(1 + returnRate / 100, 1 / n) - 1, t * n) - 1)) /
+          (Math.pow(1 + returnRate / 100, 1 / n) - 1)
+    );
 
-    for (let year = 0; year < timePeriod; year++) {
-      const yearlyInterest = currentCapital * (returnRate / 100);
-      const yearlyWithdrawal = currentWithdrawal * n;
-      currentCapital = currentCapital + yearlyInterest - yearlyWithdrawal;
-      currentWithdrawal *= (1 + inflationRate / 100);
-    }
-
-    return Math.round(currentCapital);
+    return result;
   };
 
   // Calculate final value
   useEffect(() => {
     const result = calculateSWP();
     setFinalValue(result);
-  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency, adjustForInflation, inflationRate]);
+  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency]);
 
   return {
     totalInvestment,
