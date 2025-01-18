@@ -149,8 +149,6 @@ const ResultCard = ({
   adjustForInflation,
   inflationRate,
 }: ResultCardProps) => {
-const initialFinalValue = finalValue;
-  
   const totalWithdrawal = calculateTotalWithdrawal(
     monthlyWithdrawal,
     withdrawalFrequency,

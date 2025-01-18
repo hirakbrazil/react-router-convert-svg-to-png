@@ -37,8 +37,8 @@ export const useCalculator = () => {
       monthlyWithdrawal: initialWithdrawalAmount || Number(localStorage.getItem("monthlyWithdrawal")) || 5000,
       returnRate: Number(params.get("rr")) || Number(savedReturnRate) || 13,
       timePeriod: Number(params.get("tp")) || Number(savedTimePeriod) || 10,
-      withdrawalFrequency: params.has("mw") || params.has("qw") || params.has("hyw") || params.has("yw")
-        ? initialWithdrawalFrequency
+      withdrawalFrequency: params.has("mw") || params.has("qw") || params.has("hyw") || params.has("yw") 
+        ? initialWithdrawalFrequency 
         : savedWithdrawalFrequency || "Monthly",
       currency: (params.get("cs") as CurrencyType) || savedCurrency || "INR",
       showAdvancedOptions: savedShowAdvancedOptions || false,
@@ -60,6 +60,14 @@ export const useCalculator = () => {
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(initialValues.showAdvancedOptions);
   const [adjustForInflation, setAdjustForInflation] = useState(initialValues.adjustForInflation);
   const [inflationRate, setInflationRate] = useState(initialValues.inflationRate);
+
+  // Clear URL parameters when values change
+  useEffect(() => {
+    const hasUrlParams = window.location.search !== "";
+    if (hasUrlParams) {
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency, currency]);
 
   // Save to localStorage
   useEffect(() => {
@@ -109,31 +117,21 @@ export const useCalculator = () => {
     const r = returnRate / (n * 100);
     const t = timePeriod;
 
-    let value = totalInvestment;
-    let totalWithdrawals = 0;
+    let result = Math.round(
+      totalInvestment * Math.pow(1 + returnRate / 100, t) -
+        (monthlyWithdrawal *
+          (Math.pow(1 + Math.pow(1 + returnRate / 100, 1 / n) - 1, t * n) - 1)) /
+          (Math.pow(1 + returnRate / 100, 1 / n) - 1)
+    );
 
-    for (let year = 0; year < t; year++) {
-      for (let i = 0; i < n; i++) {
-        const inflationFactor = adjustForInflation
-          ? Math.pow(1 + inflationRate / 100, year)
-          : 1;
-        const adjustedWithdrawal = monthlyWithdrawal * inflationFactor;
-
-        value *= 1 + r; // Grow due to return
-        value -= adjustedWithdrawal; // Subtract adjusted withdrawal
-        totalWithdrawals += adjustedWithdrawal;
-      }
-    }
-
-    return { finalValue: Math.round(value), totalWithdrawals: Math.round(totalWithdrawals) };
+    return result;
   };
 
-  // Calculate final value and total withdrawals
+  // Calculate final value
   useEffect(() => {
-    const { finalValue, totalWithdrawals } = calculateSWP();
-    setFinalValue(finalValue);
-    setWithdrawalPercentage((totalWithdrawals / totalInvestment) * 100);
-  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency, adjustForInflation, inflationRate]);
+    const result = calculateSWP();
+    setFinalValue(result);
+  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency]);
 
   return {
     totalInvestment,
