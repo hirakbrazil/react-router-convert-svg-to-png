@@ -99,39 +99,58 @@ export const useCalculator = () => {
   }, [totalInvestment, monthlyWithdrawal]);
 
   const calculateSWP = () => {
-    let n;
-    switch (withdrawalFrequency) {
-      case "Quarterly":
-        n = 4;
-        break;
-      case "Half-yearly":
-        n = 2;
-        break;
-      case "Yearly":
-        n = 1;
-        break;
-      default:
-        n = 12;
+    let currentBalance = totalInvestment;
+    const monthlyRate = returnRate / (12 * 100);
+    const yearlyRate = returnRate / 100;
+    
+    console.log('Starting calculation with:', {
+      totalInvestment,
+      monthlyWithdrawal,
+      returnRate,
+      timePeriod,
+      withdrawalFrequency,
+      adjustForInflation,
+      inflationRate
+    });
+
+    const withdrawalsPerYear = {
+      "Monthly": 12,
+      "Quarterly": 4,
+      "Half-yearly": 2,
+      "Yearly": 1
+    }[withdrawalFrequency];
+
+    for (let year = 0; year < timePeriod; year++) {
+      const inflationFactor = adjustForInflation 
+        ? Math.pow(1 + inflationRate / 100, year)
+        : 1;
+      
+      const adjustedWithdrawal = monthlyWithdrawal * inflationFactor;
+      const yearlyWithdrawal = adjustedWithdrawal * withdrawalsPerYear;
+      
+      // Calculate yearly interest
+      const yearlyInterest = currentBalance * yearlyRate;
+      
+      // Subtract total withdrawals for the year and add interest
+      currentBalance = currentBalance - yearlyWithdrawal + yearlyInterest;
+
+      console.log(`Year ${year + 1}:`, {
+        inflationFactor,
+        adjustedWithdrawal,
+        yearlyWithdrawal,
+        yearlyInterest,
+        currentBalance
+      });
     }
 
-    const r = returnRate / (n * 100);
-    const t = timePeriod;
-
-    let result = Math.round(
-      totalInvestment * Math.pow(1 + returnRate / 100, t) -
-        (monthlyWithdrawal *
-          (Math.pow(1 + Math.pow(1 + returnRate / 100, 1 / n) - 1, t * n) - 1)) /
-          (Math.pow(1 + returnRate / 100, 1 / n) - 1)
-    );
-
-    return result;
+    return Math.round(currentBalance);
   };
 
   // Calculate final value
   useEffect(() => {
     const result = calculateSWP();
     setFinalValue(result);
-  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency]);
+  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency, adjustForInflation, inflationRate]);
 
   return {
     totalInvestment,
