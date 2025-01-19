@@ -76,25 +76,18 @@ const CalculatorForm = ({
   return "0.001"; // Default value for invalid totalInvestment
 };
 
-  // Handles input changes in real-time
   const handlePercentageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^0-9.]/g, '');
-    setWithdrawalPercentage(value);
-  };
-
-  // Validates and formats the input value on blur
-  const handlePercentageBlur = () => {
-    const percentage = parseFloat(withdrawalPercentage);
-    const minWithdrawal = Math.max(50, (0.001 / 100) * totalInvestment);
-
+    const percentage = parseFloat(value);
+    
     if (!isNaN(percentage)) {
       const calculatedWithdrawal = Math.round((percentage / 100) * totalInvestment);
-
+      const minWithdrawal = Math.max(50, (0.001 / 100) * totalInvestment);
+      
+      // Only update if the calculated withdrawal is at least minWithdrawal
       if (calculatedWithdrawal >= minWithdrawal && percentage <= 100) {
         setMonthlyWithdrawal(calculatedWithdrawal);
       }
-    } else {
-      setWithdrawalPercentage("");
     }
   };
 
@@ -136,10 +129,8 @@ const CalculatorForm = ({
             <Input
               type="text"
               inputMode="numeric"
-              pattern="[0-9,]*"
               value={withdrawalPercentage}
               onChange={handlePercentageChange}
-              onBlur={handlePercentageBlur}
               className="w-16 h-8 text-base bg-secondary px-1 py-1 text-center"
               maxLength={6}
             />
