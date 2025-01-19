@@ -128,38 +128,37 @@ export const useCalculator = () => {
       return result;
     } else {
       // Handle inflation-adjusted calculations
-      let n;
-      switch (withdrawalFrequency) {
-        case "Quarterly":
-          n = 4;
-          break;
-        case "Half-yearly":
-          n = 2;
-          break;
-        case "Yearly":
-          n = 1;
-          break;
-        default:
-          n = 12;
-      }
+let n;
+switch (withdrawalFrequency) {
+  case "Quarterly":
+    n = 4;
+    break;
+  case "Half-yearly":
+    n = 2;
+    break;
+  case "Yearly":
+    n = 1;
+    break;
+  default: // Monthly is the default
+    n = 12;
+}
 
-      let currentCapital = totalInvestment;
-      let currentWithdrawal = monthlyWithdrawal;
+let currentCapital = totalInvestment;
+let currentWithdrawal = monthlyWithdrawal * (12 / n); // Adjust withdrawal for the selected frequency
 
-       for (let year = 0; year < timePeriod; year++) {
-    for (let month = 0; month < 12; month++) {
-      // Apply monthly compounding
-      currentCapital = currentCapital * (1 + returnRate / (12 * 100));
-      // Deduct monthly withdrawal
-      currentCapital -= currentWithdrawal;
-      if (currentCapital < 0) return 0; // Prevent negative balance
-    }
-
-    // Adjust withdrawal for next year's inflation
-    currentWithdrawal *= (1 + inflationRate / 100);
+for (let year = 0; year < timePeriod; year++) {
+  for (let period = 0; period < n; period++) {
+    // Apply periodic compounding based on `n`
+    currentCapital = currentCapital * (1 + returnRate / (n * 100));
+    // Deduct withdrawal for the selected frequency
+    currentCapital -= currentWithdrawal;
   }
 
-  return Math.round(currentCapital);
+  // Adjust withdrawal for next year's inflation
+  currentWithdrawal *= (1 + inflationRate / 100);
+}
+
+return Math.round(currentCapital);
     }
   };
 
