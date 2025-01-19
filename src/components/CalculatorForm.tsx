@@ -62,13 +62,22 @@ const CalculatorForm = ({
     return format(futureDate, "MMMM, yyyy");
   };
 
+  const getMinimumPercentage = () => {
+    const minPercentage = (50 / totalInvestment) * 100;
+    return minPercentage.toFixed(3);
+  };
+
   const handlePercentageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^0-9.]/g, '');
     const percentage = parseFloat(value);
     
-    if (!isNaN(percentage) && percentage >= 0.001 && percentage <= 100) {
-      const newWithdrawal = Math.round((percentage / 100) * totalInvestment);
-      setMonthlyWithdrawal(newWithdrawal);
+    if (!isNaN(percentage)) {
+      const calculatedWithdrawal = Math.round((percentage / 100) * totalInvestment);
+      
+      // Only update if the calculated withdrawal is at least 50
+      if (calculatedWithdrawal >= 50 && percentage <= 100) {
+        setMonthlyWithdrawal(calculatedWithdrawal);
+      }
     }
   };
 
@@ -120,7 +129,7 @@ const CalculatorForm = ({
           </div>
           <div className="flex justify-between px-2 mt-1">
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              0.001%
+              {getMinimumPercentage()}%
             </span>
             <span className="text-sm text-gray-500 dark:text-gray-400">
               100%
