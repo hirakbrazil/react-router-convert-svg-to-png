@@ -66,8 +66,12 @@ const CalculatorForm = ({
   };
 
   const getMinimumPercentage = () => {
-    return "0.001";
-  };
+  const minWithdrawal = Math.max(50, (0.001 / 100) * totalInvestment);
+  if (totalInvestment > 0) {
+    return ((minWithdrawal / totalInvestment) * 100).toFixed(3);
+  }
+  return "0.001"; // Default value when totalInvestment is 0 or invalid
+};
 
   const handlePercentageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^0-9.]/g, '');
