@@ -136,6 +136,7 @@ const CalculatorForm = ({
             <Input
               type="text"
               inputMode="numeric"
+              pattern="[0-9,]*"
               value={withdrawalPercentage}
               onChange={handlePercentageChange}
               onBlur={handlePercentageBlur}
