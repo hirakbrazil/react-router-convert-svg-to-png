@@ -129,6 +129,7 @@ const CalculatorForm = ({
             <Input
               type="text"
               inputMode="numeric"
+              pattern="[0-9,]*"
               value={withdrawalPercentage}
               onChange={handlePercentageChange}
               className="w-16 h-8 text-base bg-secondary px-1 py-1 text-center"
