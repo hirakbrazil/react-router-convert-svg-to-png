@@ -3,7 +3,6 @@ import { CurrencyType } from "./CurrencySelector";
 import { WithdrawalFrequency } from "@/types/calculator";
 import InfoTooltip from "./InfoTooltip";
 import DonutChart from "./DonutChart";
-import { format, addMonths, addQuarters, addYears } from "date-fns";
 
 interface ResultCardProps {
   totalInvestment: number;
@@ -12,8 +11,6 @@ interface ResultCardProps {
   currency: CurrencyType;
   withdrawalFrequency: WithdrawalFrequency;
   timePeriod: number;
-  adjustForInflation: boolean;
-  inflationRate: number;
 }
 
 const formatCurrency = (value: number, currency: CurrencyType): string => {
@@ -40,13 +37,7 @@ const formatCurrency = (value: number, currency: CurrencyType): string => {
   return formatter.format(value);
 };
 
-const calculateTotalWithdrawal = (
-  monthlyWithdrawal: number,
-  frequency: WithdrawalFrequency,
-  timePeriod: number,
-  adjustForInflation: boolean,
-  inflationRate: number
-): number => {
+const calculateTotalWithdrawal = (monthlyWithdrawal: number, frequency: WithdrawalFrequency, timePeriod: number): number => {
   const withdrawalsPerYear = {
     "Monthly": 12,
     "Quarterly": 4,
@@ -54,89 +45,7 @@ const calculateTotalWithdrawal = (
     "Yearly": 1
   };
 
-  const n = withdrawalsPerYear[frequency];
-  let total = 0;
-
-  if (adjustForInflation) {
-    for (let year = 0; year < timePeriod; year++) {
-      const inflationFactor = Math.pow(1 + inflationRate / 100, year);
-      const adjustedWithdrawal = monthlyWithdrawal * inflationFactor;
-      total += adjustedWithdrawal * n;
-    }
-  } else {
-    total = monthlyWithdrawal * n * timePeriod;
-  }
-
-  return Math.round(total);
-};
-
-const calculateLastSWP = (
-  monthlyWithdrawal: number,
-  timePeriod: number,
-  inflationRate: number
-): number => {
-  const inflationFactor = Math.pow(1 + inflationRate / 100, timePeriod - 1);
-  return Math.round(monthlyWithdrawal * inflationFactor);
-};
-
-const getFirstWithdrawalDate = (frequency: WithdrawalFrequency): Date => {
-  const currentDate = new Date();
-  
-  switch (frequency) {
-    case "Monthly":
-      return addMonths(currentDate, 1);
-    case "Quarterly":
-      return addQuarters(currentDate, 1);
-    case "Half-yearly":
-      return addMonths(currentDate, 6);
-    case "Yearly":
-      return addYears(currentDate, 1);
-    default:
-      return addMonths(currentDate, 1);
-  }
-};
-
-const getLastWithdrawalDate = (frequency: WithdrawalFrequency, timePeriod: number): Date => {
-  const firstDate = getFirstWithdrawalDate(frequency);
-  const totalIntervals = {
-    "Monthly": 12 * timePeriod - 1,
-    "Quarterly": 4 * timePeriod - 1,
-    "Half-yearly": 2 * timePeriod - 1,
-    "Yearly": timePeriod - 1
-  }[frequency];
-
-  switch (frequency) {
-    case "Monthly":
-      return addMonths(firstDate, totalIntervals);
-    case "Quarterly":
-      return addQuarters(firstDate, totalIntervals);
-    case "Half-yearly":
-      return addMonths(firstDate, totalIntervals * 6);
-    case "Yearly":
-      return addYears(firstDate, totalIntervals);
-    default:
-      return addMonths(firstDate, totalIntervals); // Default to monthly
-  }
-};
-
-const getWithdrawalDate = (frequency: WithdrawalFrequency, timePeriod: number, isFirst: boolean): string => {
-  const date = isFirst ? getFirstWithdrawalDate(frequency) : getLastWithdrawalDate(frequency, timePeriod);
-  return format(date, "MMM yyyy");
-};
-
-const getFrequencyText = (frequency: WithdrawalFrequency): string => {
-  switch (frequency) {
-    case "Monthly":
-      return "Monthly";
-    case "Quarterly":
-      return "Quarterly";
-    case "Half-yearly":
-      return "Half-yearly";
-    case "Yearly":
-      return "Yearly";
-    default:
-      return "Monthly";
-  }
+  return monthlyWithdrawal * withdrawalsPerYear[frequency] * timePeriod;
 };
 
 const ResultCard = ({
@@ -146,30 +55,19 @@ const ResultCard = ({
   currency,
   withdrawalFrequency,
   timePeriod,
-  adjustForInflation,
-  inflationRate,
 }: ResultCardProps) => {
-  const totalWithdrawal = calculateTotalWithdrawal(
-    monthlyWithdrawal,
-    withdrawalFrequency,
-    timePeriod,
-    adjustForInflation,
-    inflationRate
-  );
+  const totalWithdrawal = calculateTotalWithdrawal(monthlyWithdrawal, withdrawalFrequency, timePeriod);
   
-  const lastSWP = adjustForInflation
-    ? calculateLastSWP(monthlyWithdrawal, timePeriod, inflationRate)
-    : monthlyWithdrawal;
-
-  const finalWithdrawalAmount = adjustForInflation
-    ? Math.round(monthlyWithdrawal * Math.pow(1 + inflationRate / 100, timePeriod))
-    : monthlyWithdrawal;
-
+  // Use 0 instead of negative values when calculating total profit
   const finalValueForProfit = finalValue < 0 ? 0 : finalValue;
   const totalProfit = finalValueForProfit + totalWithdrawal - totalInvestment;
   const displayProfit = totalProfit > 0 ? totalProfit : 0;
+
+  // Calculate profit percentage
   const profitPercentage = (totalProfit / totalInvestment) * 100;
   const displayProfitPercentage = profitPercentage > 0 ? profitPercentage : 0;
+
+  // Calculate total value generated (total withdrawal + final value)
   const totalValueGenerated = totalWithdrawal + (finalValue < 0 ? 0 : finalValue);
 
   return (
@@ -180,43 +78,6 @@ const ResultCard = ({
           {formatCurrency(totalInvestment, currency)}
         </span>
       </div>
-
-      {adjustForInflation && (
-        <>
-          <div className="flex justify-between items-center">
-            <div className="flex flex-wrap items-center gap-x-1">
-              <span className="text-gray-600 dark:text-gray-400">First SWP</span>
-              <span className="text-gray-600 dark:text-gray-400">
-                ({getWithdrawalDate(withdrawalFrequency, timePeriod, true)})
-              </span>
-              <InfoTooltip content="The initial withdrawal amount at the start of your investment period." />
-            </div>
-            <span className="text-xl font-semibold text-foreground">
-              {formatCurrency(monthlyWithdrawal, currency)}
-            </span>
-          </div>
-
-          <div className="flex justify-between items-center">
-            <div className="flex flex-wrap items-center gap-x-1">
-              <span className="text-gray-600 dark:text-gray-400">Last SWP</span>
-              <span className="text-gray-600 dark:text-gray-400">
-                ({getWithdrawalDate(withdrawalFrequency, timePeriod, false)})
-              </span>
-              <InfoTooltip content="The final withdrawal amount adjusted for inflation at the end of your investment period." />
-            </div>
-            <div className="flex flex-col items-end">
-              <span className="text-xl font-semibold text-foreground">
-                {formatCurrency(lastSWP, currency)}
-              </span>
-            </div>
-          </div>
-          
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            {getFrequencyText(withdrawalFrequency)} expense after {timePeriod} years is {formatCurrency(finalWithdrawalAmount, currency)}
-          </div>
-        </>
-      )}
-
       <div className="flex justify-between items-center">
         <div className="flex flex-wrap items-center gap-x-1">
           <span className="text-gray-600 dark:text-gray-400">
@@ -231,7 +92,6 @@ const ResultCard = ({
           {formatCurrency(totalWithdrawal, currency)}
         </span>
       </div>
-
       <div className="flex justify-between items-center">
         <div className="flex flex-wrap items-center gap-x-1">
           <span className="text-gray-600 dark:text-gray-400">Final</span>

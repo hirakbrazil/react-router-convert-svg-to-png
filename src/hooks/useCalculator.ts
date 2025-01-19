@@ -10,9 +10,6 @@ export const useCalculator = () => {
     const savedTimePeriod = localStorage.getItem("timePeriod");
     const savedWithdrawalFrequency = localStorage.getItem("withdrawalFrequency") as WithdrawalFrequency;
     const savedCurrency = localStorage.getItem("selectedCurrency") as CurrencyType;
-    const savedShowAdvancedOptions = localStorage.getItem("showAdvancedOptions") === "true";
-    const savedAdjustForInflation = localStorage.getItem("adjustForInflation") === "true";
-    const savedInflationRate = localStorage.getItem("inflationRate");
 
     // Determine withdrawal frequency and amount from URL parameters
     let initialWithdrawalFrequency: WithdrawalFrequency = "Monthly";
@@ -40,10 +37,7 @@ export const useCalculator = () => {
       withdrawalFrequency: params.has("mw") || params.has("qw") || params.has("hyw") || params.has("yw") 
         ? initialWithdrawalFrequency 
         : savedWithdrawalFrequency || "Monthly",
-      currency: (params.get("cs") as CurrencyType) || savedCurrency || "INR",
-      showAdvancedOptions: savedShowAdvancedOptions || false,
-      adjustForInflation: savedAdjustForInflation || false,
-      inflationRate: Number(savedInflationRate) || 6,
+      currency: (params.get("cs") as CurrencyType) || savedCurrency || "INR"
     };
   };
 
@@ -57,9 +51,6 @@ export const useCalculator = () => {
   const [finalValue, setFinalValue] = useState(0);
   const [withdrawalPercentage, setWithdrawalPercentage] = useState(1);
   const [currency, setCurrency] = useState<CurrencyType>(initialValues.currency);
-  const [showAdvancedOptions, setShowAdvancedOptions] = useState(initialValues.showAdvancedOptions);
-  const [adjustForInflation, setAdjustForInflation] = useState(initialValues.adjustForInflation);
-  const [inflationRate, setInflationRate] = useState(initialValues.inflationRate);
 
   // Clear URL parameters when values change
   useEffect(() => {
@@ -77,20 +68,7 @@ export const useCalculator = () => {
     localStorage.setItem("timePeriod", timePeriod.toString());
     localStorage.setItem("withdrawalFrequency", withdrawalFrequency);
     localStorage.setItem("selectedCurrency", currency);
-    localStorage.setItem("showAdvancedOptions", showAdvancedOptions.toString());
-    localStorage.setItem("adjustForInflation", adjustForInflation.toString());
-    localStorage.setItem("inflationRate", inflationRate.toString());
-  }, [
-    totalInvestment,
-    monthlyWithdrawal,
-    returnRate,
-    timePeriod,
-    withdrawalFrequency,
-    currency,
-    showAdvancedOptions,
-    adjustForInflation,
-    inflationRate,
-  ]);
+  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency, currency]);
 
   // Calculate withdrawal percentage
   useEffect(() => {
@@ -99,82 +77,39 @@ export const useCalculator = () => {
   }, [totalInvestment, monthlyWithdrawal]);
 
   const calculateSWP = () => {
-    if (!adjustForInflation) {
-      let n;
-      switch (withdrawalFrequency) {
-        case "Quarterly":
-          n = 4;
-          break;
-        case "Half-yearly":
-          n = 2;
-          break;
-        case "Yearly":
-          n = 1;
-          break;
-        default:
-          n = 12;
-      }
-
-      const r = returnRate / (n * 100);
-      const t = timePeriod;
-
-      let result = Math.round(
-        totalInvestment * Math.pow(1 + returnRate / 100, t) -
-          (monthlyWithdrawal *
-            (Math.pow(1 + Math.pow(1 + returnRate / 100, 1 / n) - 1, t * n) - 1)) /
-            (Math.pow(1 + returnRate / 100, 1 / n) - 1)
-      );
-
-      return result;
-    } else {
-      // Handle inflation-adjusted calculations
-let n;
-switch (withdrawalFrequency) {
-  case "Quarterly":
-    n = 4;
-    break;
-  case "Half-yearly":
-    n = 2;
-    break;
-  case "Yearly":
-    n = 1;
-    break;
-  default: // Monthly is the default
-    n = 12;
-}
-
-let currentCapital = totalInvestment;
-let currentWithdrawal = monthlyWithdrawal * (12 / n); // Adjust withdrawal for the selected frequency
-
-for (let year = 0; year < timePeriod; year++) {
-  for (let period = 0; period < n; period++) {
-    // Apply periodic compounding based on `n`
-    currentCapital = currentCapital * (1 + returnRate / (n * 100));
-    // Deduct withdrawal for the selected frequency
-    currentCapital -= currentWithdrawal;
-  }
-
-  // Adjust withdrawal for next year's inflation
-  currentWithdrawal *= (1 + inflationRate / 100);
-}
-
-return Math.round(currentCapital);
+    let n;
+    switch (withdrawalFrequency) {
+      case "Quarterly":
+        n = 4;
+        break;
+      case "Half-yearly":
+        n = 2;
+        break;
+      case "Yearly":
+        n = 1;
+        break;
+      default:
+        n = 12;
     }
+
+    const r = returnRate / (n * 100);
+    const t = timePeriod;
+
+    let result = Math.round(
+      totalInvestment * Math.pow(1 + returnRate / 100, t) -
+        (monthlyWithdrawal *
+          (Math.pow(1 + Math.pow(1 + returnRate / 100, 1 / n) - 1, t * n) - 1)) /
+          (Math.pow(1 + returnRate / 100, 1 / n) - 1)
+    );
+
+    return result;
   };
 
   // Calculate final value
   useEffect(() => {
     const result = calculateSWP();
     setFinalValue(result);
-  }, [
-    totalInvestment,
-    monthlyWithdrawal,
-    returnRate,
-    timePeriod,
-    withdrawalFrequency,
-    adjustForInflation,
-    inflationRate,
-  ]);
+  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency]);
 
   return {
     totalInvestment,
@@ -191,11 +126,5 @@ return Math.round(currentCapital);
     withdrawalPercentage,
     currency,
     setCurrency,
-    showAdvancedOptions,
-    setShowAdvancedOptions,
-    adjustForInflation,
-    setAdjustForInflation,
-    inflationRate,
-    setInflationRate,
   };
 };
