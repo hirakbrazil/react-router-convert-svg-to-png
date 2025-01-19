@@ -129,10 +129,9 @@ const CalculatorForm = ({
             <Input
               type="text"
               inputMode="numeric"
-              value={withdrawalPercentage}
+              value={`${withdrawalPercentage}%`}
               onChange={handlePercentageChange}
-              className="w-20 h-8 text-base bg-secondary px-2 py-1"
-              suffix="%"
+              className="w-20 h-8 text-base bg-secondary px-1 py-1 text-center"
               maxLength={6}
             />
             <p className="text-base text-muted-foreground dark:text-[#c1cbd6]">
