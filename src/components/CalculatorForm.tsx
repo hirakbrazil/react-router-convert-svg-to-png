@@ -5,6 +5,7 @@ import { WithdrawalFrequency } from "@/types/calculator";
 import WithdrawalFrequencySelector from "./calculator/WithdrawalFrequencySelector";
 import InfoTooltip from "./InfoTooltip";
 import { format, addYears } from "date-fns";
+import { Input } from "@/components/ui/input";
 
 interface CalculatorFormProps {
   totalInvestment: number;
@@ -61,6 +62,16 @@ const CalculatorForm = ({
     return format(futureDate, "MMMM, yyyy");
   };
 
+  const handlePercentageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/[^0-9.]/g, '');
+    const percentage = parseFloat(value);
+    
+    if (!isNaN(percentage) && percentage >= 0.001 && percentage <= 100) {
+      const newWithdrawal = Math.round((percentage / 100) * totalInvestment);
+      setMonthlyWithdrawal(newWithdrawal);
+    }
+  };
+
   return (
     <div className="bg-card dark:bg-card rounded-xl shadow-lg p-6 space-y-6">
       <SliderInput
@@ -95,9 +106,26 @@ const CalculatorForm = ({
             formatValue={true}
             maxLength={12}
           />
-          <p className="text-base text-muted-foreground ml-1 dark:text-[#c1cbd6]">
-            {withdrawalPercentage}% of Total investment
-          </p>
+          <div className="flex items-center gap-2 ml-1">
+            <Input
+              type="text"
+              value={withdrawalPercentage}
+              onChange={handlePercentageChange}
+              className="w-20 h-8 text-sm bg-secondary px-2 py-1"
+              maxLength={6}
+            />
+            <p className="text-base text-muted-foreground dark:text-[#c1cbd6]">
+              % of Total investment
+            </p>
+          </div>
+          <div className="flex justify-between px-2 mt-1">
+            <span className="text-sm text-gray-500 dark:text-gray-400">
+              0.001%
+            </span>
+            <span className="text-sm text-gray-500 dark:text-gray-400">
+              100%
+            </span>
+          </div>
         </div>
       </div>
 
