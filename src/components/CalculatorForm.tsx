@@ -132,10 +132,11 @@ const CalculatorForm = ({
               value={withdrawalPercentage}
               onChange={handlePercentageChange}
               className="w-16 h-8 text-base bg-secondary px-1 py-1 text-center"
+              suffix="%"
               maxLength={6}
             />
             <p className="text-base text-muted-foreground dark:text-[#c1cbd6]">
-              % of Total investment
+              of Total investment
             </p>
           </div>
           <div className="flex justify-between px-2 mt-1">
