@@ -146,10 +146,7 @@ export const useCalculator = () => {
       let currentCapital = totalInvestment;
       let currentWithdrawal = monthlyWithdrawal;
 
-      let currentCapital = totalInvestment;
-  let currentWithdrawal = monthlyWithdrawal;
-
-  for (let year = 0; year < timePeriod; year++) {
+       for (let year = 0; year < timePeriod; year++) {
     for (let month = 0; month < 12; month++) {
       // Apply monthly compounding
       currentCapital = currentCapital * (1 + returnRate / (12 * 100));
