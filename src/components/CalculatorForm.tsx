@@ -37,7 +37,10 @@ const CalculatorForm = ({
   setWithdrawalFrequency,
 }: CalculatorFormProps) => {
   useEffect(() => {
-    if (monthlyWithdrawal > totalInvestment) {
+    const minWithdrawal = Math.max(50, (0.001 / 100) * totalInvestment);
+    if (monthlyWithdrawal < minWithdrawal) {
+      setMonthlyWithdrawal(Math.round(minWithdrawal));
+    } else if (monthlyWithdrawal > totalInvestment) {
       setMonthlyWithdrawal(totalInvestment);
     }
   }, [totalInvestment, monthlyWithdrawal, setMonthlyWithdrawal]);
@@ -63,8 +66,7 @@ const CalculatorForm = ({
   };
 
   const getMinimumPercentage = () => {
-    const minPercentage = (50 / totalInvestment) * 100;
-    return minPercentage.toFixed(3);
+    return "0.001";
   };
 
   const handlePercentageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,9 +75,10 @@ const CalculatorForm = ({
     
     if (!isNaN(percentage)) {
       const calculatedWithdrawal = Math.round((percentage / 100) * totalInvestment);
+      const minWithdrawal = Math.max(50, (0.001 / 100) * totalInvestment);
       
-      // Only update if the calculated withdrawal is at least 50
-      if (calculatedWithdrawal >= 50 && percentage <= 100) {
+      // Only update if the calculated withdrawal is at least minWithdrawal
+      if (calculatedWithdrawal >= minWithdrawal && percentage <= 100) {
         setMonthlyWithdrawal(calculatedWithdrawal);
       }
     }
@@ -108,7 +111,7 @@ const CalculatorForm = ({
             label={getWithdrawalLabel()}
             value={monthlyWithdrawal}
             onChange={setMonthlyWithdrawal}
-            min={50}
+            min={Math.max(50, Math.round((0.001 / 100) * totalInvestment))}
             max={totalInvestment}
             step={50}
             currency={currency}
