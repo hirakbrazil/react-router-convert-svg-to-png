@@ -77,24 +77,19 @@ const CalculatorForm = ({
 };
 
   const handlePercentageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const value = e.target.value;
-
-  // Allow only numbers and at most one decimal point
-  if (/^\d*\.?\d*$/.test(value)) {
-    setWithdrawalPercentage(value); // Update the raw input value
-
-    // Validate and update monthly withdrawal only if the value is a valid number
+    const value = e.target.value.replace(/[^0-9.]/g, '');
     const percentage = parseFloat(value);
+    
     if (!isNaN(percentage)) {
       const calculatedWithdrawal = Math.round((percentage / 100) * totalInvestment);
       const minWithdrawal = Math.max(50, (0.001 / 100) * totalInvestment);
-
+      
+      // Only update if the calculated withdrawal is at least minWithdrawal
       if (calculatedWithdrawal >= minWithdrawal && percentage <= 100) {
         setMonthlyWithdrawal(calculatedWithdrawal);
       }
     }
-  }
-};
+  };
 
   return (
     <div className="bg-card dark:bg-card rounded-xl shadow-lg p-6 space-y-6">
