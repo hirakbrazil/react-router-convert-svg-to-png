@@ -128,6 +128,7 @@ const CalculatorForm = ({
           <div className="flex items-center gap-2 ml-1">
             <Input
               type="text"
+              inputMode="numeric"
               value={withdrawalPercentage}
               onChange={handlePercentageChange}
               className="w-16 h-8 text-base bg-secondary px-1 py-1 text-center"
