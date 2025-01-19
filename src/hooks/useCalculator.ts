@@ -146,26 +146,23 @@ export const useCalculator = () => {
       let currentCapital = totalInvestment;
       let currentWithdrawal = monthlyWithdrawal;
 
-      // Calculate year by year with inflation adjustment
-      for (let year = 0; year < timePeriod; year++) {
-        // Apply returns for the year
-        currentCapital = currentCapital * (1 + returnRate / 100);
+      let currentCapital = totalInvestment;
+  let currentWithdrawal = monthlyWithdrawal;
 
-        // Calculate total withdrawals for this year
-        const yearlyWithdrawal = currentWithdrawal * n;
-        currentCapital -= yearlyWithdrawal;
+  for (let year = 0; year < timePeriod; year++) {
+    for (let month = 0; month < 12; month++) {
+      // Apply monthly compounding
+      currentCapital = currentCapital * (1 + returnRate / (12 * 100));
+      // Deduct monthly withdrawal
+      currentCapital -= currentWithdrawal;
+      if (currentCapital < 0) return 0; // Prevent negative balance
+    }
 
-        // Adjust withdrawal for next year's inflation
-        currentWithdrawal *= (1 + inflationRate / 100);
+    // Adjust withdrawal for next year's inflation
+    currentWithdrawal *= (1 + inflationRate / 100);
+  }
 
-        console.log(`Year ${year + 1}:`, {
-          capital: currentCapital,
-          withdrawal: currentWithdrawal,
-          yearlyWithdrawal,
-        });
-      }
-
-      return Math.round(currentCapital);
+  return Math.round(currentCapital);
     }
   };
 
