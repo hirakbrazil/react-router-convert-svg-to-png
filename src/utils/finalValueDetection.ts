@@ -3,7 +3,6 @@ import { format, addMonths } from "date-fns";
 import { toast } from "@/hooks/use-toast";
 
 let toastTimeout: NodeJS.Timeout | null = null;
-let currentToastId: string | null = null;
 let isToastShown = false;
 
 const calculateMonthlyFinalValue = (
@@ -79,18 +78,6 @@ const getPeriodStep = (withdrawalFrequency: WithdrawalFrequency): number => {
   }
 };
 
-const dismissCurrentToast = () => {
-  if (currentToastId) {
-    toast.dismiss(currentToastId);
-    currentToastId = null;
-  }
-  if (toastTimeout) {
-    clearTimeout(toastTimeout);
-    toastTimeout = null;
-  }
-  isToastShown = false;
-};
-
 export const detectLastPositiveMonth = (
   totalInvestment: number,
   monthlyWithdrawal: number,
@@ -99,13 +86,15 @@ export const detectLastPositiveMonth = (
   withdrawalFrequency: WithdrawalFrequency,
   finalValue: number
 ) => {
-  // If the final value is positive, immediately dismiss any active toast
   if (finalValue >= 0) {
-    dismissCurrentToast();
+    if (toastTimeout) {
+      clearTimeout(toastTimeout);
+      toastTimeout = null;
+    }
+    isToastShown = false;
     return;
   }
 
-  // Cancel any pending toast if values change again
   if (toastTimeout) {
     clearTimeout(toastTimeout);
     toastTimeout = null;
@@ -141,12 +130,11 @@ export const detectLastPositiveMonth = (
       const formattedDate = format(futureDate, "MMMM, yyyy");
       const timeString = getTimeString(lastPositiveMonth, withdrawalFrequency);
 
-      // Store the toast ID when showing the toast
-      currentToastId = toast({
+      toast({
         title: `Final Value ended by ${formattedDate}`,
         description: `After that ${timeString}, you'll stop receiving withdrawals.`,
         duration: 10000,
-      }) as string;
+      });
 
       isToastShown = true;
     }
