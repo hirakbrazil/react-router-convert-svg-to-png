@@ -4,6 +4,7 @@ import { toast } from "@/hooks/use-toast";
 
 let toastTimeout: NodeJS.Timeout | null = null;
 let isToastShown = false;
+let currentToastId: string | null = null;
 
 const calculateMonthlyFinalValue = (
   totalInvestment: number,
@@ -86,18 +87,28 @@ export const detectLastPositiveMonth = (
   withdrawalFrequency: WithdrawalFrequency,
   finalValue: number
 ) => {
+  // If the final value is positive and there's an active toast, dismiss it
   if (finalValue >= 0) {
     if (toastTimeout) {
       clearTimeout(toastTimeout);
       toastTimeout = null;
     }
+    if (currentToastId) {
+      toast.dismiss(currentToastId);
+      currentToastId = null;
+    }
     isToastShown = false;
     return;
   }
 
+  // Cancel any pending toast if values change again
   if (toastTimeout) {
     clearTimeout(toastTimeout);
     toastTimeout = null;
+    if (currentToastId) {
+      toast.dismiss(currentToastId);
+      currentToastId = null;
+    }
     isToastShown = false;
   }
 
@@ -130,12 +141,13 @@ export const detectLastPositiveMonth = (
       const formattedDate = format(futureDate, "MMMM, yyyy");
       const timeString = getTimeString(lastPositiveMonth, withdrawalFrequency);
 
-      toast({
+      const { id } = toast({
         title: `Final Value ended by ${formattedDate}`,
         description: `After that ${timeString}, you'll stop receiving withdrawals.`,
         duration: 10000,
       });
 
+      currentToastId = id;
       isToastShown = true;
     }
   }, 2000);
