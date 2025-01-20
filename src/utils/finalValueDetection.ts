@@ -2,8 +2,8 @@ import { WithdrawalFrequency } from "@/types/calculator";
 import { format, addMonths } from "date-fns";
 import { toast } from "@/hooks/use-toast";
 
-let toastTimeout: NodeJS.Timeout | null = null; // Keep track of the timeout
-let isToastShown = false; // Track if a toast has already been shown
+let toastTimeout: NodeJS.Timeout | null = null; // Track the timeout
+let isToastShown = false; // Track if a toast has been shown
 
 const calculateMonthlyFinalValue = (
   totalInvestment: number,
@@ -39,7 +39,15 @@ export const detectLastPositiveMonth = (
   withdrawalFrequency: WithdrawalFrequency,
   finalValue: number
 ) => {
-  if (finalValue >= 0) return;
+  // If the final value is positive, clear the toast and do nothing
+  if (finalValue >= 0) {
+    if (toastTimeout) {
+      clearTimeout(toastTimeout);
+      toastTimeout = null;
+    }
+    isToastShown = false;
+    return;
+  }
 
   console.log("Starting background check for last positive month...");
 
