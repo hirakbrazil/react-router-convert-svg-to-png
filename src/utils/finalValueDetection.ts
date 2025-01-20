@@ -1,4 +1,5 @@
 import { WithdrawalFrequency } from "@/types/calculator";
+import { format, addMonths } from "date-fns";
 import { toast } from "@/hooks/use-toast";
 
 let toastTimeout: NodeJS.Timeout | null = null; // Track the timeout
@@ -58,6 +59,7 @@ export const detectLastPositiveMonth = (
   // Set a new timeout for the toast
   toastTimeout = setTimeout(() => {
     const totalMonths = timePeriod * 12;
+
     let lastPositiveMonth = 0;
     let lastPositiveValue = 0;
 
@@ -79,48 +81,23 @@ export const detectLastPositiveMonth = (
 
     if (lastPositiveMonth > 0 && !isToastShown) {
       // Calculate the formatted date
-      const futureDate = new Date();
-      futureDate.setMonth(futureDate.getMonth() + lastPositiveMonth);
-      const formattedDate = futureDate.toLocaleString("en-US", { month: "long", year: "numeric" });
+      const futureDate = addMonths(new Date(), lastPositiveMonth);
+      const formattedDate = format(futureDate, "MMMM, yyyy");
 
-      // Calculate years and months based on withdrawal frequency
-      const withdrawalsPerYear = {
-        "Monthly": 12,
-        "Quarterly": 4,
-        "Half-yearly": 2,
-        "Yearly": 1,
-      };
+      // Calculate years and months
+      const years = Math.floor(lastPositiveMonth / 12);
+      const months = lastPositiveMonth % 12;
 
-      const monthsPerPeriod = withdrawalsPerYear[withdrawalFrequency];
-      const periods = lastPositiveMonth / monthsPerPeriod; // Number of full periods
-      const years = Math.floor(periods / 4);
-      const quarters = periods % 4;
-
-      // Create time string based on withdrawal frequency
-      let timeString = "";
-      if (withdrawalFrequency === "Monthly") {
-        const years = Math.floor(lastPositiveMonth / 12);
-        const months = lastPositiveMonth % 12;
-        timeString = `${years > 0 ? `${years} year${years > 1 ? "s" : ""}` : ""}${
-          months > 0 ? ` ${months} month${months > 1 ? "s" : ""}` : ""
-        }`.trim();
-      } else if (withdrawalFrequency === "Quarterly") {
-        timeString = `${years > 0 ? `${years} year${years > 1 ? "s" : ""}` : ""}${
-          quarters > 0 ? ` ${quarters} quarter${quarters > 1 ? "s" : ""}` : ""
-        }`.trim();
-      } else if (withdrawalFrequency === "Half-yearly") {
-        timeString = `${years > 0 ? `${years} year${years > 1 ? "s" : ""}` : ""}${
-          quarters > 0 ? ` ${quarters * 2} half-year${quarters > 1 ? "s" : ""}` : ""
-        }`.trim();
-      } else if (withdrawalFrequency === "Yearly") {
-        timeString = `${years} year${years > 1 ? "s" : ""}`;
-      }
+      // Create the time string
+      const timeString = `${years > 0 ? `${years} year${years > 1 ? "s" : ""}` : ""}${
+        months > 0 ? ` ${months} month${months > 1 ? "s" : ""}` : ""
+      }`.trim();
 
       // Show the toast with formatted date in the title and time string in the description
       toast({
         title: `Final Value ended by ${formattedDate}`,
         description: `After that ${timeString}, you'll stop receiving withdrawals.`,
-        duration: 8000,
+        duration: 9000,
       });
 
       isToastShown = true;
