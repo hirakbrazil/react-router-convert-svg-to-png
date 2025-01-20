@@ -5,39 +5,40 @@ import { toast } from "@/hooks/use-toast";
 let toastTimeout: NodeJS.Timeout | null = null; // Track the timeout
 let isToastShown = false; // Track if a toast has been shown
 
-const calculateMonthlyFinalValue = (
+const calculateFinalValue = (
   totalInvestment: number,
-  monthlyWithdrawal: number,
+  withdrawalAmount: number,
   returnRate: number,
-  monthsPeriod: number,
-  withdrawalFrequency: WithdrawalFrequency
+  periods: number, // total periods based on selected frequency
+  frequency: WithdrawalFrequency
 ): number => {
-  const withdrawalsPerYear = {
+  const periodsPerYear = {
     "Monthly": 12,
     "Quarterly": 4,
     "Half-yearly": 2,
     "Yearly": 1,
   };
 
-  const n = withdrawalsPerYear[withdrawalFrequency];
-  const r = returnRate / (n * 100);
-  const t = monthsPeriod / 12;
+  const n = periodsPerYear[frequency]; // Determine number of withdrawals per year
+  const r = returnRate / (n * 100); // Periodic rate of return (adjusted based on frequency)
+  const t = periods / n; // Time in years for the given number of periods
 
+  // Monthly calculation (or equivalent for other frequencies)
   return Math.round(
     totalInvestment * Math.pow(1 + returnRate / 100, t) -
-      (monthlyWithdrawal *
+      (withdrawalAmount *
         (Math.pow(1 + Math.pow(1 + returnRate / 100, 1 / n) - 1, t * n) - 1)) /
         (Math.pow(1 + returnRate / 100, 1 / n) - 1)
   );
 };
 
-export const detectLastPositiveMonth = (
+export const detectLastPositivePeriod = (
   totalInvestment: number,
-  monthlyWithdrawal: number,
+  withdrawalAmount: number,
   returnRate: number,
-  timePeriod: number,
-  withdrawalFrequency: WithdrawalFrequency,
-  finalValue: number
+  timePeriod: number, // Time period in years
+  frequency: WithdrawalFrequency, // User selected frequency
+  finalValue: number // Current final value
 ) => {
   // If the final value is positive, clear the toast and do nothing
   if (finalValue >= 0) {
@@ -58,40 +59,57 @@ export const detectLastPositiveMonth = (
 
   // Set a new timeout for the toast
   toastTimeout = setTimeout(() => {
-    const totalMonths = timePeriod * 12;
-
-    let lastPositiveMonth = 0;
+    const totalPeriods = timePeriod * 12; // Convert time period in years to months
+    let lastPositivePeriod = 0;
     let lastPositiveValue = 0;
 
-    for (let month = totalMonths - 1; month >= 1; month--) {
-      const value = calculateMonthlyFinalValue(
+    for (let period = totalPeriods - 1; period >= 1; period--) {
+      const value = calculateFinalValue(
         totalInvestment,
-        monthlyWithdrawal,
+        withdrawalAmount,
         returnRate,
-        month,
-        withdrawalFrequency
+        period,
+        frequency
       );
 
       if (value > 0) {
-        lastPositiveMonth = month;
+        lastPositivePeriod = period;
         lastPositiveValue = value;
         break;
       }
     }
 
-    if (lastPositiveMonth > 0 && !isToastShown) {
-      // Calculate the formatted date
-      const futureDate = addMonths(new Date(), lastPositiveMonth);
+    if (lastPositivePeriod > 0 && !isToastShown) {
+      // Calculate years, quarters, half-years, or months based on frequency
+      let timeString = '';
+      const years = Math.floor(lastPositivePeriod / 12);
+      const months = lastPositivePeriod % 12;
+      const quarters = Math.floor(lastPositivePeriod / 3);
+      const halfYears = Math.floor(lastPositivePeriod / 6);
+
+      if (frequency === "Yearly") {
+        // For Yearly, show in years
+        timeString = `${years} year${years > 1 ? "s" : ""}`;
+      } else if (frequency === "Quarterly") {
+        // For Quarterly, show in years and quarters
+        const remainderMonths = lastPositivePeriod % 12;
+        const additionalQuarter = Math.ceil(remainderMonths / 3); 
+        timeString = `${years > 0 ? `${years} year${years > 1 ? "s" : ""} ` : ""}${additionalQuarter} quarter${additionalQuarter > 1 ? "s" : ""}`;
+      } else if (frequency === "Half-yearly") {
+        // For Half-yearly, show in years and half-years
+        const remainderMonths = lastPositivePeriod % 12;
+        const additionalHalfYear = Math.ceil(remainderMonths / 6); 
+        timeString = `${years > 0 ? `${years} year${years > 1 ? "s" : ""} ` : ""}${additionalHalfYear} half-year${additionalHalfYear > 1 ? "s" : ""}`;
+      } else {
+        // For Monthly, show in years and months
+        timeString = `${years > 0 ? `${years} year${years > 1 ? "s" : ""}` : ""}${
+          months > 0 ? ` ${months} month${months > 1 ? "s" : ""}` : ""
+        }`.trim();
+      }
+
+      // Format the future date based on the final period
+      const futureDate = addMonths(new Date(), lastPositivePeriod);
       const formattedDate = format(futureDate, "MMMM, yyyy");
-
-      // Calculate years and months
-      const years = Math.floor(lastPositiveMonth / 12);
-      const months = lastPositiveMonth % 12;
-
-      // Create the time string
-      const timeString = `${years > 0 ? `${years} year${years > 1 ? "s" : ""}` : ""}${
-        months > 0 ? ` ${months} month${months > 1 ? "s" : ""}` : ""
-      }`.trim();
 
       // Show the toast with formatted date in the title and time string in the description
       toast({
