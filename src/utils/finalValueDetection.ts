@@ -1,5 +1,4 @@
 import { WithdrawalFrequency } from "@/types/calculator";
-import { format, addMonths } from "date-fns";
 import { toast } from "@/hooks/use-toast";
 
 let toastTimeout: NodeJS.Timeout | null = null; // Track the timeout
@@ -80,12 +79,18 @@ export const detectLastPositiveMonth = (
     }
 
     if (lastPositiveMonth > 0 && !isToastShown) {
-      const futureDate = addMonths(new Date(), lastPositiveMonth);
-      const formattedDate = format(futureDate, "MMMM, yyyy");
+      // Calculate years and months
+      const years = Math.floor(lastPositiveMonth / 12);
+      const months = lastPositiveMonth % 12;
+
+      // Create the time string
+      const timeString = `${years > 0 ? `${years} year${years > 1 ? "s" : ""}` : ""}${
+        months > 0 ? ` ${months} month${months > 1 ? "s" : ""}` : ""
+      }`.trim();
 
       toast({
-        title: `Final Value ended by ${formattedDate}`,
-        description: "After that time, you'll stop receiving withdrawals.",
+        title: `Final Value ended by ${timeString}`,
+        description: `After that ${timeString}, you'll stop receiving withdrawals.`,
         duration: 8000,
       });
 
