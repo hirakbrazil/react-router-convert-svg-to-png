@@ -20,18 +20,7 @@ const calculateMonthlyFinalValue = (
 
   const n = withdrawalsPerYear[withdrawalFrequency];
   const r = returnRate / (n * 100);
-
-  // Adjust `t` based on withdrawal frequency
-  let t: number;
-  if (withdrawalFrequency === "Monthly") {
-    t = monthsPeriod / 12; // Time in years for Monthly
-  } else if (withdrawalFrequency === "Quarterly") {
-    t = monthsPeriod / 3; // Time in quarters for Quarterly
-  } else if (withdrawalFrequency === "Half-yearly") {
-    t = monthsPeriod / 6; // Time in half-years for Half-Yearly
-  } else if (withdrawalFrequency === "Yearly") {
-    t = monthsPeriod / 12; // Time in years for Yearly
-  }
+  const t = monthsPeriod / 12;
 
   return Math.round(
     totalInvestment * Math.pow(1 + returnRate / 100, t) -
@@ -94,7 +83,7 @@ export const detectLastPositiveMonth = (
       futureDate.setMonth(futureDate.getMonth() + lastPositiveMonth);
       const formattedDate = futureDate.toLocaleString("en-US", { month: "long", year: "numeric" });
 
-      // Calculate years, quarters, or half-years based on withdrawal frequency
+      // Calculate years and months based on withdrawal frequency
       const withdrawalsPerYear = {
         "Monthly": 12,
         "Quarterly": 4,
@@ -131,7 +120,7 @@ export const detectLastPositiveMonth = (
       toast({
         title: `Final Value ended by ${formattedDate}`,
         description: `After that ${timeString}, you'll stop receiving withdrawals.`,
-        duration: 9000,
+        duration: 8000,
       });
 
       isToastShown = true;
