@@ -12,6 +12,8 @@ import AdSenseHorizontal from "@/components/AdSenseHorizontal";
 import AdSenseResponsive from "@/components/AdSenseResponsive";
 import DesktopSidebar from "@/components/DesktopSidebar";
 import HomepageContent from "@/components/HomepageContent";
+import { detectLastPositiveMonth } from "@/utils/finalValueDetection";
+import { useEffect } from "react";
 
 const Index = () => {
   useTheme();
@@ -32,6 +34,18 @@ const Index = () => {
     currency,
     setCurrency,
   } = useCalculator();
+
+  // Add effect to detect last positive month
+  useEffect(() => {
+    detectLastPositiveMonth(
+      totalInvestment,
+      monthlyWithdrawal,
+      returnRate,
+      timePeriod,
+      withdrawalFrequency,
+      finalValue
+    );
+  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency, finalValue]);
 
   const handleReset = () => {
     setTotalInvestment(500000);
