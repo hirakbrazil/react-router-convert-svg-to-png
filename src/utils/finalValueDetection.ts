@@ -2,8 +2,8 @@ import { WithdrawalFrequency } from "@/types/calculator";
 import { format, addMonths } from "date-fns";
 import { toast } from "@/hooks/use-toast";
 
-let toastTimeout: NodeJS.Timeout | null = null; // Track the timeout
-let isToastShown = false; // Track if a toast has been shown
+let toastTimeout: NodeJS.Timeout | null = null;
+let isToastShown = false;
 
 const calculateMonthlyFinalValue = (
   totalInvestment: number,
@@ -31,6 +31,53 @@ const calculateMonthlyFinalValue = (
   );
 };
 
+const getTimeString = (
+  totalPeriod: number,
+  withdrawalFrequency: WithdrawalFrequency
+): string => {
+  switch (withdrawalFrequency) {
+    case "Quarterly": {
+      const years = Math.floor(totalPeriod / 12);
+      const quarters = Math.floor((totalPeriod % 12) / 3);
+      return `${years > 0 ? `${years} year${years > 1 ? "s" : ""}` : ""}${
+        quarters > 0 ? ` ${quarters} quarter${quarters > 1 ? "s" : ""}` : ""
+      }`.trim();
+    }
+    case "Half-yearly": {
+      const years = Math.floor(totalPeriod / 12);
+      const halfYears = Math.floor((totalPeriod % 12) / 6);
+      return `${years > 0 ? `${years} year${years > 1 ? "s" : ""}` : ""}${
+        halfYears > 0 ? ` ${halfYears} half-year${halfYears > 1 ? "s" : ""}` : ""
+      }`.trim();
+    }
+    case "Yearly": {
+      const years = Math.floor(totalPeriod / 12);
+      return `${years} year${years > 1 ? "s" : ""}`;
+    }
+    default: {
+      // Monthly
+      const years = Math.floor(totalPeriod / 12);
+      const months = totalPeriod % 12;
+      return `${years > 0 ? `${years} year${years > 1 ? "s" : ""}` : ""}${
+        months > 0 ? ` ${months} month${months > 1 ? "s" : ""}` : ""
+      }`.trim();
+    }
+  }
+};
+
+const getPeriodStep = (withdrawalFrequency: WithdrawalFrequency): number => {
+  switch (withdrawalFrequency) {
+    case "Quarterly":
+      return 3;
+    case "Half-yearly":
+      return 6;
+    case "Yearly":
+      return 12;
+    default:
+      return 1;
+  }
+};
+
 export const detectLastPositiveMonth = (
   totalInvestment: number,
   monthlyWithdrawal: number,
@@ -39,7 +86,6 @@ export const detectLastPositiveMonth = (
   withdrawalFrequency: WithdrawalFrequency,
   finalValue: number
 ) => {
-  // If the final value is positive, clear the toast and do nothing
   if (finalValue >= 0) {
     if (toastTimeout) {
       clearTimeout(toastTimeout);
@@ -49,21 +95,21 @@ export const detectLastPositiveMonth = (
     return;
   }
 
-  // Cancel any pending toast if values change again
   if (toastTimeout) {
     clearTimeout(toastTimeout);
     toastTimeout = null;
     isToastShown = false;
   }
 
-  // Set a new timeout for the toast
   toastTimeout = setTimeout(() => {
     const totalMonths = timePeriod * 12;
+    const periodStep = getPeriodStep(withdrawalFrequency);
 
     let lastPositiveMonth = 0;
     let lastPositiveValue = 0;
 
-    for (let month = totalMonths - 1; month >= 1; month--) {
+    // Start from the last period and step backwards according to the withdrawal frequency
+    for (let month = totalMonths - periodStep; month >= 1; month -= periodStep) {
       const value = calculateMonthlyFinalValue(
         totalInvestment,
         monthlyWithdrawal,
@@ -80,20 +126,10 @@ export const detectLastPositiveMonth = (
     }
 
     if (lastPositiveMonth > 0 && !isToastShown) {
-      // Calculate the formatted date
       const futureDate = addMonths(new Date(), lastPositiveMonth);
       const formattedDate = format(futureDate, "MMMM, yyyy");
+      const timeString = getTimeString(lastPositiveMonth, withdrawalFrequency);
 
-      // Calculate years and months
-      const years = Math.floor(lastPositiveMonth / 12);
-      const months = lastPositiveMonth % 12;
-
-      // Create the time string
-      const timeString = `${years > 0 ? `${years} year${years > 1 ? "s" : ""}` : ""}${
-        months > 0 ? ` ${months} month${months > 1 ? "s" : ""}` : ""
-      }`.trim();
-
-      // Show the toast with formatted date in the title and time string in the description
       toast({
         title: `Final Value ended by ${formattedDate}`,
         description: `After that ${timeString}, you'll stop receiving withdrawals.`,
