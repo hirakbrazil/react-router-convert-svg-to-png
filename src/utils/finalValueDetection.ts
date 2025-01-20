@@ -49,8 +49,6 @@ export const detectLastPositiveMonth = (
     return;
   }
 
-  console.log("Starting background check for last positive month...");
-
   // Cancel any pending toast if values change again
   if (toastTimeout) {
     clearTimeout(toastTimeout);
@@ -74,8 +72,6 @@ export const detectLastPositiveMonth = (
         withdrawalFrequency
       );
 
-      console.log(`Checking month ${month}, value: ${value}`);
-
       if (value > 0) {
         lastPositiveMonth = month;
         lastPositiveValue = value;
@@ -86,8 +82,6 @@ export const detectLastPositiveMonth = (
     if (lastPositiveMonth > 0 && !isToastShown) {
       const futureDate = addMonths(new Date(), lastPositiveMonth);
       const formattedDate = format(futureDate, "MMM yyyy");
-
-      console.log(`Found last positive month: ${formattedDate}, value: ${lastPositiveValue}`);
 
       toast({
         title: `Final Value ended by ${formattedDate}`,
