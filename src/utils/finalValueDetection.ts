@@ -59,7 +59,19 @@ export const detectLastPositivePeriod = (
 
   // Set a new timeout for the toast
   toastTimeout = setTimeout(() => {
-    const totalPeriods = timePeriod * 12; // Convert time period in years to months
+    // Adjust total periods based on frequency
+    let totalPeriods: number;
+
+    if (frequency === "Monthly") {
+      totalPeriods = timePeriod * 12; // Convert time period in years to months
+    } else if (frequency === "Quarterly") {
+      totalPeriods = timePeriod * 4; // Convert time period in years to quarters
+    } else if (frequency === "Half-yearly") {
+      totalPeriods = timePeriod * 2; // Convert time period in years to half-years
+    } else {
+      totalPeriods = timePeriod; // For Yearly, total periods are the same as years
+    }
+
     let lastPositivePeriod = 0;
     let lastPositiveValue = 0;
 
