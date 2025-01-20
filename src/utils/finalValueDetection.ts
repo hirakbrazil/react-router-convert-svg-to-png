@@ -133,7 +133,7 @@ export const detectLastPositiveMonth = (
       toast({
         title: `Final Value ended by ${formattedDate}`,
         description: `After that ${timeString}, you'll stop receiving withdrawals.`,
-        duration: 9000,
+        duration: 10000,
       });
 
       isToastShown = true;
