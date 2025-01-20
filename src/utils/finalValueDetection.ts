@@ -81,7 +81,7 @@ export const detectLastPositiveMonth = (
 
     if (lastPositiveMonth > 0 && !isToastShown) {
       const futureDate = addMonths(new Date(), lastPositiveMonth);
-      const formattedDate = format(futureDate, "MMM yyyy");
+      const formattedDate = format(futureDate, "MMMM, yyyy");
 
       toast({
         title: `Final Value ended by ${formattedDate}`,
