@@ -43,9 +43,24 @@ export const detectLastPositiveMonth = (
 
   // Add 2-second delay
   setTimeout(() => {
+    // Recalculate final value to verify if it is still negative
+    const currentFinalValue = calculateMonthlyFinalValue(
+      totalInvestment,
+      monthlyWithdrawal,
+      returnRate,
+      timePeriod * 12,
+      withdrawalFrequency
+    );
+
+    // If the value is now positive, cancel further execution
+    if (currentFinalValue >= 0) {
+      console.log("Final Value is now positive. Cancelling toast execution.");
+      return;
+    }
+
     // Convert time period to months
     const totalMonths = timePeriod * 12;
-    
+
     let lastPositiveMonth = 0;
     let lastPositiveValue = 0;
 
