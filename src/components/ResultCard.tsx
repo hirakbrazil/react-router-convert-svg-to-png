@@ -1,7 +1,10 @@
-import React from "react";
-import { CurrencyType } from "./CurrencySelector";
+import { useEffect, useRef } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { formatNumberByCurrency } from "@/components/slider/utils";
+import { CurrencyType } from "@/components/CurrencySelector";
 import { WithdrawalFrequency } from "@/types/calculator";
-import InfoTooltip from "./InfoTooltip";
+import { findLastPositiveMonth } from "@/utils/finalValueCalculator";
+import { useToast } from "@/hooks/use-toast";
 import DonutChart from "./DonutChart";
 
 interface ResultCardProps {
@@ -13,41 +16,6 @@ interface ResultCardProps {
   timePeriod: number;
 }
 
-const formatCurrency = (value: number, currency: CurrencyType): string => {
-  const currencyFormats: { [key in CurrencyType]: { locale: string, currency: string } } = {
-    INR: { locale: "en-IN", currency: "INR" },
-    USD: { locale: "en-US", currency: "USD" },
-    EUR: { locale: "de-DE", currency: "EUR" },
-    JPY: { locale: "ja-JP", currency: "JPY" },
-    GBP: { locale: "en-GB", currency: "GBP" },
-    CNY: { locale: "zh-CN", currency: "CNY" },
-    AUD: { locale: "en-AU", currency: "AUD" },
-    CAD: { locale: "en-CA", currency: "CAD" },
-    CHF: { locale: "de-CH", currency: "CHF" },
-    HKD: { locale: "zh-HK", currency: "HKD" },
-    SGD: { locale: "en-SG", currency: "SGD" }
-  };
-
-  const format = currencyFormats[currency];
-  const formatter = new Intl.NumberFormat(format.locale, {
-    style: "currency",
-    currency: format.currency,
-    maximumFractionDigits: 0,
-  });
-  return formatter.format(value);
-};
-
-const calculateTotalWithdrawal = (monthlyWithdrawal: number, frequency: WithdrawalFrequency, timePeriod: number): number => {
-  const withdrawalsPerYear = {
-    "Monthly": 12,
-    "Quarterly": 4,
-    "Half-yearly": 2,
-    "Yearly": 1
-  };
-
-  return monthlyWithdrawal * withdrawalsPerYear[frequency] * timePeriod;
-};
-
 const ResultCard = ({
   totalInvestment,
   monthlyWithdrawal,
@@ -56,85 +24,71 @@ const ResultCard = ({
   withdrawalFrequency,
   timePeriod,
 }: ResultCardProps) => {
-  const totalWithdrawal = calculateTotalWithdrawal(monthlyWithdrawal, withdrawalFrequency, timePeriod);
-  
-  // Use 0 instead of negative values when calculating total profit
-  const finalValueForProfit = finalValue < 0 ? 0 : finalValue;
-  const totalProfit = finalValueForProfit + totalWithdrawal - totalInvestment;
-  const displayProfit = totalProfit > 0 ? totalProfit : 0;
+  const { toast } = useToast();
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Calculate profit percentage
-  const profitPercentage = (totalProfit / totalInvestment) * 100;
-  const displayProfitPercentage = profitPercentage > 0 ? profitPercentage : 0;
+  useEffect(() => {
+    // Clear any existing timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
 
-  // Calculate total value generated (total withdrawal + final value)
-  const totalValueGenerated = totalWithdrawal + (finalValue < 0 ? 0 : finalValue);
+    // Only proceed if finalValue is negative
+    if (finalValue < 0) {
+      console.log("Final value is negative, setting up check timeout");
+      
+      // Set new timeout for 2 seconds
+      timeoutRef.current = setTimeout(() => {
+        console.log("Starting background calculation after delay");
+        
+        const result = findLastPositiveMonth(
+          totalInvestment,
+          monthlyWithdrawal,
+          13, // Using default return rate
+          timePeriod,
+          withdrawalFrequency
+        );
+
+        if (result) {
+          console.log(`Showing toast for last positive month: ${result.month}`);
+          
+          toast({
+            title: `Final Value ended by ${result.month}`,
+            description: "After that time, you'll stop receiving withdrawals.",
+            duration: 8000,
+          });
+        }
+      }, 2000);
+    }
+
+    // Cleanup timeout on unmount or when dependencies change
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [finalValue, totalInvestment, monthlyWithdrawal, timePeriod, withdrawalFrequency, toast]);
 
   return (
-    <div className="bg-card dark:bg-card rounded-xl shadow-lg p-6 space-y-4">
-      <div className="flex justify-between items-center">
-        <span className="text-gray-600 dark:text-gray-400">Total Investment</span>
-        <span className="text-xl font-semibold text-foreground">
-          {formatCurrency(totalInvestment, currency)}
-        </span>
-      </div>
-      <div className="flex justify-between items-center">
-        <div className="flex flex-wrap items-center gap-x-1">
-          <span className="text-gray-600 dark:text-gray-400">
-            Total
-          </span>
-          <span className="text-gray-600 dark:text-gray-400">
-            Withdrawal
-          </span>
-          <InfoTooltip content="The total amount you will withdraw over the entire investment period. This is calculated based on your periodic withdrawal amount and frequency." />
+    <Card>
+      <CardHeader>
+        <CardTitle>Results</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <DonutChart
+          totalInvestment={totalInvestment}
+          monthlyWithdrawal={monthlyWithdrawal}
+          finalValue={finalValue}
+          currency={currency}
+          withdrawalFrequency={withdrawalFrequency}
+        />
+        <div>
+          <p>Total Investment: {formatNumberByCurrency(totalInvestment, currency)}</p>
+          <p>Monthly Withdrawal: {formatNumberByCurrency(monthlyWithdrawal, currency)}</p>
+          <p>Final Value: {formatNumberByCurrency(finalValue, currency)}</p>
         </div>
-        <span className="text-xl font-semibold text-foreground">
-          {formatCurrency(totalWithdrawal, currency)}
-        </span>
-      </div>
-      <div className="flex justify-between items-center">
-        <div className="flex flex-wrap items-center gap-x-1">
-          <span className="text-gray-600 dark:text-gray-400">Final</span>
-          <span className="text-gray-600 dark:text-gray-400">Value</span>
-          <InfoTooltip content="The remaining balance in your investment after all periodic withdrawals and accounting for returns. This is what you'll have left in your portfolio at the end of the investment period." />
-        </div>
-        <span className={`text-xl font-semibold ${finalValue < 0 ? 'text-red-500 dark:text-red-400' : 'text-foreground'}`}>
-          {formatCurrency(finalValue, currency)}
-        </span>
-      </div>
-      <div className="flex justify-between items-center">
-        <div className="flex flex-wrap items-center gap-x-1">
-          <span className="text-gray-600 dark:text-gray-400">Total</span>
-          <span className="text-gray-600 dark:text-gray-400">Value</span>
-          <InfoTooltip content="The total wealth generated by your investment, combining both what you withdrew and what remains. This represents the sum of all withdrawals plus the final portfolio value." />
-        </div>
-        <span className="text-xl font-semibold text-foreground">
-          {formatCurrency(totalValueGenerated, currency)}
-        </span>
-      </div>
-      <div className="flex justify-between items-center">
-        <div className="flex flex-wrap items-center gap-x-1">
-          <span className="text-gray-600 dark:text-gray-400">Total</span>
-          <span className="text-gray-600 dark:text-gray-400">Profit</span>
-          <InfoTooltip content="The estimated returns on your investment, shown both as an absolute value and as a percentage of your total investment. This includes both the withdrawn amount and the final value, minus your total investment." />
-        </div>
-        <div className="flex flex-col items-end">
-          <span className={`text-xl font-semibold ${totalProfit > 0 ? 'text-green-500 dark:text-green-400' : 'text-foreground'}`}>
-            {formatCurrency(displayProfit, currency)}
-          </span>
-          <span className={`text-base font-medium ${totalProfit > 0 ? 'text-green-500 dark:text-green-400' : 'text-foreground'}`}>
-            ({displayProfitPercentage.toFixed(2)}%)
-          </span>
-        </div>
-      </div>
-
-      <DonutChart
-        totalInvestment={totalInvestment}
-        totalWithdrawal={totalWithdrawal}
-        currency={currency}
-        formatCurrency={formatCurrency}
-      />
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 
