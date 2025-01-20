@@ -11,6 +11,7 @@ import CalculatorHeader from "@/components/calculator/CalculatorHeader";
 import AdSenseHorizontal from "@/components/AdSenseHorizontal";
 import AdSenseResponsive from "@/components/AdSenseResponsive";
 import DesktopSidebar from "@/components/DesktopSidebar";
+import HomepageContent from "@/components/HomepageContent";
 
 const Index = () => {
   useTheme();
@@ -107,6 +108,7 @@ const Index = () => {
               setWithdrawalFrequency(values.withdrawalFrequency);
             }}
           />
+          <HomepageContent />
           <Footer />
         </div>
         <DesktopSidebar />
