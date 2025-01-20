@@ -2,6 +2,9 @@ import { WithdrawalFrequency } from "@/types/calculator";
 import { format, addMonths } from "date-fns";
 import { toast } from "@/hooks/use-toast";
 
+let toastTimeout: NodeJS.Timeout | null = null; // Keep track of the timeout
+let isToastShown = false; // Track if a toast has already been shown
+
 const calculateMonthlyFinalValue = (
   totalInvestment: number,
   monthlyWithdrawal: number,
@@ -13,7 +16,7 @@ const calculateMonthlyFinalValue = (
     "Monthly": 12,
     "Quarterly": 4,
     "Half-yearly": 2,
-    "Yearly": 1
+    "Yearly": 1,
   };
 
   const n = withdrawalsPerYear[withdrawalFrequency];
@@ -36,20 +39,24 @@ export const detectLastPositiveMonth = (
   withdrawalFrequency: WithdrawalFrequency,
   finalValue: number
 ) => {
-  // Only proceed if final value is negative
   if (finalValue >= 0) return;
 
   console.log("Starting background check for last positive month...");
 
-  // Add 2-second delay
-  setTimeout(() => {
-    // Convert time period to months
+  // Cancel any pending toast if values change again
+  if (toastTimeout) {
+    clearTimeout(toastTimeout);
+    toastTimeout = null;
+    isToastShown = false;
+  }
+
+  // Set a new timeout for the toast
+  toastTimeout = setTimeout(() => {
     const totalMonths = timePeriod * 12;
-    
+
     let lastPositiveMonth = 0;
     let lastPositiveValue = 0;
 
-    // Start from total months and decrease until we find a positive value
     for (let month = totalMonths - 1; month >= 1; month--) {
       const value = calculateMonthlyFinalValue(
         totalInvestment,
@@ -68,8 +75,7 @@ export const detectLastPositiveMonth = (
       }
     }
 
-    if (lastPositiveMonth > 0) {
-      // Calculate the date when value becomes negative
+    if (lastPositiveMonth > 0 && !isToastShown) {
       const futureDate = addMonths(new Date(), lastPositiveMonth);
       const formattedDate = format(futureDate, "MMM yyyy");
 
@@ -80,6 +86,8 @@ export const detectLastPositiveMonth = (
         description: "After that time, you'll stop receiving withdrawals.",
         duration: 8000,
       });
+
+      isToastShown = true;
     }
   }, 2000);
 };
