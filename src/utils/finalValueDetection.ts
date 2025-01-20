@@ -36,13 +36,13 @@ export const detectLastPositiveMonth = (
   withdrawalFrequency: WithdrawalFrequency,
   finalValue: number
 ) => {
-  // Only proceed if final value is negative
+  // Add 2-second delay
+  setTimeout(() => {
+    // Only proceed if final value is negative
   if (finalValue >= 0) return;
 
   console.log("Starting background check for last positive month...");
-
-  // Add 2-second delay
-  setTimeout(() => {
+    
     // Convert time period to months
     const totalMonths = timePeriod * 12;
     
