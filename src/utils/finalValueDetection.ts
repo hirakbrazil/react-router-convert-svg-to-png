@@ -10,10 +10,10 @@ const calculateMonthlyFinalValue = (
   withdrawalFrequency: WithdrawalFrequency
 ): number => {
   const withdrawalsPerYear = {
-    "Monthly": 12,
-    "Quarterly": 4,
+    Monthly: 12,
+    Quarterly: 4,
     "Half-yearly": 2,
-    "Yearly": 1
+    Yearly: 1,
   };
 
   const n = withdrawalsPerYear[withdrawalFrequency];
@@ -36,20 +36,35 @@ export const detectLastPositiveMonth = (
   withdrawalFrequency: WithdrawalFrequency,
   finalValue: number
 ) => {
-  // Only proceed if final value is negative
+  // Only proceed if the initial final value is negative
   if (finalValue >= 0) return;
 
   console.log("Starting background check for last positive month...");
 
   // Add 2-second delay
   setTimeout(() => {
+    console.log("Re-verifying final value before proceeding...");
+
+    // Recalculate the current final value after the delay
+    const currentFinalValue = calculateMonthlyFinalValue(
+      totalInvestment,
+      monthlyWithdrawal,
+      returnRate,
+      timePeriod * 12,
+      withdrawalFrequency
+    );
+
+    if (currentFinalValue >= 0) {
+      console.log("Current final value is now positive. Canceling toast execution.");
+      return; // Do not proceed if the value is now positive
+    }
+
     // Convert time period to months
     const totalMonths = timePeriod * 12;
-    
     let lastPositiveMonth = 0;
     let lastPositiveValue = 0;
 
-    // Start from total months and decrease until we find a positive value
+    // Find the last positive month
     for (let month = totalMonths - 1; month >= 1; month--) {
       const value = calculateMonthlyFinalValue(
         totalInvestment,
