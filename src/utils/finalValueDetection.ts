@@ -1,9 +1,10 @@
 import { WithdrawalFrequency } from "@/types/calculator";
 import { format, addMonths } from "date-fns";
-import { toast } from "@/hooks/use-toast";
+import { toast, useToast } from "@/hooks/use-toast";
 
 let toastTimeout: NodeJS.Timeout | null = null;
 let isToastShown = false;
+let activeToastId: string | null = null; // Store the current toast ID
 
 const calculateMonthlyFinalValue = (
   totalInvestment: number,
@@ -55,7 +56,6 @@ const getTimeString = (
       return `${years} year${years > 1 ? "s" : ""}`;
     }
     default: {
-      // Monthly
       const years = Math.floor(totalPeriod / 12);
       const months = totalPeriod % 12;
       return `${years > 0 ? `${years} year${years > 1 ? "s" : ""}` : ""}${
@@ -86,21 +86,30 @@ export const detectLastPositiveMonth = (
   withdrawalFrequency: WithdrawalFrequency,
   finalValue: number
 ) => {
+  const { dismiss } = useToast(); // Use dismiss to manage toast notifications
+
+  // Dismiss the toast if finalValue becomes positive
   if (finalValue >= 0) {
     if (toastTimeout) {
       clearTimeout(toastTimeout);
       toastTimeout = null;
     }
+    if (activeToastId) {
+      dismiss(activeToastId); // Dismiss the active toast
+      activeToastId = null;
+    }
     isToastShown = false;
     return;
   }
 
+  // Reset any existing timeout
   if (toastTimeout) {
     clearTimeout(toastTimeout);
     toastTimeout = null;
     isToastShown = false;
   }
 
+  // Delay showing the toast by 2 seconds
   toastTimeout = setTimeout(() => {
     const totalMonths = timePeriod * 12;
     const periodStep = getPeriodStep(withdrawalFrequency);
@@ -108,7 +117,7 @@ export const detectLastPositiveMonth = (
     let lastPositiveMonth = 0;
     let lastPositiveValue = 0;
 
-    // Start from the last period and step backwards according to the withdrawal frequency
+    // Calculate the last positive month
     for (let month = totalMonths - periodStep; month >= 1; month -= periodStep) {
       const value = calculateMonthlyFinalValue(
         totalInvestment,
@@ -125,17 +134,19 @@ export const detectLastPositiveMonth = (
       }
     }
 
+    // Show the toast if a positive month is found and no toast is shown
     if (lastPositiveMonth > 0 && !isToastShown) {
       const futureDate = addMonths(new Date(), lastPositiveMonth);
       const formattedDate = format(futureDate, "MMMM, yyyy");
       const timeString = getTimeString(lastPositiveMonth, withdrawalFrequency);
 
-      toast({
+      const { id } = toast({
         title: `Final Value ended by ${formattedDate}`,
         description: `After that ${timeString}, you'll stop receiving withdrawals.`,
         duration: 10000,
       });
 
+      activeToastId = id; // Store the toast ID
       isToastShown = true;
     }
   }, 2000);
