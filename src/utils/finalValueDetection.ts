@@ -1,7 +1,6 @@
 import { WithdrawalFrequency } from "@/types/calculator";
 import { format, addMonths } from "date-fns";
 import { toast } from "@/hooks/use-toast";
-import { type Toast } from "@/components/ui/use-toast";
 
 let toastTimeout: NodeJS.Timeout | null = null;
 let isToastShown = false;
