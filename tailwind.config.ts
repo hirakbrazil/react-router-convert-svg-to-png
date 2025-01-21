@@ -32,6 +32,7 @@ export default {
           DEFAULT: "#F0FDF9",
           foreground: "#0F172A",
         },
+        customInput: "#e6f5ef",
       },
       fontFamily: {
         sans: ["Inter", "sans-serif"],
