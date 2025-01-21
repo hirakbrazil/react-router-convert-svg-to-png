@@ -1,6 +1,7 @@
 import { WithdrawalFrequency } from "@/types/calculator";
 import { format, addMonths } from "date-fns";
 import { toast } from "@/hooks/use-toast";
+import { type Toast } from "@/components/ui/use-toast";
 
 let toastTimeout: NodeJS.Timeout | null = null;
 let isToastShown = false;
@@ -66,6 +67,19 @@ const getTimeString = (
   }
 };
 
+const getPeriodStep = (withdrawalFrequency: WithdrawalFrequency): number => {
+  switch (withdrawalFrequency) {
+    case "Quarterly":
+      return 3;
+    case "Half-yearly":
+      return 6;
+    case "Yearly":
+      return 12;
+    default:
+      return 1;
+  }
+};
+
 const shouldSkipToastDismissal = (
   totalInvestment: number,
   monthlyWithdrawal: number,
@@ -94,7 +108,8 @@ const dismissActiveToast = (
       title: "",
       description: "",
       duration: 0,
-      className: "hidden"
+      className: "hidden",
+      id: activeToastId,
     });
     activeToastId = null;
   }
@@ -158,20 +173,8 @@ export const detectLastPositiveMonth = (
         duration: 10000,
       });
       
+      activeToastId = newToast.id;
       isToastShown = true;
     }
   }, 2000);
-};
-
-const getPeriodStep = (withdrawalFrequency: WithdrawalFrequency): number => {
-  switch (withdrawalFrequency) {
-    case "Quarterly":
-      return 3;
-    case "Half-yearly":
-      return 6;
-    case "Yearly":
-      return 12;
-    default:
-      return 1;
-  }
 };
