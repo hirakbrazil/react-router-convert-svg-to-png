@@ -10,7 +10,8 @@ import {
   TrendingUp,
   DollarSign,
   Percent,
-  Info
+  Info,
+  RefreshCw
 } from 'lucide-react';
 
 const HomepageContent = () => {
@@ -79,6 +80,23 @@ const HomepageContent = () => {
                 <li>Total Profit (Amount and Percentage)</li>
               </ul>
             </div>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold flex items-center gap-2 mb-3">
+              <RefreshCw className="h-5 w-5" />
+              Reset Functionality
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400">
+              Use the Reset button to quickly restore all values to their defaults:
+            </p>
+            <ul className="list-disc ml-6 mt-2 text-gray-600 dark:text-gray-400 space-y-1">
+              <li>Total Investment: ₹5,00,000</li>
+              <li>Withdrawal Frequency: Monthly</li>
+              <li>Withdrawal Amount: ₹5,000</li>
+              <li>Expected Return Rate: 13%</li>
+              <li>Time Period: 10 Years</li>
+            </ul>
           </div>
 
           <div>
