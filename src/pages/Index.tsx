@@ -122,7 +122,11 @@ const Index = () => {
               setWithdrawalFrequency(values.withdrawalFrequency);
             }}
           />
-          <HomepageContent />
+          <HomepageContent 
+            currency={currency}
+            totalInvestment={totalInvestment}
+            monthlyWithdrawal={monthlyWithdrawal}
+          />
           <Footer />
         </div>
         <DesktopSidebar />
