@@ -127,6 +127,7 @@ const Index = () => {
             totalInvestment={totalInvestment}
             monthlyWithdrawal={monthlyWithdrawal}
             timePeriod={timePeriod}
+            withdrawalFrequency={withdrawalFrequency}
           />
           <Footer />
         </div>

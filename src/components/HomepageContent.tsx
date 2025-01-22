@@ -14,7 +14,7 @@ import {
   RefreshCw,
   MousePointerClick,
   Euro,
-  Yen,
+  JapaneseYen,
   PoundSterling
 } from 'lucide-react';
 import { CurrencyType } from './CurrencySelector';
@@ -45,7 +45,7 @@ const HomepageContent = ({
         return <Euro className="h-5 w-5" />;
       case 'JPY':
       case 'CNY':
-        return <Yen className="h-5 w-5" />;
+        return <JapaneseYen className="h-5 w-5" />;
       case 'GBP':
         return <PoundSterling className="h-5 w-5" />;
       default:
@@ -64,7 +64,6 @@ const HomepageContent = ({
     return `${currencySymbol}50`;
   };
 
-  // Calculate total withdrawal amount
   const getTotalWithdrawal = () => {
     let withdrawalsPerYear;
     switch (withdrawalFrequency) {
@@ -218,6 +217,3 @@ const HomepageContent = ({
       </Card>
     </div>
   );
-};
-
-export default HomepageContent;
