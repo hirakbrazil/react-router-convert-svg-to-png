@@ -4,6 +4,7 @@ import { toast } from "@/hooks/use-toast";
 
 let toastTimeout: NodeJS.Timeout | null = null;
 let isToastShown = false;
+let activeToastId: string | null = null;
 
 const calculateMonthlyFinalValue = (
   totalInvestment: number,
@@ -94,6 +95,25 @@ const shouldSkipToastDismissal = (
   );
 };
 
+const dismissActiveToast = (
+  totalInvestment: number,
+  monthlyWithdrawal: number,
+  returnRate: number,
+  timePeriod: number,
+  withdrawalFrequency: WithdrawalFrequency
+) => {
+  if (activeToastId && !shouldSkipToastDismissal(totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency)) {
+    toast({
+      title: "",
+      description: "",
+      duration: 0,
+      className: "hidden",
+      id: activeToastId,
+    });
+    activeToastId = null;
+  }
+};
+
 export const detectLastPositiveMonth = (
   totalInvestment: number,
   monthlyWithdrawal: number,
@@ -107,13 +127,7 @@ export const detectLastPositiveMonth = (
       clearTimeout(toastTimeout);
       toastTimeout = null;
     }
-    // Skip toast dismissal for specific condition
-    if (!shouldSkipToastDismissal(totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency)) {
-      // Update toast with zero duration
-      toast({
-        duration: 0,
-      });
-    }
+    dismissActiveToast(totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency);
     isToastShown = false;
     return;
   }
@@ -152,12 +166,13 @@ export const detectLastPositiveMonth = (
       const formattedDate = format(futureDate, "MMMM, yyyy");
       const timeString = getTimeString(lastPositiveMonth, withdrawalFrequency);
 
-      toast({
+      const newToast = toast({
         title: `Final Value ended by ${formattedDate}`,
         description: `After that ${timeString}, you'll stop receiving withdrawals.`,
         duration: 10000,
       });
       
+      activeToastId = newToast.id;
       isToastShown = true;
     }
   }, 2000);
