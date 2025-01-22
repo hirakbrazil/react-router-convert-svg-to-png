@@ -66,15 +66,15 @@ const CalculatorForm = ({
   };
 
   const getMinimumPercentage = () => {
-  const minWithdrawal = Math.max(50, (0.001 / 100) * totalInvestment);
-  if (totalInvestment > 0) {
-    const percentage = (minWithdrawal / totalInvestment) * 100;
+    const minWithdrawal = Math.max(50, (0.001 / 100) * totalInvestment);
+    if (totalInvestment > 0) {
+      const percentage = (minWithdrawal / totalInvestment) * 100;
 
-    // Remove unnecessary zeros for whole numbers
-    return percentage % 1 === 0 ? percentage.toFixed(0) : percentage.toFixed(3);
-  }
-  return "0.001"; // Default value for invalid totalInvestment
-};
+      // Remove unnecessary zeros for whole numbers
+      return percentage % 1 === 0 ? percentage.toFixed(0) : percentage.toFixed(3);
+    }
+    return "0.001"; // Default value for invalid totalInvestment
+  };
 
   const handlePercentageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^0-9.]/g, '');
@@ -92,7 +92,7 @@ const CalculatorForm = ({
   };
 
   return (
-    <div className="bg-card dark:bg-card rounded-xl shadow-lg p-6 space-y-6">
+    <div className="border border-border bg-card dark:bg-card rounded-xl p-6 space-y-6">
       <SliderInput
         label="Total investment"
         value={totalInvestment}

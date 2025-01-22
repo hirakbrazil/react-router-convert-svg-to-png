@@ -71,7 +71,7 @@ const ResultCard = ({
   const totalValueGenerated = totalWithdrawal + (finalValue < 0 ? 0 : finalValue);
 
   return (
-    <div className="bg-card dark:bg-card rounded-xl shadow-lg p-6 space-y-4">
+    <div className="border border-border bg-card dark:bg-card rounded-xl p-6 space-y-4">
       <div className="flex justify-between items-center">
         <span className="text-gray-600 dark:text-gray-400">Total Investment</span>
         <span className="text-xl font-semibold text-foreground">
