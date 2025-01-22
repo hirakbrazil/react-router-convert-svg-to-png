@@ -60,7 +60,7 @@ const HomepageContent = ({
     if (currency === 'INR') {
       return `${currencySymbol}1,000 to ${currencySymbol}50 Crore`;
     }
-    return `${currencySymbol}1,000 to ${currencySymbol}5 Million`;
+    return `${currencySymbol}1,000 to ${currencySymbol}500 Million`;
   };
 
   const formatMinWithdrawal = (currency: CurrencyType) => {
