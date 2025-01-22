@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Info } from "lucide-react";
+import { Info, Share2 } from "lucide-react";
 
 const HomepageContent = () => {
   return (
@@ -45,6 +45,22 @@ const HomepageContent = () => {
             <p className="text-gray-600 dark:text-gray-400">
               The calculator will show you the final investment value after your planned withdrawals, helping you understand if your withdrawal strategy is sustainable over your chosen time period.
             </p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold mb-2 flex items-center gap-2">
+              <Share2 className="h-5 w-5" />
+              Share Your Calculations
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400">
+              You can easily share your calculations with others using our sharing options:
+            </p>
+            <ul className="list-disc ml-6 mt-2 text-gray-600 dark:text-gray-400 space-y-2">
+              <li>Click the "Share" button to open sharing options</li>
+              <li>Use the direct sharing feature if your device supports it</li>
+              <li>Copy a link to the calculator</li>
+              <li>Share your specific calculation settings with others</li>
+            </ul>
           </div>
         </CardContent>
       </Card>
