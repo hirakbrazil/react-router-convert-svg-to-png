@@ -217,3 +217,6 @@ const HomepageContent = ({
       </Card>
     </div>
   );
+};
+
+export default HomepageContent;
