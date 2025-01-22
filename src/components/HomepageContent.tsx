@@ -15,7 +15,8 @@ import {
   MousePointerClick,
   Euro,
   JapaneseYen,
-  PoundSterling
+  PoundSterling,
+  BadgeSwissFranc
 } from 'lucide-react';
 import { CurrencyType } from './CurrencySelector';
 import { formatNumberByCurrency, getCurrencySymbol } from './slider/utils';
@@ -43,6 +44,8 @@ const HomepageContent = ({
         return <IndianRupee className="h-5 w-5" />;
       case 'EUR':
         return <Euro className="h-5 w-5" />;
+      case 'CHF':
+        return <BadgeSwissFranc className="h-5 w-5" />;
       case 'JPY':
       case 'CNY':
         return <JapaneseYen className="h-5 w-5" />;
