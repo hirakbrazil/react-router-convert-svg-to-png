@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
-  Calculator, 
+  Calculator,
   IndianRupee,
   Clock,
   Calendar,
@@ -12,7 +12,10 @@ import {
   Percent,
   Info,
   RefreshCw,
-  MousePointerClick
+  MousePointerClick,
+  Euro,
+  Yen,
+  PoundSterling
 } from 'lucide-react';
 import { CurrencyType } from './CurrencySelector';
 import { formatNumberByCurrency, getCurrencySymbol } from './slider/utils';
@@ -21,15 +24,30 @@ interface HomepageContentProps {
   currency: CurrencyType;
   totalInvestment: number;
   monthlyWithdrawal: number;
+  timePeriod: number;
+  withdrawalFrequency: string;
 }
 
-const HomepageContent = ({ currency, totalInvestment, monthlyWithdrawal }: HomepageContentProps) => {
+const HomepageContent = ({ 
+  currency, 
+  totalInvestment, 
+  monthlyWithdrawal,
+  timePeriod,
+  withdrawalFrequency
+}: HomepageContentProps) => {
   const currencySymbol = getCurrencySymbol(currency);
   
   const getCurrencyIcon = (currency: CurrencyType) => {
     switch(currency) {
       case 'INR':
         return <IndianRupee className="h-5 w-5" />;
+      case 'EUR':
+        return <Euro className="h-5 w-5" />;
+      case 'JPY':
+      case 'CNY':
+        return <Yen className="h-5 w-5" />;
+      case 'GBP':
+        return <PoundSterling className="h-5 w-5" />;
       default:
         return <DollarSign className="h-5 w-5" />;
     }
@@ -44,6 +62,25 @@ const HomepageContent = ({ currency, totalInvestment, monthlyWithdrawal }: Homep
 
   const formatMinWithdrawal = (currency: CurrencyType) => {
     return `${currencySymbol}50`;
+  };
+
+  // Calculate total withdrawal amount
+  const getTotalWithdrawal = () => {
+    let withdrawalsPerYear;
+    switch (withdrawalFrequency) {
+      case "Quarterly":
+        withdrawalsPerYear = 4;
+        break;
+      case "Half-yearly":
+        withdrawalsPerYear = 2;
+        break;
+      case "Yearly":
+        withdrawalsPerYear = 1;
+        break;
+      default:
+        withdrawalsPerYear = 12;
+    }
+    return monthlyWithdrawal * withdrawalsPerYear * timePeriod;
   };
 
   return (
@@ -126,7 +163,7 @@ const HomepageContent = ({ currency, totalInvestment, monthlyWithdrawal }: Homep
                 <ul className="list-disc ml-6 space-y-1">
                   <li>Click on different sections of the chart to highlight specific values</li>
                   <li>Hover over chart segments to see detailed amounts</li>
-                  <li>Compare withdrawal amount ({formatNumberByCurrency(monthlyWithdrawal, currency)}) against total investment ({formatNumberByCurrency(totalInvestment, currency)})</li>
+                  <li>Compare total withdrawal amount ({formatNumberByCurrency(getTotalWithdrawal(), currency)}) against total investment ({formatNumberByCurrency(totalInvestment, currency)})</li>
                   <li>Visualize the proportion of withdrawals to investment</li>
                 </ul>
               </div>
