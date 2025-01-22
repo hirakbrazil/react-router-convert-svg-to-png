@@ -108,7 +108,6 @@ const dismissActiveToast = (
       description: "",
       duration: 0,
       className: "hidden",
-      id: activeToastId,
     });
     activeToastId = null;
   }
