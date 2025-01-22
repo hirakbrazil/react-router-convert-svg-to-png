@@ -81,7 +81,7 @@ const HomepageContent = () => {
                 <li>Total Profit (Amount and Percentage)</li>
               </ul>
             </div>
-            <div className="space-y-2 text-gray-600 dark:text-gray-400">
+            <div className="space-y-2 text-gray-600 dark:text-gray-400 mt-6">
           <p>The interactive Donut Chart provides a visual comparison between:</p>
           <ul className="list-disc ml-6 space-y-1">
             <li>Total Withdrawal (displayed in high contrast green)</li>
