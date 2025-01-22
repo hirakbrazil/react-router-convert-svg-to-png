@@ -20,7 +20,7 @@ const HomepageContent = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Calculator className="h-5 w-5" />
-            Systematic Withdrawal Plan (SWP) Calculator
+            SWP Calculator Uses Guide
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
