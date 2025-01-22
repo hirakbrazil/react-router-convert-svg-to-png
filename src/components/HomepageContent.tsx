@@ -181,9 +181,9 @@ const HomepageContent = ({
               Use the Reset button to quickly restore all values to their defaults:
             </p>
             <ul className="list-disc ml-6 mt-2 text-gray-600 dark:text-gray-400 space-y-1">
-              <li>Total Investment: {formatNumberByCurrency(500000, currency)}</li>
+              <li>Total Investment: {currencySymbol}{formatNumberByCurrency(500000, currency)}</li>
               <li>Withdrawal Frequency: Monthly</li>
-              <li>Withdrawal Amount: {formatNumberByCurrency(5000, currency)}</li>
+              <li>Withdrawal Amount: {currencySymbol}{formatNumberByCurrency(5000, currency)}</li>
               <li>Expected Return Rate: 13%</li>
               <li>Time Period: 10 Years</li>
             </ul>
