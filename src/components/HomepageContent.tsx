@@ -11,7 +11,8 @@ import {
   DollarSign,
   Percent,
   Info,
-  RefreshCw
+  RefreshCw,
+  MousePointerClick
 } from 'lucide-react';
 
 const HomepageContent = () => {
@@ -80,6 +81,26 @@ const HomepageContent = () => {
                 <li>Total Profit (Amount and Percentage)</li>
               </ul>
             </div>
+            <div className="space-y-2 text-gray-600 dark:text-gray-400">
+          <p>The interactive Donut Chart provides a visual comparison between:</p>
+          <ul className="list-disc ml-6 space-y-1">
+            <li>Total Withdrawal (displayed in high contrast green)</li>
+            <li>Total Investment (displayed in low contrast green)</li>
+          </ul>
+          
+          <div className="mt-4">
+            <h4 className="font-semibold flex items-center gap-2 mb-2">
+              <MousePointerClick className="h-4 w-4" />
+              Interactive Features:
+            </h4>
+            <ul className="list-disc ml-6 space-y-1">
+              <li>Click on different sections of the chart to highlight specific values</li>
+              <li>Hover over chart segments to see detailed amounts</li>
+              <li>Compare withdrawal amount (₹6,00,000) against total investment (₹5,00,000)</li>
+              <li>Visualize the proportion of withdrawals to investment</li>
+            </ul>
+          </div>
+              </div>
           </div>
 
           <div>
