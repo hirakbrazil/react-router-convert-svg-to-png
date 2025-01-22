@@ -165,7 +165,7 @@ const HomepageContent = ({
                 <ul className="list-disc ml-6 space-y-1">
                   <li>Click on different sections of the chart to highlight specific values</li>
                   <li>Hover over chart segments to see detailed amounts</li>
-                  <li>Compare total withdrawal amount ({formatNumberByCurrency(getTotalWithdrawal(), currency)}) against total investment ({formatNumberByCurrency(totalInvestment, currency)})</li>
+                  <li>Compare total withdrawal amount ({currencySymbol}{formatNumberByCurrency(getTotalWithdrawal(), currency)}) against total investment ({currencySymbol}{formatNumberByCurrency(totalInvestment, currency)})</li>
                   <li>Visualize the proportion of withdrawals to investment</li>
                 </ul>
               </div>
