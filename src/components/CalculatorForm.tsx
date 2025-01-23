@@ -77,7 +77,7 @@ const CalculatorForm = ({
   };
 
   const handlePercentageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/[^0-9.]/g, '');
+    const value = e.target.value.replace(/,/g, '');
     const percentage = parseFloat(value);
     
     if (!isNaN(percentage)) {
