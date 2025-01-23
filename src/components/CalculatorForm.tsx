@@ -77,7 +77,7 @@ const CalculatorForm = ({
   };
 
   const handlePercentageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const value = e.target.value;
+  const value = e.target.value.replace(/[^0-9.]/g, '');
   
   // Ensure only one decimal point
   const decimalParts = value.split('.');
