@@ -77,30 +77,19 @@ const CalculatorForm = ({
   };
 
   const handlePercentageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const value = e.target.value.replace(/[^0-9.]/g, '');
-  
-  // Ensure only one decimal point
-  const decimalParts = value.split('.');
-  const formattedValue = decimalParts.length > 2 
-    ? `${decimalParts[0]}.${decimalParts[1]}` 
-    : value;
-
-  // Limit to 2 decimal places
-  const decimalMatch = formattedValue.match(/^(\d+\.?\d{0,2})/);
-  const processedValue = decimalMatch ? decimalMatch[0] : formattedValue;
-  
-  const percentage = parseFloat(processedValue);
-  
-  if (!isNaN(percentage)) {
-    const calculatedWithdrawal = Math.round((percentage / 100) * totalInvestment);
-    const minWithdrawal = Math.max(50, (0.001 / 100) * totalInvestment);
+    const value = e.target.value.replace(/[^0-9.]/g, '');
+    const percentage = parseFloat(value);
     
-    // Only update if the calculated withdrawal is at least minWithdrawal
-    if (calculatedWithdrawal >= minWithdrawal && percentage <= 100) {
-      setMonthlyWithdrawal(calculatedWithdrawal);
+    if (!isNaN(percentage)) {
+      const calculatedWithdrawal = Math.round((percentage / 100) * totalInvestment);
+      const minWithdrawal = Math.max(50, (0.001 / 100) * totalInvestment);
+      
+      // Only update if the calculated withdrawal is at least minWithdrawal
+      if (calculatedWithdrawal >= minWithdrawal && percentage <= 100) {
+        setMonthlyWithdrawal(calculatedWithdrawal);
+      }
     }
-  }
-};
+  };
 
   return (
     <div className="border border-border bg-card dark:bg-card rounded-xl p-6 space-y-6">
