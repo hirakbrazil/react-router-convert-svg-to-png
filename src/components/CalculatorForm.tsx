@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import SliderInput from "@/components/slider/SliderInput";
 import { CurrencyType } from "@/components/CurrencySelector";
 import { WithdrawalFrequency } from "@/types/calculator";
@@ -36,6 +36,12 @@ const CalculatorForm = ({
   withdrawalFrequency,
   setWithdrawalFrequency,
 }: CalculatorFormProps) => {
+  const [percentageInput, setPercentageInput] = useState(withdrawalPercentage.toString());
+
+  useEffect(() => {
+    setPercentageInput(withdrawalPercentage.toString());
+  }, [withdrawalPercentage]);
+
   useEffect(() => {
     const minWithdrawal = Math.max(50, (0.001 / 100) * totalInvestment);
     if (monthlyWithdrawal < minWithdrawal) {
@@ -69,25 +75,41 @@ const CalculatorForm = ({
     const minWithdrawal = Math.max(50, (0.001 / 100) * totalInvestment);
     if (totalInvestment > 0) {
       const percentage = (minWithdrawal / totalInvestment) * 100;
-
-      // Remove unnecessary zeros for whole numbers
       return percentage % 1 === 0 ? percentage.toFixed(0) : percentage.toFixed(3);
     }
-    return "0.001"; // Default value for invalid totalInvestment
+    return "0.001";
   };
 
   const handlePercentageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/,/g, '');
-    const percentage = parseFloat(value);
+    const rawValue = e.target.value.replace(/[^\d.]/g, '');
     
+    // Handle multiple decimal points
+    const decimalCount = (rawValue.match(/\./g) || []).length;
+    if (decimalCount > 1) return;
+
+    setPercentageInput(rawValue);
+
+    const percentage = parseFloat(rawValue);
     if (!isNaN(percentage)) {
       const calculatedWithdrawal = Math.round((percentage / 100) * totalInvestment);
       const minWithdrawal = Math.max(50, (0.001 / 100) * totalInvestment);
       
-      // Only update if the calculated withdrawal is at least minWithdrawal
       if (calculatedWithdrawal >= minWithdrawal && percentage <= 100) {
         setMonthlyWithdrawal(calculatedWithdrawal);
       }
+    }
+  };
+
+  const handlePercentageBlur = () => {
+    const percentage = parseFloat(percentageInput);
+    if (isNaN(percentage)) {
+      setPercentageInput(withdrawalPercentage.toString());
+    } else {
+      const minPercentage = parseFloat(getMinimumPercentage());
+      const clampedPercentage = Math.min(Math.max(percentage, minPercentage), 100);
+      const calculatedWithdrawal = Math.round((clampedPercentage / 100) * totalInvestment);
+      setMonthlyWithdrawal(calculatedWithdrawal);
+      setPercentageInput(clampedPercentage.toString());
     }
   };
 
@@ -128,9 +150,10 @@ const CalculatorForm = ({
           <div className="flex items-center gap-2 ml-1">
             <Input
               type="text"
-              inputMode="numeric"
-              value={withdrawalPercentage}
+              inputMode="decimal"
+              value={percentageInput}
               onChange={handlePercentageChange}
+              onBlur={handlePercentageBlur}
               className="w-16 h-8 text-base bg-secondary px-1 py-1 text-center"
               maxLength={6}
             />
