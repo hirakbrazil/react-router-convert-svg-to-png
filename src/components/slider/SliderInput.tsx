@@ -93,8 +93,8 @@ const SliderInput = ({
         maxWidth: '300px',
       };
     } else {
-      const baseWidth = Math.max(70, inputValue.length * 14);
-const minWidth = inputValue.length <= 5 ? 70 : 210;
+      const baseWidth = Math.max(100, inputValue.length * 14);
+const minWidth = inputValue.length <= 5 ? 100 : 210;
 
 return {
   width: `${baseWidth}px`,
