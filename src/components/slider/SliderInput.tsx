@@ -86,10 +86,10 @@ const SliderInput = ({
 
   const getInputWidth = () => {
     if (isMobile) {
-      const baseWidth = Math.max(60, inputValue.length * 12);
+      const baseWidth = Math.max(50, inputValue.length * 12);
       return {
         width: `${baseWidth}px`,
-        minWidth: '60px',
+        minWidth: '50px',
         maxWidth: '300px',
       };
     } else {
