@@ -93,12 +93,12 @@ const SliderInput = ({
         maxWidth: '300px',
       };
     } else {
-      const baseWidth = Math.max(80, inputValue.length * 12);
-      return {
-        width: `${baseWidth}px`,
-        minWidth: '80px',
-        maxWidth: '270px',
-      };
+      const baseWidth = Math.max(100, inputValue.length * 14); // Increase baseWidth for better desktop handling
+    return {
+      width: `${baseWidth}px`,
+      minWidth: '100px', // Adjusted minWidth
+      maxWidth: '500px', // Increased maxWidth for desktop
+    };
     }
   };
 
