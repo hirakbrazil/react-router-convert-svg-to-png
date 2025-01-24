@@ -56,7 +56,7 @@ const CurrencySelector = ({ value, onChange }: CurrencySelectorProps) => {
   return (
     <div className="flex items-center justify-center mt-5 mb-6">
       <Select value={value} onValueChange={handleCurrencyChange}>
-        <SelectTrigger className="w-[80px]">
+        <SelectTrigger className="w-[80px] focus:outline-none">
           <SelectValue />
         </SelectTrigger>
         <SelectContent className="bg-white">
