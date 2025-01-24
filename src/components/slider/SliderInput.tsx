@@ -94,11 +94,13 @@ const SliderInput = ({
       };
     } else {
       const baseWidth = Math.max(80, inputValue.length * 14);
-    return {
-      width: `${baseWidth}px`,
-      minWidth: '210px', // Adjusted minWidth
-      maxWidth: '400px', // Increased maxWidth for desktop
-    };
+const minWidth = inputValue.length <= 4 ? 80 : 210; // Adjust minWidth based on input length
+
+return {
+  width: `${baseWidth}px`,
+  minWidth: `${minWidth}px`,
+  maxWidth: '400px', // Set your desired maxWidth
+};
     }
   };
 
