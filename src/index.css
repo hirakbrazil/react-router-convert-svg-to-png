@@ -71,6 +71,26 @@
     background-color: #e6f5ef !important;
   }
 
+  /* Remove focus ring and hover effects from currency selector */
+  [data-radix-select-trigger] {
+    outline: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  [data-radix-select-trigger]:focus {
+    outline: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    ring: 0 !important;
+  }
+
+  [data-radix-select-trigger]:hover {
+    outline: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+
   /* Custom Scrollbar Styles */
   ::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.22);
@@ -130,15 +150,15 @@
     }
   }
   input {
-    outline: none !important; /* Removes the default browser outline */
-    border: none !important; /* Removes any border */
-    box-shadow: none !important; /* Removes any shadow effects, including focus rings */
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
   }
 
   input:focus {
-    outline: none !important; /* Ensures no outline on focus */
-    border: none !important; /* Ensures no border on focus */
-    box-shadow: none !important; /* Ensures no shadow on focus */
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
   }
   ins.adsbygoogle[data-ad-status="unfilled"]{display:none!important;}
 }
