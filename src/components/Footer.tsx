@@ -37,7 +37,7 @@ const Footer = () => {
       </nav>
 
       <div className="text-center text-sm text-muted-foreground">
-        Made with ❤️ by{" "}
+        Built with ❤️ by{" "}
         <a 
           href="https://mutualfundjournal.in/" 
           target="_blank" 
