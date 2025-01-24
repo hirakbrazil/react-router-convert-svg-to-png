@@ -48,7 +48,7 @@ const CurrencySelector = ({ value, onChange }: CurrencySelectorProps) => {
     onChange(newCurrency); // Call the parent's onChange handler
     toast({
       title: "Currency Changed",
-      description: `Currency switched to ${newCurrency} ${getCurrencySymbol(newCurrency)}`,
+      description: `Switched to ${newCurrency} ${getCurrencySymbol(newCurrency)}`,
       duration: 5000,
     });
   };
