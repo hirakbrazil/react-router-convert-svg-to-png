@@ -20,19 +20,20 @@ import {
 } from 'lucide-react';
 import { CurrencyType } from './CurrencySelector';
 import { formatNumberByCurrency, getCurrencySymbol } from './slider/utils';
+import { WithdrawalFrequency } from '@/types/calculator';
 
 interface HomepageContentProps {
   currency: CurrencyType;
   totalInvestment: number;
-  monthlyWithdrawal: number;
+  monthlyInvestment: number;
   timePeriod: number;
-  withdrawalFrequency: string;
+  withdrawalFrequency: WithdrawalFrequency;
 }
 
 const HomepageContent = ({ 
   currency, 
   totalInvestment, 
-  monthlyWithdrawal,
+  monthlyInvestment,
   timePeriod,
   withdrawalFrequency
 }: HomepageContentProps) => {
@@ -82,7 +83,7 @@ const HomepageContent = ({
       default:
         withdrawalsPerYear = 12;
     }
-    return monthlyWithdrawal * withdrawalsPerYear * timePeriod;
+    return monthlyInvestment * withdrawalsPerYear * timePeriod;
   };
 
   return (

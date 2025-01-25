@@ -58,6 +58,8 @@ const Index = () => {
           <CalculatorHeader currency={currency} onCurrencyChange={setCurrency} />
 
           <CalculatorForm
+            totalInvestment={totalInvestment}
+            setTotalInvestment={setMonthlyInvestment}
             monthlyInvestment={monthlyInvestment}
             setMonthlyInvestment={setMonthlyInvestment}
             returnRate={returnRate}
@@ -101,9 +103,10 @@ const Index = () => {
           />
           <HomepageContent 
             currency={currency}
+            totalInvestment={totalInvestment}
             monthlyInvestment={monthlyInvestment}
             timePeriod={timePeriod}
-            sipFrequency={sipFrequency}
+            withdrawalFrequency={sipFrequency}
           />
           <Footer />
         </div>
