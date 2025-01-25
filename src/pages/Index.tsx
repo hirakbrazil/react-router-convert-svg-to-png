@@ -106,7 +106,7 @@ const Index = () => {
             totalInvestment={totalInvestment}
             monthlyInvestment={monthlyInvestment}
             timePeriod={timePeriod}
-            withdrawalFrequency={sipFrequency}
+            sipFrequency={sipFrequency}
           />
           <Footer />
         </div>

@@ -27,7 +27,7 @@ interface HomepageContentProps {
   totalInvestment: number;
   monthlyInvestment: number;
   timePeriod: number;
-  withdrawalFrequency: WithdrawalFrequency;
+  sipFrequency: WithdrawalFrequency;
 }
 
 const HomepageContent = ({ 
@@ -35,7 +35,7 @@ const HomepageContent = ({
   totalInvestment, 
   monthlyInvestment,
   timePeriod,
-  withdrawalFrequency
+  sipFrequency
 }: HomepageContentProps) => {
   const currencySymbol = getCurrencySymbol(currency);
   
@@ -70,7 +70,7 @@ const HomepageContent = ({
 
   const getTotalWithdrawal = () => {
     let withdrawalsPerYear;
-    switch (withdrawalFrequency) {
+    switch (sipFrequency) {
       case "Quarterly":
         withdrawalsPerYear = 4;
         break;
