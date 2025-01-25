@@ -1,6 +1,6 @@
 import React from "react";
 import { CurrencyType } from "./CurrencySelector";
-import { WithdrawalFrequency } from "@/types/calculator";
+import { SIPFrequency } from "@/types/calculator";
 import InfoTooltip from "./InfoTooltip";
 import DonutChart from "./DonutChart";
 
@@ -9,7 +9,7 @@ interface ResultCardProps {
   monthlyInvestment: number;
   totalValue: number;
   currency: CurrencyType;
-  sipFrequency: WithdrawalFrequency;
+  sipFrequency: SIPFrequency;
   timePeriod: number;
 }
 

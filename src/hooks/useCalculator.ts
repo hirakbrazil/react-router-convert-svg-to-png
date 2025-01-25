@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { WithdrawalFrequency } from "@/types/calculator";
+import { SIPFrequency } from "@/types/calculator";
 import { CurrencyType } from "@/components/CurrencySelector";
 
 export const useCalculator = () => {
@@ -8,14 +8,14 @@ export const useCalculator = () => {
     const savedMonthlyInvestment = localStorage.getItem("monthlyInvestment");
     const savedReturnRate = localStorage.getItem("returnRate");
     const savedTimePeriod = localStorage.getItem("timePeriod");
-    const savedSipFrequency = localStorage.getItem("sipFrequency") as WithdrawalFrequency;
+    const savedSipFrequency = localStorage.getItem("sipFrequency") as SIPFrequency;
     const savedCurrency = localStorage.getItem("selectedCurrency") as CurrencyType;
 
     return {
       monthlyInvestment: Number(params.get("mi")) || Number(savedMonthlyInvestment) || 30000,
       returnRate: Number(params.get("rr")) || Number(savedReturnRate) || 13,
       timePeriod: Number(params.get("tp")) || Number(savedTimePeriod) || 10,
-      sipFrequency: (params.get("sf") as WithdrawalFrequency) || savedSipFrequency || "Monthly",
+      sipFrequency: (params.get("sf") as SIPFrequency) || savedSipFrequency || "Monthly",
       currency: (params.get("cs") as CurrencyType) || savedCurrency || "INR"
     };
   };
@@ -25,7 +25,7 @@ export const useCalculator = () => {
   const [monthlyInvestment, setMonthlyInvestment] = useState(initialValues.monthlyInvestment);
   const [returnRate, setReturnRate] = useState(initialValues.returnRate);
   const [timePeriod, setTimePeriod] = useState(initialValues.timePeriod);
-  const [sipFrequency, setSipFrequency] = useState<WithdrawalFrequency>(initialValues.sipFrequency);
+  const [sipFrequency, setSipFrequency] = useState<SIPFrequency>(initialValues.sipFrequency);
   const [totalValue, setTotalValue] = useState(0);
   const [totalInvestment, setTotalInvestment] = useState(0);
   const [currency, setCurrency] = useState<CurrencyType>(initialValues.currency);

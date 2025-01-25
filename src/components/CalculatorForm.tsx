@@ -1,8 +1,8 @@
 import React from "react";
 import SliderInput from "@/components/slider/SliderInput";
 import { CurrencyType } from "@/components/CurrencySelector";
-import { WithdrawalFrequency } from "@/types/calculator";
-import WithdrawalFrequencySelector from "./calculator/WithdrawalFrequencySelector";
+import { SIPFrequency } from "@/types/calculator";
+import SIPFrequencySelector from "./calculator/SIPFrequencySelector";
 import InfoTooltip from "./InfoTooltip";
 import { format, addYears } from "date-fns";
 
@@ -16,8 +16,8 @@ interface CalculatorFormProps {
   timePeriod: number;
   setTimePeriod: (value: number) => void;
   currency: CurrencyType;
-  sipFrequency: WithdrawalFrequency;
-  setSipFrequency: (frequency: WithdrawalFrequency) => void;
+  sipFrequency: SIPFrequency;
+  setSipFrequency: (frequency: SIPFrequency) => void;
 }
 
 const CalculatorForm = ({
@@ -59,9 +59,9 @@ const CalculatorForm = ({
     <div className="border border-border bg-card dark:bg-card rounded-xl p-6 space-y-6">
       <div className="space-y-4">
         <div className="flex flex-col space-y-4">
-          <WithdrawalFrequencySelector
-            withdrawalFrequency={sipFrequency}
-            setWithdrawalFrequency={setSipFrequency}
+          <SIPFrequencySelector
+            sipFrequency={sipFrequency}
+            setSIPFrequency={setSipFrequency}
           />
         </div>
 

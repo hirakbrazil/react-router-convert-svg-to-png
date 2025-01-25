@@ -1,6 +1,6 @@
-export type WithdrawalFrequency = "Daily" | "Weekly" | "Monthly" | "Quarterly" | "Half-yearly" | "Yearly";
+export type SIPFrequency = "Daily" | "Weekly" | "Monthly" | "Quarterly" | "Half-yearly" | "Yearly";
 
-export const withdrawalFrequencies: WithdrawalFrequency[] = [
+export const sipFrequencies: SIPFrequency[] = [
   "Daily",
   "Weekly",
   "Monthly",
