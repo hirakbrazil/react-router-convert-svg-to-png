@@ -4,31 +4,31 @@ import { toast } from "@/hooks/use-toast";
 import { useState, useRef } from "react";
 import ShareDialog from "./ShareDialog";
 import { CurrencyType } from "./CurrencySelector";
-import { WithdrawalFrequency } from "@/types/calculator";
+import { SIPFrequency } from "@/types/calculator";
 
 interface ActionButtonsProps {
   onReset: () => void;
   previousValues: {
     totalInvestment: number;
-    monthlyWithdrawal: number;
+    monthlyInvestment: number;
     returnRate: number;
     timePeriod: number;
-    withdrawalFrequency: WithdrawalFrequency;
+    sipFrequency: SIPFrequency;
   };
   currentValues: {
     totalInvestment: number;
-    monthlyWithdrawal: number;
+    monthlyInvestment: number;
     returnRate: number;
     timePeriod: number;
-    withdrawalFrequency: WithdrawalFrequency;
+    sipFrequency: SIPFrequency;
     currency: CurrencyType;
   };
   onRestore: (values: {
     totalInvestment: number;
-    monthlyWithdrawal: number;
+    monthlyInvestment: number;
     returnRate: number;
     timePeriod: number;
-    withdrawalFrequency: WithdrawalFrequency;
+    sipFrequency: SIPFrequency;
   }) => void;
 }
 

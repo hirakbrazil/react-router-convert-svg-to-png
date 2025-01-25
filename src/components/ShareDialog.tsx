@@ -3,56 +3,42 @@ import { Button } from "@/components/ui/button";
 import { Share2, Link, Calculator } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { CurrencyType } from "./CurrencySelector";
-import { WithdrawalFrequency } from "@/types/calculator";
+import { SIPFrequency } from "@/types/calculator";
 
 interface ShareDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   totalInvestment: number;
-  monthlyWithdrawal: number;
+  monthlyInvestment: number;
   returnRate: number;
   timePeriod: number;
   currency: CurrencyType;
-  withdrawalFrequency: WithdrawalFrequency;
+  sipFrequency: SIPFrequency;
 }
 
 const ShareDialog = ({
   open,
   onOpenChange,
   totalInvestment,
-  monthlyWithdrawal,
+  monthlyInvestment,
   returnRate,
   timePeriod,
   currency,
-  withdrawalFrequency,
+  sipFrequency,
 }: ShareDialogProps) => {
-  const baseUrl = "https://swp-calculator.mutualfundjournal.in/";
+  const baseUrl = "https://sip-calculator.mutualfundjournal.in/";
 
   const generateShareableLink = (includeParams: boolean = true) => {
     if (!includeParams) return baseUrl;
     
     const params = new URLSearchParams({
       ti: totalInvestment.toString(),
+      mi: monthlyInvestment.toString(),
       cs: currency,
       rr: returnRate.toString(),
       tp: timePeriod.toString(),
+      sf: sipFrequency,
     });
-
-    // Add withdrawal amount based on frequency
-    switch (withdrawalFrequency) {
-      case "Monthly":
-        params.append("mw", monthlyWithdrawal.toString());
-        break;
-      case "Quarterly":
-        params.append("qw", monthlyWithdrawal.toString());
-        break;
-      case "Half-yearly":
-        params.append("hyw", monthlyWithdrawal.toString());
-        break;
-      case "Yearly":
-        params.append("yw", monthlyWithdrawal.toString());
-        break;
-    }
 
     return `${baseUrl}?${params.toString()}`;
   };
@@ -61,8 +47,8 @@ const ShareDialog = ({
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "SWP Calculator",
-          text: "SWP Calculator - Systematic Withdrawal Plan Calculator",
+          title: "SIP Calculator",
+          text: "SIP Calculator - Systematic Investment Plan Calculator",
           url: generateShareableLink(false),
         });
       } catch (error) {
