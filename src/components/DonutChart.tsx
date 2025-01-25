@@ -27,7 +27,7 @@ const DonutChart: React.FC<DonutChartProps> = ({
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
   const data = [
-    { name: "Total Withdrawal", value: totalWithdrawal },
+    { name: "Total Profit", value: totalWithdrawal },
     { name: "Total Investment", value: totalInvestment },
   ];
 
