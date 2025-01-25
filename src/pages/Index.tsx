@@ -12,61 +12,44 @@ import AdSenseHorizontal from "@/components/AdSenseHorizontal";
 import AdSenseResponsive from "@/components/AdSenseResponsive";
 import DesktopSidebar from "@/components/DesktopSidebar";
 import HomepageContent from "@/components/HomepageContent";
-import { detectLastPositiveMonth } from "@/utils/finalValueDetection";
-import { useEffect } from "react";
 
 const Index = () => {
   useTheme();
 
   const {
-    totalInvestment,
-    setTotalInvestment,
-    monthlyWithdrawal,
-    setMonthlyWithdrawal,
+    monthlyInvestment,
+    setMonthlyInvestment,
     returnRate,
     setReturnRate,
     timePeriod,
     setTimePeriod,
-    withdrawalFrequency,
-    setWithdrawalFrequency,
-    finalValue,
-    withdrawalPercentage,
+    sipFrequency,
+    setSipFrequency,
+    totalValue,
+    totalInvestment,
     currency,
     setCurrency,
   } = useCalculator();
 
-  // Add effect to detect last positive month
-  useEffect(() => {
-    detectLastPositiveMonth(
-      totalInvestment,
-      monthlyWithdrawal,
-      returnRate,
-      timePeriod,
-      withdrawalFrequency,
-      finalValue
-    );
-  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency, finalValue]);
-
   const handleReset = () => {
-    setTotalInvestment(500000);
-    setMonthlyWithdrawal(5000);
+    setMonthlyInvestment(30000);
     setReturnRate(13);
     setTimePeriod(10);
-    setWithdrawalFrequency("Monthly");
+    setSipFrequency("Monthly");
     window.history.replaceState({}, '', window.location.pathname);
   };
 
   return (
     <>
       <SEO
-        title="SWP Calculator - Systematic Withdrawal Plan Calculator"
-        description="Calculate your Systematic Withdrawal Plan (SWP) easily with our free calculator. Plan your investment withdrawals effectively."
-        canonicalUrl="https://swp-calculator.mutualfundjournal.in/"
+        title="SIP Calculator - Systematic Investment Plan Calculator"
+        description="Calculate your Systematic Investment Plan (SIP) easily with our free calculator. Plan your investments effectively."
+        canonicalUrl="https://sip-calculator.mutualfundjournal.in/"
         robots="max-image-preview:large"
-        ogTitle="SWP Calculator - Systematic Withdrawal Plan Calculator"
-        ogDescription="Calculate your Systematic Withdrawal Plan (SWP) easily with our free calculator. Plan your investment withdrawals effectively."
-        ogUrl="https://swp-calculator.mutualfundjournal.in/"
-        ogImage="https://swp-calculator.mutualfundjournal.in/banner.jpg"
+        ogTitle="SIP Calculator - Systematic Investment Plan Calculator"
+        ogDescription="Calculate your Systematic Investment Plan (SIP) easily with our free calculator. Plan your investments effectively."
+        ogUrl="https://sip-calculator.mutualfundjournal.in/"
+        ogImage="https://sip-calculator.mutualfundjournal.in/banner.jpg"
         ogType="website"
       />
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
@@ -75,59 +58,52 @@ const Index = () => {
           <CalculatorHeader currency={currency} onCurrencyChange={setCurrency} />
 
           <CalculatorForm
-            totalInvestment={totalInvestment}
-            setTotalInvestment={setTotalInvestment}
-            monthlyWithdrawal={monthlyWithdrawal}
-            setMonthlyWithdrawal={setMonthlyWithdrawal}
+            monthlyInvestment={monthlyInvestment}
+            setMonthlyInvestment={setMonthlyInvestment}
             returnRate={returnRate}
             setReturnRate={setReturnRate}
             timePeriod={timePeriod}
             setTimePeriod={setTimePeriod}
-            withdrawalPercentage={withdrawalPercentage}
             currency={currency}
-            withdrawalFrequency={withdrawalFrequency}
-            setWithdrawalFrequency={setWithdrawalFrequency}
+            sipFrequency={sipFrequency}
+            setSipFrequency={setSipFrequency}
           />
           <ResultCard
             totalInvestment={totalInvestment}
-            monthlyWithdrawal={monthlyWithdrawal}
-            finalValue={finalValue}
+            monthlyInvestment={monthlyInvestment}
+            totalValue={totalValue}
             currency={currency}
-            withdrawalFrequency={withdrawalFrequency}
+            sipFrequency={sipFrequency}
             timePeriod={timePeriod}
           />
           <AdSenseResponsive />
           <ActionButtons
             onReset={handleReset}
             previousValues={{
-              totalInvestment,
-              monthlyWithdrawal,
+              monthlyInvestment,
               returnRate,
               timePeriod,
-              withdrawalFrequency,
+              sipFrequency,
             }}
             currentValues={{
-              totalInvestment,
-              monthlyWithdrawal,
+              monthlyInvestment,
               returnRate,
               timePeriod,
-              withdrawalFrequency,
+              sipFrequency,
               currency,
             }}
             onRestore={(values) => {
-              setTotalInvestment(values.totalInvestment);
-              setMonthlyWithdrawal(values.monthlyWithdrawal);
+              setMonthlyInvestment(values.monthlyInvestment);
               setReturnRate(values.returnRate);
               setTimePeriod(values.timePeriod);
-              setWithdrawalFrequency(values.withdrawalFrequency);
+              setSipFrequency(values.sipFrequency);
             }}
           />
           <HomepageContent 
             currency={currency}
-            totalInvestment={totalInvestment}
-            monthlyWithdrawal={monthlyWithdrawal}
+            monthlyInvestment={monthlyInvestment}
             timePeriod={timePeriod}
-            withdrawalFrequency={withdrawalFrequency}
+            sipFrequency={sipFrequency}
           />
           <Footer />
         </div>
