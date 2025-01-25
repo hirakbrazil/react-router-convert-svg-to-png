@@ -1,68 +1,52 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import SliderInput from "@/components/slider/SliderInput";
 import { CurrencyType } from "@/components/CurrencySelector";
 import { WithdrawalFrequency } from "@/types/calculator";
 import WithdrawalFrequencySelector from "./calculator/WithdrawalFrequencySelector";
 import InfoTooltip from "./InfoTooltip";
 import { format, addYears } from "date-fns";
-import { Input } from "@/components/ui/input";
 
 interface CalculatorFormProps {
   totalInvestment: number;
   setTotalInvestment: (value: number) => void;
-  monthlyWithdrawal: number;
-  setMonthlyWithdrawal: (value: number) => void;
+  monthlyInvestment: number;
+  setMonthlyInvestment: (value: number) => void;
   returnRate: number;
   setReturnRate: (value: number) => void;
   timePeriod: number;
   setTimePeriod: (value: number) => void;
-  withdrawalPercentage: number;
   currency: CurrencyType;
-  withdrawalFrequency: WithdrawalFrequency;
-  setWithdrawalFrequency: (frequency: WithdrawalFrequency) => void;
+  sipFrequency: WithdrawalFrequency;
+  setSipFrequency: (frequency: WithdrawalFrequency) => void;
 }
 
 const CalculatorForm = ({
-  totalInvestment,
-  setTotalInvestment,
-  monthlyWithdrawal,
-  setMonthlyWithdrawal,
+  monthlyInvestment,
+  setMonthlyInvestment,
   returnRate,
   setReturnRate,
   timePeriod,
   setTimePeriod,
-  withdrawalPercentage,
   currency,
-  withdrawalFrequency,
-  setWithdrawalFrequency,
+  sipFrequency,
+  setSipFrequency,
 }: CalculatorFormProps) => {
-  const [percentageInput, setPercentageInput] = useState(withdrawalPercentage.toString());
-
-  useEffect(() => {
-    setPercentageInput(withdrawalPercentage.toString());
-  }, [withdrawalPercentage]);
-
-  useEffect(() => {
-    const minWithdrawal = Math.max(50, (0.001 / 100) * totalInvestment);
-    if (monthlyWithdrawal < minWithdrawal) {
-      setMonthlyWithdrawal(Math.round(minWithdrawal));
-    } else if (monthlyWithdrawal > totalInvestment) {
-      setMonthlyWithdrawal(totalInvestment);
-    }
-  }, [totalInvestment, monthlyWithdrawal, setMonthlyWithdrawal]);
-
-  const getWithdrawalLabel = () => {
-    switch (withdrawalFrequency) {
+  const getInvestmentLabel = () => {
+    switch (sipFrequency) {
+      case "Daily":
+        return "Daily investment";
+      case "Weekly":
+        return "Weekly investment";
       case "Monthly":
-        return "Withdrawal per month";
+        return "Monthly investment";
       case "Quarterly":
-        return "Withdrawal per quarter";
+        return "Quarterly investment";
       case "Half-yearly":
-        return "Withdrawal per half-year";
+        return "Half-yearly investment";
       case "Yearly":
-        return "Withdrawal per year";
+        return "Yearly investment";
       default:
-        return "Withdrawal per month";
+        return "Monthly investment";
     }
   };
 
@@ -71,105 +55,27 @@ const CalculatorForm = ({
     return format(futureDate, "MMMM, yyyy");
   };
 
-  const getMinimumPercentage = () => {
-    const minWithdrawal = Math.max(50, (0.001 / 100) * totalInvestment);
-    if (totalInvestment > 0) {
-      const percentage = (minWithdrawal / totalInvestment) * 100;
-      return percentage % 1 === 0 ? percentage.toFixed(0) : percentage.toFixed(3);
-    }
-    return "0.001";
-  };
-
-  const handlePercentageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const rawValue = e.target.value.replace(/[^\d.]/g, '');
-    
-    // Handle multiple decimal points
-    const decimalCount = (rawValue.match(/\./g) || []).length;
-    if (decimalCount > 1) return;
-
-    setPercentageInput(rawValue);
-
-    const percentage = parseFloat(rawValue);
-    if (!isNaN(percentage)) {
-      const calculatedWithdrawal = Math.round((percentage / 100) * totalInvestment);
-      const minWithdrawal = Math.max(50, (0.001 / 100) * totalInvestment);
-      
-      if (calculatedWithdrawal >= minWithdrawal && percentage <= 100) {
-        setMonthlyWithdrawal(calculatedWithdrawal);
-      }
-    }
-  };
-
-  const handlePercentageBlur = () => {
-    const percentage = parseFloat(percentageInput);
-    if (isNaN(percentage)) {
-      setPercentageInput(withdrawalPercentage.toString());
-    } else {
-      const minPercentage = parseFloat(getMinimumPercentage());
-      const clampedPercentage = Math.min(Math.max(percentage, minPercentage), 100);
-      const calculatedWithdrawal = Math.round((clampedPercentage / 100) * totalInvestment);
-      setMonthlyWithdrawal(calculatedWithdrawal);
-      setPercentageInput(clampedPercentage.toString());
-    }
-  };
-
   return (
     <div className="border border-border bg-card dark:bg-card rounded-xl p-6 space-y-6">
-      <SliderInput
-        label="Total investment"
-        value={totalInvestment}
-        onChange={setTotalInvestment}
-        min={1000}
-        max={500000000}
-        step={1000}
-        currency={currency}
-        formatValue={true}
-        maxLength={12}
-      />
-
       <div className="space-y-4">
         <div className="flex flex-col space-y-4">
           <WithdrawalFrequencySelector
-            withdrawalFrequency={withdrawalFrequency}
-            setWithdrawalFrequency={setWithdrawalFrequency}
+            withdrawalFrequency={sipFrequency}
+            setWithdrawalFrequency={setSipFrequency}
           />
         </div>
 
-        <div className="space-y-1">
-          <SliderInput
-            label={getWithdrawalLabel()}
-            value={monthlyWithdrawal}
-            onChange={setMonthlyWithdrawal}
-            min={Math.max(50, Math.round((0.001 / 100) * totalInvestment))}
-            max={totalInvestment}
-            step={50}
-            currency={currency}
-            formatValue={true}
-            maxLength={12}
-          />
-          <div className="flex items-center gap-2 ml-1">
-            <Input
-              type="text"
-              inputMode="decimal"
-              value={percentageInput}
-              onChange={handlePercentageChange}
-              onBlur={handlePercentageBlur}
-              className="w-16 h-8 text-base bg-secondary px-1 py-1 text-center"
-              maxLength={6}
-            />
-            <p className="text-base text-muted-foreground dark:text-[#c1cbd6]">
-              % of Total investment
-            </p>
-          </div>
-          <div className="flex justify-between px-2 mt-1">
-            <span className="text-sm text-gray-500 dark:text-gray-400">
-              {getMinimumPercentage()}%
-            </span>
-            <span className="text-sm text-gray-500 dark:text-gray-400">
-              100%
-            </span>
-          </div>
-        </div>
+        <SliderInput
+          label={getInvestmentLabel()}
+          value={monthlyInvestment}
+          onChange={setMonthlyInvestment}
+          min={50}
+          max={50000000}
+          step={50}
+          currency={currency}
+          formatValue={true}
+          maxLength={12}
+        />
       </div>
 
       <div className="space-y-4">
@@ -186,7 +92,7 @@ const CalculatorForm = ({
                 <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">
                   (p.a)
                 </span>
-                <InfoTooltip content="The expected annual return rate on your investment. This is the percentage by which your investment is expected to grow each year before withdrawals." />
+                <InfoTooltip content="The expected annual return rate on your investment. This is the percentage by which your investment is expected to grow each year." />
               </div>
             </div>
           }
@@ -205,7 +111,7 @@ const CalculatorForm = ({
           label={
             <div className="flex items-center gap-x-1">
               <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">Time period</span>
-              <InfoTooltip content="The total duration for which you plan to keep your investment and make periodic withdrawals. This is measured in years." />
+              <InfoTooltip content="The total duration for which you plan to invest through SIP. This is measured in years." />
             </div>
           }
           value={timePeriod}

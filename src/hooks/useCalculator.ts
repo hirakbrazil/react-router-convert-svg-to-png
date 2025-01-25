@@ -5,51 +5,29 @@ import { CurrencyType } from "@/components/CurrencySelector";
 export const useCalculator = () => {
   const getInitialValues = () => {
     const params = new URLSearchParams(window.location.search);
-    const savedTotalInvestment = localStorage.getItem("totalInvestment");
+    const savedMonthlyInvestment = localStorage.getItem("monthlyInvestment");
     const savedReturnRate = localStorage.getItem("returnRate");
     const savedTimePeriod = localStorage.getItem("timePeriod");
-    const savedWithdrawalFrequency = localStorage.getItem("withdrawalFrequency") as WithdrawalFrequency;
+    const savedSipFrequency = localStorage.getItem("sipFrequency") as WithdrawalFrequency;
     const savedCurrency = localStorage.getItem("selectedCurrency") as CurrencyType;
 
-    // Determine withdrawal frequency and amount from URL parameters
-    let initialWithdrawalFrequency: WithdrawalFrequency = "Monthly";
-    let initialWithdrawalAmount = 0;
-
-    if (params.has("mw")) {
-      initialWithdrawalFrequency = "Monthly";
-      initialWithdrawalAmount = Number(params.get("mw"));
-    } else if (params.has("qw")) {
-      initialWithdrawalFrequency = "Quarterly";
-      initialWithdrawalAmount = Number(params.get("qw"));
-    } else if (params.has("hyw")) {
-      initialWithdrawalFrequency = "Half-yearly";
-      initialWithdrawalAmount = Number(params.get("hyw"));
-    } else if (params.has("yw")) {
-      initialWithdrawalFrequency = "Yearly";
-      initialWithdrawalAmount = Number(params.get("yw"));
-    }
-
     return {
-      totalInvestment: Number(params.get("ti")) || Number(savedTotalInvestment) || 500000,
-      monthlyWithdrawal: initialWithdrawalAmount || Number(localStorage.getItem("monthlyWithdrawal")) || 5000,
+      monthlyInvestment: Number(params.get("mi")) || Number(savedMonthlyInvestment) || 30000,
       returnRate: Number(params.get("rr")) || Number(savedReturnRate) || 13,
       timePeriod: Number(params.get("tp")) || Number(savedTimePeriod) || 10,
-      withdrawalFrequency: params.has("mw") || params.has("qw") || params.has("hyw") || params.has("yw") 
-        ? initialWithdrawalFrequency 
-        : savedWithdrawalFrequency || "Monthly",
+      sipFrequency: (params.get("sf") as WithdrawalFrequency) || savedSipFrequency || "Monthly",
       currency: (params.get("cs") as CurrencyType) || savedCurrency || "INR"
     };
   };
 
   const initialValues = getInitialValues();
 
-  const [totalInvestment, setTotalInvestment] = useState(initialValues.totalInvestment);
-  const [monthlyWithdrawal, setMonthlyWithdrawal] = useState(initialValues.monthlyWithdrawal);
+  const [monthlyInvestment, setMonthlyInvestment] = useState(initialValues.monthlyInvestment);
   const [returnRate, setReturnRate] = useState(initialValues.returnRate);
   const [timePeriod, setTimePeriod] = useState(initialValues.timePeriod);
-  const [withdrawalFrequency, setWithdrawalFrequency] = useState<WithdrawalFrequency>(initialValues.withdrawalFrequency);
-  const [finalValue, setFinalValue] = useState(0);
-  const [withdrawalPercentage, setWithdrawalPercentage] = useState(1);
+  const [sipFrequency, setSipFrequency] = useState<WithdrawalFrequency>(initialValues.sipFrequency);
+  const [totalValue, setTotalValue] = useState(0);
+  const [totalInvestment, setTotalInvestment] = useState(0);
   const [currency, setCurrency] = useState<CurrencyType>(initialValues.currency);
 
   // Clear URL parameters when values change
@@ -58,72 +36,56 @@ export const useCalculator = () => {
     if (hasUrlParams) {
       window.history.replaceState({}, '', window.location.pathname);
     }
-  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency, currency]);
+  }, [monthlyInvestment, returnRate, timePeriod, sipFrequency, currency]);
 
   // Save to localStorage
   useEffect(() => {
-    localStorage.setItem("totalInvestment", totalInvestment.toString());
-    localStorage.setItem("monthlyWithdrawal", monthlyWithdrawal.toString());
+    localStorage.setItem("monthlyInvestment", monthlyInvestment.toString());
     localStorage.setItem("returnRate", returnRate.toString());
     localStorage.setItem("timePeriod", timePeriod.toString());
-    localStorage.setItem("withdrawalFrequency", withdrawalFrequency);
+    localStorage.setItem("sipFrequency", sipFrequency);
     localStorage.setItem("selectedCurrency", currency);
-  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency, currency]);
+  }, [monthlyInvestment, returnRate, timePeriod, sipFrequency, currency]);
 
-  // Calculate withdrawal percentage
-  useEffect(() => {
-    const percentage = (monthlyWithdrawal / totalInvestment) * 100;
-    setWithdrawalPercentage(Number(percentage.toFixed(3)));
-  }, [totalInvestment, monthlyWithdrawal]);
+  const calculateSIP = () => {
+    const paymentsPerYear = {
+      "Daily": 365,
+      "Weekly": 52,
+      "Monthly": 12,
+      "Quarterly": 4,
+      "Half-yearly": 2,
+      "Yearly": 1
+    };
 
-  const calculateSWP = () => {
-    let n;
-    switch (withdrawalFrequency) {
-      case "Quarterly":
-        n = 4;
-        break;
-      case "Half-yearly":
-        n = 2;
-        break;
-      case "Yearly":
-        n = 1;
-        break;
-      default:
-        n = 12;
-    }
+    const n = paymentsPerYear[sipFrequency];
+    const r = returnRate / (n * 100); // Convert percentage to decimal and divide by frequency
+    const t = timePeriod * n; // Total number of payments
 
-    const r = returnRate / (n * 100);
-    const t = timePeriod;
+    // Calculate total investment
+    const investment = monthlyInvestment * t;
+    setTotalInvestment(investment);
 
-    let result = Math.round(
-      totalInvestment * Math.pow(1 + returnRate / 100, t) -
-        (monthlyWithdrawal *
-          (Math.pow(1 + Math.pow(1 + returnRate / 100, 1 / n) - 1, t * n) - 1)) /
-          (Math.pow(1 + returnRate / 100, 1 / n) - 1)
-    );
-
-    return result;
+    // SIP Future Value formula: P * ((1 + r)^t - 1) / r * (1 + r)
+    const futureValue = monthlyInvestment * ((Math.pow(1 + r, t) - 1) / r) * (1 + r);
+    setTotalValue(Math.round(futureValue));
   };
 
-  // Calculate final value
+  // Calculate values
   useEffect(() => {
-    const result = calculateSWP();
-    setFinalValue(result);
-  }, [totalInvestment, monthlyWithdrawal, returnRate, timePeriod, withdrawalFrequency]);
+    calculateSIP();
+  }, [monthlyInvestment, returnRate, timePeriod, sipFrequency]);
 
   return {
-    totalInvestment,
-    setTotalInvestment,
-    monthlyWithdrawal,
-    setMonthlyWithdrawal,
+    monthlyInvestment,
+    setMonthlyInvestment,
     returnRate,
     setReturnRate,
     timePeriod,
     setTimePeriod,
-    withdrawalFrequency,
-    setWithdrawalFrequency,
-    finalValue,
-    withdrawalPercentage,
+    sipFrequency,
+    setSipFrequency,
+    totalValue,
+    totalInvestment,
     currency,
     setCurrency,
   };
