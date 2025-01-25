@@ -20,14 +20,14 @@ import {
 } from 'lucide-react';
 import { CurrencyType } from './CurrencySelector';
 import { formatNumberByCurrency, getCurrencySymbol } from './slider/utils';
-import { WithdrawalFrequency } from '@/types/calculator';
+import { SIPFrequency } from '@/types/calculator';
 
 interface HomepageContentProps {
   currency: CurrencyType;
   totalInvestment: number;
   monthlyInvestment: number;
   timePeriod: number;
-  sipFrequency: WithdrawalFrequency;
+  sipFrequency: SIPFrequency;
 }
 
 const HomepageContent = ({ 
