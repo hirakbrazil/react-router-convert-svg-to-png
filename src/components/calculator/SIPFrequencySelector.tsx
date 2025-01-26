@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, Check } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,15 +38,11 @@ const SIPFrequencySelector = ({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="flex items-center gap-2 focus:ring-0 focus:ring-offset-0 bg-white dark:bg-[#030c21]">
-            <span className="flex items-center gap-2">
-              {sipFrequency}
-              {sipFrequency === sipFrequencies[0] && <Check className="h-5 w-5" />}
-            </span>
-            <ChevronDown className="h-4 w-4" />
+            {sipFrequency} <ChevronDown className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="bg-white dark:bg-[#030c21] border-border">
-          {sipFrequencies.map((frequency, index) => (
+          {sipFrequencies.map((frequency) => (
             <DropdownMenuItem
               key={frequency}
               onClick={() => {
@@ -58,10 +54,7 @@ const SIPFrequencySelector = ({
                 });
               }}
             >
-              <span className="flex items-center gap-2">
-                {frequency}
-                {frequency === sipFrequency && <Check className="h-5 w-5" />}
-              </span>
+              {frequency}
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>
