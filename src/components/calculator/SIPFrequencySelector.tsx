@@ -37,7 +37,7 @@ const SIPFrequencySelector = ({
       </div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="flex items-center gap-2 focus:ring-0 focus:ring-offset-0 bg-white dark:bg-[#030c21]">
+          <Button variant="outline" className="flex items-center gap-2 focus:outline-none focus:ring-0 focus:ring-offset-0 bg-white dark:bg-[#030c21]">
             {sipFrequency} <ChevronDown className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
