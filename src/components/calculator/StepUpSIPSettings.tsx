@@ -29,13 +29,13 @@ const StepUpSIPSettings = ({
 const getWidthClass = () => {
     switch (frequency) {
       case "Monthly":
-        return "w-[150px]";
-      case "Quarterly":
         return "w-[160px]";
+      case "Quarterly":
+        return "w-[170px]";
       case "Half-yearly":
         return "w-[180px]";
       case "Yearly":
-        return "w-[140px]";
+        return "w-[150px]";
       default:
         return "w-[180px]";
     }
