@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Check } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -53,7 +53,11 @@ const SIPFrequencySelector = ({
                   duration: 5000,
                 });
               }}
+              className="flex items-center gap-2"
             >
+              {sipFrequency === frequency && (
+                <Check className="h-4 w-4" />
+              )}
               {frequency}
             </DropdownMenuItem>
           ))}
