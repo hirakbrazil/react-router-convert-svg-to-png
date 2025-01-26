@@ -71,7 +71,7 @@ const ResultCard = ({
             {formatCurrency(totalProfit, currency)}
           </span>
           <span className={`text-base font-medium ${totalProfit > 0 ? 'text-green-500 dark:text-green-400' : 'text-foreground'}`}>
-            ({totalProfit > 0 ? '+' : ''}{profitPercentage}%)
+            ({profitPercentage}%)
           </span>
         </div>
       </div>
