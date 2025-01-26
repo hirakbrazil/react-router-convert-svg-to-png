@@ -61,7 +61,7 @@ const getWidthClass = () => {
             label={
               <Select value={frequency} onValueChange={(value) => onFrequencyChange(value as StepUpFrequency)}>
                 <SelectTrigger
-                  className={`${getWidthClass()} focus:ring-0 focus-visible:ring-0`}
+                  className={`${getWidthClass()} focus:ring-0 focus-visible:ring-0 bg-white dark:bg-[#030c21]`}
                 >
                   <SelectValue />
                 </SelectTrigger>
