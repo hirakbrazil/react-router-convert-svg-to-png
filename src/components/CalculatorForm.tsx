@@ -7,8 +7,6 @@ import InfoTooltip from "./InfoTooltip";
 import { format, addYears } from "date-fns";
 
 interface CalculatorFormProps {
-  totalInvestment: number;
-  setTotalInvestment: (value: number) => void;
   monthlyInvestment: number;
   setMonthlyInvestment: (value: number) => void;
   returnRate: number;

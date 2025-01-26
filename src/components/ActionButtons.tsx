@@ -9,14 +9,12 @@ import { SIPFrequency } from "@/types/calculator";
 interface ActionButtonsProps {
   onReset: () => void;
   previousValues: {
-    totalInvestment: number;
     monthlyInvestment: number;
     returnRate: number;
     timePeriod: number;
     sipFrequency: SIPFrequency;
   };
   currentValues: {
-    totalInvestment: number;
     monthlyInvestment: number;
     returnRate: number;
     timePeriod: number;
@@ -24,7 +22,6 @@ interface ActionButtonsProps {
     currency: CurrencyType;
   };
   onRestore: (values: {
-    totalInvestment: number;
     monthlyInvestment: number;
     returnRate: number;
     timePeriod: number;

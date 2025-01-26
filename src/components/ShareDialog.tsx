@@ -8,7 +8,6 @@ import { SIPFrequency } from "@/types/calculator";
 interface ShareDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  totalInvestment: number;
   monthlyInvestment: number;
   returnRate: number;
   timePeriod: number;
@@ -19,7 +18,6 @@ interface ShareDialogProps {
 const ShareDialog = ({
   open,
   onOpenChange,
-  totalInvestment,
   monthlyInvestment,
   returnRate,
   timePeriod,
@@ -32,7 +30,6 @@ const ShareDialog = ({
     if (!includeParams) return baseUrl;
     
     const params = new URLSearchParams({
-      ti: totalInvestment.toString(),
       mi: monthlyInvestment.toString(),
       cs: currency,
       rr: returnRate.toString(),
