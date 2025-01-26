@@ -58,7 +58,9 @@ const SIPFrequencySelector = ({
               {sipFrequency === frequency && (
                 <Check className="h-4 w-4" />
               )}
-              {frequency}
+              <span className={`${sipFrequency === frequency ? "pl-0" : "pl-6"}`}>
+  {frequency}
+</span>
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>
