@@ -46,8 +46,7 @@ const ResultCard = ({
   timePeriod,
 }: ResultCardProps) => {
   const totalProfit = totalValue - totalInvestment;
-  const rawProfitPercentage = (totalProfit / totalInvestment) * 100;
-  const profitPercentage = parseFloat(rawProfitPercentage.toFixed(2));
+  const profitPercentage = ((totalProfit / totalInvestment) * 100).toFixed(2);
 
   return (
     <div className="border border-border bg-card dark:bg-card rounded-xl p-6 space-y-4">
