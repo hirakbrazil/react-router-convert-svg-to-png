@@ -41,24 +41,22 @@ const StepUpSIPSettings = ({
       </div>
 
       {enabled && isAdvancedOptionsEnabled && (
-        <div className="space-y-4 pl-4">
-          <div className="flex items-center gap-4">
-            <Select value={frequency} onValueChange={(value) => onFrequencyChange(value as StepUpFrequency)}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue />
-                <ChevronDown className="h-4 w-4 opacity-50" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Monthly">Monthly Step Up</SelectItem>
-                <SelectItem value="Quarterly">Quarterly Step Up</SelectItem>
-                <SelectItem value="Half-yearly">Half-yearly Step Up</SelectItem>
-                <SelectItem value="Yearly">Yearly Step Up</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
+        <div className="space-y-4">
           <SliderInput
-            label="Step Up Percentage"
+            label={
+              <Select value={frequency} onValueChange={(value) => onFrequencyChange(value as StepUpFrequency)}>
+                <SelectTrigger className="w-[180px] bg-transparent border-none shadow-none hover:bg-transparent focus:ring-0 focus-visible:ring-0 text-lg text-gray-700 dark:text-[#c1cbd6] px-0">
+                  <SelectValue />
+                  <ChevronDown className="h-4 w-4 opacity-50" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Monthly">Monthly Step Up</SelectItem>
+                  <SelectItem value="Quarterly">Quarterly Step Up</SelectItem>
+                  <SelectItem value="Half-yearly">Half-yearly Step Up</SelectItem>
+                  <SelectItem value="Yearly">Yearly Step Up</SelectItem>
+                </SelectContent>
+              </Select>
+            }
             value={percentage}
             onChange={onPercentageChange}
             min={1}
