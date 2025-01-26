@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import SliderInput from "@/components/slider/SliderInput";
 import { CurrencyType } from "@/components/CurrencySelector";
 import { SIPFrequency } from "@/types/calculator";
 import SIPFrequencySelector from "./calculator/SIPFrequencySelector";
 import InfoTooltip from "./InfoTooltip";
 import { format, addYears } from "date-fns";
+import { Switch } from "@/components/ui/switch";
+import StepUpSIPSettings, { StepUpFrequency } from "./calculator/StepUpSIPSettings";
 
 interface CalculatorFormProps {
   monthlyInvestment: number;
@@ -29,6 +31,11 @@ const CalculatorForm = ({
   sipFrequency,
   setSipFrequency,
 }: CalculatorFormProps) => {
+  const [advancedOptionsEnabled, setAdvancedOptionsEnabled] = useState(false);
+  const [stepUpEnabled, setStepUpEnabled] = useState(false);
+  const [stepUpFrequency, setStepUpFrequency] = useState<StepUpFrequency>("Yearly");
+  const [stepUpPercentage, setStepUpPercentage] = useState(10);
+
   const getInvestmentLabel = () => {
     switch (sipFrequency) {
       case "Daily":
@@ -123,6 +130,38 @@ const CalculatorForm = ({
         <p className="text-base text-muted-foreground ml-1 dark:text-[#c1cbd6]">
           {getFutureDate(timePeriod)}
         </p>
+      </div>
+
+      <div className="space-y-4 pt-2">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-x-1">
+            <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">Advanced options</span>
+            <InfoTooltip content="Enable additional settings to customize your SIP investment strategy." />
+          </div>
+          <Switch
+            checked={advancedOptionsEnabled}
+            onCheckedChange={(checked) => {
+              setAdvancedOptionsEnabled(checked);
+              if (!checked) {
+                setStepUpEnabled(false);
+              }
+            }}
+          />
+        </div>
+
+        {advancedOptionsEnabled && (
+          <div className="pl-4">
+            <StepUpSIPSettings
+              enabled={stepUpEnabled}
+              onEnabledChange={setStepUpEnabled}
+              frequency={stepUpFrequency}
+              onFrequencyChange={setStepUpFrequency}
+              percentage={stepUpPercentage}
+              onPercentageChange={setStepUpPercentage}
+              isAdvancedOptionsEnabled={advancedOptionsEnabled}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
