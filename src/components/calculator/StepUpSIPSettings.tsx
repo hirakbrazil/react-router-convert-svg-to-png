@@ -45,9 +45,8 @@ const StepUpSIPSettings = ({
           <SliderInput
             label={
               <Select value={frequency} onValueChange={(value) => onFrequencyChange(value as StepUpFrequency)}>
-                <SelectTrigger className="w-[180px] bg-transparent border-none shadow-none hover:bg-transparent focus:ring-0 focus-visible:ring-0 text-lg text-gray-700 dark:text-[#c1cbd6] px-0">
+                <SelectTrigger className="w-[180px] focus:ring-0 focus-visible:ring-0">
                   <SelectValue />
-                  <ChevronDown className="h-4 w-4 opacity-50" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Monthly">Monthly Step Up</SelectItem>
