@@ -48,7 +48,7 @@ const StepUpSIPSettings = ({
                 <SelectTrigger className="w-[180px] focus:ring-0 focus-visible:ring-0">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white dark:bg-[#030c21] border-border">
                   <SelectItem value="Monthly">Monthly Step Up</SelectItem>
                   <SelectItem value="Quarterly">Quarterly Step Up</SelectItem>
                   <SelectItem value="Half-yearly">Half-yearly Step Up</SelectItem>
