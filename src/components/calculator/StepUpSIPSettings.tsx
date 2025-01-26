@@ -26,6 +26,21 @@ const StepUpSIPSettings = ({
   onPercentageChange,
   isAdvancedOptionsEnabled,
 }: StepUpSIPSettingsProps) => {
+const getWidthClass = () => {
+    switch (frequency) {
+      case "Monthly":
+        return "w-[150px]";
+      case "Quarterly":
+        return "w-[160px]";
+      case "Half-yearly":
+        return "w-[180px]";
+      case "Yearly":
+        return "w-[140px]";
+      default:
+        return "w-[180px]";
+    }
+  };
+  
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -45,7 +60,9 @@ const StepUpSIPSettings = ({
           <SliderInput
             label={
               <Select value={frequency} onValueChange={(value) => onFrequencyChange(value as StepUpFrequency)}>
-                <SelectTrigger className="w-[180px] focus:ring-0 focus-visible:ring-0">
+                <SelectTrigger
+                  className={`${getWidthClass()} focus:ring-0 focus-visible:ring-0`}
+                >
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-white dark:bg-[#030c21] border-border">
