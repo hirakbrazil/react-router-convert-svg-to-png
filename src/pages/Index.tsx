@@ -84,6 +84,10 @@ const Index = () => {
               returnRate,
               timePeriod,
               sipFrequency,
+              advancedOptionsEnabled: localStorage.getItem("advancedOptionsEnabled") === "true",
+              stepUpEnabled: localStorage.getItem("stepUpEnabled") === "true",
+              stepUpFrequency: localStorage.getItem("stepUpFrequency") as any || "Yearly",
+              stepUpPercentage: Number(localStorage.getItem("stepUpPercentage")) || 10,
             }}
             currentValues={{
               monthlyInvestment,
@@ -91,12 +95,24 @@ const Index = () => {
               timePeriod,
               sipFrequency,
               currency,
+              advancedOptionsEnabled: localStorage.getItem("advancedOptionsEnabled") === "true",
+              stepUpEnabled: localStorage.getItem("stepUpEnabled") === "true",
+              stepUpFrequency: localStorage.getItem("stepUpFrequency") as any || "Yearly",
+              stepUpPercentage: Number(localStorage.getItem("stepUpPercentage")) || 10,
             }}
             onRestore={(values) => {
               setMonthlyInvestment(values.monthlyInvestment);
               setReturnRate(values.returnRate);
               setTimePeriod(values.timePeriod);
               setSipFrequency(values.sipFrequency);
+              if (values.advancedOptionsEnabled) {
+                localStorage.setItem("advancedOptionsEnabled", "true");
+                if (values.stepUpEnabled) {
+                  localStorage.setItem("stepUpEnabled", "true");
+                  localStorage.setItem("stepUpFrequency", values.stepUpFrequency || "Yearly");
+                  localStorage.setItem("stepUpPercentage", (values.stepUpPercentage || 10).toString());
+                }
+              }
             }}
           />
           <HomepageContent 
