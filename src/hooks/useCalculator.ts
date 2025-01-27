@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { SIPFrequency } from "@/types/calculator";
 import { CurrencyType } from "@/components/CurrencySelector";
+import { StepUpFrequency } from "@/components/calculator/StepUpSIPSettings";
 
 export const useCalculator = () => {
   const getInitialValues = () => {
@@ -10,13 +11,21 @@ export const useCalculator = () => {
     const savedTimePeriod = localStorage.getItem("timePeriod");
     const savedSipFrequency = localStorage.getItem("sipFrequency") as SIPFrequency;
     const savedCurrency = localStorage.getItem("selectedCurrency") as CurrencyType;
+    const savedAdvancedOptionsEnabled = localStorage.getItem("advancedOptionsEnabled");
+    const savedStepUpEnabled = localStorage.getItem("stepUpEnabled");
+    const savedStepUpFrequency = localStorage.getItem("stepUpFrequency") as StepUpFrequency;
+    const savedStepUpPercentage = localStorage.getItem("stepUpPercentage");
 
     return {
       monthlyInvestment: Number(params.get("mi")) || Number(savedMonthlyInvestment) || 30000,
       returnRate: Number(params.get("rr")) || Number(savedReturnRate) || 13,
       timePeriod: Number(params.get("tp")) || Number(savedTimePeriod) || 10,
       sipFrequency: (params.get("sf") as SIPFrequency) || savedSipFrequency || "Monthly",
-      currency: (params.get("cs") as CurrencyType) || savedCurrency || "INR"
+      currency: (params.get("cs") as CurrencyType) || savedCurrency || "INR",
+      advancedOptionsEnabled: params.get("ao") === "true" || (savedAdvancedOptionsEnabled ? JSON.parse(savedAdvancedOptionsEnabled) : false),
+      stepUpEnabled: params.get("su") === "true" || (savedStepUpEnabled ? JSON.parse(savedStepUpEnabled) : false),
+      stepUpFrequency: (params.get("suf") as StepUpFrequency) || savedStepUpFrequency || "Yearly",
+      stepUpPercentage: Number(params.get("sup")) || Number(savedStepUpPercentage) || 10,
     };
   };
 
@@ -29,14 +38,10 @@ export const useCalculator = () => {
   const [totalValue, setTotalValue] = useState(0);
   const [totalInvestment, setTotalInvestment] = useState(0);
   const [currency, setCurrency] = useState<CurrencyType>(initialValues.currency);
-
-  // Clear URL parameters when values change
-  useEffect(() => {
-    const hasUrlParams = window.location.search !== "";
-    if (hasUrlParams) {
-      window.history.replaceState({}, '', window.location.pathname);
-    }
-  }, [monthlyInvestment, returnRate, timePeriod, sipFrequency, currency]);
+  const [advancedOptionsEnabled, setAdvancedOptionsEnabled] = useState(initialValues.advancedOptionsEnabled);
+  const [stepUpEnabled, setStepUpEnabled] = useState(initialValues.stepUpEnabled);
+  const [stepUpFrequency, setStepUpFrequency] = useState<StepUpFrequency>(initialValues.stepUpFrequency);
+  const [stepUpPercentage, setStepUpPercentage] = useState(initialValues.stepUpPercentage);
 
   // Save to localStorage
   useEffect(() => {
@@ -45,7 +50,11 @@ export const useCalculator = () => {
     localStorage.setItem("timePeriod", timePeriod.toString());
     localStorage.setItem("sipFrequency", sipFrequency);
     localStorage.setItem("selectedCurrency", currency);
-  }, [monthlyInvestment, returnRate, timePeriod, sipFrequency, currency]);
+    localStorage.setItem("advancedOptionsEnabled", JSON.stringify(advancedOptionsEnabled));
+    localStorage.setItem("stepUpEnabled", JSON.stringify(stepUpEnabled));
+    localStorage.setItem("stepUpFrequency", stepUpFrequency);
+    localStorage.setItem("stepUpPercentage", stepUpPercentage.toString());
+  }, [monthlyInvestment, returnRate, timePeriod, sipFrequency, currency, advancedOptionsEnabled, stepUpEnabled, stepUpFrequency, stepUpPercentage]);
 
   const calculateSIP = () => {
     const paymentsPerYear = {
@@ -88,5 +97,13 @@ export const useCalculator = () => {
     totalInvestment,
     currency,
     setCurrency,
+    advancedOptionsEnabled,
+    setAdvancedOptionsEnabled,
+    stepUpEnabled,
+    setStepUpEnabled,
+    stepUpFrequency,
+    setStepUpFrequency,
+    stepUpPercentage,
+    setStepUpPercentage,
   };
 };

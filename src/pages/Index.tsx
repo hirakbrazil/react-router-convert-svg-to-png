@@ -29,6 +29,14 @@ const Index = () => {
     totalInvestment,
     currency,
     setCurrency,
+    advancedOptionsEnabled,
+    setAdvancedOptionsEnabled,
+    stepUpEnabled,
+    setStepUpEnabled,
+    stepUpFrequency,
+    setStepUpFrequency,
+    stepUpPercentage,
+    setStepUpPercentage,
   } = useCalculator();
 
   const handleReset = () => {
@@ -36,7 +44,17 @@ const Index = () => {
     setReturnRate(13);
     setTimePeriod(10);
     setSipFrequency("Monthly");
+    setAdvancedOptionsEnabled(false);
+    setStepUpEnabled(false);
+    setStepUpFrequency("Yearly");
+    setStepUpPercentage(10);
     window.history.replaceState({}, '', window.location.pathname);
+    
+    // Clear advanced options from localStorage
+    localStorage.removeItem("advancedOptionsEnabled");
+    localStorage.removeItem("stepUpEnabled");
+    localStorage.removeItem("stepUpFrequency");
+    localStorage.removeItem("stepUpPercentage");
   };
 
   return (
@@ -67,6 +85,14 @@ const Index = () => {
             currency={currency}
             sipFrequency={sipFrequency}
             setSipFrequency={setSipFrequency}
+            advancedOptionsEnabled={advancedOptionsEnabled}
+            setAdvancedOptionsEnabled={setAdvancedOptionsEnabled}
+            stepUpEnabled={stepUpEnabled}
+            setStepUpEnabled={setStepUpEnabled}
+            stepUpFrequency={stepUpFrequency}
+            setStepUpFrequency={setStepUpFrequency}
+            stepUpPercentage={stepUpPercentage}
+            setStepUpPercentage={setStepUpPercentage}
           />
           <ResultCard
             totalInvestment={totalInvestment}
@@ -84,6 +110,10 @@ const Index = () => {
               returnRate,
               timePeriod,
               sipFrequency,
+              advancedOptionsEnabled,
+              stepUpEnabled,
+              stepUpFrequency,
+              stepUpPercentage,
             }}
             currentValues={{
               monthlyInvestment,
@@ -91,12 +121,20 @@ const Index = () => {
               timePeriod,
               sipFrequency,
               currency,
+              advancedOptionsEnabled,
+              stepUpEnabled,
+              stepUpFrequency,
+              stepUpPercentage,
             }}
             onRestore={(values) => {
               setMonthlyInvestment(values.monthlyInvestment);
               setReturnRate(values.returnRate);
               setTimePeriod(values.timePeriod);
               setSipFrequency(values.sipFrequency);
+              setAdvancedOptionsEnabled(values.advancedOptionsEnabled || false);
+              setStepUpEnabled(values.stepUpEnabled || false);
+              setStepUpFrequency(values.stepUpFrequency || "Yearly");
+              setStepUpPercentage(values.stepUpPercentage || 10);
             }}
           />
           <HomepageContent 

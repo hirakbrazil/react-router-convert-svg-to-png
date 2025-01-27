@@ -64,7 +64,7 @@ const ShareDialog = ({
         await navigator.share({
           title: "SIP Calculator",
           text: "SIP Calculator - Systematic Investment Plan Calculator",
-          url: generateShareableLink(false),
+          url: generateShareableLink(true),
         });
       } catch (error) {
         console.error("Error sharing:", error);
