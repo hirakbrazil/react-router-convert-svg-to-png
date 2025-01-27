@@ -61,12 +61,6 @@ const ActionButtons = ({
 
     setIsResetDisabled(true);
     onReset();
-    
-    // Clear advanced options from localStorage
-    localStorage.removeItem("advancedOptionsEnabled");
-    localStorage.removeItem("stepUpEnabled");
-    localStorage.removeItem("stepUpFrequency");
-    localStorage.removeItem("stepUpPercentage");
 
     toast({
       title: "Reset Complete",
