@@ -46,7 +46,7 @@ const getWidthClass = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-1">
           <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">Step Up SIP</span>
-          <InfoTooltip content="Automatically increase your SIP amount by a fixed percentage at regular intervals to keep up with your growing income and inflation." />
+          <InfoTooltip content="Automatically increase your SIP amount by a fixed percentage at regular intervals to keep up with your growing income and inflation. The most common step up frequency is Yearly, also known as the Annual step up." />
         </div>
         <Switch
           checked={enabled}
