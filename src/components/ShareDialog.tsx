@@ -46,7 +46,6 @@ const ShareDialog = ({
       sf: sipFrequency,
     });
 
-    // Always check the current state of advanced options
     if (advancedOptionsEnabled) {
       params.append("ao", "true");
       if (stepUpEnabled) {
@@ -82,9 +81,7 @@ const ShareDialog = ({
   };
 
   const handleShareCalculation = () => {
-    // Generate link with current state values
-    const currentLink = generateShareableLink(true);
-    navigator.clipboard.writeText(currentLink);
+    navigator.clipboard.writeText(generateShareableLink(true));
     toast({
       title: "Link copied to clipboard",
       description: "Share this link to show your current calculation",
