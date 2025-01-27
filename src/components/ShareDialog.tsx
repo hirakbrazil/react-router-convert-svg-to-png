@@ -4,6 +4,7 @@ import { Share2, Link, Calculator } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { CurrencyType } from "./CurrencySelector";
 import { SIPFrequency } from "@/types/calculator";
+import { StepUpFrequency } from "./calculator/StepUpSIPSettings";
 
 interface ShareDialogProps {
   open: boolean;
@@ -13,6 +14,10 @@ interface ShareDialogProps {
   timePeriod: number;
   currency: CurrencyType;
   sipFrequency: SIPFrequency;
+  advancedOptionsEnabled?: boolean;
+  stepUpEnabled?: boolean;
+  stepUpFrequency?: StepUpFrequency;
+  stepUpPercentage?: number;
 }
 
 const ShareDialog = ({
@@ -23,6 +28,10 @@ const ShareDialog = ({
   timePeriod,
   currency,
   sipFrequency,
+  advancedOptionsEnabled,
+  stepUpEnabled,
+  stepUpFrequency,
+  stepUpPercentage,
 }: ShareDialogProps) => {
   const baseUrl = "https://sip-calculator.mutualfundjournal.in/";
 
@@ -36,6 +45,15 @@ const ShareDialog = ({
       tp: timePeriod.toString(),
       sf: sipFrequency,
     });
+
+    if (advancedOptionsEnabled) {
+      params.append("ao", "true");
+      if (stepUpEnabled) {
+        params.append("su", "true");
+        params.append("suf", stepUpFrequency || "Yearly");
+        params.append("sup", stepUpPercentage?.toString() || "10");
+      }
+    }
 
     return `${baseUrl}?${params.toString()}`;
   };

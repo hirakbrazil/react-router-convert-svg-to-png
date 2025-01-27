@@ -5,6 +5,7 @@ import { useState, useRef } from "react";
 import ShareDialog from "./ShareDialog";
 import { CurrencyType } from "./CurrencySelector";
 import { SIPFrequency } from "@/types/calculator";
+import { StepUpFrequency } from "./calculator/StepUpSIPSettings";
 
 interface ActionButtonsProps {
   onReset: () => void;
@@ -13,6 +14,10 @@ interface ActionButtonsProps {
     returnRate: number;
     timePeriod: number;
     sipFrequency: SIPFrequency;
+    advancedOptionsEnabled?: boolean;
+    stepUpEnabled?: boolean;
+    stepUpFrequency?: StepUpFrequency;
+    stepUpPercentage?: number;
   };
   currentValues: {
     monthlyInvestment: number;
@@ -20,12 +25,20 @@ interface ActionButtonsProps {
     timePeriod: number;
     sipFrequency: SIPFrequency;
     currency: CurrencyType;
+    advancedOptionsEnabled?: boolean;
+    stepUpEnabled?: boolean;
+    stepUpFrequency?: StepUpFrequency;
+    stepUpPercentage?: number;
   };
   onRestore: (values: {
     monthlyInvestment: number;
     returnRate: number;
     timePeriod: number;
     sipFrequency: SIPFrequency;
+    advancedOptionsEnabled?: boolean;
+    stepUpEnabled?: boolean;
+    stepUpFrequency?: StepUpFrequency;
+    stepUpPercentage?: number;
   }) => void;
 }
 
@@ -48,6 +61,12 @@ const ActionButtons = ({
 
     setIsResetDisabled(true);
     onReset();
+    
+    // Clear advanced options from localStorage
+    localStorage.removeItem("advancedOptionsEnabled");
+    localStorage.removeItem("stepUpEnabled");
+    localStorage.removeItem("stepUpFrequency");
+    localStorage.removeItem("stepUpPercentage");
 
     toast({
       title: "Reset Complete",
