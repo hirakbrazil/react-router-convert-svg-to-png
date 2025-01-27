@@ -18,6 +18,14 @@ interface CalculatorFormProps {
   currency: CurrencyType;
   sipFrequency: SIPFrequency;
   setSipFrequency: (frequency: SIPFrequency) => void;
+  advancedOptionsEnabled: boolean;
+  setAdvancedOptionsEnabled: (enabled: boolean) => void;
+  stepUpEnabled: boolean;
+  setStepUpEnabled: (enabled: boolean) => void;
+  stepUpFrequency: StepUpFrequency;
+  setStepUpFrequency: (frequency: StepUpFrequency) => void;
+  stepUpPercentage: number;
+  setStepUpPercentage: (percentage: number) => void;
 }
 
 const CalculatorForm = ({
@@ -30,34 +38,15 @@ const CalculatorForm = ({
   currency,
   sipFrequency,
   setSipFrequency,
+  advancedOptionsEnabled,
+  setAdvancedOptionsEnabled,
+  stepUpEnabled,
+  setStepUpEnabled,
+  stepUpFrequency,
+  setStepUpFrequency,
+  stepUpPercentage,
+  setStepUpPercentage,
 }: CalculatorFormProps) => {
-  const [advancedOptionsEnabled, setAdvancedOptionsEnabled] = useState(() => {
-    const saved = localStorage.getItem("advancedOptionsEnabled");
-    return saved ? JSON.parse(saved) : false;
-  });
-  
-  const [stepUpEnabled, setStepUpEnabled] = useState(() => {
-    const saved = localStorage.getItem("stepUpEnabled");
-    return saved ? JSON.parse(saved) : false;
-  });
-  
-  const [stepUpFrequency, setStepUpFrequency] = useState<StepUpFrequency>(() => {
-    const saved = localStorage.getItem("stepUpFrequency");
-    return (saved as StepUpFrequency) || "Yearly";
-  });
-  
-  const [stepUpPercentage, setStepUpPercentage] = useState(() => {
-    const saved = localStorage.getItem("stepUpPercentage");
-    return saved ? Number(saved) : 10;
-  });
-
-  useEffect(() => {
-    localStorage.setItem("advancedOptionsEnabled", JSON.stringify(advancedOptionsEnabled));
-    localStorage.setItem("stepUpEnabled", JSON.stringify(stepUpEnabled));
-    localStorage.setItem("stepUpFrequency", stepUpFrequency);
-    localStorage.setItem("stepUpPercentage", stepUpPercentage.toString());
-  }, [advancedOptionsEnabled, stepUpEnabled, stepUpFrequency, stepUpPercentage]);
-
   const getInvestmentLabel = () => {
     switch (sipFrequency) {
       case "Daily":
@@ -162,12 +151,7 @@ const CalculatorForm = ({
           </div>
           <Switch
             checked={advancedOptionsEnabled}
-            onCheckedChange={(checked) => {
-              setAdvancedOptionsEnabled(checked);
-              if (!checked) {
-                setStepUpEnabled(false);
-              }
-            }}
+            onCheckedChange={setAdvancedOptionsEnabled}
           />
         </div>
 
