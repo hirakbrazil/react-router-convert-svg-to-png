@@ -86,34 +86,31 @@ export const useCalculator = () => {
       futureValue = monthlyInvestment * ((Math.pow(1 + r, t) - 1) / r) * (1 + r);
     } else {
       // Step-up SIP calculation
-      const stepUpsPerYear = stepUpPeriodsPerYear[stepUpFrequency];
-      const paymentsPerStepUp = n / stepUpsPerYear;
-      const totalStepUps = timePeriod * stepUpsPerYear;
-      
-      let currentInvestment = monthlyInvestment;
-      let remainingPayments = t;
-      let currentPeriodPayments = 0;
+    const stepUpsPerYear = stepUpPeriodsPerYear[stepUpFrequency];
+    const paymentsPerStepUp = n / stepUpsPerYear;
+    const totalStepUps = timePeriod * stepUpsPerYear;
+    
+    let currentInvestment = monthlyInvestment;
+    let remainingPayments = t;
+    let currentPeriodPayments = 0;
 
-      for (let i = 0; i < totalStepUps; i++) {
-        const paymentsInThisPeriod = Math.min(paymentsPerStepUp, remainingPayments);
-        
-        // Calculate future value for this period's investments
-        const periodFV = currentInvestment * 
-          ((Math.pow(1 + r, remainingPayments) - Math.pow(1 + r, remainingPayments - paymentsInThisPeriod)) / r);
-        
-        futureValue += periodFV;
-        totalInvestmentAmount += currentInvestment * paymentsInThisPeriod;
-        
-        // Update for next period
-        currentPeriodPayments += paymentsInThisPeriod;
-        remainingPayments -= paymentsInThisPeriod;
-        
-        if (remainingPayments > 0) {
-          // Increase investment amount for next period
-          currentInvestment *= (1 + stepUpPercentage / 100);
-        }
+    for (let i = 0; i < totalStepUps; i++) {
+      const paymentsInThisPeriod = Math.min(paymentsPerStepUp, remainingPayments);
+      
+      // Corrected: Multiply by (1 + r) for annuity due
+      const periodFV = currentInvestment * 
+        ((Math.pow(1 + r, remainingPayments) - Math.pow(1 + r, remainingPayments - paymentsInThisPeriod)) / r) * (1 + r);
+      
+      futureValue += periodFV;
+      totalInvestmentAmount += currentInvestment * paymentsInThisPeriod;
+      
+      remainingPayments -= paymentsInThisPeriod;
+      
+      if (remainingPayments > 0) {
+        currentInvestment *= (1 + stepUpPercentage / 100);
       }
     }
+  }
 
     setTotalInvestment(Math.round(totalInvestmentAmount));
     setTotalValue(Math.round(futureValue));
