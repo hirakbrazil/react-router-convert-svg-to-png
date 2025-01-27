@@ -49,12 +49,6 @@ const Index = () => {
     setStepUpFrequency("Yearly");
     setStepUpPercentage(10);
     window.history.replaceState({}, '', window.location.pathname);
-    
-    // Clear advanced options from localStorage
-    localStorage.removeItem("advancedOptionsEnabled");
-    localStorage.removeItem("stepUpEnabled");
-    localStorage.removeItem("stepUpFrequency");
-    localStorage.removeItem("stepUpPercentage");
   };
 
   return (
