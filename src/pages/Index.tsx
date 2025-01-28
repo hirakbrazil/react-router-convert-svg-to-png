@@ -37,6 +37,10 @@ const Index = () => {
     setStepUpFrequency,
     stepUpPercentage,
     setStepUpPercentage,
+    initialInvestmentEnabled,
+    setInitialInvestmentEnabled,
+    initialInvestmentAmount,
+    setInitialInvestmentAmount,
   } = useCalculator();
 
   const handleReset = () => {
@@ -48,6 +52,8 @@ const Index = () => {
     setStepUpEnabled(false);
     setStepUpFrequency("Yearly");
     setStepUpPercentage(10);
+    setInitialInvestmentEnabled(false);
+    setInitialInvestmentAmount(500000);
     window.history.replaceState({}, '', window.location.pathname);
   };
 
@@ -87,6 +93,10 @@ const Index = () => {
             setStepUpFrequency={setStepUpFrequency}
             stepUpPercentage={stepUpPercentage}
             setStepUpPercentage={setStepUpPercentage}
+            initialInvestmentEnabled={initialInvestmentEnabled}
+            setInitialInvestmentEnabled={setInitialInvestmentEnabled}
+            initialInvestmentAmount={initialInvestmentAmount}
+            setInitialInvestmentAmount={setInitialInvestmentAmount}
           />
           <ResultCard
             totalInvestment={totalInvestment}

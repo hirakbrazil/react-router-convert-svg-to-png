@@ -7,6 +7,7 @@ import InfoTooltip from "./InfoTooltip";
 import { format, addYears } from "date-fns";
 import { Switch } from "@/components/ui/switch";
 import StepUpSIPSettings, { StepUpFrequency } from "./calculator/StepUpSIPSettings";
+import InitialInvestmentSettings from "./calculator/InitialInvestmentSettings";
 
 interface CalculatorFormProps {
   monthlyInvestment: number;
@@ -26,6 +27,10 @@ interface CalculatorFormProps {
   setStepUpFrequency: (frequency: StepUpFrequency) => void;
   stepUpPercentage: number;
   setStepUpPercentage: (percentage: number) => void;
+  initialInvestmentEnabled: boolean;
+  setInitialInvestmentEnabled: (enabled: boolean) => void;
+  initialInvestmentAmount: number;
+  setInitialInvestmentAmount: (amount: number) => void;
 }
 
 const CalculatorForm = ({
@@ -46,6 +51,10 @@ const CalculatorForm = ({
   setStepUpFrequency,
   stepUpPercentage,
   setStepUpPercentage,
+  initialInvestmentEnabled,
+  setInitialInvestmentEnabled,
+  initialInvestmentAmount,
+  setInitialInvestmentAmount,
 }: CalculatorFormProps) => {
   const getInvestmentLabel = () => {
     switch (sipFrequency) {
@@ -156,7 +165,7 @@ const CalculatorForm = ({
         </div>
 
         {advancedOptionsEnabled && (
-          <div className="pl-4">
+          <div className="pl-4 space-y-6">
             <StepUpSIPSettings
               enabled={stepUpEnabled}
               onEnabledChange={setStepUpEnabled}
@@ -165,6 +174,14 @@ const CalculatorForm = ({
               percentage={stepUpPercentage}
               onPercentageChange={setStepUpPercentage}
               isAdvancedOptionsEnabled={advancedOptionsEnabled}
+            />
+            <InitialInvestmentSettings
+              enabled={initialInvestmentEnabled}
+              onEnabledChange={setInitialInvestmentEnabled}
+              amount={initialInvestmentAmount}
+              onAmountChange={setInitialInvestmentAmount}
+              isAdvancedOptionsEnabled={advancedOptionsEnabled}
+              currency={currency}
             />
           </div>
         )}

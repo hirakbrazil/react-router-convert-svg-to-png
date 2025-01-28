@@ -15,6 +15,8 @@ export const useCalculator = () => {
     const savedStepUpEnabled = localStorage.getItem("stepUpEnabled");
     const savedStepUpFrequency = localStorage.getItem("stepUpFrequency") as StepUpFrequency;
     const savedStepUpPercentage = localStorage.getItem("stepUpPercentage");
+    const savedInitialInvestmentEnabled = localStorage.getItem("initialInvestmentEnabled");
+    const savedInitialInvestmentAmount = localStorage.getItem("initialInvestmentAmount");
 
     return {
       monthlyInvestment: Number(params.get("mi")) || Number(savedMonthlyInvestment) || 30000,
@@ -26,6 +28,8 @@ export const useCalculator = () => {
       stepUpEnabled: params.get("su") === "true" || (savedStepUpEnabled ? JSON.parse(savedStepUpEnabled) : false),
       stepUpFrequency: (params.get("suf") as StepUpFrequency) || savedStepUpFrequency || "Yearly",
       stepUpPercentage: Number(params.get("sup")) || Number(savedStepUpPercentage) || 10,
+      initialInvestmentEnabled: params.get("iie") === "true" || (savedInitialInvestmentEnabled ? JSON.parse(savedInitialInvestmentEnabled) : false),
+      initialInvestmentAmount: Number(params.get("iia")) || Number(savedInitialInvestmentAmount) || 500000,
     };
   };
 
@@ -42,6 +46,8 @@ export const useCalculator = () => {
   const [stepUpEnabled, setStepUpEnabled] = useState(initialValues.stepUpEnabled);
   const [stepUpFrequency, setStepUpFrequency] = useState<StepUpFrequency>(initialValues.stepUpFrequency);
   const [stepUpPercentage, setStepUpPercentage] = useState(initialValues.stepUpPercentage);
+  const [initialInvestmentEnabled, setInitialInvestmentEnabled] = useState(initialValues.initialInvestmentEnabled);
+  const [initialInvestmentAmount, setInitialInvestmentAmount] = useState(initialValues.initialInvestmentAmount);
 
   // Save to localStorage
   useEffect(() => {
@@ -54,7 +60,9 @@ export const useCalculator = () => {
     localStorage.setItem("stepUpEnabled", JSON.stringify(stepUpEnabled));
     localStorage.setItem("stepUpFrequency", stepUpFrequency);
     localStorage.setItem("stepUpPercentage", stepUpPercentage.toString());
-  }, [monthlyInvestment, returnRate, timePeriod, sipFrequency, currency, advancedOptionsEnabled, stepUpEnabled, stepUpFrequency, stepUpPercentage]);
+    localStorage.setItem("initialInvestmentEnabled", JSON.stringify(initialInvestmentEnabled));
+    localStorage.setItem("initialInvestmentAmount", initialInvestmentAmount.toString());
+  }, [monthlyInvestment, returnRate, timePeriod, sipFrequency, currency, advancedOptionsEnabled, stepUpEnabled, stepUpFrequency, stepUpPercentage, initialInvestmentEnabled, initialInvestmentAmount]);
 
   const calculateSIP = () => {
     const paymentsPerYear = {
@@ -77,40 +85,39 @@ export const useCalculator = () => {
     const r = returnRate / (n * 100); // Convert percentage to decimal and divide by frequency
     const t = timePeriod * n; // Total number of payments
 
-    let totalInvestmentAmount = 0;
-    let futureValue = 0;
+    let totalInvestmentAmount = initialInvestmentEnabled ? initialInvestmentAmount : 0;
+    let futureValue = initialInvestmentEnabled ? initialInvestmentAmount * Math.pow(1 + returnRate / 100, timePeriod) : 0;
 
     if (!advancedOptionsEnabled || !stepUpEnabled) {
       // Regular SIP calculation without step-up
-      totalInvestmentAmount = monthlyInvestment * t;
-      futureValue = monthlyInvestment * ((Math.pow(1 + r, t) - 1) / r) * (1 + r);
+      totalInvestmentAmount += monthlyInvestment * t;
+      futureValue += monthlyInvestment * ((Math.pow(1 + r, t) - 1) / r) * (1 + r);
     } else {
       // Step-up SIP calculation
-    const stepUpsPerYear = stepUpPeriodsPerYear[stepUpFrequency];
-    const paymentsPerStepUp = n / stepUpsPerYear;
-    const totalStepUps = timePeriod * stepUpsPerYear;
-    
-    let currentInvestment = monthlyInvestment;
-    let remainingPayments = t;
-    let currentPeriodPayments = 0;
+      const stepUpsPerYear = stepUpPeriodsPerYear[stepUpFrequency];
+      const paymentsPerStepUp = n / stepUpsPerYear;
+      const totalStepUps = timePeriod * stepUpsPerYear;
+      
+      let currentInvestment = monthlyInvestment;
+      let remainingPayments = t;
+      let currentPeriodPayments = 0;
 
-    for (let i = 0; i < totalStepUps; i++) {
-      const paymentsInThisPeriod = Math.min(paymentsPerStepUp, remainingPayments);
-      
-      // Corrected: Multiply by (1 + r) for annuity due
-      const periodFV = currentInvestment * 
-        ((Math.pow(1 + r, remainingPayments) - Math.pow(1 + r, remainingPayments - paymentsInThisPeriod)) / r) * (1 + r);
-      
-      futureValue += periodFV;
-      totalInvestmentAmount += currentInvestment * paymentsInThisPeriod;
-      
-      remainingPayments -= paymentsInThisPeriod;
-      
-      if (remainingPayments > 0) {
-        currentInvestment *= (1 + stepUpPercentage / 100);
+      for (let i = 0; i < totalStepUps; i++) {
+        const paymentsInThisPeriod = Math.min(paymentsPerStepUp, remainingPayments);
+        
+        const periodFV = currentInvestment * 
+          ((Math.pow(1 + r, remainingPayments) - Math.pow(1 + r, remainingPayments - paymentsInThisPeriod)) / r) * (1 + r);
+        
+        futureValue += periodFV;
+        totalInvestmentAmount += currentInvestment * paymentsInThisPeriod;
+        
+        remainingPayments -= paymentsInThisPeriod;
+        
+        if (remainingPayments > 0) {
+          currentInvestment *= (1 + stepUpPercentage / 100);
+        }
       }
     }
-  }
 
     setTotalInvestment(Math.round(totalInvestmentAmount));
     setTotalValue(Math.round(futureValue));
@@ -127,7 +134,9 @@ export const useCalculator = () => {
     advancedOptionsEnabled,
     stepUpEnabled,
     stepUpFrequency,
-    stepUpPercentage
+    stepUpPercentage,
+    initialInvestmentEnabled,
+    initialInvestmentAmount
   ]);
 
   return {
@@ -151,5 +160,9 @@ export const useCalculator = () => {
     setStepUpFrequency,
     stepUpPercentage,
     setStepUpPercentage,
+    initialInvestmentEnabled,
+    setInitialInvestmentEnabled,
+    initialInvestmentAmount,
+    setInitialInvestmentAmount,
   };
 };
