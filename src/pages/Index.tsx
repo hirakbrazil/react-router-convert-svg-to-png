@@ -143,8 +143,8 @@ const Index = () => {
               setStepUpEnabled(values.stepUpEnabled || false);
               setStepUpFrequency(values.stepUpFrequency || "Yearly");
               setStepUpPercentage(values.stepUpPercentage || 10);
-              setInitialInvestmentEnabled(values.InitialInvestmentEnabled || false);
-              setInitialInvestmentAmount(values.InitialInvestmentAmount || 500000);
+              setInitialInvestmentEnabled(values.initialInvestmentEnabled || false);
+              setInitialInvestmentAmount(values.initialInvestmentAmount || 500000);
             }}
           />
           <HomepageContent 
