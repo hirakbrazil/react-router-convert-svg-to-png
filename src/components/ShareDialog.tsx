@@ -18,6 +18,8 @@ interface ShareDialogProps {
   stepUpEnabled?: boolean;
   stepUpFrequency?: StepUpFrequency;
   stepUpPercentage?: number;
+  initialInvestmentEnabled?: boolean;
+  initialInvestmentAmount?: number;
 }
 
 const ShareDialog = ({
@@ -32,6 +34,8 @@ const ShareDialog = ({
   stepUpEnabled,
   stepUpFrequency,
   stepUpPercentage,
+  initialInvestmentEnabled,
+  initialInvestmentAmount,
 }: ShareDialogProps) => {
   const baseUrl = "https://sip-calculator.mutualfundjournal.in/";
 
@@ -52,6 +56,10 @@ const ShareDialog = ({
         params.append("su", "true");
         params.append("suf", stepUpFrequency || "Yearly");
         params.append("sup", stepUpPercentage?.toString() || "10");
+      }
+      if (initialInvestmentEnabled) {
+        params.append("iie", "true");
+        params.append("iia", initialInvestmentAmount?.toString() || "500000");
       }
     }
 

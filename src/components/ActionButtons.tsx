@@ -18,6 +18,8 @@ interface ActionButtonsProps {
     stepUpEnabled?: boolean;
     stepUpFrequency?: StepUpFrequency;
     stepUpPercentage?: number;
+    initialInvestmentEnabled?: boolean;
+    initialInvestmentAmount?: number;
   };
   currentValues: {
     monthlyInvestment: number;
@@ -29,6 +31,8 @@ interface ActionButtonsProps {
     stepUpEnabled?: boolean;
     stepUpFrequency?: StepUpFrequency;
     stepUpPercentage?: number;
+    initialInvestmentEnabled?: boolean;
+    initialInvestmentAmount?: number;
   };
   onRestore: (values: {
     monthlyInvestment: number;
@@ -39,6 +43,8 @@ interface ActionButtonsProps {
     stepUpEnabled?: boolean;
     stepUpFrequency?: StepUpFrequency;
     stepUpPercentage?: number;
+    initialInvestmentEnabled?: boolean;
+    initialInvestmentAmount?: number;
   }) => void;
 }
 
