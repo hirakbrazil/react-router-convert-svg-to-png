@@ -86,7 +86,14 @@ export const useCalculator = () => {
     const t = timePeriod * n; // Total number of payments
 
     let totalInvestmentAmount = initialInvestmentEnabled ? initialInvestmentAmount : 0;
-    let futureValue = initialInvestmentEnabled ? initialInvestmentAmount * Math.pow(1 + returnRate / 100, timePeriod) : 0;
+    let futureValue = 0;
+
+    // Calculate initial investment with monthly compounding
+    if (initialInvestmentEnabled) {
+      const monthlyRate = returnRate / (100 * 12); // Monthly rate
+      const totalMonths = timePeriod * 12; // Total months
+      futureValue = initialInvestmentAmount * Math.pow(1 + monthlyRate, totalMonths);
+    }
 
     if (!advancedOptionsEnabled || !stepUpEnabled) {
       // Regular SIP calculation without step-up
