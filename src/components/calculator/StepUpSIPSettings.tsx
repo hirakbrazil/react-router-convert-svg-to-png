@@ -4,6 +4,7 @@ import { Switch } from "@/components/ui/switch";
 import { ChevronDown } from "lucide-react";
 import SliderInput from "@/components/slider/SliderInput";
 import InfoTooltip from "@/components/InfoTooltip";
+import { useToast } from "@/hooks/use-toast";
 
 export type StepUpFrequency = "Monthly" | "Quarterly" | "Half-yearly" | "Yearly";
 
@@ -26,7 +27,9 @@ const StepUpSIPSettings = ({
   onPercentageChange,
   isAdvancedOptionsEnabled,
 }: StepUpSIPSettingsProps) => {
-const getWidthClass = () => {
+  const { toast } = useToast();
+
+  const getWidthClass = () => {
     switch (frequency) {
       case "Monthly":
         return "w-[160px]";
@@ -41,6 +44,16 @@ const getWidthClass = () => {
     }
   };
   
+  const handleFrequencyChange = (value: string) => {
+    const newFrequency = value as StepUpFrequency;
+    onFrequencyChange(newFrequency);
+    toast({
+      title: "Step Up frequency updated",
+      description: `Changed to ${value} Step Up`,
+      duration: 7000,
+    });
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -59,7 +72,7 @@ const getWidthClass = () => {
         <div className="space-y-4">
           <SliderInput
             label={
-              <Select value={frequency} onValueChange={(value) => onFrequencyChange(value as StepUpFrequency)}>
+              <Select value={frequency} onValueChange={handleFrequencyChange}>
                 <SelectTrigger
                   className={`${getWidthClass()} focus:ring-0 focus-visible:ring-0 bg-white dark:bg-[#030c21]`}
                 >
