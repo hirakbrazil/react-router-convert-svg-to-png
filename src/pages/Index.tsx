@@ -118,6 +118,8 @@ const Index = () => {
               stepUpEnabled,
               stepUpFrequency,
               stepUpPercentage,
+              initialInvestmentEnabled,
+              initialInvestmentAmount,
             }}
             currentValues={{
               monthlyInvestment,
@@ -129,6 +131,8 @@ const Index = () => {
               stepUpEnabled,
               stepUpFrequency,
               stepUpPercentage,
+              initialInvestmentEnabled,
+              initialInvestmentAmount,
             }}
             onRestore={(values) => {
               setMonthlyInvestment(values.monthlyInvestment);
@@ -139,6 +143,8 @@ const Index = () => {
               setStepUpEnabled(values.stepUpEnabled || false);
               setStepUpFrequency(values.stepUpFrequency || "Yearly");
               setStepUpPercentage(values.stepUpPercentage || 10);
+              setInitialInvestmentEnabled(values.setInitialInvestmentEnabled || false);
+              setInitialInvestmentAmount(values.setInitialInvestmentAmount || 500000);
             }}
           />
           <HomepageContent 
