@@ -88,11 +88,12 @@ export const useCalculator = () => {
     let totalInvestmentAmount = initialInvestmentEnabled ? initialInvestmentAmount : 0;
     let futureValue = 0;
 
-    // Calculate initial investment with monthly compounding
+    // Calculate initial investment with matching frequency compounding
     if (initialInvestmentEnabled) {
-      const monthlyRate = returnRate / (100 * 12); // Monthly rate
-      const totalMonths = timePeriod * 12; // Total months
-      futureValue = initialInvestmentAmount * Math.pow(1 + monthlyRate, totalMonths);
+      const periodsPerYear = paymentsPerYear[sipFrequency];
+      const periodRate = returnRate / (100 * periodsPerYear); // Rate per period
+      const totalPeriods = timePeriod * periodsPerYear; // Total periods
+      futureValue = initialInvestmentAmount * Math.pow(1 + periodRate, totalPeriods);
     }
 
     if (!advancedOptionsEnabled || !stepUpEnabled) {
