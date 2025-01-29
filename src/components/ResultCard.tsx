@@ -3,6 +3,7 @@ import { CurrencyType } from "./CurrencySelector";
 import { SIPFrequency } from "@/types/calculator";
 import InfoTooltip from "./InfoTooltip";
 import DonutChart from "./DonutChart";
+import { format, addMonths, addYears } from "date-fns";
 
 interface ResultCardProps {
   totalInvestment: number;
@@ -11,6 +12,8 @@ interface ResultCardProps {
   currency: CurrencyType;
   sipFrequency: SIPFrequency;
   timePeriod: number;
+  stepUpEnabled?: boolean;
+  stepUpPercentage?: number;
 }
 
 const formatCurrency = (value: number, currency: CurrencyType): string => {
@@ -44,12 +47,49 @@ const ResultCard = ({
   currency,
   sipFrequency,
   timePeriod,
+  stepUpEnabled,
+  stepUpPercentage = 0,
 }: ResultCardProps) => {
   const totalProfit = totalValue - totalInvestment;
   const profitPercentage = ((totalProfit / totalInvestment) * 100).toFixed(2);
 
+  const calculateLastSIPAmount = () => {
+    if (!stepUpEnabled) return monthlyInvestment;
+    return monthlyInvestment * Math.pow(1 + stepUpPercentage / 100, timePeriod);
+  };
+
+  const startDate = new Date();
+  const endDate = addYears(startDate, timePeriod);
+  const firstSIPDate = format(startDate, "MMM yyyy");
+  const lastSIPDate = format(endDate, "MMM yyyy");
+  const lastSIPAmount = calculateLastSIPAmount();
+
   return (
     <div className="border border-border bg-card dark:bg-card rounded-xl p-6 space-y-4">
+      {stepUpEnabled && (
+        <>
+          <div className="flex justify-between items-center">
+            <div className="flex flex-wrap items-center gap-x-1">
+              <span className="text-gray-600 dark:text-gray-400">First SIP</span>
+              <span className="text-gray-600 dark:text-gray-400">({firstSIPDate})</span>
+              <InfoTooltip content="Your initial SIP amount at the start of investment" />
+            </div>
+            <span className="text-xl font-semibold text-foreground">
+              {formatCurrency(monthlyInvestment, currency)}
+            </span>
+          </div>
+          <div className="flex justify-between items-center">
+            <div className="flex flex-wrap items-center gap-x-1">
+              <span className="text-gray-600 dark:text-gray-400">Last SIP</span>
+              <span className="text-gray-600 dark:text-gray-400">({lastSIPDate})</span>
+              <InfoTooltip content="Your final SIP amount after all step-ups" />
+            </div>
+            <span className="text-xl font-semibold text-foreground">
+              {formatCurrency(lastSIPAmount, currency)}
+            </span>
+          </div>
+        </>
+      )}
       <div className="flex justify-between items-center">
         <div className="flex flex-wrap items-center gap-x-1">
           <span className="text-gray-600 dark:text-gray-400">Total</span>
