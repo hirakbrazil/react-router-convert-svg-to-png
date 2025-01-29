@@ -105,6 +105,8 @@ const Index = () => {
             currency={currency}
             sipFrequency={sipFrequency}
             timePeriod={timePeriod}
+            stepUpEnabled={stepUpEnabled}
+            stepUpPercentage={stepUpPercentage}
           />
           <AdSenseResponsive />
           <ActionButtons
