@@ -3,7 +3,7 @@ import { CurrencyType } from "./CurrencySelector";
 import { SIPFrequency } from "@/types/calculator";
 import InfoTooltip from "./InfoTooltip";
 import DonutChart from "./DonutChart";
-import { format, addMonths, addYears } from "date-fns";
+import { format, addMonths, addYears, startOfMonth } from "date-fns";
 
 interface ResultCardProps {
   totalInvestment: number;
@@ -53,15 +53,34 @@ const ResultCard = ({
   const totalProfit = totalValue - totalInvestment;
   const profitPercentage = ((totalProfit / totalInvestment) * 100).toFixed(2);
 
-  const calculateLastSIPAmount = () => {
-    if (!stepUpEnabled) return monthlyInvestment;
-    return monthlyInvestment * Math.pow(1 + stepUpPercentage / 100, timePeriod);
+  const getFrequencyMonths = (frequency: SIPFrequency): number => {
+    switch (frequency) {
+      case "Daily": return 1/30;
+      case "Weekly": return 1/4;
+      case "Monthly": return 1;
+      case "Quarterly": return 3;
+      case "Half-yearly": return 6;
+      case "Yearly": return 12;
+      default: return 1;
+    }
   };
 
-  const startDate = new Date();
-  const endDate = addYears(startDate, timePeriod);
+  const calculateLastSIPAmount = () => {
+    if (!stepUpEnabled) return monthlyInvestment;
+    
+    const frequencyMonths = getFrequencyMonths(sipFrequency);
+    const totalStepUps = Math.floor(timePeriod * 12 / frequencyMonths);
+    
+    return monthlyInvestment * Math.pow(1 + stepUpPercentage / 100, totalStepUps - 1);
+  };
+
+  const startDate = startOfMonth(new Date());
+  const frequencyMonths = getFrequencyMonths(sipFrequency);
+  const totalMonths = timePeriod * 12;
+  const lastSIPDate = addMonths(startDate, Math.floor(totalMonths / frequencyMonths) * frequencyMonths - frequencyMonths);
+  
   const firstSIPDate = format(startDate, "MMM yyyy");
-  const lastSIPDate = format(endDate, "MMM yyyy");
+  const lastSIPDate_formatted = format(lastSIPDate, "MMM yyyy");
   const lastSIPAmount = calculateLastSIPAmount();
 
   return (
@@ -81,7 +100,7 @@ const ResultCard = ({
           <div className="flex justify-between items-center">
             <div className="flex flex-wrap items-center gap-x-1">
               <span className="text-gray-600 dark:text-gray-400">Last SIP</span>
-              <span className="text-gray-600 dark:text-gray-400">({lastSIPDate})</span>
+              <span className="text-gray-600 dark:text-gray-400">({lastSIPDate_formatted})</span>
               <InfoTooltip content="Your final SIP amount after all step-ups" />
             </div>
             <span className="text-xl font-semibold text-foreground">
@@ -90,6 +109,7 @@ const ResultCard = ({
           </div>
         </>
       )}
+
       <div className="flex justify-between items-center">
         <div className="flex flex-wrap items-center gap-x-1">
           <span className="text-gray-600 dark:text-gray-400">Total</span>
@@ -100,6 +120,7 @@ const ResultCard = ({
           {formatCurrency(totalInvestment, currency)}
         </span>
       </div>
+
       <div className="flex justify-between items-center">
         <div className="flex flex-wrap items-center gap-x-1">
           <span className="text-gray-600 dark:text-gray-400">Total</span>
