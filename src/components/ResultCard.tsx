@@ -4,6 +4,7 @@ import { SIPFrequency } from "@/types/calculator";
 import InfoTooltip from "./InfoTooltip";
 import DonutChart from "./DonutChart";
 import { format, addMonths, startOfMonth } from "date-fns";
+import { StepUpFrequency } from "./calculator/StepUpSIPSettings";
 
 interface ResultCardProps {
   totalInvestment: number;
@@ -14,6 +15,7 @@ interface ResultCardProps {
   timePeriod: number;
   stepUpEnabled?: boolean;
   stepUpPercentage?: number;
+  stepUpFrequency?: StepUpFrequency;
 }
 
 const formatCurrency = (value: number, currency: CurrencyType): string => {
@@ -49,6 +51,7 @@ const ResultCard = ({
   timePeriod,
   stepUpEnabled,
   stepUpPercentage = 0,
+  stepUpFrequency = "Yearly",
 }: ResultCardProps) => {
   const totalProfit = totalValue - totalInvestment;
   const profitPercentage = ((totalProfit / totalInvestment) * 100).toFixed(2);
@@ -65,13 +68,24 @@ const ResultCard = ({
     }
   };
 
+  const getStepUpPeriodsPerYear = (frequency: StepUpFrequency): number => {
+    switch (frequency) {
+      case "Monthly": return 12;
+      case "Quarterly": return 4;
+      case "Half-yearly": return 2;
+      case "Yearly": return 1;
+      default: return 1;
+    }
+  };
+
   const calculateLastSIPAmount = () => {
     if (!stepUpEnabled) return monthlyInvestment;
     
-    // Calculate number of years for step-ups
-    const years = timePeriod;
-    // Each year will have one step-up
-    return monthlyInvestment * Math.pow(1 + stepUpPercentage / 100, years - 1);
+    const periodsPerYear = getStepUpPeriodsPerYear(stepUpFrequency);
+    const totalPeriods = timePeriod * periodsPerYear;
+    
+    // Calculate step-ups based on the selected frequency
+    return monthlyInvestment * Math.pow(1 + stepUpPercentage / 100, totalPeriods - 1);
   };
 
   const startDate = startOfMonth(new Date());

@@ -107,6 +107,7 @@ const Index = () => {
             timePeriod={timePeriod}
             stepUpEnabled={stepUpEnabled}
             stepUpPercentage={stepUpPercentage}
+            stepUpFrequency={stepUpFrequency}
           />
           <AdSenseResponsive />
           <ActionButtons
