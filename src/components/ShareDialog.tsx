@@ -32,14 +32,14 @@ const ShareDialog = ({
   timePeriod,
   currency,
   sipFrequency,
-  advancedOptionsEnabled,
-  stepUpEnabled,
-  stepUpFrequency,
-  stepUpPercentage,
-  initialInvestmentEnabled,
-  initialInvestmentAmount,
-  inflationEnabled,
-  inflationRate,
+  advancedOptionsEnabled = false,
+  stepUpEnabled = false,
+  stepUpFrequency = "Yearly",
+  stepUpPercentage = 10,
+  initialInvestmentEnabled = false,
+  initialInvestmentAmount = 500000,
+  inflationEnabled = false,
+  inflationRate = 6,
 }: ShareDialogProps) => {
   const baseUrl = "https://sip-calculator.mutualfundjournal.in/";
 
@@ -52,24 +52,15 @@ const ShareDialog = ({
       rr: returnRate.toString(),
       tp: timePeriod.toString(),
       sf: sipFrequency,
+      ao: advancedOptionsEnabled.toString(),
+      su: stepUpEnabled.toString(),
+      suf: stepUpFrequency,
+      sup: stepUpPercentage.toString(),
+      iie: initialInvestmentEnabled.toString(),
+      iia: initialInvestmentAmount.toString(),
+      inf: inflationEnabled.toString(),
+      ir: inflationRate.toString(),
     });
-
-    if (advancedOptionsEnabled) {
-      params.append("ao", "true");
-      if (stepUpEnabled) {
-        params.append("su", "true");
-        params.append("suf", stepUpFrequency || "Yearly");
-        params.append("sup", stepUpPercentage?.toString() || "10");
-      }
-      if (initialInvestmentEnabled) {
-        params.append("iie", "true");
-        params.append("iia", initialInvestmentAmount?.toString() || "500000");
-      }
-      if (inflationEnabled) {
-        params.append("inf", "true");
-        params.append("ir", inflationRate?.toString() || "6");
-      }
-    }
 
     return `${baseUrl}?${params.toString()}`;
   };
