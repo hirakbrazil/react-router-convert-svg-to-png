@@ -41,6 +41,10 @@ const Index = () => {
     setInitialInvestmentEnabled,
     initialInvestmentAmount,
     setInitialInvestmentAmount,
+    inflationEnabled,
+    setInflationEnabled,
+    inflationRate,
+    setInflationRate,
   } = useCalculator();
 
   const handleReset = () => {
@@ -54,6 +58,8 @@ const Index = () => {
     setStepUpPercentage(10);
     setInitialInvestmentEnabled(false);
     setInitialInvestmentAmount(500000);
+    setInflationEnabled(false);
+    setInflationRate(6);
     window.history.replaceState({}, '', window.location.pathname);
   };
 
@@ -97,6 +103,10 @@ const Index = () => {
             setInitialInvestmentEnabled={setInitialInvestmentEnabled}
             initialInvestmentAmount={initialInvestmentAmount}
             setInitialInvestmentAmount={setInitialInvestmentAmount}
+            inflationEnabled={inflationEnabled}
+            setInflationEnabled={setInflationEnabled}
+            inflationRate={inflationRate}
+            setInflationRate={setInflationRate}
           />
           <ResultCard
             totalInvestment={totalInvestment}
@@ -123,6 +133,8 @@ const Index = () => {
               stepUpPercentage,
               initialInvestmentEnabled,
               initialInvestmentAmount,
+              inflationEnabled,
+              inflationRate,
             }}
             currentValues={{
               monthlyInvestment,
@@ -136,6 +148,8 @@ const Index = () => {
               stepUpPercentage,
               initialInvestmentEnabled,
               initialInvestmentAmount,
+              inflationEnabled,
+              inflationRate,
             }}
             onRestore={(values) => {
               setMonthlyInvestment(values.monthlyInvestment);
@@ -148,6 +162,8 @@ const Index = () => {
               setStepUpPercentage(values.stepUpPercentage || 10);
               setInitialInvestmentEnabled(values.initialInvestmentEnabled || false);
               setInitialInvestmentAmount(values.initialInvestmentAmount || 500000);
+              setInflationEnabled(values.inflationEnabled || false);
+              setInflationRate(values.inflationRate || 6);
             }}
           />
           <HomepageContent 

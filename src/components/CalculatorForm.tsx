@@ -8,6 +8,7 @@ import { format, addYears } from "date-fns";
 import { Switch } from "@/components/ui/switch";
 import StepUpSIPSettings, { StepUpFrequency } from "./calculator/StepUpSIPSettings";
 import InitialInvestmentSettings from "./calculator/InitialInvestmentSettings";
+import InflationSettings from "./calculator/InflationSettings";
 
 interface CalculatorFormProps {
   monthlyInvestment: number;
@@ -31,6 +32,10 @@ interface CalculatorFormProps {
   setInitialInvestmentEnabled: (enabled: boolean) => void;
   initialInvestmentAmount: number;
   setInitialInvestmentAmount: (amount: number) => void;
+  inflationEnabled: boolean;
+  setInflationEnabled: (enabled: boolean) => void;
+  inflationRate: number;
+  setInflationRate: (rate: number) => void;
 }
 
 const CalculatorForm = ({
@@ -55,6 +60,10 @@ const CalculatorForm = ({
   setInitialInvestmentEnabled,
   initialInvestmentAmount,
   setInitialInvestmentAmount,
+  inflationEnabled,
+  setInflationEnabled,
+  inflationRate,
+  setInflationRate,
 }: CalculatorFormProps) => {
   const getInvestmentLabel = () => {
     switch (sipFrequency) {
@@ -182,6 +191,13 @@ const CalculatorForm = ({
               onAmountChange={setInitialInvestmentAmount}
               isAdvancedOptionsEnabled={advancedOptionsEnabled}
               currency={currency}
+            />
+            <InflationSettings
+              enabled={inflationEnabled}
+              onEnabledChange={setInflationEnabled}
+              rate={inflationRate}
+              onRateChange={setInflationRate}
+              isAdvancedOptionsEnabled={advancedOptionsEnabled}
             />
           </div>
         )}

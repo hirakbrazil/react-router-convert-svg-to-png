@@ -17,6 +17,8 @@ export const useCalculator = () => {
     const savedStepUpPercentage = localStorage.getItem("stepUpPercentage");
     const savedInitialInvestmentEnabled = localStorage.getItem("initialInvestmentEnabled");
     const savedInitialInvestmentAmount = localStorage.getItem("initialInvestmentAmount");
+    const savedInflationEnabled = localStorage.getItem("inflationEnabled");
+    const savedInflationRate = localStorage.getItem("inflationRate");
 
     return {
       monthlyInvestment: Number(params.get("mi")) || Number(savedMonthlyInvestment) || 30000,
@@ -30,6 +32,8 @@ export const useCalculator = () => {
       stepUpPercentage: Number(params.get("sup")) || Number(savedStepUpPercentage) || 10,
       initialInvestmentEnabled: params.get("iie") === "true" || (savedInitialInvestmentEnabled ? JSON.parse(savedInitialInvestmentEnabled) : false),
       initialInvestmentAmount: Number(params.get("iia")) || Number(savedInitialInvestmentAmount) || 500000,
+      inflationEnabled: params.get("inf") === "true" || (savedInflationEnabled ? JSON.parse(savedInflationEnabled) : false),
+      inflationRate: Number(params.get("ir")) || Number(savedInflationRate) || 6,
     };
   };
 
@@ -48,6 +52,8 @@ export const useCalculator = () => {
   const [stepUpPercentage, setStepUpPercentage] = useState(initialValues.stepUpPercentage);
   const [initialInvestmentEnabled, setInitialInvestmentEnabled] = useState(initialValues.initialInvestmentEnabled);
   const [initialInvestmentAmount, setInitialInvestmentAmount] = useState(initialValues.initialInvestmentAmount);
+  const [inflationEnabled, setInflationEnabled] = useState(initialValues.inflationEnabled);
+  const [inflationRate, setInflationRate] = useState(initialValues.inflationRate);
 
   // Save to localStorage
   useEffect(() => {
@@ -62,7 +68,13 @@ export const useCalculator = () => {
     localStorage.setItem("stepUpPercentage", stepUpPercentage.toString());
     localStorage.setItem("initialInvestmentEnabled", JSON.stringify(initialInvestmentEnabled));
     localStorage.setItem("initialInvestmentAmount", initialInvestmentAmount.toString());
-  }, [monthlyInvestment, returnRate, timePeriod, sipFrequency, currency, advancedOptionsEnabled, stepUpEnabled, stepUpFrequency, stepUpPercentage, initialInvestmentEnabled, initialInvestmentAmount]);
+    localStorage.setItem("inflationEnabled", JSON.stringify(inflationEnabled));
+    localStorage.setItem("inflationRate", inflationRate.toString());
+  }, [monthlyInvestment, returnRate, timePeriod, sipFrequency, currency, advancedOptionsEnabled, stepUpEnabled, stepUpFrequency, stepUpPercentage, initialInvestmentEnabled, initialInvestmentAmount, inflationEnabled, inflationRate]);
+
+  const calculateRealReturnRate = (nominalReturn: number, inflation: number): number => {
+    return ((1 + nominalReturn / 100) / (1 + inflation / 100) - 1) * 100;
+  };
 
   const calculateSIP = () => {
     const paymentsPerYear = {
@@ -82,7 +94,11 @@ export const useCalculator = () => {
     };
 
     const n = paymentsPerYear[sipFrequency];
-    const r = returnRate / (n * 100); // Convert percentage to decimal and divide by frequency
+    const effectiveReturnRate = inflationEnabled ? 
+      calculateRealReturnRate(returnRate, inflationRate) : 
+      returnRate;
+    
+    const r = effectiveReturnRate / (n * 100); // Convert percentage to decimal and divide by frequency
     const t = timePeriod * n; // Total number of payments
 
     let totalInvestmentAmount = initialInvestmentEnabled ? initialInvestmentAmount : 0;
@@ -91,7 +107,7 @@ export const useCalculator = () => {
     // Calculate initial investment with matching frequency compounding
     if (initialInvestmentEnabled) {
       const periodsPerYear = paymentsPerYear[sipFrequency];
-      const periodRate = returnRate / (100 * periodsPerYear); // Rate per period
+      const periodRate = effectiveReturnRate / (100 * periodsPerYear); // Rate per period
       const totalPeriods = timePeriod * periodsPerYear; // Total periods
       futureValue = initialInvestmentAmount * Math.pow(1 + periodRate, totalPeriods);
     }
@@ -144,7 +160,9 @@ export const useCalculator = () => {
     stepUpFrequency,
     stepUpPercentage,
     initialInvestmentEnabled,
-    initialInvestmentAmount
+    initialInvestmentAmount,
+    inflationEnabled,
+    inflationRate
   ]);
 
   return {
@@ -172,5 +190,9 @@ export const useCalculator = () => {
     setInitialInvestmentEnabled,
     initialInvestmentAmount,
     setInitialInvestmentAmount,
+    inflationEnabled,
+    setInflationEnabled,
+    inflationRate,
+    setInflationRate,
   };
 };
