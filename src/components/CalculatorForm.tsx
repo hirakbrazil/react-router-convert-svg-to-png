@@ -65,6 +65,15 @@ const CalculatorForm = ({
   inflationRate,
   setInflationRate,
 }: CalculatorFormProps) => {
+  // Effect to handle disabling all advanced options when main toggle is turned off
+  useEffect(() => {
+    if (!advancedOptionsEnabled) {
+      setStepUpEnabled(false);
+      setInitialInvestmentEnabled(false);
+      setInflationEnabled(false);
+    }
+  }, [advancedOptionsEnabled]);
+
   const getInvestmentLabel = () => {
     switch (sipFrequency) {
       case "Daily":

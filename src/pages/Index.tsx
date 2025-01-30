@@ -13,6 +13,25 @@ import AdSenseResponsive from "@/components/AdSenseResponsive";
 import DesktopSidebar from "@/components/DesktopSidebar";
 import HomepageContent from "@/components/HomepageContent";
 
+interface PreviousValues {
+  monthlyInvestment: number;
+  returnRate: number;
+  timePeriod: number;
+  sipFrequency: string;
+  advancedOptionsEnabled?: boolean;
+  stepUpEnabled?: boolean;
+  stepUpFrequency?: string;
+  stepUpPercentage?: number;
+  initialInvestmentEnabled?: boolean;
+  initialInvestmentAmount?: number;
+  inflationEnabled?: boolean;
+  inflationRate?: number;
+}
+
+interface CurrentValues extends PreviousValues {
+  currency: string;
+}
+
 const Index = () => {
   useTheme();
 
@@ -115,7 +134,7 @@ const Index = () => {
             currency={currency}
             sipFrequency={sipFrequency}
             timePeriod={timePeriod}
-            stepUpEnabled={stepUpEnabled}
+            stepUpEnabled={stepUpEnabled && advancedOptionsEnabled}
             stepUpPercentage={stepUpPercentage}
             stepUpFrequency={stepUpFrequency}
           />
