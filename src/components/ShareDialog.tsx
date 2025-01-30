@@ -20,6 +20,8 @@ interface ShareDialogProps {
   stepUpPercentage?: number;
   initialInvestmentEnabled?: boolean;
   initialInvestmentAmount?: number;
+  inflationEnabled?: boolean;
+  inflationRate?: number;
 }
 
 const ShareDialog = ({
@@ -36,6 +38,8 @@ const ShareDialog = ({
   stepUpPercentage,
   initialInvestmentEnabled,
   initialInvestmentAmount,
+  inflationEnabled,
+  inflationRate,
 }: ShareDialogProps) => {
   const baseUrl = "https://sip-calculator.mutualfundjournal.in/";
 
@@ -60,6 +64,10 @@ const ShareDialog = ({
       if (initialInvestmentEnabled) {
         params.append("iie", "true");
         params.append("iia", initialInvestmentAmount?.toString() || "500000");
+      }
+      if (inflationEnabled) {
+        params.append("inf", "true");
+        params.append("ir", inflationRate?.toString() || "6");
       }
     }
 
