@@ -198,6 +198,7 @@ const CalculatorForm = ({
               rate={inflationRate}
               onRateChange={setInflationRate}
               isAdvancedOptionsEnabled={advancedOptionsEnabled}
+              returnRate={returnRate}
             />
           </div>
         )}

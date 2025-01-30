@@ -9,6 +9,7 @@ interface InflationSettingsProps {
   rate: number;
   onRateChange: (rate: number) => void;
   isAdvancedOptionsEnabled: boolean;
+  returnRate: number; // Add returnRate prop
 }
 
 const InflationSettings = ({
@@ -17,7 +18,18 @@ const InflationSettings = ({
   rate,
   onRateChange,
   isAdvancedOptionsEnabled,
+  returnRate,
 }: InflationSettingsProps) => {
+  // Calculate max inflation rate as 0.1 less than return rate
+  const maxInflationRate = Math.max(returnRate - 0.1, 0.1);
+
+  // Ensure inflation rate doesn't exceed new maximum
+  React.useEffect(() => {
+    if (rate > maxInflationRate) {
+      onRateChange(maxInflationRate);
+    }
+  }, [returnRate, rate, maxInflationRate, onRateChange]);
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -39,7 +51,7 @@ const InflationSettings = ({
             value={rate}
             onChange={onRateChange}
             min={0.1}
-            max={50}
+            max={maxInflationRate}
             step={0.1}
             suffix="%"
             maxLength={4}
