@@ -61,7 +61,7 @@ const HomepageContent = ({
     if (currency === 'INR') {
       return `${currencySymbol}50 to ${currencySymbol}5 Crore`;
     }
-    return `${currencySymbol}50 to ${currencySymbol}500 Million`;
+    return `${currencySymbol}50 to ${currencySymbol}50 Million`;
   };
 
   const getTotalInvestment = () => {
