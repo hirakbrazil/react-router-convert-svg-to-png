@@ -13,23 +13,6 @@ import AdSenseResponsive from "@/components/AdSenseResponsive";
 import DesktopSidebar from "@/components/DesktopSidebar";
 import HomepageContent from "@/components/HomepageContent";
 
-interface PreviousValues {
-  monthlyInvestment: number;
-  returnRate: number;
-  timePeriod: number;
-  sipFrequency: string;
-  advancedOptionsEnabled?: boolean;
-  stepUpEnabled?: boolean;
-  stepUpFrequency?: string;
-  stepUpPercentage?: number;
-  initialInvestmentEnabled?: boolean;
-  initialInvestmentAmount?: number;
-}
-
-interface CurrentValues extends PreviousValues {
-  currency: string;
-}
-
 const Index = () => {
   useTheme();
 
@@ -79,6 +62,8 @@ const Index = () => {
     setInflationRate(6);
     window.history.replaceState({}, '', window.location.pathname);
   };
+
+  const totalProfit = totalValue - totalInvestment;
 
   return (
     <>
@@ -184,6 +169,7 @@ const Index = () => {
             timePeriod={timePeriod}
             sipFrequency={sipFrequency}
             totalValue={totalValue}
+            totalProfit={totalProfit}
           />
           <Footer />
         </div>

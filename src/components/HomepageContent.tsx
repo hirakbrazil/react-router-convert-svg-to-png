@@ -28,6 +28,8 @@ interface HomepageContentProps {
   monthlyInvestment: number;
   timePeriod: number;
   sipFrequency: SIPFrequency;
+  totalValue: number;
+  totalProfit: number;
 }
 
 const HomepageContent = ({ 
@@ -36,7 +38,8 @@ const HomepageContent = ({
   monthlyInvestment,
   timePeriod,
   sipFrequency,
-  totalValue
+  totalValue,
+  totalProfit
 }: HomepageContentProps) => {
   const currencySymbol = getCurrencySymbol(currency);
   
@@ -87,10 +90,6 @@ const HomepageContent = ({
         investmentsPerYear = 12;
     }
     return monthlyInvestment * investmentsPerYear * timePeriod;
-  };
-
-  const getTotalProfit = () => {
-    return totalValue - getTotalInvestment();
   };
 
   return (
@@ -188,7 +187,7 @@ const HomepageContent = ({
                 <ul className="list-disc ml-6 space-y-1">
                   <li>Click on different sections of the chart to highlight specific values</li>
                   <li>Hover over chart segments to see detailed amounts</li>
-                  <li>Compare total profit amount ({currencySymbol}{formatNumberByCurrency(getTotalProfit(), currency)}) against total investment ({currencySymbol}{formatNumberByCurrency(getTotalInvestment(), currency)})</li>
+                  <li>Compare total profit amount ({currencySymbol}{formatNumberByCurrency(totalProfit, currency)}) against total investment ({currencySymbol}{formatNumberByCurrency(getTotalInvestment(), currency)})</li>
                   <li>XIRR percentage: XIRR stands for Extended Internal Rate of Return, which represents the annualized return on your investment while accounting for the timing and size of cash flows.</li>
                 </ul>
               </div>
