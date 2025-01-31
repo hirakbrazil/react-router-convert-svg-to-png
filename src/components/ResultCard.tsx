@@ -96,12 +96,52 @@ const ResultCard = ({
   const lastSIPDate_formatted = format(lastSIPDate, "MMM yyyy");
   const lastSIPAmount = calculateLastSIPAmount();
 
-  // Calculate XIRR (simplified for demonstration)
   const calculateXIRR = () => {
-    const monthlyRate = Math.pow((totalValue / totalInvestment), 1 / (timePeriod * 12)) - 1;
-    const annualRate = ((1 + monthlyRate) ** 12 - 1) * 100;
-    return annualRate.toFixed(2);
+  const cashFlows = [];
+  const dates = [];
+  let currentDate = new Date();
+  
+  // Determine SIP frequency in months
+  const frequencyMonths = getFrequencyMonths(sipFrequency); // Uses your existing function
+
+  // Generate cash flows (SIP outflows)
+  let totalPeriods = Math.floor((timePeriod * 12) / frequencyMonths);
+  for (let i = 0; i < totalPeriods; i++) {
+    cashFlows.push(-monthlyInvestment);
+    dates.push(new Date(currentDate)); // Store actual investment date
+    currentDate = addMonths(currentDate, frequencyMonths); // Move to next SIP date
+  }
+
+  // Final inflow (total value received at end)
+  cashFlows.push(totalValue);
+  dates.push(addMonths(new Date(), timePeriod * 12));
+
+  // XIRR calculation using Newton's method
+  const xirrNewton = (cashFlows, dates) => {
+    const guess = 0.1; // Initial guess (10%)
+    let rate = guess;
+    let maxIterations = 100;
+    let precision = 1e-6;
+
+    for (let i = 0; i < maxIterations; i++) {
+      let f = 0;
+      let df = 0;
+
+      for (let j = 0; j < cashFlows.length; j++) {
+        const t = (dates[j] - dates[0]) / (1000 * 60 * 60 * 24 * 365); // Convert to years
+        f += cashFlows[j] / Math.pow(1 + rate, t);
+        df += -t * cashFlows[j] / Math.pow(1 + rate, t + 1);
+      }
+
+      let newRate = rate - f / df;
+      if (Math.abs(newRate - rate) < precision) return (newRate * 100).toFixed(2);
+      rate = newRate;
+    }
+    return (rate * 100).toFixed(2); // Convert to percentage
   };
+
+  return xirrNewton(cashFlows, dates);
+};
 
   return (
     <div className="border border-border bg-card dark:bg-card rounded-xl p-6 space-y-4">
