@@ -94,11 +94,8 @@ export const useCalculator = () => {
     };
 
     const n = paymentsPerYear[sipFrequency];
-    const effectiveReturnRate = inflationEnabled ? 
-      calculateRealReturnRate(returnRate, inflationRate) : 
-      returnRate;
-    
-    const r = effectiveReturnRate / (n * 100); // Convert percentage to decimal and divide by frequency
+    // Calculate without inflation first
+    const r = returnRate / (n * 100); // Convert percentage to decimal and divide by frequency
     const t = timePeriod * n; // Total number of payments
 
     let totalInvestmentAmount = initialInvestmentEnabled ? initialInvestmentAmount : 0;
@@ -107,7 +104,7 @@ export const useCalculator = () => {
     // Calculate initial investment with matching frequency compounding
     if (initialInvestmentEnabled) {
       const periodsPerYear = paymentsPerYear[sipFrequency];
-      const periodRate = effectiveReturnRate / (100 * periodsPerYear); // Rate per period
+      const periodRate = returnRate / (100 * periodsPerYear); // Rate per period
       const totalPeriods = timePeriod * periodsPerYear; // Total periods
       futureValue = initialInvestmentAmount * Math.pow(1 + periodRate, totalPeriods);
     }
@@ -141,6 +138,15 @@ export const useCalculator = () => {
           currentInvestment *= (1 + stepUpPercentage / 100);
         }
       }
+    }
+
+    // Calculate total profit before inflation adjustment
+    const totalProfit = futureValue - totalInvestmentAmount;
+
+    // Apply inflation adjustment to total profit if enabled
+    if (advancedOptionsEnabled && inflationEnabled) {
+      const inflationAdjustedProfit = totalProfit / Math.pow(1 + inflationRate / 100, timePeriod);
+      futureValue = totalInvestmentAmount + inflationAdjustedProfit;
     }
 
     setTotalInvestment(Math.round(totalInvestmentAmount));
