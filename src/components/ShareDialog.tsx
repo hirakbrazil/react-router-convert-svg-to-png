@@ -46,21 +46,22 @@ const ShareDialog = ({
   const generateShareableLink = (includeParams: boolean = true) => {
     if (!includeParams) return baseUrl;
     
-    const params = new URLSearchParams({
-      mi: monthlyInvestment.toString(),
-      cs: currency,
-      rr: returnRate.toString(),
-      tp: timePeriod.toString(),
-      sf: sipFrequency,
-      ao: advancedOptionsEnabled.toString(),
-      su: stepUpEnabled.toString(),
-      suf: stepUpFrequency,
-      sup: stepUpPercentage.toString(),
-      iie: initialInvestmentEnabled.toString(),
-      iia: initialInvestmentAmount.toString(),
-      inf: inflationEnabled.toString(),
-      ir: inflationRate.toString(),
-    });
+    const params = new URLSearchParams();
+    
+    // Add all parameters
+    params.set("mi", monthlyInvestment.toString());
+    params.set("cs", currency);
+    params.set("rr", returnRate.toString());
+    params.set("tp", timePeriod.toString());
+    params.set("sf", sipFrequency);
+    params.set("ao", advancedOptionsEnabled.toString());
+    params.set("su", stepUpEnabled.toString());
+    params.set("suf", stepUpFrequency);
+    params.set("sup", stepUpPercentage.toString());
+    params.set("iie", initialInvestmentEnabled.toString());
+    params.set("iia", initialInvestmentAmount.toString());
+    params.set("inf", inflationEnabled.toString());
+    params.set("ir", inflationRate.toString());
 
     return `${baseUrl}?${params.toString()}`;
   };
