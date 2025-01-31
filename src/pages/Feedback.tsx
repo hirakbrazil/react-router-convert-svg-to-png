@@ -12,14 +12,14 @@ const Feedback = () => {
   return (
     <>
       <SEO
-        title="Feedback - SWP Calculator"
+        title="Feedback - SIP Calculator"
         description="We value your feedback! Share your thoughts, queries, or suggestions with us to help us improve."
-        canonicalUrl="https://swp-calculator.mutualfundjournal.in/feedback"
+        canonicalUrl="https://sip-calculator.mutualfundjournal.in/feedback"
         robots="max-image-preview:large"
-        ogTitle="Feedback - SWP Calculator"
+        ogTitle="Feedback - SIP Calculator"
         ogDescription="We value your feedback! Share your thoughts, queries, or suggestions with us to help us improve."
-        ogUrl="https://swp-calculator.mutualfundjournal.in/feedback"
-        ogImage="https://swp-calculator.mutualfundjournal.in/banner.jpg"
+        ogUrl="https://sip-calculator.mutualfundjournal.in/feedback"
+        ogImage="https://sip-calculator.mutualfundjournal.in/banner.jpg"
         ogType="article"
       />
     <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">

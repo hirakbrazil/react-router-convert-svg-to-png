@@ -74,6 +74,10 @@ const CalculatorForm = ({
     }
   }, [advancedOptionsEnabled]);
 
+  const handleAdvancedOptionsLabelClick = () => {
+    setAdvancedOptionsEnabled(!advancedOptionsEnabled);
+  };
+
   const getInvestmentLabel = () => {
     switch (sipFrequency) {
       case "Daily":
@@ -172,7 +176,10 @@ const CalculatorForm = ({
 
       <div className="space-y-4 pt-2">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-x-1">
+          <div 
+            className="flex items-center gap-x-1 cursor-pointer"
+            onClick={handleAdvancedOptionsLabelClick}
+          >
             <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">Advanced options</span>
             <InfoTooltip content="Enable additional settings to customize your SIP investment strategy." />
           </div>

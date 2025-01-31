@@ -59,31 +59,33 @@ const HomepageContent = ({
 
   const formatInvestmentRange = (currency: CurrencyType) => {
     if (currency === 'INR') {
-      return `${currencySymbol}1,000 to ${currencySymbol}50 Crore`;
+      return `${currencySymbol}50 to ${currencySymbol}5 Crore`;
     }
-    return `${currencySymbol}1,000 to ${currencySymbol}500 Million`;
+    return `${currencySymbol}50 to ${currencySymbol}500,000`;
   };
 
-  const formatMinWithdrawal = (currency: CurrencyType) => {
-    return `${currencySymbol}50`;
-  };
-
-  const getTotalWithdrawal = () => {
-    let withdrawalsPerYear;
+  const getTotalInvestment = () => {
+    let investmentsPerYear;
     switch (sipFrequency) {
+      case "Daily":
+        investmentsPerYear = 365;
+        break;
+      case "Weekly":
+        investmentsPerYear = 52;
+        break;
       case "Quarterly":
-        withdrawalsPerYear = 4;
+        investmentsPerYear = 4;
         break;
       case "Half-yearly":
-        withdrawalsPerYear = 2;
+        investmentsPerYear = 2;
         break;
       case "Yearly":
-        withdrawalsPerYear = 1;
+        investmentsPerYear = 1;
         break;
       default:
-        withdrawalsPerYear = 12;
+        investmentsPerYear = 12;
     }
-    return monthlyInvestment * withdrawalsPerYear * timePeriod;
+    return monthlyInvestment * investmentsPerYear * timePeriod;
   };
 
   return (
@@ -92,7 +94,7 @@ const HomepageContent = ({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Calculator className="h-5 w-5" />
-            SWP Calculator Uses Guide
+            SIP Calculator Uses Guide
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -102,17 +104,17 @@ const HomepageContent = ({
               Investment Details
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Enter your total investment amount ({formatInvestmentRange(currency)}) and select from 11 supported currencies including INR, USD, EUR, JPY, GBP, CNY, AUD, CAD, CHF, HKD, and SGD.
+              Enter your investment amount ({formatInvestmentRange(currency)}) and select from 11 supported currencies including INR, USD, EUR, JPY, GBP, CNY, AUD, CAD, CHF, HKD, and SGD.
             </p>
           </div>
 
           <div>
             <h3 className="text-lg font-semibold flex items-center gap-2 mb-3">
               <Calendar className="h-5 w-5" />
-              Withdrawal Configuration
+              Investment Frequency
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Choose your withdrawal frequency (Monthly, Quarterly, Half-yearly, or Yearly) and set the withdrawal amount. You can specify either a fixed amount or percentage of total investment, with a minimum of {formatMinWithdrawal(currency)} per withdrawal.
+              Choose your investment frequency (Daily, Weekly, Monthly, Quarterly, Half-yearly, or Yearly) and set the investment amount. The calculator supports flexible investment schedules to match your financial planning.
             </p>
           </div>
 
@@ -122,7 +124,7 @@ const HomepageContent = ({
               Return Rate Settings
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Set your expected annual return rate (1% to 50%) to calculate potential earnings. The calculator factors this into your withdrawal sustainability analysis.
+              Set your expected annual return rate (1% to 50%) to calculate potential earnings. The calculator factors this into your investment growth analysis.
             </p>
           </div>
 
@@ -132,62 +134,24 @@ const HomepageContent = ({
               Investment Timeline
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Define your investment horizon from 1 to 50 years. The calculator shows the end date of your investment period and helps plan long-term withdrawal strategies.
+              Define your investment horizon from 1 to 50 years. The calculator shows the end date of your investment period and helps plan long-term investment strategies.
             </p>
           </div>
 
           <div>
             <h3 className="text-lg font-semibold flex items-center gap-2 mb-3">
               <PieChart className="h-5 w-5" />
-              Results Breakdown
+              Advanced Features
             </h3>
             <div className="space-y-2 text-gray-600 dark:text-gray-400">
-              <p>The calculator provides comprehensive results including:</p>
+              <p>The calculator includes advanced options for detailed investment planning:</p>
               <ul className="list-disc ml-6 space-y-1">
-                <li>Total Investment Value</li>
-                <li>Total Withdrawal Amount</li>
-                <li>Final Portfolio Value</li>
-                <li>Total Value (Including Withdrawals)</li>
-                <li>Total Profit (Amount and Percentage)</li>
+                <li>Step-up SIP: Automatically increase investment amount periodically</li>
+                <li>Initial Investment: Add lump sum amount at the start</li>
+                <li>Inflation Adjustment: Account for the impact of inflation</li>
+                <li>XIRR Calculation: View the internal rate of return</li>
               </ul>
             </div>
-            <div className="space-y-2 text-gray-600 dark:text-gray-400 mt-6">
-              <p>The interactive Donut Chart provides a visual comparison between:</p>
-              <ul className="list-disc ml-6 space-y-1">
-                <li>Total Withdrawal (displayed in high contrast green)</li>
-                <li>Total Investment (displayed in low contrast green)</li>
-              </ul>
-          
-              <div className="mt-4">
-                <h4 className="font-semibold flex items-center gap-2 mb-2">
-                  <MousePointerClick className="h-4 w-4" />
-                  Interactive Features:
-                </h4>
-                <ul className="list-disc ml-6 space-y-1">
-                  <li>Click on different sections of the chart to highlight specific values</li>
-                  <li>Hover over chart segments to see detailed amounts</li>
-                  <li>Compare total withdrawal amount ({currencySymbol}{formatNumberByCurrency(getTotalWithdrawal(), currency)}) against total investment ({currencySymbol}{formatNumberByCurrency(totalInvestment, currency)})</li>
-                  <li>Visualize the proportion of withdrawals to investment</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold flex items-center gap-2 mb-3">
-              <RefreshCw className="h-5 w-5" />
-              Reset Functionality
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400">
-              Use the Reset button to quickly restore all values to their defaults:
-            </p>
-            <ul className="list-disc ml-6 mt-2 text-gray-600 dark:text-gray-400 space-y-1">
-              <li>Total Investment: {currencySymbol}{formatNumberByCurrency(500000, currency)}</li>
-              <li>Withdrawal Frequency: Monthly</li>
-              <li>Withdrawal Amount: {currencySymbol}{formatNumberByCurrency(5000, currency)}</li>
-              <li>Expected Return Rate: 13%</li>
-              <li>Time Period: 10 Years</li>
-            </ul>
           </div>
 
           <div>
@@ -200,8 +164,8 @@ const HomepageContent = ({
             </p>
             <ul className="list-disc ml-6 mt-2 text-gray-600 dark:text-gray-400 space-y-1">
               <li>Direct share via platform sharing</li>
-              <li>Copy calculator link</li>
-              <li>Share current calculation settings</li>
+              <li>Copy calculator link with all settings</li>
+              <li>Share current calculation details</li>
             </ul>
           </div>
 
@@ -215,6 +179,7 @@ const HomepageContent = ({
               <li>Returns are calculated using compound interest</li>
               <li>The calculator assumes consistent returns over the investment period</li>
               <li>Regular monitoring and rebalancing of your investment is recommended</li>
+              <li>XIRR calculations provide annualized returns for better comparison</li>
             </ul>
           </div>
         </CardContent>
