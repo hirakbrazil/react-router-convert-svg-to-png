@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import SliderInput from "@/components/slider/SliderInput";
@@ -15,6 +15,7 @@ interface StepUpSIPSettingsProps {
   percentage: number;
   onPercentageChange: (percentage: number) => void;
   isAdvancedOptionsEnabled: boolean;
+  onDropdownOpenChange?: (open: boolean) => void;
 }
 
 const StepUpSIPSettings = ({
@@ -25,8 +26,10 @@ const StepUpSIPSettings = ({
   percentage,
   onPercentageChange,
   isAdvancedOptionsEnabled,
+  onDropdownOpenChange,
 }: StepUpSIPSettingsProps) => {
   const { toast } = useToast();
+  const [isOpen, setIsOpen] = useState(false);
 
   const getWidthClass = () => {
     switch (frequency) {
@@ -49,9 +52,14 @@ const StepUpSIPSettings = ({
   };
 
   const handleLabelClick = () => {
-    if (isAdvancedOptionsEnabled) {
+    if (isAdvancedOptionsEnabled && !isOpen) {
       onEnabledChange(!enabled);
     }
+  };
+
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    onDropdownOpenChange?.(open);
   };
 
   return (
@@ -59,7 +67,7 @@ const StepUpSIPSettings = ({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-1">
           <span 
-            className="text-lg text-gray-700 dark:text-[#c1cbd6] cursor-pointer"
+            className={`text-lg text-gray-700 dark:text-[#c1cbd6] ${!isOpen ? 'cursor-pointer' : ''}`}
             onClick={handleLabelClick}
           >
             Step Up SIP
@@ -77,7 +85,11 @@ const StepUpSIPSettings = ({
         <div className="space-y-4">
           <SliderInput
             label={
-              <Select value={frequency} onValueChange={handleFrequencyChange}>
+              <Select 
+                value={frequency} 
+                onValueChange={handleFrequencyChange}
+                onOpenChange={handleOpenChange}
+              >
                 <SelectTrigger className={`${getWidthClass()} focus:ring-0 focus-visible:ring-0 bg-white dark:bg-[#030c21]`}>
                   <SelectValue />
                 </SelectTrigger>

@@ -65,6 +65,8 @@ const CalculatorForm = ({
   inflationRate,
   setInflationRate,
 }: CalculatorFormProps) => {
+  const [isStepUpDropdownOpen, setIsStepUpDropdownOpen] = useState(false);
+
   // Effect to handle disabling all advanced options when main toggle is turned off
   useEffect(() => {
     if (!advancedOptionsEnabled) {
@@ -75,7 +77,9 @@ const CalculatorForm = ({
   }, [advancedOptionsEnabled]);
 
   const handleAdvancedOptionsLabelClick = () => {
-    setAdvancedOptionsEnabled(!advancedOptionsEnabled);
+    if (!isStepUpDropdownOpen) {
+      setAdvancedOptionsEnabled(!advancedOptionsEnabled);
+    }
   };
 
   const getInvestmentLabel = () => {
@@ -176,8 +180,13 @@ const CalculatorForm = ({
 
       <div className="space-y-4 pt-2">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-x-1 cursor-pointer">
-            <span className="text-lg text-gray-700 dark:text-[#c1cbd6]" onClick={handleAdvancedOptionsLabelClick}>Advanced options</span>
+          <div className="flex items-center gap-x-1">
+            <span 
+              className={`text-lg text-gray-700 dark:text-[#c1cbd6] ${!isStepUpDropdownOpen ? 'cursor-pointer' : ''}`} 
+              onClick={handleAdvancedOptionsLabelClick}
+            >
+              Advanced options
+            </span>
             <InfoTooltip content="Enable additional settings to customize your SIP investment strategy." />
           </div>
           <Switch
@@ -196,6 +205,7 @@ const CalculatorForm = ({
               percentage={stepUpPercentage}
               onPercentageChange={setStepUpPercentage}
               isAdvancedOptionsEnabled={advancedOptionsEnabled}
+              onDropdownOpenChange={setIsStepUpDropdownOpen}
             />
             <InitialInvestmentSettings
               enabled={initialInvestmentEnabled}

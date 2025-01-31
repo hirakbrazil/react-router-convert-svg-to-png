@@ -88,6 +88,10 @@ const HomepageContent = ({
     return monthlyInvestment * investmentsPerYear * timePeriod;
   };
 
+  const getTotalProfit = () => {
+    return totalInvestment > 0 ? totalInvestment - getTotalInvestment() : 0;
+  };
+
   return (
     <div className="space-y-6">
       <Card>
@@ -98,7 +102,7 @@ const HomepageContent = ({
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-<div>
+          <div>
             <h3 className="text-lg font-semibold flex items-center gap-2 mb-3">
               <Calendar className="h-5 w-5" />
               Investment Frequency
@@ -183,7 +187,7 @@ const HomepageContent = ({
                 <ul className="list-disc ml-6 space-y-1">
                   <li>Click on different sections of the chart to highlight specific values</li>
                   <li>Hover over chart segments to see detailed amounts</li>
-                  <li>Compare total profit amount ({currencySymbol}{formatNumberByCurrency(getTotalProfit(), currency)}) against total investment ({currencySymbol}{formatNumberByCurrency(getTotalInvestment, currency)})</li>
+                  <li>Compare total profit amount ({currencySymbol}{formatNumberByCurrency(getTotalProfit(), currency)}) against total investment ({currencySymbol}{formatNumberByCurrency(getTotalInvestment(), currency)})</li>
                   <li>XIRR percentage: XIRR stands for Extended Internal Rate of Return, which represents the annualized return on your investment while accounting for the timing and size of cash flows.</li>
                 </ul>
               </div>
