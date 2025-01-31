@@ -183,8 +183,7 @@ const HomepageContent = ({
                 <ul className="list-disc ml-6 space-y-1">
                   <li>Click on different sections of the chart to highlight specific values</li>
                   <li>Hover over chart segments to see detailed amounts</li>
-                  <li>Compare total withdrawal amount ({currencySymbol}{formatNumberByCurrency(getTotalWithdrawal(), currency)}) against total investment ({currencySymbol}{formatNumberByCurrency(totalInvestment, currency)})</li>
-                  <li>Visualize the proportion of withdrawals to investment</li>
+                  <li>Compare total profit amount ({currencySymbol}{formatNumberByCurrency(getTotalProfit(), currency)}) against total investment ({currencySymbol}{formatNumberByCurrency(totalInvestment, currency)})</li>
                   <li>XIRR percentage: XIRR stands for Extended Internal Rate of Return, which represents the annualized return on your investment while accounting for the timing and size of cash flows.</li>
                 </ul>
               </div>
@@ -200,9 +199,8 @@ const HomepageContent = ({
               Use the Reset button to quickly restore all values to their defaults:
             </p>
             <ul className="list-disc ml-6 mt-2 text-gray-600 dark:text-gray-400 space-y-1">
-              <li>Total Investment: {currencySymbol}{formatNumberByCurrency(500000, currency)}</li>
-              <li>Withdrawal Frequency: Monthly</li>
-              <li>Withdrawal Amount: {currencySymbol}{formatNumberByCurrency(5000, currency)}</li>
+              <li>SIP Frequency: Monthly</li>
+              <li>Monthly investment: {currencySymbol}{formatNumberByCurrency(5000, currency)}</li>
               <li>Expected Return Rate: 13%</li>
               <li>Time Period: 10 Years</li>
             </ul>
