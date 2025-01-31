@@ -179,7 +179,6 @@ const ResultCard = ({
         <span className="text-lg font-semibold text-foreground">
           {calculateXIRR()}%
         </span>
-        <InfoTooltip content="XIRR (Extended Internal Rate of Return) represents the annualized return on your investment, taking into account the timing and size of cash flows." />
       </div>
     </div>
   );
