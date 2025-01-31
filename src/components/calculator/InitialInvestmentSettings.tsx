@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
 import SliderInput from "@/components/slider/SliderInput";
 import InfoTooltip from "@/components/InfoTooltip";
@@ -23,8 +23,22 @@ const InitialInvestmentSettings = ({
   currency,
   isStepUpDropdownOpen = false,
 }: InitialInvestmentSettingsProps) => {
+  const [isClickable, setIsClickable] = useState(true);
+
+  useEffect(() => {
+    if (!isStepUpDropdownOpen) {
+      // Add 500ms delay before enabling click functionality
+      const timer = setTimeout(() => {
+        setIsClickable(true);
+      }, 500);
+      return () => clearTimeout(timer);
+    } else {
+      setIsClickable(false);
+    }
+  }, [isStepUpDropdownOpen]);
+
   const handleLabelClick = () => {
-    if (isAdvancedOptionsEnabled && !isStepUpDropdownOpen) {
+    if (isAdvancedOptionsEnabled && !isStepUpDropdownOpen && isClickable) {
       onEnabledChange(!enabled);
     }
   };
@@ -34,7 +48,7 @@ const InitialInvestmentSettings = ({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-1">
           <span 
-            className={`text-lg text-gray-700 dark:text-[#c1cbd6] ${!isStepUpDropdownOpen ? 'cursor-pointer' : ''}`}
+            className={`text-lg text-gray-700 dark:text-[#c1cbd6] ${(!isStepUpDropdownOpen && isClickable) ? 'cursor-pointer' : ''}`}
             onClick={handleLabelClick}
           >
             Initial investment
