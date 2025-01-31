@@ -32,10 +32,11 @@ interface HomepageContentProps {
 
 const HomepageContent = ({ 
   currency, 
-  totalInvestment, 
+  totalInvestment,
   monthlyInvestment,
   timePeriod,
-  sipFrequency
+  sipFrequency,
+  totalValue
 }: HomepageContentProps) => {
   const currencySymbol = getCurrencySymbol(currency);
   
@@ -89,7 +90,7 @@ const HomepageContent = ({
   };
 
   const getTotalProfit = () => {
-    return totalInvestment > 0 ? totalInvestment - getTotalInvestment() : 0;
+    return totalValue - getTotalInvestment();
   };
 
   return (

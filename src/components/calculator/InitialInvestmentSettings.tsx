@@ -11,6 +11,7 @@ interface InitialInvestmentSettingsProps {
   onAmountChange: (amount: number) => void;
   isAdvancedOptionsEnabled: boolean;
   currency: CurrencyType;
+  isStepUpDropdownOpen?: boolean;
 }
 
 const InitialInvestmentSettings = ({
@@ -20,9 +21,10 @@ const InitialInvestmentSettings = ({
   onAmountChange,
   isAdvancedOptionsEnabled,
   currency,
+  isStepUpDropdownOpen = false,
 }: InitialInvestmentSettingsProps) => {
   const handleLabelClick = () => {
-    if (isAdvancedOptionsEnabled) {
+    if (isAdvancedOptionsEnabled && !isStepUpDropdownOpen) {
       onEnabledChange(!enabled);
     }
   };
@@ -32,7 +34,7 @@ const InitialInvestmentSettings = ({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-1">
           <span 
-            className="text-lg text-gray-700 dark:text-[#c1cbd6] cursor-pointer"
+            className={`text-lg text-gray-700 dark:text-[#c1cbd6] ${!isStepUpDropdownOpen ? 'cursor-pointer' : ''}`}
             onClick={handleLabelClick}
           >
             Initial investment
