@@ -20,17 +20,14 @@ const InflationSettings = ({
   isAdvancedOptionsEnabled,
   returnRate,
 }: InflationSettingsProps) => {
-  // Calculate max inflation rate as 0.1 less than return rate
   const maxInflationRate = Number((Math.max(returnRate - 0.1, 0.1)).toFixed(1));
 
-  // Ensure inflation rate doesn't exceed new maximum and is properly rounded
   React.useEffect(() => {
     if (rate > maxInflationRate) {
       onRateChange(maxInflationRate);
     }
   }, [returnRate, rate, maxInflationRate, onRateChange]);
 
-  // Format the rate to one decimal place
   const formatRate = (value: number) => {
     return Number(value.toFixed(1));
   };
@@ -39,11 +36,22 @@ const InflationSettings = ({
     onRateChange(formatRate(newRate));
   };
 
+  const handleLabelClick = () => {
+    if (isAdvancedOptionsEnabled) {
+      onEnabledChange(!enabled);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-1">
-          <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">Adjust for inflation</span>
+          <span 
+            className="text-lg text-gray-700 dark:text-[#c1cbd6] cursor-pointer"
+            onClick={handleLabelClick}
+          >
+            Adjust for inflation
+          </span>
           <InfoTooltip content="Enable this to see your returns adjusted for inflation, giving you a more realistic view of your investment's purchasing power over time." />
         </div>
         <Switch

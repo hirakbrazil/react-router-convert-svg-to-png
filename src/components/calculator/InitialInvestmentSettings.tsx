@@ -21,11 +21,22 @@ const InitialInvestmentSettings = ({
   isAdvancedOptionsEnabled,
   currency,
 }: InitialInvestmentSettingsProps) => {
+  const handleLabelClick = () => {
+    if (isAdvancedOptionsEnabled) {
+      onEnabledChange(!enabled);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-1">
-          <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">Initial investment</span>
+          <span 
+            className="text-lg text-gray-700 dark:text-[#c1cbd6] cursor-pointer"
+            onClick={handleLabelClick}
+          >
+            Initial investment
+          </span>
           <InfoTooltip content="A one-time lump sum investment made before starting your regular SIP investments. This amount will be invested at the beginning of your investment period." />
         </div>
         <Switch

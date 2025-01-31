@@ -84,7 +84,6 @@ const ResultCard = ({
     const periodsPerYear = getStepUpPeriodsPerYear(stepUpFrequency);
     const totalPeriods = timePeriod * periodsPerYear;
     
-    // Calculate step-ups based on the selected frequency
     return monthlyInvestment * Math.pow(1 + stepUpPercentage / 100, totalPeriods - 1);
   };
 
@@ -96,6 +95,13 @@ const ResultCard = ({
   const firstSIPDate = format(startDate, "MMM yyyy");
   const lastSIPDate_formatted = format(lastSIPDate, "MMM yyyy");
   const lastSIPAmount = calculateLastSIPAmount();
+
+  // Calculate XIRR (simplified for demonstration)
+  const calculateXIRR = () => {
+    const monthlyRate = Math.pow((totalValue / totalInvestment), 1 / (timePeriod * 12)) - 1;
+    const annualRate = ((1 + monthlyRate) ** 12 - 1) * 100;
+    return annualRate.toFixed(2);
+  };
 
   return (
     <div className="border border-border bg-card dark:bg-card rounded-xl p-6 space-y-4">
@@ -167,6 +173,14 @@ const ResultCard = ({
         currency={currency}
         formatCurrency={formatCurrency}
       />
+
+      <div className="flex justify-center items-center gap-x-1">
+        <span className="text-gray-600 dark:text-gray-400">XIRR:</span>
+        <span className="text-lg font-semibold text-foreground">
+          {calculateXIRR()}%
+        </span>
+        <InfoTooltip content="XIRR (Extended Internal Rate of Return) represents the annualized return on your investment, taking into account the timing and size of cash flows." />
+      </div>
     </div>
   );
 };

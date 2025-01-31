@@ -1,7 +1,6 @@
 import React from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { ChevronDown } from "lucide-react";
 import SliderInput from "@/components/slider/SliderInput";
 import InfoTooltip from "@/components/InfoTooltip";
 import { useToast } from "@/hooks/use-toast";
@@ -31,19 +30,14 @@ const StepUpSIPSettings = ({
 
   const getWidthClass = () => {
     switch (frequency) {
-      case "Monthly":
-        return "w-[160px]";
-      case "Quarterly":
-        return "w-[170px]";
-      case "Half-yearly":
-        return "w-[180px]";
-      case "Yearly":
-        return "w-[150px]";
-      default:
-        return "w-[180px]";
+      case "Monthly": return "w-[160px]";
+      case "Quarterly": return "w-[170px]";
+      case "Half-yearly": return "w-[180px]";
+      case "Yearly": return "w-[150px]";
+      default: return "w-[180px]";
     }
   };
-  
+
   const handleFrequencyChange = (value: string) => {
     const newFrequency = value as StepUpFrequency;
     onFrequencyChange(newFrequency);
@@ -54,11 +48,22 @@ const StepUpSIPSettings = ({
     });
   };
 
+  const handleLabelClick = () => {
+    if (isAdvancedOptionsEnabled) {
+      onEnabledChange(!enabled);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-1">
-          <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">Step Up SIP</span>
+          <span 
+            className="text-lg text-gray-700 dark:text-[#c1cbd6] cursor-pointer"
+            onClick={handleLabelClick}
+          >
+            Step Up SIP
+          </span>
           <InfoTooltip content="Automatically increase your SIP amount by a fixed percentage at regular intervals to keep up with your growing income and inflation. The most common step-up frequency is Yearly, also known as the Annual step-up." />
         </div>
         <Switch
@@ -73,9 +78,7 @@ const StepUpSIPSettings = ({
           <SliderInput
             label={
               <Select value={frequency} onValueChange={handleFrequencyChange}>
-                <SelectTrigger
-                  className={`${getWidthClass()} focus:ring-0 focus-visible:ring-0 bg-white dark:bg-[#030c21]`}
-                >
+                <SelectTrigger className={`${getWidthClass()} focus:ring-0 focus-visible:ring-0 bg-white dark:bg-[#030c21]`}>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-white dark:bg-[#030c21] border-border">
