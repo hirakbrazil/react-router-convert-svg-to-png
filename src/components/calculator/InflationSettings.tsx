@@ -9,7 +9,7 @@ interface InflationSettingsProps {
   rate: number;
   onRateChange: (rate: number) => void;
   isAdvancedOptionsEnabled: boolean;
-  returnRate: number; // Add returnRate prop
+  returnRate: number;
 }
 
 const InflationSettings = ({
@@ -21,14 +21,23 @@ const InflationSettings = ({
   returnRate,
 }: InflationSettingsProps) => {
   // Calculate max inflation rate as 0.1 less than return rate
-  const maxInflationRate = Math.max(returnRate - 0.1, 0.1);
+  const maxInflationRate = Number((Math.max(returnRate - 0.1, 0.1)).toFixed(1));
 
-  // Ensure inflation rate doesn't exceed new maximum
+  // Ensure inflation rate doesn't exceed new maximum and is properly rounded
   React.useEffect(() => {
     if (rate > maxInflationRate) {
       onRateChange(maxInflationRate);
     }
   }, [returnRate, rate, maxInflationRate, onRateChange]);
+
+  // Format the rate to one decimal place
+  const formatRate = (value: number) => {
+    return Number(value.toFixed(1));
+  };
+
+  const handleRateChange = (newRate: number) => {
+    onRateChange(formatRate(newRate));
+  };
 
   return (
     <div className="space-y-4">
@@ -48,8 +57,8 @@ const InflationSettings = ({
         <div className="space-y-4">
           <SliderInput
             label="Inflation rate"
-            value={rate}
-            onChange={onRateChange}
+            value={formatRate(rate)}
+            onChange={handleRateChange}
             min={0.1}
             max={maxInflationRate}
             step={0.1}
