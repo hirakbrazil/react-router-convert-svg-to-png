@@ -135,6 +135,8 @@ const Index = () => {
               stepUpPercentage,
               initialInvestmentEnabled,
               initialInvestmentAmount,
+              inflationEnabled,
+              inflationRate,
             }}
             currentValues={{
               monthlyInvestment,
@@ -148,6 +150,8 @@ const Index = () => {
               stepUpPercentage,
               initialInvestmentEnabled,
               initialInvestmentAmount,
+              inflationEnabled,
+              inflationRate,
             }}
             onRestore={(values) => {
               setMonthlyInvestment(values.monthlyInvestment);
@@ -160,6 +164,8 @@ const Index = () => {
               setStepUpPercentage(values.stepUpPercentage || 10);
               setInitialInvestmentEnabled(values.initialInvestmentEnabled || false);
               setInitialInvestmentAmount(values.initialInvestmentAmount || 500000);
+              setInflationEnabled(values.inflationEnabled || false);
+              setInflationRate(values.inflationRate || 6);
             }}
           />
           <HomepageContent 
