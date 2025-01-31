@@ -149,7 +149,7 @@ const HomepageContent = ({
                 <li>Step-up SIP: Automatically increase investment amount periodically</li>
                 <li>Initial Investment: Add lump sum amount at the start</li>
                 <li>Inflation Adjustment: Account for the impact of inflation</li>
-                <li>XIRR: XIRR means Extended Internal Rate of Return, which represents the annualized return on your investment, taking into account the timing and size of cash flows.</li>
+                <li>XIRR: XIRR stands for Extended Internal Rate of Return, which represents the annualized return on your investment while accounting for the timing and size of cash flows.</li>
               </ul>
             </div>
           </div>
