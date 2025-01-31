@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
 import SliderInput from "@/components/slider/SliderInput";
 import InfoTooltip from "@/components/InfoTooltip";
