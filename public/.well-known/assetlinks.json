@@ -1,8 +1,15 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "com.mutualfundjournal.swpcalculator",
-        "sha256_cert_fingerprints": ["88:EE:50:53:2B:33:85:34:96:D6:4C:A9:06:3C:EB:54:C5:5A:5C:82:3D:5F:F4:D7:0F:97:26:34:F8:8A:71:7D","DD:0B:9F:77:1F:01:F5:52:20:50:7C:23:DA:B8:F2:34:A1:D4:95:A9:C4:D3:79:EA:CB:13:D9:74:06:71:4D:B0"]
-      }
-    }]
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.mutualfundjournal.sipcalculator",
+      "sha256_cert_fingerprints": [
+        "C4:58:37:A7:15:8D:D6:F7:90:28:E4:58:D7:0C:C0:3D:0E:38:7A:6D:D9:25:EB:7B:22:A6:C8:C0:5A:CC:6E:7F",
+        "E6:80:C4:BA:D5:A0:F1:40:5F:27:FB:87:A5:17:CF:D1:90:45:1F:26:FE:91:04:BA:10:00:AF:60:73:40:21:A1"
+      ]
+    }
+  }
+]
