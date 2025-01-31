@@ -165,8 +165,8 @@ const HomepageContent = ({
                   <li>Click on different sections of the chart to highlight specific values</li>
                   <li>Hover over chart segments to see detailed amounts</li>
                   <li>Compare total profit amount ({currencySymbol}{formatNumberByCurrency(totalProfit, currency)}) against total investment ({currencySymbol}{formatNumberByCurrency(totalInvestment, currency)})</li>
-                  <li>XIRR percentage: XIRR stands for Extended Internal Rate of Return, which represents the annualized return on your investment while accounting for the timing and size of cash flows.</li>
                 </ul>
+                <p className="text-gray-600 dark:text-gray-400">XIRR percentage: XIRR stands for Extended Internal Rate of Return, which represents the annualized return on your investment while accounting for the timing and size of cash flows.</p>
               </div>
             </div>
           </div>
