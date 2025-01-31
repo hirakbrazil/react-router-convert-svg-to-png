@@ -98,6 +98,16 @@ const HomepageContent = ({
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
+<div>
+            <h3 className="text-lg font-semibold flex items-center gap-2 mb-3">
+              <Calendar className="h-5 w-5" />
+              Investment Frequency
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400">
+              Choose your SIP investment frequency (Daily, Weekly, Monthly, Quarterly, Half-yearly, or Yearly/Annually) and set the investment amount. The calculator supports flexible investment schedules to match your financial planning.
+            </p>
+          </div>
+          
           <div>
             <h3 className="text-lg font-semibold flex items-center gap-2 mb-3">
               {getCurrencyIcon(currency)}
@@ -105,16 +115,6 @@ const HomepageContent = ({
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
               Enter your investment amount ({formatInvestmentRange(currency)}) and select from 11 supported currencies including INR, USD, EUR, JPY, GBP, CNY, AUD, CAD, CHF, HKD, and SGD.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold flex items-center gap-2 mb-3">
-              <Calendar className="h-5 w-5" />
-              Investment Frequency
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400">
-              Choose your investment frequency (Daily, Weekly, Monthly, Quarterly, Half-yearly, or Yearly/Annually) and set the investment amount. The calculator supports flexible investment schedules to match your financial planning.
             </p>
           </div>
 
