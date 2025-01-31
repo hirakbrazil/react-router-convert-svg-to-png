@@ -16,7 +16,8 @@ import {
   Euro,
   JapaneseYen,
   PoundSterling,
-  BadgeSwissFranc
+  BadgeSwissFranc,
+  Settings
 } from 'lucide-react';
 import { CurrencyType } from './CurrencySelector';
 import { formatNumberByCurrency, getCurrencySymbol } from './slider/utils';
@@ -120,7 +121,7 @@ const HomepageContent = ({
 
           <div>
             <h3 className="text-lg font-semibold flex items-center gap-2 mb-3">
-              <PieChart className="h-5 w-5" />
+              <Settings className="h-5 w-5" />
               Advanced Features
             </h3>
             <div className="space-y-2 text-gray-600 dark:text-gray-400">
