@@ -27,10 +27,10 @@ const InitialInvestmentSettings = ({
 
   useEffect(() => {
     if (!isStepUpDropdownOpen) {
-      // Add 500ms delay before enabling click functionality
+      // Add delay before enabling click functionality
       const timer = setTimeout(() => {
         setIsClickable(true);
-      }, 500);
+      }, 2000);
       return () => clearTimeout(timer);
     } else {
       setIsClickable(false);
