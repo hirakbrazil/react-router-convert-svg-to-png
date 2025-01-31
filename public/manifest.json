@@ -1,7 +1,7 @@
 {
-  "short_name": "SWP Calc",
-  "name": "SWP Calculator",
-  "description": "Calculate your Systematic Withdrawal Plan (SWP) easily with our free calculator",
+  "short_name": "SIP Calc",
+  "name": "SIP Calculator",
+  "description": "Calculate your Systematic Investment Plan (SIP) easily with our free calculator",
   "icons": [
     {
       "src": "icon.png",
