@@ -20,7 +20,8 @@ export const useCalculator = () => {
     const savedInflationEnabled = localStorage.getItem("inflationEnabled");
     const savedInflationRate = localStorage.getItem("inflationRate");
 
-    return {
+    // Get values from URL parameters or fallback to localStorage/defaults
+    const values = {
       monthlyInvestment: Number(params.get("mi")) || Number(savedMonthlyInvestment) || 30000,
       returnRate: Number(params.get("rr")) || Number(savedReturnRate) || 13,
       timePeriod: Number(params.get("tp")) || Number(savedTimePeriod) || 10,
@@ -35,6 +36,13 @@ export const useCalculator = () => {
       inflationEnabled: params.get("inf") === "true" || (savedInflationEnabled ? JSON.parse(savedInflationEnabled) : false),
       inflationRate: Number(params.get("ir")) || Number(savedInflationRate) || 6,
     };
+
+    // Clean up URL if there are parameters
+    if (window.location.search) {
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+
+    return values;
   };
 
   const initialValues = getInitialValues();
@@ -202,3 +210,5 @@ export const useCalculator = () => {
     setInflationRate,
   };
 };
+
+export default useCalculator;
