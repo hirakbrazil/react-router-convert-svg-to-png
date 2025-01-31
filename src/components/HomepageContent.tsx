@@ -114,7 +114,7 @@ const HomepageContent = ({
               Investment Frequency
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Choose your investment frequency (Daily, Weekly, Monthly, Quarterly, Half-yearly, or Yearly) and set the investment amount. The calculator supports flexible investment schedules to match your financial planning.
+              Choose your investment frequency (Daily, Weekly, Monthly, Quarterly, Half-yearly, or Yearly/Annually) and set the investment amount. The calculator supports flexible investment schedules to match your financial planning.
             </p>
           </div>
 
