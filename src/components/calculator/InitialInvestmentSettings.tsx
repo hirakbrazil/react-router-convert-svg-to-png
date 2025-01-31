@@ -34,7 +34,7 @@ const InitialInvestmentSettings = ({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-1">
           <span 
-            className={`text-lg text-gray-700 dark:text-[#c1cbd6] ${!isStepUpDropdownOpen ? 'cursor-pointer' : 'pointer-events-none'}`}
+            className={`text-lg text-gray-700 dark:text-[#c1cbd6] ${!isStepUpDropdownOpen ? 'cursor-pointer' : ''}`}
             onClick={handleLabelClick}
           >
             Initial investment
