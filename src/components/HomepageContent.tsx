@@ -211,8 +211,8 @@ const HomepageContent = ({
               <li>All calculations are indicative and based on your inputs</li>
               <li>Returns are calculated using compound interest</li>
               <li>The calculator assumes consistent returns over the investment period</li>
-              <li>Regular monitoring and rebalancing of your investment is recommended</li>
               <li>XIRR calculations provide annualized returns for better comparison</li>
+              <li>Regular monitoring and rebalancing of your investment is recommended</li>
             </ul>
           </div>
         </CardContent>
