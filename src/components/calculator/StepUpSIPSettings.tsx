@@ -63,7 +63,7 @@ const StepUpSIPSettings = ({
   };
 
   return (
-    <div className={`space-y-4 ${isOpen ? 'mb-8' : ''}`}>
+    <div className={`space-y-4 ${isOpen ? 'mb-16' : ''}`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-1">
           <span 
