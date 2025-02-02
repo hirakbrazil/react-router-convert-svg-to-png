@@ -14,14 +14,13 @@ interface ActionButtonsProps {
     returnRate: number;
     timePeriod: number;
     sipFrequency: SIPFrequency;
-    advancedOptionsEnabled?: boolean;
-    stepUpEnabled?: boolean;
-    stepUpFrequency?: StepUpFrequency;
-    stepUpPercentage?: number;
-    initialInvestmentEnabled?: boolean;
-    initialInvestmentAmount?: number;
-    inflationEnabled?: boolean;
-    inflationRate?: number;
+    stepUpEnabled: boolean;
+    stepUpFrequency: StepUpFrequency;
+    stepUpPercentage: number;
+    initialInvestmentEnabled: boolean;
+    initialInvestmentAmount: number;
+    inflationEnabled: boolean;
+    inflationRate: number;
   };
   currentValues: {
     monthlyInvestment: number;
@@ -29,28 +28,26 @@ interface ActionButtonsProps {
     timePeriod: number;
     sipFrequency: SIPFrequency;
     currency: CurrencyType;
-    advancedOptionsEnabled?: boolean;
-    stepUpEnabled?: boolean;
-    stepUpFrequency?: StepUpFrequency;
-    stepUpPercentage?: number;
-    initialInvestmentEnabled?: boolean;
-    initialInvestmentAmount?: number;
-    inflationEnabled?: boolean;
-    inflationRate?: number;
+    stepUpEnabled: boolean;
+    stepUpFrequency: StepUpFrequency;
+    stepUpPercentage: number;
+    initialInvestmentEnabled: boolean;
+    initialInvestmentAmount: number;
+    inflationEnabled: boolean;
+    inflationRate: number;
   };
   onRestore: (values: {
     monthlyInvestment: number;
     returnRate: number;
     timePeriod: number;
     sipFrequency: SIPFrequency;
-    advancedOptionsEnabled?: boolean;
-    stepUpEnabled?: boolean;
-    stepUpFrequency?: StepUpFrequency;
-    stepUpPercentage?: number;
-    initialInvestmentEnabled?: boolean;
-    initialInvestmentAmount?: number;
-    inflationEnabled?: boolean;
-    inflationRate?: number;
+    stepUpEnabled: boolean;
+    stepUpFrequency: StepUpFrequency;
+    stepUpPercentage: number;
+    initialInvestmentEnabled: boolean;
+    initialInvestmentAmount: number;
+    inflationEnabled: boolean;
+    inflationRate: number;
   }) => void;
 }
 
