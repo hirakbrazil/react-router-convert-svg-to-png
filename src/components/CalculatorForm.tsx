@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import SliderInput from "@/components/slider/SliderInput";
 import { CurrencyType } from "@/components/CurrencySelector";
 import { SIPFrequency } from "@/types/calculator";
 import SIPFrequencySelector from "./calculator/SIPFrequencySelector";
 import InfoTooltip from "./InfoTooltip";
 import { format, addYears } from "date-fns";
-import { Switch } from "@/components/ui/switch";
 import StepUpSIPSettings, { StepUpFrequency } from "./calculator/StepUpSIPSettings";
 import InitialInvestmentSettings from "./calculator/InitialInvestmentSettings";
 import InflationSettings from "./calculator/InflationSettings";
@@ -20,8 +19,6 @@ interface CalculatorFormProps {
   currency: CurrencyType;
   sipFrequency: SIPFrequency;
   setSipFrequency: (frequency: SIPFrequency) => void;
-  advancedOptionsEnabled: boolean;
-  setAdvancedOptionsEnabled: (enabled: boolean) => void;
   stepUpEnabled: boolean;
   setStepUpEnabled: (enabled: boolean) => void;
   stepUpFrequency: StepUpFrequency;
@@ -48,8 +45,6 @@ const CalculatorForm = ({
   currency,
   sipFrequency,
   setSipFrequency,
-  advancedOptionsEnabled,
-  setAdvancedOptionsEnabled,
   stepUpEnabled,
   setStepUpEnabled,
   stepUpFrequency,
@@ -66,21 +61,6 @@ const CalculatorForm = ({
   setInflationRate,
 }: CalculatorFormProps) => {
   const [isStepUpDropdownOpen, setIsStepUpDropdownOpen] = useState(false);
-
-  // Effect to handle disabling all advanced options when main toggle is turned off
-  useEffect(() => {
-    if (!advancedOptionsEnabled) {
-      setStepUpEnabled(false);
-      setInitialInvestmentEnabled(false);
-      setInflationEnabled(false);
-    }
-  }, [advancedOptionsEnabled]);
-
-  const handleAdvancedOptionsLabelClick = () => {
-    if (!isStepUpDropdownOpen) {
-      setAdvancedOptionsEnabled(!advancedOptionsEnabled);
-    }
-  };
 
   const getInvestmentLabel = () => {
     switch (sipFrequency) {
@@ -178,53 +158,33 @@ const CalculatorForm = ({
         </p>
       </div>
 
-      <div className="space-y-4 pt-2">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-x-1">
-            <span 
-              className={`text-lg text-gray-700 dark:text-[#c1cbd6] ${!isStepUpDropdownOpen ? 'cursor-pointer' : ''}`} 
-              onClick={handleAdvancedOptionsLabelClick}
-            >
-              Advanced options
-            </span>
-            <InfoTooltip content="Enable additional settings to customize your SIP investment strategy." />
-          </div>
-          <Switch
-            checked={advancedOptionsEnabled}
-            onCheckedChange={setAdvancedOptionsEnabled}
-          />
-        </div>
-
-        {advancedOptionsEnabled && (
-          <div className="pl-4 space-y-6">
-            <StepUpSIPSettings
-              enabled={stepUpEnabled}
-              onEnabledChange={setStepUpEnabled}
-              frequency={stepUpFrequency}
-              onFrequencyChange={setStepUpFrequency}
-              percentage={stepUpPercentage}
-              onPercentageChange={setStepUpPercentage}
-              isAdvancedOptionsEnabled={advancedOptionsEnabled}
-              onDropdownOpenChange={setIsStepUpDropdownOpen}
-            />
-            <InitialInvestmentSettings
-              enabled={initialInvestmentEnabled}
-              onEnabledChange={setInitialInvestmentEnabled}
-              amount={initialInvestmentAmount}
-              onAmountChange={setInitialInvestmentAmount}
-              isAdvancedOptionsEnabled={advancedOptionsEnabled}
-              currency={currency}
-            />
-            <InflationSettings
-              enabled={inflationEnabled}
-              onEnabledChange={setInflationEnabled}
-              rate={inflationRate}
-              onRateChange={setInflationRate}
-              isAdvancedOptionsEnabled={advancedOptionsEnabled}
-              returnRate={returnRate}
-            />
-          </div>
-        )}
+      <div className="space-y-6 pt-2">
+        <StepUpSIPSettings
+          enabled={stepUpEnabled}
+          onEnabledChange={setStepUpEnabled}
+          frequency={stepUpFrequency}
+          onFrequencyChange={setStepUpFrequency}
+          percentage={stepUpPercentage}
+          onPercentageChange={setStepUpPercentage}
+          isAdvancedOptionsEnabled={true}
+          onDropdownOpenChange={setIsStepUpDropdownOpen}
+        />
+        <InitialInvestmentSettings
+          enabled={initialInvestmentEnabled}
+          onEnabledChange={setInitialInvestmentEnabled}
+          amount={initialInvestmentAmount}
+          onAmountChange={setInitialInvestmentAmount}
+          isAdvancedOptionsEnabled={true}
+          currency={currency}
+        />
+        <InflationSettings
+          enabled={inflationEnabled}
+          onEnabledChange={setInflationEnabled}
+          rate={inflationRate}
+          onRateChange={setInflationRate}
+          isAdvancedOptionsEnabled={true}
+          returnRate={returnRate}
+        />
       </div>
     </div>
   );

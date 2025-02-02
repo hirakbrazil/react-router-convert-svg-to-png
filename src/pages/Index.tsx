@@ -29,8 +29,6 @@ const Index = () => {
     totalInvestment,
     currency,
     setCurrency,
-    advancedOptionsEnabled,
-    setAdvancedOptionsEnabled,
     stepUpEnabled,
     setStepUpEnabled,
     stepUpFrequency,
@@ -52,7 +50,6 @@ const Index = () => {
     setReturnRate(13);
     setTimePeriod(10);
     setSipFrequency("Monthly");
-    setAdvancedOptionsEnabled(false);
     setStepUpEnabled(false);
     setStepUpFrequency("Yearly");
     setStepUpPercentage(10);
@@ -93,8 +90,6 @@ const Index = () => {
             currency={currency}
             sipFrequency={sipFrequency}
             setSipFrequency={setSipFrequency}
-            advancedOptionsEnabled={advancedOptionsEnabled}
-            setAdvancedOptionsEnabled={setAdvancedOptionsEnabled}
             stepUpEnabled={stepUpEnabled}
             setStepUpEnabled={setStepUpEnabled}
             stepUpFrequency={stepUpFrequency}
@@ -117,7 +112,7 @@ const Index = () => {
             currency={currency}
             sipFrequency={sipFrequency}
             timePeriod={timePeriod}
-            stepUpEnabled={stepUpEnabled && advancedOptionsEnabled}
+            stepUpEnabled={stepUpEnabled}
             stepUpPercentage={stepUpPercentage}
             stepUpFrequency={stepUpFrequency}
           />
@@ -129,7 +124,6 @@ const Index = () => {
               returnRate,
               timePeriod,
               sipFrequency,
-              advancedOptionsEnabled,
               stepUpEnabled,
               stepUpFrequency,
               stepUpPercentage,
@@ -144,7 +138,6 @@ const Index = () => {
               timePeriod,
               sipFrequency,
               currency,
-              advancedOptionsEnabled,
               stepUpEnabled,
               stepUpFrequency,
               stepUpPercentage,
@@ -158,7 +151,6 @@ const Index = () => {
               setReturnRate(values.returnRate);
               setTimePeriod(values.timePeriod);
               setSipFrequency(values.sipFrequency);
-              setAdvancedOptionsEnabled(values.advancedOptionsEnabled || false);
               setStepUpEnabled(values.stepUpEnabled || false);
               setStepUpFrequency(values.stepUpFrequency || "Yearly");
               setStepUpPercentage(values.stepUpPercentage || 10);

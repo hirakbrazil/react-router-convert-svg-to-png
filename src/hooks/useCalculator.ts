@@ -11,7 +11,6 @@ export const useCalculator = () => {
     const savedTimePeriod = localStorage.getItem("timePeriod");
     const savedSipFrequency = localStorage.getItem("sipFrequency") as SIPFrequency;
     const savedCurrency = localStorage.getItem("selectedCurrency") as CurrencyType;
-    const savedAdvancedOptionsEnabled = localStorage.getItem("advancedOptionsEnabled");
     const savedStepUpEnabled = localStorage.getItem("stepUpEnabled");
     const savedStepUpFrequency = localStorage.getItem("stepUpFrequency") as StepUpFrequency;
     const savedStepUpPercentage = localStorage.getItem("stepUpPercentage");
@@ -20,14 +19,12 @@ export const useCalculator = () => {
     const savedInflationEnabled = localStorage.getItem("inflationEnabled");
     const savedInflationRate = localStorage.getItem("inflationRate");
 
-    // Get values from URL parameters or fallback to localStorage/defaults
     const values = {
       monthlyInvestment: Number(params.get("mi")) || Number(savedMonthlyInvestment) || 30000,
       returnRate: Number(params.get("rr")) || Number(savedReturnRate) || 13,
       timePeriod: Number(params.get("tp")) || Number(savedTimePeriod) || 10,
       sipFrequency: (params.get("sf") as SIPFrequency) || savedSipFrequency || "Monthly",
       currency: (params.get("cs") as CurrencyType) || savedCurrency || "INR",
-      advancedOptionsEnabled: params.get("ao") === "true" || (savedAdvancedOptionsEnabled ? JSON.parse(savedAdvancedOptionsEnabled) : false),
       stepUpEnabled: params.get("su") === "true" || (savedStepUpEnabled ? JSON.parse(savedStepUpEnabled) : false),
       stepUpFrequency: (params.get("suf") as StepUpFrequency) || savedStepUpFrequency || "Yearly",
       stepUpPercentage: Number(params.get("sup")) || Number(savedStepUpPercentage) || 10,
@@ -54,7 +51,6 @@ export const useCalculator = () => {
   const [totalValue, setTotalValue] = useState(0);
   const [totalInvestment, setTotalInvestment] = useState(0);
   const [currency, setCurrency] = useState<CurrencyType>(initialValues.currency);
-  const [advancedOptionsEnabled, setAdvancedOptionsEnabled] = useState(initialValues.advancedOptionsEnabled);
   const [stepUpEnabled, setStepUpEnabled] = useState(initialValues.stepUpEnabled);
   const [stepUpFrequency, setStepUpFrequency] = useState<StepUpFrequency>(initialValues.stepUpFrequency);
   const [stepUpPercentage, setStepUpPercentage] = useState(initialValues.stepUpPercentage);
@@ -70,7 +66,6 @@ export const useCalculator = () => {
     localStorage.setItem("timePeriod", timePeriod.toString());
     localStorage.setItem("sipFrequency", sipFrequency);
     localStorage.setItem("selectedCurrency", currency);
-    localStorage.setItem("advancedOptionsEnabled", JSON.stringify(advancedOptionsEnabled));
     localStorage.setItem("stepUpEnabled", JSON.stringify(stepUpEnabled));
     localStorage.setItem("stepUpFrequency", stepUpFrequency);
     localStorage.setItem("stepUpPercentage", stepUpPercentage.toString());
@@ -78,7 +73,7 @@ export const useCalculator = () => {
     localStorage.setItem("initialInvestmentAmount", initialInvestmentAmount.toString());
     localStorage.setItem("inflationEnabled", JSON.stringify(inflationEnabled));
     localStorage.setItem("inflationRate", inflationRate.toString());
-  }, [monthlyInvestment, returnRate, timePeriod, sipFrequency, currency, advancedOptionsEnabled, stepUpEnabled, stepUpFrequency, stepUpPercentage, initialInvestmentEnabled, initialInvestmentAmount, inflationEnabled, inflationRate]);
+  }, [monthlyInvestment, returnRate, timePeriod, sipFrequency, currency, stepUpEnabled, stepUpFrequency, stepUpPercentage, initialInvestmentEnabled, initialInvestmentAmount, inflationEnabled, inflationRate]);
 
   const calculateRealReturnRate = (nominalReturn: number, inflation: number): number => {
     return ((1 + nominalReturn / 100) / (1 + inflation / 100) - 1) * 100;
@@ -117,7 +112,7 @@ export const useCalculator = () => {
       futureValue = initialInvestmentAmount * Math.pow(1 + periodRate, totalPeriods);
     }
 
-    if (!advancedOptionsEnabled || !stepUpEnabled) {
+    if (!stepUpEnabled) {
       // Regular SIP calculation without step-up
       totalInvestmentAmount += monthlyInvestment * t;
       futureValue += monthlyInvestment * ((Math.pow(1 + r, t) - 1) / r) * (1 + r);
@@ -152,7 +147,7 @@ export const useCalculator = () => {
     const totalProfit = futureValue - totalInvestmentAmount;
 
     // Apply inflation adjustment to total profit if enabled
-    if (advancedOptionsEnabled && inflationEnabled) {
+    if (inflationEnabled) {
       const inflationAdjustedProfit = totalProfit / Math.pow(1 + inflationRate / 100, timePeriod);
       futureValue = totalInvestmentAmount + inflationAdjustedProfit;
     }
@@ -169,7 +164,6 @@ export const useCalculator = () => {
     returnRate,
     timePeriod,
     sipFrequency,
-    advancedOptionsEnabled,
     stepUpEnabled,
     stepUpFrequency,
     stepUpPercentage,
@@ -192,8 +186,6 @@ export const useCalculator = () => {
     totalInvestment,
     currency,
     setCurrency,
-    advancedOptionsEnabled,
-    setAdvancedOptionsEnabled,
     stepUpEnabled,
     setStepUpEnabled,
     stepUpFrequency,
