@@ -14,14 +14,13 @@ interface ShareDialogProps {
   timePeriod: number;
   currency: CurrencyType;
   sipFrequency: SIPFrequency;
-  advancedOptionsEnabled?: boolean;
-  stepUpEnabled?: boolean;
-  stepUpFrequency?: StepUpFrequency;
-  stepUpPercentage?: number;
-  initialInvestmentEnabled?: boolean;
-  initialInvestmentAmount?: number;
-  inflationEnabled?: boolean;
-  inflationRate?: number;
+  stepUpEnabled: boolean;
+  stepUpFrequency: StepUpFrequency;
+  stepUpPercentage: number;
+  initialInvestmentEnabled: boolean;
+  initialInvestmentAmount: number;
+  inflationEnabled: boolean;
+  inflationRate: number;
 }
 
 const ShareDialog = ({
@@ -32,7 +31,6 @@ const ShareDialog = ({
   timePeriod,
   currency,
   sipFrequency,
-  advancedOptionsEnabled = false,
   stepUpEnabled = false,
   stepUpFrequency = "Yearly",
   stepUpPercentage = 10,
@@ -54,7 +52,6 @@ const ShareDialog = ({
     params.set("rr", returnRate.toString());
     params.set("tp", timePeriod.toString());
     params.set("sf", sipFrequency);
-    params.set("ao", advancedOptionsEnabled.toString());
     params.set("su", stepUpEnabled.toString());
     params.set("suf", stepUpFrequency);
     params.set("sup", stepUpPercentage.toString());
