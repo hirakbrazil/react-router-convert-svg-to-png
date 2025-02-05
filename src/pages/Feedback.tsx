@@ -59,6 +59,26 @@ const Feedback = () => {
                 <li>Any issues or bugs you've encountered</li>
               </ul>
             </div>
+
+            <div>
+            <h2 className="text-2xl font-semibold mb-4">Advertising</h2>
+            <p className="mb-4">
+              For advertising opportunities, please visit our{" "}
+              <a 
+                href="https://mutualfundjournal.in/advertise/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                Advertise on MFJ
+              </a>
+              {" "}page.
+            </p>
+          </div>
+
+          <p>
+            We appreciate your support in making this tool better for everyone!
+          </p>
           </div>
           <AdSenseResponsive />
           <Footer />
