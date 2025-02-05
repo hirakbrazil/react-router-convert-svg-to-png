@@ -10,10 +10,10 @@ const CalculatorHeader = ({ currency, onCurrencyChange }: CalculatorHeaderProps)
   return (
     <div className="text-center">
       <h1 className="text-3xl font-bold text-foreground sm:text-4xl">
-        SIP Calculator
+        Lumpsum Calculator
       </h1>
       <p className="mt-2 text-muted-foreground">
-        Calculate your Systematic Investment Plan
+        Calculate your Lumpsum Investment Plan
       </p>
       <CurrencySelector value={currency} onChange={onCurrencyChange} />
     </div>
