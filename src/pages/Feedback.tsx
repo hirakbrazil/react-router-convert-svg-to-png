@@ -1,10 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import Footer from "@/components/Footer";
+import useTheme from "@/hooks/useTheme";
 import SEO from "@/components/SEO";
+import AdSenseHorizontal from "@/components/AdSenseHorizontal";
+import AdSenseResponsive from "@/components/AdSenseResponsive";
+import DesktopSidebar from "@/components/DesktopSidebar";
 
 const Feedback = () => {
+  useTheme();
+
   return (
     <>
       <SEO
@@ -16,25 +20,23 @@ const Feedback = () => {
         ogDescription="Share your feedback about our Lumpsum Calculator. Help us improve your investment planning experience."
         ogUrl="https://lumpsum-calculator.mutualfundjournal.in/feedback"
         ogImage="https://lumpsum-calculator.mutualfundjournal.in/banner.jpg"
-        ogType="website"
+        ogType="article"
       />
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto">
-          <Link to="/">
-            <Button variant="outline" className="mb-8">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Calculator
-            </Button>
-          </Link>
+        <div className="max-w-3xl mx-auto space-y-8 lg:mr-[300px]">
+          <AdSenseHorizontal />
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-foreground sm:text-4xl">
+              Feedback
+            </h1>
+          </div>
 
-          <h1 className="text-4xl font-bold mb-8">Feedback</h1>
-
-          <div className="prose dark:prose-invert max-w-none">
-            <p>
-              We value your feedback! If you have any suggestions, comments, or issues regarding our Lumpsum Calculator, please feel free to reach out to us. Your input helps us improve and provide a better investment planning experience.
+          <div className="space-y-6">
+            <p className="text-lg">
+              We value your feedback! Your input helps us improve and provide a better investment planning experience with our Lumpsum Calculator.
             </p>
 
-            <div className="mt-8">
+            <div>
               <h2 className="text-2xl font-semibold mb-4">Contact Information</h2>
               <p>
                 You can send your feedback to:{" "}
@@ -47,7 +49,7 @@ const Feedback = () => {
               </p>
             </div>
 
-            <div className="mt-8">
+            <div>
               <h2 className="text-2xl font-semibold mb-4">What We'd Love to Hear About</h2>
               <ul className="list-disc pl-6 space-y-2">
                 <li>User interface and experience</li>
@@ -58,7 +60,10 @@ const Feedback = () => {
               </ul>
             </div>
           </div>
+          <AdSenseResponsive />
+          <Footer />
         </div>
+        <DesktopSidebar />
       </div>
     </>
   );
