@@ -9,7 +9,6 @@ import {
   Share2,
   TrendingUp,
   DollarSign,
-  Percent,
   Info,
   RefreshCw,
   MousePointerClick,
@@ -21,14 +20,11 @@ import {
 } from 'lucide-react';
 import { CurrencyType } from './CurrencySelector';
 import { formatNumberByCurrency, getCurrencySymbol } from './slider/utils';
-import { SIPFrequency } from '@/types/calculator';
 
 interface HomepageContentProps {
   currency: CurrencyType;
   totalInvestment: number;
-  monthlyInvestment: number;
   timePeriod: number;
-  sipFrequency: SIPFrequency;
   totalValue: number;
   totalProfit: number;
 }
@@ -36,9 +32,7 @@ interface HomepageContentProps {
 const HomepageContent = ({ 
   currency, 
   totalInvestment,
-  monthlyInvestment,
   timePeriod,
-  sipFrequency,
   totalValue,
   totalProfit
 }: HomepageContentProps) => {
@@ -64,9 +58,9 @@ const HomepageContent = ({
 
   const formatInvestmentRange = (currency: CurrencyType) => {
     if (currency === 'INR') {
-      return `${currencySymbol}50 to ${currencySymbol}5 Crore`;
+      return `${currencySymbol}1,000 to ${currencySymbol}50 Crore`;
     }
-    return `${currencySymbol}50 to ${currencySymbol}50 Million`;
+    return `${currencySymbol}1,000 to ${currencySymbol}50 Million`;
   };
 
   return (
@@ -75,27 +69,17 @@ const HomepageContent = ({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Calculator className="h-5 w-5" />
-            SIP Calculator Uses Guide
+            Lumpsum Calculator Uses Guide
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div>
-            <h3 className="text-lg font-semibold flex items-center gap-2 mb-3">
-              <Calendar className="h-5 w-5" />
-              Investment Frequency
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400">
-              Choose your SIP investment frequency (Daily, Weekly, Monthly, Quarterly, Half-yearly, or Yearly/Annually) and set the investment amount. The calculator supports flexible investment schedules to match your financial planning.
-            </p>
-          </div>
-          
           <div>
             <h3 className="text-lg font-semibold flex items-center gap-2 mb-3">
               {getCurrencyIcon(currency)}
               Investment Details
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Enter your investment amount ({formatInvestmentRange(currency)}) and select from 11 supported currencies including INR, USD, EUR, JPY, GBP, CNY, AUD, CAD, CHF, HKD, and SGD.
+              Enter your one-time investment amount ({formatInvestmentRange(currency)}) and select from 11 supported currencies including INR, USD, EUR, JPY, GBP, CNY, AUD, CAD, CHF, HKD, and SGD.
             </p>
           </div>
 
@@ -127,9 +111,9 @@ const HomepageContent = ({
             <div className="space-y-2 text-gray-600 dark:text-gray-400">
               <p>The calculator includes advanced options for detailed investment planning:</p>
               <ul className="list-disc ml-6 space-y-1">
-                <li>Step-up SIP: Automatically increase investment amount periodically</li>
-                <li>Initial Investment: Add lump sum amount at the start</li>
-                <li>Inflation Adjustment: Account for the impact of inflation</li>
+                <li>Inflation Adjustment: Account for the impact of inflation on your returns</li>
+                <li>Currency Selection: Choose from multiple currencies</li>
+                <li>Real-time Calculations: Instant updates as you modify inputs</li>
               </ul>
             </div>
           </div>
@@ -142,11 +126,9 @@ const HomepageContent = ({
             <div className="space-y-2 text-gray-600 dark:text-gray-400">
               <p>The calculator provides comprehensive results including:</p>
               <ul className="list-disc ml-6 space-y-1">
-                <li>First SIP Date and Amount</li>
-                <li>Last SIP Date and Amount</li>
-                <li>Total Investment</li>
-                <li>Total Profit (Amount and Percentage)</li>
-                <li>Total Value (Invested amount plus return)</li>
+                <li>Total Investment: Your initial investment amount</li>
+                <li>Total Profit: Returns generated over the investment period</li>
+                <li>Total Value: Final amount (Investment plus returns)</li>
               </ul>
             </div>
             <div className="space-y-2 text-gray-600 dark:text-gray-400 mt-6">
@@ -166,7 +148,6 @@ const HomepageContent = ({
                   <li>Hover over chart segments to see detailed amounts</li>
                   <li>Compare total profit amount ({currencySymbol}{formatNumberByCurrency(totalProfit, currency)}) against total investment ({currencySymbol}{formatNumberByCurrency(totalInvestment, currency)})</li>
                 </ul>
-                <p className="text-gray-600 dark:text-gray-400 mt-4">XIRR percentage: XIRR stands for Extended Internal Rate of Return, which represents the annualized return on your investment while accounting for the timing and size of cash flows.</p>
               </div>
             </div>
           </div>
@@ -180,10 +161,10 @@ const HomepageContent = ({
               Use the Reset button to quickly restore all values to their defaults:
             </p>
             <ul className="list-disc ml-6 mt-2 text-gray-600 dark:text-gray-400 space-y-1">
-              <li>SIP Frequency: Monthly</li>
-              <li>Monthly investment: {currencySymbol}{formatNumberByCurrency(30000, currency)}</li>
+              <li>Total Investment: {currencySymbol}{formatNumberByCurrency(500000, currency)}</li>
               <li>Expected Return Rate: 13%</li>
               <li>Time Period: 10 Years</li>
+              <li>Inflation Adjustment: Disabled</li>
             </ul>
           </div>
 
@@ -209,10 +190,10 @@ const HomepageContent = ({
             </h3>
             <ul className="list-disc ml-6 text-gray-600 dark:text-gray-400 space-y-1">
               <li>All calculations are indicative and based on your inputs</li>
-              <li>Returns are calculated using compound interest</li>
+              <li>Returns are calculated using compound interest formula</li>
               <li>The calculator assumes consistent returns over the investment period</li>
-              <li>XIRR calculations provide annualized returns for better comparison</li>
-              <li>Regular monitoring and rebalancing of your investment is recommended</li>
+              <li>Inflation adjustment helps understand real returns</li>
+              <li>Regular monitoring of your investment is recommended</li>
             </ul>
           </div>
         </CardContent>
