@@ -60,7 +60,7 @@ const HomepageContent = ({
     if (currency === 'INR') {
       return `${currencySymbol}1,000 to ${currencySymbol}50 Crore`;
     }
-    return `${currencySymbol}1,000 to ${currencySymbol}50 Million`;
+    return `${currencySymbol}1,000 to ${currencySymbol}500 Million`;
   };
 
   return (
@@ -112,8 +112,6 @@ const HomepageContent = ({
               <p>The calculator includes advanced options for detailed investment planning:</p>
               <ul className="list-disc ml-6 space-y-1">
                 <li>Inflation Adjustment: Account for the impact of inflation on your returns</li>
-                <li>Currency Selection: Choose from multiple currencies</li>
-                <li>Real-time Calculations: Instant updates as you modify inputs</li>
               </ul>
             </div>
           </div>
@@ -164,7 +162,6 @@ const HomepageContent = ({
               <li>Total Investment: {currencySymbol}{formatNumberByCurrency(500000, currency)}</li>
               <li>Expected Return Rate: 13%</li>
               <li>Time Period: 10 Years</li>
-              <li>Inflation Adjustment: Disabled</li>
             </ul>
           </div>
 
@@ -192,7 +189,6 @@ const HomepageContent = ({
               <li>All calculations are indicative and based on your inputs</li>
               <li>Returns are calculated using compound interest formula</li>
               <li>The calculator assumes consistent returns over the investment period</li>
-              <li>Inflation adjustment helps understand real returns</li>
               <li>Regular monitoring of your investment is recommended</li>
             </ul>
           </div>
