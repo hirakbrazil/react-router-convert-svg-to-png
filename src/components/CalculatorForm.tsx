@@ -1,34 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import SliderInput from "@/components/slider/SliderInput";
 import { CurrencyType } from "@/components/CurrencySelector";
-import { SIPFrequency } from "@/types/calculator";
-import SIPFrequencySelector from "./calculator/SIPFrequencySelector";
 import InfoTooltip from "./InfoTooltip";
 import { format, addYears } from "date-fns";
-import StepUpSIPSettings, { StepUpFrequency } from "./calculator/StepUpSIPSettings";
-import InitialInvestmentSettings from "./calculator/InitialInvestmentSettings";
 import InflationSettings from "./calculator/InflationSettings";
 
 interface CalculatorFormProps {
-  monthlyInvestment: number;
-  setMonthlyInvestment: (value: number) => void;
+  totalInvestment: number;
+  setTotalInvestment: (value: number) => void;
   returnRate: number;
   setReturnRate: (value: number) => void;
   timePeriod: number;
   setTimePeriod: (value: number) => void;
   currency: CurrencyType;
-  sipFrequency: SIPFrequency;
-  setSipFrequency: (frequency: SIPFrequency) => void;
-  stepUpEnabled: boolean;
-  setStepUpEnabled: (enabled: boolean) => void;
-  stepUpFrequency: StepUpFrequency;
-  setStepUpFrequency: (frequency: StepUpFrequency) => void;
-  stepUpPercentage: number;
-  setStepUpPercentage: (percentage: number) => void;
-  initialInvestmentEnabled: boolean;
-  setInitialInvestmentEnabled: (enabled: boolean) => void;
-  initialInvestmentAmount: number;
-  setInitialInvestmentAmount: (amount: number) => void;
   inflationEnabled: boolean;
   setInflationEnabled: (enabled: boolean) => void;
   inflationRate: number;
@@ -36,51 +20,18 @@ interface CalculatorFormProps {
 }
 
 const CalculatorForm = ({
-  monthlyInvestment,
-  setMonthlyInvestment,
+  totalInvestment,
+  setTotalInvestment,
   returnRate,
   setReturnRate,
   timePeriod,
   setTimePeriod,
   currency,
-  sipFrequency,
-  setSipFrequency,
-  stepUpEnabled,
-  setStepUpEnabled,
-  stepUpFrequency,
-  setStepUpFrequency,
-  stepUpPercentage,
-  setStepUpPercentage,
-  initialInvestmentEnabled,
-  setInitialInvestmentEnabled,
-  initialInvestmentAmount,
-  setInitialInvestmentAmount,
   inflationEnabled,
   setInflationEnabled,
   inflationRate,
   setInflationRate,
 }: CalculatorFormProps) => {
-  const [isStepUpDropdownOpen, setIsStepUpDropdownOpen] = useState(false);
-
-  const getInvestmentLabel = () => {
-    switch (sipFrequency) {
-      case "Daily":
-        return "Daily investment";
-      case "Weekly":
-        return "Weekly investment";
-      case "Monthly":
-        return "Monthly investment";
-      case "Quarterly":
-        return "Quarterly investment";
-      case "Half-yearly":
-        return "Half-yearly investment";
-      case "Yearly":
-        return "Yearly investment";
-      default:
-        return "Monthly investment";
-    }
-  };
-
   const getFutureDate = (years: number) => {
     const futureDate = addYears(new Date(), years);
     return format(futureDate, "MMMM, yyyy");
@@ -89,20 +40,13 @@ const CalculatorForm = ({
   return (
     <div className="border border-border bg-card dark:bg-card rounded-xl p-6 space-y-6">
       <div className="space-y-4">
-        <div className="flex flex-col space-y-4">
-          <SIPFrequencySelector
-            sipFrequency={sipFrequency}
-            setSIPFrequency={setSipFrequency}
-          />
-        </div>
-
         <SliderInput
-          label={getInvestmentLabel()}
-          value={monthlyInvestment}
-          onChange={setMonthlyInvestment}
-          min={50}
-          max={50000000}
-          step={50}
+          label="Total investment"
+          value={totalInvestment}
+          onChange={setTotalInvestment}
+          min={1000}
+          max={500000000}
+          step={1000}
           currency={currency}
           formatValue={true}
           maxLength={12}
@@ -142,7 +86,7 @@ const CalculatorForm = ({
           label={
             <div className="flex items-center gap-x-1">
               <span className="text-lg text-gray-700 dark:text-[#c1cbd6]">Time period</span>
-              <InfoTooltip content="The total duration for which you plan to invest through SIP. This is measured in years." />
+              <InfoTooltip content="The total duration for which you plan to stay invested. This is measured in years." />
             </div>
           }
           value={timePeriod}
@@ -159,24 +103,6 @@ const CalculatorForm = ({
       </div>
 
       <div className="space-y-6 pt-2">
-        <StepUpSIPSettings
-          enabled={stepUpEnabled}
-          onEnabledChange={setStepUpEnabled}
-          frequency={stepUpFrequency}
-          onFrequencyChange={setStepUpFrequency}
-          percentage={stepUpPercentage}
-          onPercentageChange={setStepUpPercentage}
-          isAdvancedOptionsEnabled={true}
-          onDropdownOpenChange={setIsStepUpDropdownOpen}
-        />
-        <InitialInvestmentSettings
-          enabled={initialInvestmentEnabled}
-          onEnabledChange={setInitialInvestmentEnabled}
-          amount={initialInvestmentAmount}
-          onAmountChange={setInitialInvestmentAmount}
-          isAdvancedOptionsEnabled={true}
-          currency={currency}
-        />
         <InflationSettings
           enabled={inflationEnabled}
           onEnabledChange={setInflationEnabled}
