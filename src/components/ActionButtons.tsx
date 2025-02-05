@@ -4,48 +4,28 @@ import { toast } from "@/hooks/use-toast";
 import { useState, useRef } from "react";
 import ShareDialog from "./ShareDialog";
 import { CurrencyType } from "./CurrencySelector";
-import { SIPFrequency } from "@/types/calculator";
-import { StepUpFrequency } from "./calculator/StepUpSIPSettings";
 
 interface ActionButtonsProps {
   onReset: () => void;
   previousValues: {
-    monthlyInvestment: number;
+    totalInvestment: number;
     returnRate: number;
     timePeriod: number;
-    sipFrequency: SIPFrequency;
-    stepUpEnabled: boolean;
-    stepUpFrequency: StepUpFrequency;
-    stepUpPercentage: number;
-    initialInvestmentEnabled: boolean;
-    initialInvestmentAmount: number;
     inflationEnabled: boolean;
     inflationRate: number;
   };
   currentValues: {
-    monthlyInvestment: number;
+    totalInvestment: number;
     returnRate: number;
     timePeriod: number;
-    sipFrequency: SIPFrequency;
     currency: CurrencyType;
-    stepUpEnabled: boolean;
-    stepUpFrequency: StepUpFrequency;
-    stepUpPercentage: number;
-    initialInvestmentEnabled: boolean;
-    initialInvestmentAmount: number;
     inflationEnabled: boolean;
     inflationRate: number;
   };
   onRestore: (values: {
-    monthlyInvestment: number;
+    totalInvestment: number;
     returnRate: number;
     timePeriod: number;
-    sipFrequency: SIPFrequency;
-    stepUpEnabled: boolean;
-    stepUpFrequency: StepUpFrequency;
-    stepUpPercentage: number;
-    initialInvestmentEnabled: boolean;
-    initialInvestmentAmount: number;
     inflationEnabled: boolean;
     inflationRate: number;
   }) => void;

@@ -1,10 +1,10 @@
 [[redirects]]
-  from = "https://sip-calculator-production.netlify.app/*"
-  to = "https://sip-calculator.mutualfundjournal.in/:splat"
+  from = "https://lumpsum-calculator-production.netlify.app/*"
+  to = "https://lumpsum-calculator.mutualfundjournal.in/:splat"
   status = 301
   force = true
   
 [[redirects]]
-  from = "https://sip-calculator.mutualfundjournal.in/*"
+  from = "https://lumpsum-calculator.mutualfundjournal.in/*"
   to = "/index.html"
   status = 200

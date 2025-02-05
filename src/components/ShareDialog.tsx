@@ -3,22 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Share2, Link, Calculator } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { CurrencyType } from "./CurrencySelector";
-import { SIPFrequency } from "@/types/calculator";
-import { StepUpFrequency } from "./calculator/StepUpSIPSettings";
 
 interface ShareDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  monthlyInvestment: number;
+  totalInvestment: number;
   returnRate: number;
   timePeriod: number;
   currency: CurrencyType;
-  sipFrequency: SIPFrequency;
-  stepUpEnabled: boolean;
-  stepUpFrequency: StepUpFrequency;
-  stepUpPercentage: number;
-  initialInvestmentEnabled: boolean;
-  initialInvestmentAmount: number;
   inflationEnabled: boolean;
   inflationRate: number;
 }
@@ -26,20 +18,14 @@ interface ShareDialogProps {
 const ShareDialog = ({
   open,
   onOpenChange,
-  monthlyInvestment,
+  totalInvestment,
   returnRate,
   timePeriod,
   currency,
-  sipFrequency,
-  stepUpEnabled = false,
-  stepUpFrequency = "Yearly",
-  stepUpPercentage = 10,
-  initialInvestmentEnabled = false,
-  initialInvestmentAmount = 500000,
   inflationEnabled = false,
   inflationRate = 6,
 }: ShareDialogProps) => {
-  const baseUrl = "https://sip-calculator.mutualfundjournal.in/";
+  const baseUrl = "https://lumpsum-calculator.mutualfundjournal.in/";
 
   const generateShareableLink = (includeParams: boolean = true) => {
     if (!includeParams) return baseUrl;
@@ -47,16 +33,10 @@ const ShareDialog = ({
     const params = new URLSearchParams();
     
     // Add all parameters
-    params.set("mi", monthlyInvestment.toString());
+    params.set("ti", totalInvestment.toString());
     params.set("cs", currency);
     params.set("rr", returnRate.toString());
     params.set("tp", timePeriod.toString());
-    params.set("sf", sipFrequency);
-    params.set("su", stepUpEnabled.toString());
-    params.set("suf", stepUpFrequency);
-    params.set("sup", stepUpPercentage.toString());
-    params.set("iie", initialInvestmentEnabled.toString());
-    params.set("iia", initialInvestmentAmount.toString());
     params.set("inf", inflationEnabled.toString());
     params.set("ir", inflationRate.toString());
 
@@ -67,8 +47,8 @@ const ShareDialog = ({
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "SIP Calculator",
-          text: "SIP Calculator - Systematic Investment Plan Calculator",
+          title: "Lumpsum Calculator",
+          text: "Lumpsum Calculator - One-time Investment Calculator",
           url: generateShareableLink(true),
         });
       } catch (error) {

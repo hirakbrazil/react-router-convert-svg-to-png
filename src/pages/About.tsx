@@ -1,74 +1,60 @@
 import React from "react";
-import Footer from "@/components/Footer";
-import useTheme from "@/hooks/useTheme";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 import SEO from "@/components/SEO";
-import AdSenseHorizontal from "@/components/AdSenseHorizontal";
-import AdSenseResponsive from "@/components/AdSenseResponsive";
-import DesktopSidebar from "@/components/DesktopSidebar";
 
 const About = () => {
-  useTheme();
-  
   return (
     <>
       <SEO
-        title="About SIP Calculator"
-        description="Discover the purpose and features of SIP Calculator. Learn why our tool is essential for your financial planning."
-        canonicalUrl="https://sip-calculator.mutualfundjournal.in/about"
+        title="About - Lumpsum Calculator"
+        description="Learn more about our Lumpsum Calculator tool and how it can help you plan your one-time investments better."
+        canonicalUrl="https://lumpsum-calculator.mutualfundjournal.in/about"
         robots="max-image-preview:large"
-        ogTitle="About SIP Calculator"
-        ogDescription="Discover the purpose and features of SIP Calculator. Learn why our tool is essential for your financial planning."
-        ogUrl="https://sip-calculator.mutualfundjournal.in/about"
-        ogImage="https://sip-calculator.mutualfundjournal.in/banner.jpg"
-        ogType="article"
+        ogTitle="About - Lumpsum Calculator"
+        ogDescription="Learn more about our Lumpsum Calculator tool and how it can help you plan your one-time investments better."
+        ogUrl="https://lumpsum-calculator.mutualfundjournal.in/about"
+        ogImage="https://lumpsum-calculator.mutualfundjournal.in/banner.jpg"
+        ogType="website"
       />
-    <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto space-y-8 lg:mr-[300px]">
-        <AdSenseHorizontal />
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-foreground sm:text-4xl">
-            About SIP Calculator
-          </h1>
-        </div>
+      <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto">
+          <Link to="/">
+            <Button variant="outline" className="mb-8">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Calculator
+            </Button>
+          </Link>
 
-        <div className="space-y-6">
-          <p className="text-lg">
-            Welcome to our advanced Systematic Investment Plan (SIP) Calculator, a comprehensive tool designed to make investment planning accessible for everyone.
-          </p>
+          <h1 className="text-4xl font-bold mb-8">About Lumpsum Calculator</h1>
 
-          <div>
-            <h2 className="text-2xl font-semibold mb-4">Why Choose Our SIP Calculator?</h2>
-            <p className="mb-4">Our calculator stands out by offering advanced features in one place, completely free of charge. Unlike other calculators, we provide:</p>
+          <div className="prose dark:prose-invert max-w-none space-y-6">
+            <p>
+              Welcome to our Lumpsum Calculator! This tool is designed to help you calculate the potential returns on your one-time investments. Whether you're planning for long-term wealth creation or evaluating investment opportunities, our calculator provides you with clear insights into your investment's growth potential.
+            </p>
+
+            <h2 className="text-2xl font-semibold mt-8 mb-4">Key Features</h2>
             <ul className="list-disc pl-6 space-y-2">
-              <li>Multi-currency support for global investors</li>
-              <li>Real-time calculations with instant updates</li>
-              <li>Step-up SIP and inflation adjustment options</li>
-              <li>XIRR calculations for better return analysis</li>
-              <li>User-friendly interface with dark/light mode</li>
-              <li>Responsive design for all devices</li>
+              <li>Calculate returns on one-time investments</li>
+              <li>Adjust for inflation to see real returns</li>
+              <li>Support for multiple currencies</li>
+              <li>Easy-to-understand visual representation of your investment growth</li>
+              <li>Share your calculations with others</li>
             </ul>
-          </div>
 
-          <div>
-            <h2 className="text-2xl font-semibold mb-4">Our Vision</h2>
-            <p className="mb-4">We believe that investment planning should be accessible to everyone. Our mission is to empower individuals to make informed investment decisions by providing:</p>
-            <ul className="list-disc pl-6 space-y-2">
-              <li>Free access to advanced financial tools</li>
-              <li>Clear and transparent calculations</li>
-              <li>Educational resources about SIP investing</li>
-              <li>Regular updates and improvements based on user feedback</li>
-            </ul>
-          </div>
+            <h2 className="text-2xl font-semibold mt-8 mb-4">How It Works</h2>
+            <p>
+              Our calculator uses compound interest principles to project your investment's growth over time. Simply input your investment amount, expected return rate, and investment duration to see how your money could grow.
+            </p>
 
-          <p>
-            By making these tools freely available, we aim to help investors better understand and plan their systematic investments, ultimately contributing to their financial well-being.
-          </p>
+            <h2 className="text-2xl font-semibold mt-8 mb-4">Disclaimer</h2>
+            <p>
+              The calculations provided are for illustration purposes only. Actual returns may vary based on market conditions, taxes, and other factors. Always consult with a financial advisor before making investment decisions.
+            </p>
+          </div>
         </div>
-        <AdSenseResponsive />
-        <Footer />
       </div>
-      <DesktopSidebar />
-    </div>
     </>
   );
 };

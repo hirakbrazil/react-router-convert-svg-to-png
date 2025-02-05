@@ -48,12 +48,12 @@ const Index = () => {
       <SEO
         title="Lumpsum Calculator - One-time Investment Calculator"
         description="Calculate your one-time investment returns easily with our free Lumpsum Calculator. Plan your investments effectively."
-        canonicalUrl="https://sip-calculator.mutualfundjournal.in/"
+        canonicalUrl="https://djournal.in/"
         robots="max-image-preview:large"
         ogTitle="Lumpsum Calculator - One-time Investment Calculator"
         ogDescription="Calculate your one-time investment returns easily with our free Lumpsum Calculator. Plan your investments effectively."
-        ogUrl="https://sip-calculator.mutualfundjournal.in/"
-        ogImage="https://sip-calculator.mutualfundjournal.in/banner.jpg"
+        ogUrl="https://lumpsum-calculator.mutualfundjournal.in/"
+        ogImage="https://lumpsum-calculator.mutualfundjournal.in/banner.jpg"
         ogType="website"
       />
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
