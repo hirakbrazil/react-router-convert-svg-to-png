@@ -39,12 +39,12 @@ const Feedback = () => {
             <div>
               <h2 className="text-2xl font-semibold mb-4">Contact Information</h2>
               <p>
-                You can send your feedback to:{" "}
+                For any queries, feedback, suggestions, or bug reports, please email us at:{" "}
                 <a
-                  href="mailto:feedback@mutualfundjournal.in"
+                  href="mailto:info@mutualfundjournal.in"
                   className="text-primary hover:underline"
                 >
-                  feedback@mutualfundjournal.in
+                  info@mutualfundjournal.in
                 </a>
               </p>
             </div>
