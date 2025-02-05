@@ -1,5 +1,5 @@
 [[redirects]]
-  from = "https://lumpsum-calculator-production.netlify.app/*"
+  from = "https://lumpsum-calculator.netlify.app/*"
   to = "https://lumpsum-calculator.mutualfundjournal.in/:splat"
   status = 301
   force = true
