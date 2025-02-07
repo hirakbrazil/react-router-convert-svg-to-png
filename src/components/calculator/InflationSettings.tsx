@@ -71,7 +71,7 @@ const InflationSettings = ({
             max={maxInflationRate}
             step={0.1}
             suffix="%"
-            maxLength={4}
+            maxLength={5}
           />
         </div>
       )}
