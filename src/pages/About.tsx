@@ -1,3 +1,4 @@
+
 import React from "react";
 import Footer from "@/components/Footer";
 import useTheme from "@/hooks/useTheme";
@@ -12,14 +13,14 @@ const About = () => {
   return (
     <>
       <SEO
-        title="About Lumpsum Calculator"
-        description="Discover the purpose and features of Lumpsum Calculator. Learn why our tool is essential for your financial planning."
-        canonicalUrl="https://lumpsum-calculator.mutualfundjournal.in/about"
+        title="About Clipboard to Image - Easy Image Conversion Tool"
+        description="Learn about our free Clipboard to Image converter tool. Convert clipboard content to downloadable images instantly with our user-friendly tool."
+        canonicalUrl="https://clipboard-to-image.toolyoulove.com/about"
         robots="max-image-preview:large"
-        ogTitle="About Lumpsum Calculator"
-        ogDescription="Discover the purpose and features of Lumpsum Calculator. Learn why our tool is essential for your financial planning."
-        ogUrl="https://lumpsum-calculator.mutualfundjournal.in/about"
-        ogImage="https://lumpsum-calculator.mutualfundjournal.in/banner.jpg"
+        ogTitle="About Clipboard to Image - Easy Image Conversion Tool"
+        ogDescription="Learn about our free Clipboard to Image converter tool. Convert clipboard content to downloadable images instantly with our user-friendly tool."
+        ogUrl="https://clipboard-to-image.toolyoulove.com/about"
+        ogImage="https://clipboard-to-image.toolyoulove.com/banner.jpg"
         ogType="article"
       />
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
@@ -27,41 +28,44 @@ const About = () => {
           <AdSenseHorizontal />
           <div className="text-center">
             <h1 className="text-3xl font-bold text-foreground sm:text-4xl">
-              About Lumpsum Calculator
+              About Clipboard to Image
             </h1>
           </div>
 
           <div className="space-y-6">
             <p className="text-lg">
-              Welcome to our advanced Lumpsum Investment Calculator, a comprehensive tool designed to make one-time investment planning accessible for everyone.
+              Welcome to Clipboard to Image, a simple yet powerful tool designed to help you convert clipboard content into downloadable images instantly.
             </p>
 
             <div>
-              <h2 className="text-2xl font-semibold mb-4">Why Choose Our Lumpsum Calculator?</h2>
-              <p className="mb-4">Our calculator stands out by offering advanced features in one place, completely free of charge. Unlike other calculators, we provide:</p>
+              <h2 className="text-2xl font-semibold mb-4">Key Features</h2>
               <ul className="list-disc pl-6 space-y-2">
-                <li>Multi-currency support for global investors</li>
-                <li>Real-time calculations with instant updates</li>
-                <li>Inflation adjustment options</li>
-                <li>Accurate compound interest calculations</li>
-                <li>User-friendly interface with dark/light mode</li>
-                <li>Responsive design for all devices</li>
+                <li>Quick clipboard-to-image conversion with just one paste</li>
+                <li>Keyboard shortcut support (Ctrl+V / Cmd+V)</li>
+                <li>Dark and light mode for comfortable viewing</li>
+                <li>Local processing - your images never leave your browser</li>
+                <li>Cross-browser compatibility</li>
+                <li>Instant image downloads in PNG format</li>
+                <li>No registration required</li>
               </ul>
             </div>
 
             <div>
-              <h2 className="text-2xl font-semibold mb-4">Our Vision</h2>
-              <p className="mb-4">We believe that investment planning should be accessible to everyone. Our mission is to empower individuals to make informed investment decisions by providing:</p>
-              <ul className="list-disc pl-6 space-y-2">
-                <li>Free access to advanced financial tools</li>
-                <li>Clear and transparent calculations</li>
-                <li>Educational resources about lumpsum investing</li>
-                <li>Regular updates and improvements based on user feedback</li>
-              </ul>
+              <h2 className="text-2xl font-semibold mb-4">Privacy & Security</h2>
+              <p className="mb-4">
+                Your privacy is our priority. All image processing happens locally in your browser - we never store or transmit your images to any server. This ensures your content remains completely private and secure.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-2xl font-semibold mb-4">Browser Support</h2>
+              <p className="mb-4">
+                Our tool works seamlessly across all modern browsers including Chrome, Firefox, Safari, and Edge. For the best experience, we recommend using the latest version of your preferred browser.
+              </p>
             </div>
 
             <p>
-              By making these tools freely available, we aim to help investors better understand and plan their one-time investments, ultimately contributing to their financial well-being.
+              Start using Clipboard to Image today - it's free, fast, and focused on providing the best image conversion experience possible!
             </p>
           </div>
           <AdSenseResponsive />

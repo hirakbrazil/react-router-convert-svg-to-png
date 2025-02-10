@@ -14,13 +14,13 @@ const Index = () => {
     <>
       <SEO
         title="Clipboard to Image - Convert Clipboard Content to Image"
-        description="Easily convert and download clipboard content as images with our free Clipboard to Image tool."
-        canonicalUrl="https://clipboard-to-image.djournal.in/"
+        description="Easily convert and download clipboard content as images with our free Clipboard to Image tool. Simply paste and download!"
+        canonicalUrl="https://clipboard-to-image.toolyoulove.com/"
         robots="max-image-preview:large"
         ogTitle="Clipboard to Image - Convert Clipboard Content to Image"
-        ogDescription="Easily convert and download clipboard content as images with our free Clipboard to Image tool."
-        ogUrl="https://clipboard-to-image.djournal.in/"
-        ogImage="https://clipboard-to-image.djournal.in/banner.jpg"
+        ogDescription="Easily convert and download clipboard content as images with our free Clipboard to Image tool. Simply paste and download!"
+        ogUrl="https://clipboard-to-image.toolyoulove.com/"
+        ogImage="https://clipboard-to-image.toolyoulove.com/banner.jpg"
         ogType="website"
       />
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">

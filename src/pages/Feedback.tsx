@@ -1,3 +1,4 @@
+
 import React from "react";
 import Footer from "@/components/Footer";
 import useTheme from "@/hooks/useTheme";
@@ -12,14 +13,14 @@ const Feedback = () => {
   return (
     <>
       <SEO
-        title="Feedback - Lumpsum Calculator"
-        description="Share your feedback about our Lumpsum Calculator. Help us improve your investment planning experience."
-        canonicalUrl="https://lumpsum-calculator.mutualfundjournal.in/feedback"
+        title="Feedback - Clipboard to Image Converter"
+        description="Share your feedback about our Clipboard to Image converter. Help us improve your image conversion experience."
+        canonicalUrl="https://clipboard-to-image.toolyoulove.com/feedback"
         robots="max-image-preview:large"
-        ogTitle="Feedback - Lumpsum Calculator"
-        ogDescription="Share your feedback about our Lumpsum Calculator. Help us improve your investment planning experience."
-        ogUrl="https://lumpsum-calculator.mutualfundjournal.in/feedback"
-        ogImage="https://lumpsum-calculator.mutualfundjournal.in/banner.jpg"
+        ogTitle="Feedback - Clipboard to Image Converter"
+        ogDescription="Share your feedback about our Clipboard to Image converter. Help us improve your image conversion experience."
+        ogUrl="https://clipboard-to-image.toolyoulove.com/feedback"
+        ogImage="https://clipboard-to-image.toolyoulove.com/banner.jpg"
         ogType="article"
       />
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
@@ -33,7 +34,7 @@ const Feedback = () => {
 
           <div className="space-y-6">
             <p className="text-lg">
-              We value your feedback! Your input helps us improve and provide a better investment planning experience with our Lumpsum Calculator.
+              We value your feedback! Your input helps us improve and provide a better image conversion experience with our Clipboard to Image tool.
             </p>
 
             <div>
@@ -41,10 +42,10 @@ const Feedback = () => {
               <p>
                 For any queries, feedback, suggestions, or bug reports, please email us at:{" "}
                 <a
-                  href="mailto:info@mutualfundjournal.in"
+                  href="mailto:support@toolyoulove.com"
                   className="text-primary hover:underline"
                 >
-                  info@mutualfundjournal.in
+                  support@toolyoulove.com
                 </a>
               </p>
             </div>
@@ -52,33 +53,18 @@ const Feedback = () => {
             <div>
               <h2 className="text-2xl font-semibold mb-4">What We'd Love to Hear About</h2>
               <ul className="list-disc pl-6 space-y-2">
+                <li>Image conversion quality and performance</li>
                 <li>User interface and experience</li>
-                <li>Calculator features and functionality</li>
-                <li>Accuracy and reliability of calculations</li>
+                <li>Browser compatibility issues</li>
                 <li>Additional features you'd like to see</li>
-                <li>Any issues or bugs you've encountered</li>
+                <li>Any bugs or issues you've encountered</li>
+                <li>Suggestions for improvement</li>
               </ul>
             </div>
 
-            <div>
-            <h2 className="text-2xl font-semibold mb-4">Advertising</h2>
-            <p className="mb-4">
-              For advertising opportunities, please visit our{" "}
-              <a 
-                href="https://mutualfundjournal.in/advertise/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:underline"
-              >
-                Advertise on MFJ
-              </a>
-              {" "}page.
+            <p>
+              Thank you for helping us make Clipboard to Image better for everyone!
             </p>
-          </div>
-
-          <p>
-            We appreciate your support in making this tool better for everyone!
-          </p>
           </div>
           <AdSenseResponsive />
           <Footer />

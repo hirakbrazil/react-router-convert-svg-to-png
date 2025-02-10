@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Home, Info, MessageSquare } from "lucide-react";
@@ -39,12 +40,12 @@ const Footer = () => {
       <div className="text-center text-sm text-muted-foreground">
         Built with ❤️ by{" "}
         <a 
-          href="https://mutualfundjournal.in/" 
+          href="https://toolyoulove.com/" 
           target="_blank" 
           rel="noopener noreferrer"
           className="text-primary hover:underline"
         >
-          Mutual Fund Journal
+          Tool You Love
         </a>
       </div>
     </footer>
