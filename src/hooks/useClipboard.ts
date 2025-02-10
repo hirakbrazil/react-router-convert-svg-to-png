@@ -8,48 +8,82 @@ export const useClipboard = () => {
 
   const checkClipboardPermission = async () => {
     try {
+      // Try to query clipboard permission
       const result = await navigator.permissions.query({
         name: "clipboard-read" as PermissionName,
       });
-      return result.state === "granted";
+      
+      // If permission is denied, return false
+      if (result.state === "denied") {
+        return false;
+      }
+      
+      // For both "granted" and "prompt" states, return true to allow the operation
+      return true;
     } catch (error) {
-      return true; // Fallback for browsers that don't support permission API
+      // For browsers that don't support the Permissions API,
+      // return true and let the actual clipboard operation handle any errors
+      return true;
     }
   };
 
   const handlePaste = async () => {
-    const hasPermission = await checkClipboardPermission();
-    
-    if (!hasPermission) {
-      toast({
-        title: "Permission Denied",
-        description: "Please allow clipboard access to paste images",
-        variant: "destructive",
-      });
-      return;
-    }
-
     try {
+      const hasPermission = await checkClipboardPermission();
+      
+      if (!hasPermission) {
+        toast({
+          title: "Permission Denied",
+          description: "Please allow clipboard access in your browser settings",
+          variant: "destructive",
+        });
+        return;
+      }
+
       const items = await navigator.clipboard.read();
+      let foundImage = false;
+      
       for (const item of items) {
         if (item.types.includes("image/png") || item.types.includes("image/jpeg")) {
-          const blob = await item.getType(item.types.includes("image/png") ? "image/png" : "image/jpeg");
+          const blob = await item.getType(
+            item.types.includes("image/png") ? "image/png" : "image/jpeg"
+          );
           const url = URL.createObjectURL(blob);
           setImage(url);
-          return;
+          foundImage = true;
+          break;
         }
       }
-      toast({
-        title: "No Image Found",
-        description: "Please copy an image to your clipboard first",
-        variant: "destructive",
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to read from clipboard. Please try again.",
-        variant: "destructive",
-      });
+
+      if (!foundImage) {
+        toast({
+          title: "No Image Found",
+          description: "Please copy an image to your clipboard first",
+          variant: "destructive",
+        });
+      }
+    } catch (error: any) {
+      // Handle different types of errors with specific messages
+      if (error.name === "NotAllowedError") {
+        toast({
+          title: "Access Denied",
+          description: "Please allow clipboard access when prompted",
+          variant: "destructive",
+        });
+      } else if (error.name === "SecurityError") {
+        toast({
+          title: "Security Error",
+          description: "Clipboard access is restricted in this context",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to read from clipboard. Please try again.",
+          variant: "destructive",
+        });
+      }
+      console.error("Clipboard error:", error);
     }
   };
 
