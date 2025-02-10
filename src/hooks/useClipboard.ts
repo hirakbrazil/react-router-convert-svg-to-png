@@ -8,18 +8,12 @@ export const useClipboard = () => {
 
   const checkClipboardPermission = async () => {
     try {
-      // Try to query clipboard permission
       const result = await navigator.permissions.query({
         name: "clipboard-read" as PermissionName,
       });
       
-      // If permission is denied, return false
-      if (result.state === "denied") {
-        return false;
-      }
-      
-      // For both "granted" and "prompt" states, return true to allow the operation
-      return true;
+      // Only return false if explicitly denied
+      return result.state !== "denied";
     } catch (error) {
       // For browsers that don't support the Permissions API,
       // return true and let the actual clipboard operation handle any errors
@@ -63,7 +57,6 @@ export const useClipboard = () => {
         });
       }
     } catch (error: any) {
-      // Handle different types of errors with specific messages
       if (error.name === "NotAllowedError") {
         toast({
           title: "Access Denied",
@@ -98,9 +91,17 @@ export const useClipboard = () => {
     document.body.removeChild(link);
   };
 
+  const resetImage = () => {
+    if (image) {
+      URL.revokeObjectURL(image);
+      setImage(null);
+    }
+  };
+
   return {
     image,
     handlePaste,
     downloadImage,
+    resetImage,
   };
 };

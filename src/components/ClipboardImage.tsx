@@ -1,11 +1,11 @@
 
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ImageIcon, Download } from "lucide-react";
+import { ImageIcon, Download, RefreshCcw } from "lucide-react";
 import { useClipboard } from "@/hooks/useClipboard";
 
 const ClipboardImage = () => {
-  const { image, handlePaste, downloadImage } = useClipboard();
+  const { image, handlePaste, downloadImage, resetImage } = useClipboard();
 
   useEffect(() => {
     const handleKeyboardPaste = (e: KeyboardEvent) => {
@@ -34,10 +34,16 @@ const ClipboardImage = () => {
           <div className="border border-border rounded-lg overflow-hidden">
             <img src={image} alt="Pasted content" className="w-full h-auto" />
           </div>
-          <Button onClick={downloadImage} className="w-full gap-2">
-            <Download className="w-5 h-5" />
-            Download Image
-          </Button>
+          <div className="space-y-2">
+            <Button onClick={downloadImage} className="w-full gap-2">
+              <Download className="w-5 h-5" />
+              Download Image
+            </Button>
+            <Button onClick={resetImage} variant="outline" className="w-full gap-2">
+              <RefreshCcw className="w-5 h-5" />
+              Reset
+            </Button>
+          </div>
         </div>
       )}
     </div>
