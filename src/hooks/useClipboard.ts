@@ -1,9 +1,12 @@
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 export const useClipboard = () => {
   const [image, setImage] = useState<string | null>(null);
+  const [previousImage, setPreviousImage] = useState<string | null>(null);
+  const [isResetDisabled, setIsResetDisabled] = useState(false);
+  const resetTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const { toast } = useToast();
 
   const checkClipboardPermission = async () => {
@@ -93,8 +96,53 @@ export const useClipboard = () => {
 
   const resetImage = () => {
     if (image) {
+      // Store the current image URL for potential undo
+      setPreviousImage(image);
+      
+      // Clear current image
       URL.revokeObjectURL(image);
       setImage(null);
+
+      // Disable reset button
+      setIsResetDisabled(true);
+
+      // Show toast with undo button
+      toast({
+        title: "Reset Complete",
+        description: "Image has been cleared",
+        duration: 7000,
+        action: (
+          <button
+            onClick={() => {
+              if (previousImage) {
+                setImage(previousImage);
+                setPreviousImage(null);
+                toast({
+                  title: "Image Restored",
+                  description: "Previous image has been restored",
+                  duration: 5000,
+                });
+              }
+            }}
+            className="inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-sm font-medium ring-offset-background transition-colors hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+          >
+            Undo
+          </button>
+        ),
+      });
+
+      // Enable reset button after 7 seconds
+      if (resetTimeoutRef.current) {
+        clearTimeout(resetTimeoutRef.current);
+      }
+
+      resetTimeoutRef.current = setTimeout(() => {
+        setIsResetDisabled(false);
+        if (previousImage) {
+          URL.revokeObjectURL(previousImage);
+          setPreviousImage(null);
+        }
+      }, 7000);
     }
   };
 
@@ -103,5 +151,6 @@ export const useClipboard = () => {
     handlePaste,
     downloadImage,
     resetImage,
+    isResetDisabled,
   };
 };

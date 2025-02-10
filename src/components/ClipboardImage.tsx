@@ -5,7 +5,7 @@ import { ImageIcon, Download, RefreshCcw } from "lucide-react";
 import { useClipboard } from "@/hooks/useClipboard";
 
 const ClipboardImage = () => {
-  const { image, handlePaste, downloadImage, resetImage } = useClipboard();
+  const { image, handlePaste, downloadImage, resetImage, isResetDisabled } = useClipboard();
 
   useEffect(() => {
     const handleKeyboardPaste = (e: KeyboardEvent) => {
@@ -39,7 +39,12 @@ const ClipboardImage = () => {
               <Download className="w-5 h-5" />
               Download Image
             </Button>
-            <Button onClick={resetImage} variant="outline" className="w-full gap-2">
+            <Button 
+              onClick={resetImage} 
+              variant="outline" 
+              className="w-full gap-2"
+              disabled={isResetDisabled}
+            >
               <RefreshCcw className="w-5 h-5" />
               Reset
             </Button>
