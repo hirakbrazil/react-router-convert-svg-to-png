@@ -40,10 +40,10 @@ const SEO: React.FC<SEOProps> = ({
       {ogTitle && <meta property="og:title" content={ogTitle} />}
       {ogDescription && <meta property="og:description" content={ogDescription} />}
       {ogImage && <meta property="og:image" content={ogImage} />}
-      <meta property="og:site_name" content="Lumpsum Calculator" />
+      <meta property="og:site_name" content="Clipboard to Image" />
       <script
         async
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5161705954627943"
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3677847561110212"
         crossOrigin="anonymous"
       ></script>
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-RG2EBW5W0Y"></script>
