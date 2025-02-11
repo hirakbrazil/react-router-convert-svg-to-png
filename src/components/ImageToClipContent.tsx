@@ -16,6 +16,7 @@ const ImageToClipContent = () => {
             processes the image and makes it ready for copying to your clipboard
             with a single click.
           </p>
+          <p>Note: If you are getting the error "Unable to fetch" when trying to enter an image URL, it means the website has a CORS security mechanism that doesn't allow access to images. In that case, simply open the image in your browser, download it, and use the Upload or Drag Image button. Then, click Copy to Clipboard.</p>
           <p>
             Support for both file uploads and URL imports gives you flexibility in
             how you work with images. All processing is done locally for speed and
