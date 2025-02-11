@@ -1,14 +1,23 @@
 
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ImageIcon, Download, RefreshCcw } from "lucide-react";
+import { ImageIcon, Download, RefreshCcw, ChevronDown } from "lucide-react";
 import { useClipboard } from "@/hooks/useClipboard";
 import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const ClipboardImage = () => {
   const { 
     image, 
     isDragging,
+    format,
+    setFormat,
     handlePaste, 
     downloadImage, 
     resetImage,
@@ -55,6 +64,16 @@ const ClipboardImage = () => {
             <img src={image} alt="Pasted image" className="w-full h-auto" />
           </div>
           <div className="space-y-2">
+            <Select value={format} onValueChange={(value: "png" | "jpg" | "webp") => setFormat(value)}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select format" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="png">PNG</SelectItem>
+                <SelectItem value="jpg">JPG</SelectItem>
+                <SelectItem value="webp">WEBP</SelectItem>
+              </SelectContent>
+            </Select>
             <Button onClick={downloadImage} className="w-full gap-2">
               <Download className="w-5 h-5" />
               Download Image

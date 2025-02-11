@@ -1,10 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
+
+type ImageFormat = 'png' | 'jpg' | 'webp';
 
 export const useClipboard = () => {
   const [image, setImage] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [format, setFormat] = useState<ImageFormat>(() => {
+    const savedFormat = localStorage.getItem('clipboard-image-format');
+    return (savedFormat as ImageFormat) || 'png';
+  });
   const { toast } = useToast();
+
+  useEffect(() => {
+    localStorage.setItem('clipboard-image-format', format);
+  }, [format]);
 
   const checkClipboardPermission = async () => {
     try {
@@ -131,15 +141,64 @@ export const useClipboard = () => {
     }
   };
 
-  const downloadImage = () => {
+  const convertImageToFormat = async (imageUrl: string, format: ImageFormat): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          reject(new Error('Failed to get canvas context'));
+          return;
+        }
+        ctx.drawImage(img, 0, 0);
+        
+        let mimeType: string;
+        let quality: number;
+        
+        switch (format) {
+          case 'jpg':
+            mimeType = 'image/jpeg';
+            quality = 0.9;
+            break;
+          case 'webp':
+            mimeType = 'image/webp';
+            quality = 0.9;
+            break;
+          default:
+            mimeType = 'image/png';
+            quality = 1;
+        }
+        
+        const dataUrl = canvas.toDataURL(mimeType, quality);
+        resolve(dataUrl);
+      };
+      img.onerror = () => reject(new Error('Failed to load image'));
+      img.src = imageUrl;
+    });
+  };
+
+  const downloadImage = async () => {
     if (!image) return;
     
-    const link = document.createElement("a");
-    link.href = image;
-    link.download = `copied-image-${Date.now()}.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    try {
+      const convertedImage = await convertImageToFormat(image, format);
+      const link = document.createElement("a");
+      link.href = convertedImage;
+      link.download = `copied-image-${Date.now()}.${format}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      toast({
+        title: "Download Error",
+        description: "Failed to download the image. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const resetImage = () => {
@@ -152,6 +211,8 @@ export const useClipboard = () => {
   return {
     image,
     isDragging,
+    format,
+    setFormat,
     handlePaste,
     downloadImage,
     resetImage,
