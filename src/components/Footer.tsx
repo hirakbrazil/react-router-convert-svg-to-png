@@ -17,27 +17,27 @@ const Footer = () => {
         <ThemeSwitcher />
       </div>
       
-      <nav className="flex justify-center gap-6">
+      <nav className="flex flex-wrap justify-center gap-x-6 gap-y-4">
         {!isHomePage && (
-          <Link to="/" className="inline-flex items-center gap-2 text-foreground hover:text-primary">
+          <Link to="/" className="inline-flex items-center gap-2 text-foreground hover:text-primary whitespace-nowrap">
             <Home className="h-4 w-4" />
             Home
           </Link>
         )}
         {!isImageToClipboardPage && (
-          <Link to="/imagetoclipboard" className="inline-flex items-center gap-2 text-foreground hover:text-primary">
+          <Link to="/imagetoclipboard" className="inline-flex items-center gap-2 text-foreground hover:text-primary whitespace-nowrap">
             <Image className="h-4 w-4" />
             Image to Clipboard
           </Link>
         )}
         {!isAboutPage && (
-          <Link to="/about" className="inline-flex items-center gap-2 text-foreground hover:text-primary">
+          <Link to="/about" className="inline-flex items-center gap-2 text-foreground hover:text-primary whitespace-nowrap">
             <Info className="h-4 w-4" />
             About
           </Link>
         )}
         {!isFeedbackPage && (
-          <Link to="/feedback" className="inline-flex items-center gap-2 text-foreground hover:text-primary">
+          <Link to="/feedback" className="inline-flex items-center gap-2 text-foreground hover:text-primary whitespace-nowrap">
             <MessageSquare className="h-4 w-4" />
             Feedback
           </Link>
