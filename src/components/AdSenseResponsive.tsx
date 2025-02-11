@@ -15,8 +15,8 @@ const AdSenseResponsive: React.FC = () => {
     <ins
       className="adsbygoogle"
       style={{ display: 'block' }}
-      data-ad-client="ca-pub-5161705954627943"
-      data-ad-slot="6591128075"
+      data-ad-client="ca-pub-3677847561110212"
+      data-ad-slot="7495897394"
       data-ad-format="auto"
       data-full-width-responsive="true"
     ></ins>
