@@ -36,8 +36,8 @@ const ImageToClipboard = () => {
           <div className="border border-border bg-card dark:bg-card rounded-xl p-6">
             <ImageUploader />
           </div>
-          <ImageToClipContent />
           <AdSenseResponsive />
+          <ImageToClipContent />
           <Footer />
         </div>
         <DesktopSidebar />
