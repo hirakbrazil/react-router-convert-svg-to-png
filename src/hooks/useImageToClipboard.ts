@@ -54,11 +54,37 @@ export const useImageToClipboard = () => {
 
     try {
       const response = await fetch(image);
-      const blob = await response.blob();
+      const originalBlob = await response.blob();
       
+      // Convert to PNG using canvas
+      const img = new Image();
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      
+      if (!ctx) {
+        throw new Error('Failed to create canvas context');
+      }
+
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+        img.src = image;
+      });
+
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+      
+      const pngBlob = await new Promise<Blob>((resolve, reject) => {
+        canvas.toBlob((blob) => {
+          if (blob) resolve(blob);
+          else reject(new Error('Failed to convert image to PNG'));
+        }, 'image/png');
+      });
+
       await navigator.clipboard.write([
         new ClipboardItem({
-          [blob.type]: blob
+          'image/png': pngBlob
         })
       ]);
 
@@ -69,9 +95,10 @@ export const useImageToClipboard = () => {
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to copy image to clipboard",
+        description: "Failed to copy image to clipboard. Make sure you're using a supported browser.",
         variant: "destructive",
       });
+      console.error('Clipboard error:', error);
     }
   };
 
@@ -91,3 +118,4 @@ export const useImageToClipboard = () => {
     reset,
   };
 };
+

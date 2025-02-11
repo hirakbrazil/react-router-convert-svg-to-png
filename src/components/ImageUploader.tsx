@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ImageIcon, Upload, Copy, RefreshCcw, Link } from "lucide-react";
 import { useImageToClipboard } from "@/hooks/useImageToClipboard";
+import { Separator } from "@/components/ui/separator";
 
 const ImageUploader = () => {
   const [url, setUrl] = useState("");
@@ -38,6 +39,13 @@ const ImageUploader = () => {
             <Upload className="w-6 h-6" />
             Upload Image
           </Button>
+        </div>
+
+        <div className="relative flex items-center justify-center">
+          <Separator className="absolute w-full" />
+          <span className="relative bg-card px-2 text-sm text-muted-foreground">
+            or
+          </span>
         </div>
 
         <div className="flex gap-2">
@@ -79,3 +87,4 @@ const ImageUploader = () => {
 };
 
 export default ImageUploader;
+
