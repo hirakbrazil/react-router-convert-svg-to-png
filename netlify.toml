@@ -1,10 +1,10 @@
 [[redirects]]
-  from = "https://lumpsum-calculator.netlify.app/*"
-  to = "https://lumpsum-calculator.mutualfundjournal.in/:splat"
+  from = "https://clipboard-to-image.netlify.app/*"
+  to = "https://clipboard-to-image.toolyoulove.com/:splat"
   status = 301
   force = true
   
 [[redirects]]
-  from = "https://lumpsum-calculator.mutualfundjournal.in/*"
+  from = "https://clipboard-to-image.toolyoulove.com/*"
   to = "/index.html"
   status = 200
