@@ -85,7 +85,7 @@ const ClipboardImage = () => {
             </div>
             <Button 
               onClick={downloadImage} 
-              className="w-80 gap-2"
+              className="w-40 gap-2"
               disabled={isFormatSelectOpen}
             >
               <Download className="w-5 h-5" />
