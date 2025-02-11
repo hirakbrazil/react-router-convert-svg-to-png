@@ -89,8 +89,7 @@ export const useImageToClipboard = () => {
       ]);
 
       toast({
-        title: "Success",
-        description: "Image copied to clipboard",
+        title: "Image copied to clipboard",
       });
     } catch (error) {
       toast({
