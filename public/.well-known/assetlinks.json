@@ -1,8 +1,0 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "com.mutualfundjournal.lumpsumcalculator",
-        "sha256_cert_fingerprints": ["E6:FC:48:4F:28:89:75:ED:99:D8:58:0E:A5:13:48:3E:F8:3B:24:A9:69:AE:E0:AC:B1:9B:21:8F:36:8C:45:90","7D:58:C4:80:7D:D9:20:28:8A:B8:9F:07:C8:94:8F:3B:C4:A5:EE:0D:33:92:F6:5C:5F:BC:01:62:C4:7B:AE:CD"]
-      }
-    }]
