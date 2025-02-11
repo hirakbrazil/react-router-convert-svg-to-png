@@ -1,10 +1,10 @@
-
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 export const useImageToClipboard = () => {
   const [image, setImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const { toast } = useToast();
 
   const fetchImage = async (url: string) => {
@@ -47,6 +47,51 @@ export const useImageToClipboard = () => {
 
     const imageUrl = URL.createObjectURL(file);
     setImage(imageUrl);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDragEnter = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const items = e.dataTransfer.items;
+    let foundImage = false;
+
+    for (const item of items) {
+      if (item.kind === 'file' && item.type.startsWith('image/')) {
+        const file = item.getAsFile();
+        if (file) {
+          handleFileUpload(file);
+          foundImage = true;
+          break;
+        }
+      }
+    }
+
+    if (!foundImage) {
+      toast({
+        title: "Invalid File",
+        description: "Please drop an image file",
+        variant: "destructive",
+      });
+    }
   };
 
   const copyToClipboard = async () => {
@@ -112,10 +157,14 @@ export const useImageToClipboard = () => {
   return {
     image,
     isLoading,
+    isDragging,
     fetchImage,
     handleFileUpload,
     copyToClipboard,
     reset,
+    handleDragOver,
+    handleDragEnter,
+    handleDragLeave,
+    handleDrop,
   };
 };
-

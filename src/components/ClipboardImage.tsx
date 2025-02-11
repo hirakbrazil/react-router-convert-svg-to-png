@@ -3,9 +3,20 @@ import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ImageIcon, Download, RefreshCcw } from "lucide-react";
 import { useClipboard } from "@/hooks/useClipboard";
+import { cn } from "@/lib/utils";
 
 const ClipboardImage = () => {
-  const { image, handlePaste, downloadImage, resetImage } = useClipboard();
+  const { 
+    image, 
+    isDragging,
+    handlePaste, 
+    downloadImage, 
+    resetImage,
+    handleDragOver,
+    handleDragEnter,
+    handleDragLeave,
+    handleDrop
+  } = useClipboard();
 
   useEffect(() => {
     const handleKeyboardPaste = (e: KeyboardEvent) => {
@@ -23,11 +34,20 @@ const ClipboardImage = () => {
       {!image ? (
         <Button
           onClick={handlePaste}
-          className="w-full py-8 text-lg gap-3"
+          onDragOver={handleDragOver}
+          onDragEnter={handleDragEnter}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          className={cn(
+            "w-full py-8 text-lg gap-3 relative",
+            "border-2 border-dashed",
+            isDragging ? "border-primary bg-primary/5" : "border-border",
+            "transition-colors duration-200"
+          )}
           variant="outline"
         >
           <ImageIcon className="w-6 h-6" />
-          Paste Image
+          {isDragging ? "Drop Image Here" : "Paste or Drop Image"}
         </Button>
       ) : (
         <div className="space-y-4">

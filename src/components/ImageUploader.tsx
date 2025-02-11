@@ -5,10 +5,23 @@ import { Input } from "@/components/ui/input";
 import { ImageIcon, Upload, Copy, RefreshCcw, Link } from "lucide-react";
 import { useImageToClipboard } from "@/hooks/useImageToClipboard";
 import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 
 const ImageUploader = () => {
   const [url, setUrl] = useState("");
-  const { image, isLoading, fetchImage, handleFileUpload, copyToClipboard, reset } = useImageToClipboard();
+  const { 
+    image, 
+    isLoading, 
+    isDragging,
+    fetchImage, 
+    handleFileUpload, 
+    copyToClipboard, 
+    reset,
+    handleDragOver,
+    handleDragEnter,
+    handleDragLeave,
+    handleDrop
+  } = useImageToClipboard();
 
   const handleUrlSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,11 +46,20 @@ const ImageUploader = () => {
           />
           <Button
             variant="outline"
-            className="w-full py-8 text-lg gap-3"
+            className={cn(
+              "w-full py-8 text-lg gap-3 relative",
+              "border-2 border-dashed",
+              isDragging ? "border-primary bg-primary/5" : "border-border",
+              "transition-colors duration-200"
+            )}
+            onDragOver={handleDragOver}
+            onDragEnter={handleDragEnter}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
             onClick={() => document.getElementById("image-upload")?.click()}
           >
             <Upload className="w-6 h-6" />
-            Upload Image
+            {isDragging ? "Drop Image Here" : "Upload or Drop Image"}
           </Button>
         </div>
 
@@ -88,4 +110,3 @@ const ImageUploader = () => {
 };
 
 export default ImageUploader;
-
