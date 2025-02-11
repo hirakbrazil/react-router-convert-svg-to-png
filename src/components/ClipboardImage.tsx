@@ -67,7 +67,7 @@ const ClipboardImage = () => {
           <div className="space-y-2">
             <div
               className={`flex justify-center transition-all duration-500 ${
-                isFormatSelectOpen ? "mb-24" : "mb-0"
+                isFormatSelectOpen ? "mb-28" : "mb-0"
               }`}
             >
               <Select 
@@ -76,7 +76,7 @@ const ClipboardImage = () => {
                 open={isFormatSelectOpen}
                 onOpenChange={setIsFormatSelectOpen}
               >
-                <SelectTrigger className="w-31">
+                <SelectTrigger className="w-32">
                   <SelectValue placeholder="Select format" />
                 </SelectTrigger>
                 <SelectContent>
@@ -96,7 +96,7 @@ const ClipboardImage = () => {
             <Button 
               onClick={resetImage} 
               variant="outline" 
-              className="w-31 gap-2"
+              className="w-30 gap-2"
             >
               <RefreshCcw className="w-5 h-5" />
               Reset
