@@ -1,70 +1,35 @@
 
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 
 export const useImageToClipboard = () => {
   const [image, setImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const fetchImageWithProxy = async (url: string) => {
-    try {
-      console.log("Fetching image via proxy:", url);
-
-      const response = await supabase.functions.invoke("fetch-image-proxy", {
-        body: { url },
-        responseType: 'arraybuffer'
-      });
-
-      if (response.error) {
-        console.error("Proxy error:", response.error);
-        throw new Error(response.error.message);
-      }
-
-      if (!response.data) {
-        throw new Error("No data received from proxy");
-      }
-
-      // Create blob from the array buffer response
-      const blob = new Blob([response.data]);
-      const imageUrl = URL.createObjectURL(blob);
-      console.log("Successfully created blob URL:", imageUrl);
-      return imageUrl;
-    } catch (error) {
-      console.error("Proxy error:", error);
-      throw error;
-    }
-  };
-
   const fetchImage = async (url: string) => {
     try {
       setIsLoading(true);
-      let imageUrl: string;
+      const response = await fetch(url);
 
-      try {
-        console.log('Attempting direct fetch:', url);
-        // First try direct fetch
-        const response = await fetch(url);
-        if (!response.ok) throw new Error('Failed to fetch image');
-        
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.startsWith('image/')) {
-          throw new Error('URL does not point to a valid image');
-        }
-
-        const blob = await response.blob();
-        imageUrl = URL.createObjectURL(blob);
-        console.log('Direct fetch successful');
-      } catch (error) {
-        console.log('Direct fetch failed, trying proxy:', error);
-        // If direct fetch fails, try using the proxy
-        imageUrl = await fetchImageWithProxy(url);
+      // Check if response is opaque (which can indicate a CORS issue)
+    if (response.type === 'opaque') {
+      throw new Error('Access Denied by CORS');
+    }
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch image');
+      }
+      
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.startsWith('image/')) {
+        throw new Error('URL does not point to a valid image');
       }
 
+      const blob = await response.blob();
+      const imageUrl = URL.createObjectURL(blob);
       setImage(imageUrl);
     } catch (error) {
-      console.error('Error fetching image:', error);
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to fetch image",
@@ -94,11 +59,37 @@ export const useImageToClipboard = () => {
 
     try {
       const response = await fetch(image);
-      const blob = await response.blob();
+      const originalBlob = await response.blob();
       
+      // Convert to PNG using canvas
+      const img = new Image();
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      
+      if (!ctx) {
+        throw new Error('Failed to create canvas context');
+      }
+
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+        img.src = image;
+      });
+
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+      
+      const pngBlob = await new Promise<Blob>((resolve, reject) => {
+        canvas.toBlob((blob) => {
+          if (blob) resolve(blob);
+          else reject(new Error('Failed to convert image to PNG'));
+        }, 'image/png');
+      });
+
       await navigator.clipboard.write([
         new ClipboardItem({
-          [blob.type]: blob
+          'image/png': pngBlob
         })
       ]);
 
@@ -132,3 +123,4 @@ export const useImageToClipboard = () => {
     reset,
   };
 };
+
