@@ -30,6 +30,7 @@ export const useClipboard = () => {
           title: "Permission Denied",
           description: "Please allow clipboard access in your browser settings",
           variant: "destructive",
+          duration: 7000,
         });
         return;
       }
@@ -54,6 +55,7 @@ export const useClipboard = () => {
           title: "No Image Found",
           description: "Please copy an image to your clipboard first",
           variant: "destructive",
+          duration: 7000,
         });
       }
     } catch (error: any) {
@@ -62,18 +64,21 @@ export const useClipboard = () => {
           title: "Access Denied",
           description: "Please allow clipboard access when prompted",
           variant: "destructive",
+          duration: 7000,
         });
       } else if (error.name === "SecurityError") {
         toast({
           title: "Security Error",
           description: "Clipboard access is restricted in this context",
           variant: "destructive",
+          duration: 7000,
         });
       } else {
         toast({
           title: "Error",
           description: "Failed to read from clipboard. Please try again.",
           variant: "destructive",
+          duration: 7000,
         });
       }
       console.error("Clipboard error:", error);
