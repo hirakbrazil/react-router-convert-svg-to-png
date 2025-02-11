@@ -30,8 +30,8 @@ const Index = () => {
           <div className="border border-border bg-card dark:bg-card rounded-xl p-6">
             <ClipboardImage />
           </div>
-          <HomepageContent />
           <AdSenseResponsive />
+          <HomepageContent />
           <Footer />
         </div>
         <DesktopSidebar />
