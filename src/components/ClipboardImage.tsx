@@ -32,7 +32,7 @@ const ClipboardImage = () => {
       ) : (
         <div className="space-y-4">
           <div className="border border-border rounded-lg overflow-hidden">
-            <img src={image} alt="Pasted image" className="w-full h-auto" />
+            <img src={image} alt="Pasted content" className="w-full h-auto" />
           </div>
           <div className="space-y-2">
             <Button onClick={downloadImage} className="w-full gap-2">
