@@ -1,19 +1,19 @@
-
 import { useEffect } from "react";
 
 const useTheme = () => {
   useEffect(() => {
     const updateThemeColor = () => {
-      const theme = localStorage.getItem("theme");
-      const root = document.documentElement;
-      const isDark = theme === "dark" || 
-        (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches);
-      
+      const isDark = document.documentElement.classList.contains("dark");
       const meta = document.querySelector('meta[name="theme-color"]');
       const themeColor = isDark ? "#000000" : "#07a36c";
 
       if (meta) {
         meta.setAttribute("content", themeColor);
+      } else {
+        const newMeta = document.createElement("meta");
+        newMeta.name = "theme-color";
+        newMeta.content = themeColor;
+        document.head.appendChild(newMeta);
       }
     };
 
