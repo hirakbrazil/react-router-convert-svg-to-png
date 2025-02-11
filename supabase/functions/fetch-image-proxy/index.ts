@@ -1,3 +1,4 @@
+
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
@@ -16,7 +17,7 @@ serve(async (req) => {
     const { url } = await req.json();
 
     if (!url) {
-      return new Response("No URL provided", {
+      return new Response(JSON.stringify({ error: "No URL provided" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -27,7 +28,7 @@ serve(async (req) => {
     const response = await fetch(url);
     if (!response.ok) {
       console.error(`Failed to fetch image: ${response.status} ${response.statusText}`);
-      return new Response("Failed to fetch image", {
+      return new Response(JSON.stringify({ error: "Failed to fetch image" }), {
         status: response.status,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -35,24 +36,26 @@ serve(async (req) => {
 
     const contentType = response.headers.get("content-type");
     if (!contentType || !contentType.startsWith("image/")) {
-      return new Response("URL does not point to a valid image", {
+      return new Response(JSON.stringify({ error: "URL does not point to a valid image" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const imageData = new Uint8Array(await response.arrayBuffer()); // Convert to Uint8Array
+    const arrayBuffer = await response.arrayBuffer();
+    console.log(`Successfully fetched image. Content-Type: ${contentType}, Size: ${arrayBuffer.byteLength} bytes`);
 
-    const headers = new Headers(corsHeaders);
-    headers.set("Content-Type", contentType);
-    
-    return new Response(imageData, {
+    return new Response(arrayBuffer, {
       status: 200,
-      headers,
+      headers: {
+        ...corsHeaders,
+        "Content-Type": contentType,
+        "Content-Length": arrayBuffer.byteLength.toString(),
+      },
     });
   } catch (error) {
     console.error("Error in fetch-image-proxy:", error);
-    return new Response("Failed to process request", {
+    return new Response(JSON.stringify({ error: "Failed to process request" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

@@ -9,33 +9,33 @@ export const useImageToClipboard = () => {
   const { toast } = useToast();
 
   const fetchImageWithProxy = async (url: string) => {
-  try {
-    console.log("Fetching image via proxy:", url);
+    try {
+      console.log("Fetching image via proxy:", url);
 
-    const { data, error } = await supabase.functions.invoke("fetch-image-proxy", {
-      body: { url },
-    });
+      const response = await supabase.functions.invoke("fetch-image-proxy", {
+        body: { url },
+        responseType: 'arraybuffer'
+      });
 
-    if (error) {
+      if (response.error) {
+        console.error("Proxy error:", response.error);
+        throw new Error(response.error.message);
+      }
+
+      if (!response.data) {
+        throw new Error("No data received from proxy");
+      }
+
+      // Create blob from the array buffer response
+      const blob = new Blob([response.data]);
+      const imageUrl = URL.createObjectURL(blob);
+      console.log("Successfully created blob URL:", imageUrl);
+      return imageUrl;
+    } catch (error) {
       console.error("Proxy error:", error);
       throw error;
     }
-
-    if (!data) {
-      throw new Error("No data received from proxy");
-    }
-
-    // Convert the response data to a Blob
-    const blob = new Blob([new Uint8Array(data)], { type: "image/png" });
-    const imageUrl = URL.createObjectURL(blob);
-
-    console.log("Successfully created blob URL:", imageUrl);
-    return imageUrl;
-  } catch (error) {
-    console.error("Proxy error:", error);
-    throw error;
-  }
-};
+  };
 
   const fetchImage = async (url: string) => {
     try {
@@ -94,37 +94,11 @@ export const useImageToClipboard = () => {
 
     try {
       const response = await fetch(image);
-      const originalBlob = await response.blob();
+      const blob = await response.blob();
       
-      // Convert to PNG using canvas
-      const img = new Image();
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      
-      if (!ctx) {
-        throw new Error('Failed to create canvas context');
-      }
-
-      await new Promise((resolve, reject) => {
-        img.onload = resolve;
-        img.onerror = reject;
-        img.src = image;
-      });
-
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0);
-      
-      const pngBlob = await new Promise<Blob>((resolve, reject) => {
-        canvas.toBlob((blob) => {
-          if (blob) resolve(blob);
-          else reject(new Error('Failed to convert image to PNG'));
-        }, 'image/png');
-      });
-
       await navigator.clipboard.write([
         new ClipboardItem({
-          'image/png': pngBlob
+          [blob.type]: blob
         })
       ]);
 
