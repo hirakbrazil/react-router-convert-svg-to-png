@@ -83,7 +83,7 @@ const ClipboardImage = () => {
             <img src={image} alt="Pasted image" className="w-full h-auto" />
           </div>
           <div className="space-y-2">
-            <div className="flex justify-center">
+            <div className="flex justify-center gap-4">
               <Select 
                 value={format} 
                 onValueChange={(value: "png" | "jpg" | "webp") => setFormat(value)}
@@ -99,7 +99,6 @@ const ClipboardImage = () => {
                   <SelectItem value="webp">WEBP</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
             <Button 
               onClick={downloadImage} 
               className="w-40 gap-2"
@@ -117,6 +116,7 @@ const ClipboardImage = () => {
               <RefreshCcw className="w-5 h-5" />
               Reset
             </Button>
+              </div>
           </div>
         </div>
       )}
