@@ -90,7 +90,7 @@ export const useClipboard = () => {
     
     const link = document.createElement("a");
     link.href = image;
-    link.download = `clipboard-image-${Date.now()}.png`;
+    link.download = `copied-image-${Date.now()}.png`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
