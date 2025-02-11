@@ -54,7 +54,7 @@ const ImageUploader = () => {
             placeholder="Enter image URL"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
-            className="border border-gray-300 dark:border-gray-800  rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="bg-gray-100 dark:bg-gray-900"
           />
           <Button 
             onClick={handleUrlSubmit}
