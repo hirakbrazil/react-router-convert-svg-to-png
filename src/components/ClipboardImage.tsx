@@ -83,7 +83,7 @@ const ClipboardImage = () => {
             <img src={image} alt="Pasted image" className="w-full h-auto" />
           </div>
           <div className="space-y-2">
-            <div className="flex justify-center gap-4">
+            <div className="flex justify-center">
               <Select 
                 value={format} 
                 onValueChange={(value: "png" | "jpg" | "webp") => setFormat(value)}
