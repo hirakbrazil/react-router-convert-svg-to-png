@@ -86,6 +86,7 @@ const ClipboardImage = () => {
                 </SelectContent>
               </Select>
             </div>
+            <div className="flex flex-col space-y-2 items-center">
             <Button 
               onClick={downloadImage} 
               className="w-40 gap-2"
@@ -101,6 +102,7 @@ const ClipboardImage = () => {
               <RefreshCcw className="w-5 h-5" />
               Reset
             </Button>
+              </div>
           </div>
         </div>
       )}
