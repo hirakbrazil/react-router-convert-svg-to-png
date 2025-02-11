@@ -1,28 +1,54 @@
 
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 export const useImageToClipboard = () => {
   const [image, setImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
+  const fetchImageWithProxy = async (url: string) => {
+    try {
+      const { data, error } = await supabase.functions.invoke('fetch-image-proxy', {
+        body: { url }
+      });
+
+      if (error) throw error;
+
+      // The response is the image binary data with proper content type
+      const blob = new Blob([data], { type: 'image/png' });
+      const imageUrl = URL.createObjectURL(blob);
+      return imageUrl;
+    } catch (error) {
+      console.error('Proxy error:', error);
+      throw error;
+    }
+  };
+
   const fetchImage = async (url: string) => {
     try {
       setIsLoading(true);
-      const response = await fetch(url);
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch image');
-      }
-      
-      const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.startsWith('image/')) {
-        throw new Error('URL does not point to a valid image');
+      let imageUrl: string;
+
+      try {
+        // First try direct fetch
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Failed to fetch image');
+        
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.startsWith('image/')) {
+          throw new Error('URL does not point to a valid image');
+        }
+
+        const blob = await response.blob();
+        imageUrl = URL.createObjectURL(blob);
+      } catch (error) {
+        console.log('Direct fetch failed, trying proxy:', error);
+        // If direct fetch fails, try using the proxy
+        imageUrl = await fetchImageWithProxy(url);
       }
 
-      const blob = await response.blob();
-      const imageUrl = URL.createObjectURL(blob);
       setImage(imageUrl);
     } catch (error) {
       toast({
@@ -118,4 +144,3 @@ export const useImageToClipboard = () => {
     reset,
   };
 };
-
