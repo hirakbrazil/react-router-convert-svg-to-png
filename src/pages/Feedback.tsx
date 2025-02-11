@@ -42,10 +42,10 @@ const Feedback = () => {
               <p>
                 For any queries, feedback, suggestions, or bug reports, please email us at:{" "}
                 <a
-                  href="mailto:support@toolyoulove.com"
+                  href="mailto:info@toolyoulove.com"
                   className="text-primary hover:underline"
                 >
-                  support@toolyoulove.com
+                  info@toolyoulove.com
                 </a>
               </p>
             </div>
