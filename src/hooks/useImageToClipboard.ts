@@ -10,15 +10,29 @@ export const useImageToClipboard = () => {
 
   const fetchImageWithProxy = async (url: string) => {
     try {
+      console.log('Fetching image via proxy:', url);
+      
       const { data, error } = await supabase.functions.invoke('fetch-image-proxy', {
         body: { url }
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Proxy error:', error);
+        throw error;
+      }
 
-      // The response is the image binary data with proper content type
-      const blob = new Blob([data], { type: 'image/png' });
+      if (!data) {
+        throw new Error('No data received from proxy');
+      }
+
+      // Convert the response data to a Uint8Array
+      const uint8Array = new Uint8Array(Object.values(data));
+      
+      // Create a blob from the binary data
+      const blob = new Blob([uint8Array], { type: 'image/png' });
       const imageUrl = URL.createObjectURL(blob);
+      
+      console.log('Successfully created blob URL:', imageUrl);
       return imageUrl;
     } catch (error) {
       console.error('Proxy error:', error);
@@ -32,6 +46,7 @@ export const useImageToClipboard = () => {
       let imageUrl: string;
 
       try {
+        console.log('Attempting direct fetch:', url);
         // First try direct fetch
         const response = await fetch(url);
         if (!response.ok) throw new Error('Failed to fetch image');
@@ -43,6 +58,7 @@ export const useImageToClipboard = () => {
 
         const blob = await response.blob();
         imageUrl = URL.createObjectURL(blob);
+        console.log('Direct fetch successful');
       } catch (error) {
         console.log('Direct fetch failed, trying proxy:', error);
         // If direct fetch fails, try using the proxy
@@ -51,6 +67,7 @@ export const useImageToClipboard = () => {
 
       setImage(imageUrl);
     } catch (error) {
+      console.error('Error fetching image:', error);
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to fetch image",

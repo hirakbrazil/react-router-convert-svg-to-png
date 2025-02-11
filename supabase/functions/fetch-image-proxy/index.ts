@@ -27,6 +27,7 @@ serve(async (req) => {
     const response = await fetch(url)
     
     if (!response.ok) {
+      console.error(`Failed to fetch image: ${response.status} ${response.statusText}`)
       return new Response(
         JSON.stringify({ error: 'Failed to fetch image' }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: response.status }
@@ -35,17 +36,24 @@ serve(async (req) => {
 
     const contentType = response.headers.get('content-type')
     if (!contentType || !contentType.startsWith('image/')) {
+      console.error(`Invalid content type: ${contentType}`)
       return new Response(
         JSON.stringify({ error: 'URL does not point to a valid image' }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
       )
     }
 
-    // Forward the image with CORS headers
+    // Convert the response to an ArrayBuffer
+    const imageData = await response.arrayBuffer()
+    
+    // Forward the image with CORS headers and the original content type
     const headers = new Headers(corsHeaders)
     headers.set('Content-Type', contentType)
     
-    return new Response(response.body, { headers })
+    return new Response(imageData, { 
+      headers,
+      status: 200
+    })
 
   } catch (error) {
     console.error('Error in fetch-image-proxy:', error)
