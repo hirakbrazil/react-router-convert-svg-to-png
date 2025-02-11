@@ -1,7 +1,6 @@
-
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ImageIcon, Download, RefreshCcw, ChevronDown } from "lucide-react";
+import { ImageIcon, Download, RefreshCcw } from "lucide-react";
 import { useClipboard } from "@/hooks/useClipboard";
 import { cn } from "@/lib/utils";
 import {
@@ -66,7 +65,11 @@ const ClipboardImage = () => {
             <img src={image} alt="Pasted image" className="w-full h-auto" />
           </div>
           <div className="space-y-2">
-            <div className="flex justify-center">
+            <div
+              className={`flex justify-center transition-all duration-300 ${
+                isFormatSelectOpen ? "mb-[30px]" : "mb-0"
+              }`}
+            >
               <Select 
                 value={format} 
                 onValueChange={(value: "png" | "jpg" | "webp") => setFormat(value)}
@@ -86,7 +89,6 @@ const ClipboardImage = () => {
             <Button 
               onClick={downloadImage} 
               className="w-full gap-2"
-              disabled={isFormatSelectOpen}
             >
               <Download className="w-5 h-5" />
               Download Image
@@ -95,7 +97,6 @@ const ClipboardImage = () => {
               onClick={resetImage} 
               variant="outline" 
               className="w-full gap-2"
-              disabled={isFormatSelectOpen}
             >
               <RefreshCcw className="w-5 h-5" />
               Reset
