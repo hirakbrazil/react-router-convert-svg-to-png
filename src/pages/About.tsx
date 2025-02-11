@@ -6,6 +6,7 @@ import SEO from "@/components/SEO";
 import AdSenseHorizontal from "@/components/AdSenseHorizontal";
 import AdSenseResponsive from "@/components/AdSenseResponsive";
 import DesktopSidebar from "@/components/DesktopSidebar";
+import { Award, Shield, Info } from "lucide-react";
 
 const About = () => {
   useTheme();
@@ -38,7 +39,10 @@ const About = () => {
             </p>
 
             <div>
-              <h2 className="text-2xl font-semibold mb-4">Key Features</h2>
+              <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+                <Award className="w-6 h-6 text-primary" />
+                Key Features
+              </h2>
               <ul className="list-disc pl-6 space-y-2">
                 <li>Quick clipboard-to-image conversion with just one paste</li>
                 <li>Keyboard shortcut support (Ctrl+V / Cmd+V)</li>
@@ -51,14 +55,20 @@ const About = () => {
             </div>
 
             <div>
-              <h2 className="text-2xl font-semibold mb-4">Privacy & Security</h2>
+              <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+                <Shield className="w-6 h-6 text-primary" />
+                Privacy & Security
+              </h2>
               <p className="mb-4">
                 Your privacy is our priority. All image processing happens locally in your browser - we never store or transmit your images to any server. This ensures your content remains completely private and secure.
               </p>
             </div>
 
             <div>
-              <h2 className="text-2xl font-semibold mb-4">Browser Support</h2>
+              <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+                <Info className="w-6 h-6 text-primary" />
+                Browser Support
+              </h2>
               <p className="mb-4">
                 Our tool works seamlessly across all modern browsers including Chrome, Firefox, Safari, and Edge. For the best experience, we recommend using the latest version of your preferred browser.
               </p>
