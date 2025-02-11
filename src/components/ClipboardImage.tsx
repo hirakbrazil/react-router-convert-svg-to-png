@@ -1,7 +1,6 @@
-
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ImageIcon, Download, RefreshCcw, ChevronDown } from "lucide-react";
+import { ImageIcon, Download, RefreshCcw } from "lucide-react";
 import { useClipboard } from "@/hooks/useClipboard";
 import { cn } from "@/lib/utils";
 import {
@@ -28,7 +27,9 @@ const ClipboardImage = () => {
   } = useClipboard();
 
   const [isFormatSelectOpen, setIsFormatSelectOpen] = useState(false);
+  const [disableButtons, setDisableButtons] = useState(false);
 
+  // Handle keyboard paste events
   useEffect(() => {
     const handleKeyboardPaste = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === "v") {
@@ -39,6 +40,22 @@ const ClipboardImage = () => {
     window.addEventListener("keydown", handleKeyboardPaste);
     return () => window.removeEventListener("keydown", handleKeyboardPaste);
   }, [handlePaste]);
+
+  // Disable buttons for 1 second after the menu closes
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    if (!isFormatSelectOpen) {
+      // When the menu closes, disable the buttons
+      setDisableButtons(true);
+      timeout = setTimeout(() => {
+        setDisableButtons(false);
+      }, 1000);
+    } else {
+      // If the menu is opened again, immediately enable the buttons (if needed)
+      setDisableButtons(false);
+    }
+    return () => clearTimeout(timeout);
+  }, [isFormatSelectOpen]);
 
   return (
     <div className="space-y-6">
@@ -86,7 +103,7 @@ const ClipboardImage = () => {
             <Button 
               onClick={downloadImage} 
               className="w-40 gap-2"
-              disabled={isFormatSelectOpen}
+              disabled={isFormatSelectOpen || disableButtons}
             >
               <Download className="w-5 h-5" />
               Download Image
@@ -95,7 +112,7 @@ const ClipboardImage = () => {
               onClick={resetImage} 
               variant="outline" 
               className="w-32 gap-2"
-              disabled={isFormatSelectOpen}
+              disabled={isFormatSelectOpen || disableButtons}
             >
               <RefreshCcw className="w-5 h-5" />
               Reset
