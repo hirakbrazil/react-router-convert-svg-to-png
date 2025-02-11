@@ -6,7 +6,7 @@ import SEO from "@/components/SEO";
 import AdSenseHorizontal from "@/components/AdSenseHorizontal";
 import AdSenseResponsive from "@/components/AdSenseResponsive";
 import DesktopSidebar from "@/components/DesktopSidebar";
-import { Award, Shield, Info } from "lucide-react";
+import { Sparkles, Shield, Globe } from "lucide-react";
 
 const About = () => {
   useTheme();
@@ -40,7 +40,7 @@ const About = () => {
 
             <div>
               <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-                <Award className="w-6 h-6 text-primary" />
+                <Sparkles className="w-6 h-6 text-primary" />
                 Key Features
               </h2>
               <ul className="list-disc pl-6 space-y-2">
@@ -66,7 +66,7 @@ const About = () => {
 
             <div>
               <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-                <Info className="w-6 h-6 text-primary" />
+                <Globe className="w-6 h-6 text-primary" />
                 Browser Support
               </h2>
               <p className="mb-4">
