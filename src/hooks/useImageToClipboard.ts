@@ -96,6 +96,7 @@ export const useImageToClipboard = () => {
         title: "Error",
         description: "Failed to copy image to clipboard. Make sure you're using a supported browser.",
         variant: "destructive",
+        duration: 8000,
       });
       console.error('Clipboard error:', error);
     }
