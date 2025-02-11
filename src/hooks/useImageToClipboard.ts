@@ -11,6 +11,11 @@ export const useImageToClipboard = () => {
     try {
       setIsLoading(true);
       const response = await fetch(url);
+
+      // Check if response is opaque (which can indicate a CORS issue)
+    if (response.type === 'opaque') {
+      throw new Error('Access Denied by CORS');
+    }
       
       if (!response.ok) {
         throw new Error('Failed to fetch image');
