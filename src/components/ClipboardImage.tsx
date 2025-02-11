@@ -76,7 +76,7 @@ const ClipboardImage = () => {
                 open={isFormatSelectOpen}
                 onOpenChange={setIsFormatSelectOpen}
               >
-                <SelectTrigger className="w-[120]">
+                <SelectTrigger className="w-[110px]">
                   <SelectValue placeholder="Select format" />
                 </SelectTrigger>
                 <SelectContent>
