@@ -197,6 +197,7 @@ export const useClipboard = () => {
         title: "Download Error",
         description: "Failed to download the image. Please try again.",
         variant: "destructive",
+        duration: 7000,
       });
     }
   };
