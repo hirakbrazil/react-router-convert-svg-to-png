@@ -66,7 +66,7 @@ const ClipboardImage = () => {
           </div>
           <div className="space-y-2">
             <div
-              className={`flex justify-center transition-all duration-300 ${
+              className={`flex justify-center transition-all duration-500 ${
                 isFormatSelectOpen ? "mb-22" : "mb-0"
               }`}
             >
