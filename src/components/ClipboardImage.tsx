@@ -1,5 +1,5 @@
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ImageIcon, Download, RefreshCcw, ChevronDown } from "lucide-react";
 import { useClipboard } from "@/hooks/useClipboard";
@@ -26,6 +26,8 @@ const ClipboardImage = () => {
     handleDragLeave,
     handleDrop
   } = useClipboard();
+
+  const [isFormatSelectOpen, setIsFormatSelectOpen] = useState(false);
 
   useEffect(() => {
     const handleKeyboardPaste = (e: KeyboardEvent) => {
@@ -64,21 +66,37 @@ const ClipboardImage = () => {
             <img src={image} alt="Pasted image" className="w-full h-auto" />
           </div>
           <div className="space-y-2">
-            <Select value={format} onValueChange={(value: "png" | "jpg" | "webp") => setFormat(value)}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select format" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="png">PNG</SelectItem>
-                <SelectItem value="jpg">JPG</SelectItem>
-                <SelectItem value="webp">WEBP</SelectItem>
-              </SelectContent>
-            </Select>
-            <Button onClick={downloadImage} className="w-full gap-2">
+            <div className="flex justify-center">
+              <Select 
+                value={format} 
+                onValueChange={(value: "png" | "jpg" | "webp") => setFormat(value)}
+                open={isFormatSelectOpen}
+                onOpenChange={setIsFormatSelectOpen}
+              >
+                <SelectTrigger className="w-32">
+                  <SelectValue placeholder="Select format" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="png">PNG</SelectItem>
+                  <SelectItem value="jpg">JPG</SelectItem>
+                  <SelectItem value="webp">WEBP</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <Button 
+              onClick={downloadImage} 
+              className="w-full gap-2"
+              disabled={isFormatSelectOpen}
+            >
               <Download className="w-5 h-5" />
               Download Image
             </Button>
-            <Button onClick={resetImage} variant="outline" className="w-full gap-2">
+            <Button 
+              onClick={resetImage} 
+              variant="outline" 
+              className="w-full gap-2"
+              disabled={isFormatSelectOpen}
+            >
               <RefreshCcw className="w-5 h-5" />
               Reset
             </Button>
