@@ -27,7 +27,7 @@ const Footer = () => {
         {!isImageToClipboardPage && (
           <Link to="/imagetoclipboard" className="inline-flex items-center gap-2 text-foreground hover:text-primary">
             <Image className="h-4 w-4" />
-            Image to Clipboard
+            IMG 2 Clipboard
           </Link>
         )}
         {!isAboutPage && (
