@@ -7,7 +7,6 @@ import AdSenseHorizontal from "@/components/AdSenseHorizontal";
 import AdSenseResponsive from "@/components/AdSenseResponsive";
 import DesktopSidebar from "@/components/DesktopSidebar";
 import ClipboardImage from "@/components/ClipboardImage";
-import { Toaster } from "@/components/ui/toaster";
 
 const Index = () => {
   return (
@@ -35,7 +34,6 @@ const Index = () => {
         </div>
         <DesktopSidebar />
       </div>
-      <Toaster />
     </>
   );
 };
