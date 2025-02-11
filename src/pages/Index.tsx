@@ -12,12 +12,12 @@ const Index = () => {
   return (
     <>
       <SEO
-        title="Clipboard to Image - Convert Clipboard Content to Image"
-        description="Easily convert and download clipboard content as images with our free Clipboard to Image tool. Simply paste and download!"
+        title="Clipboard to Image - Paste Image to Download"
+        description="Easily download copied clipboard images with our free Clipboard to Image tool. Simply Paste Image to Download!"
         canonicalUrl="https://clipboard-to-image.toolyoulove.com/"
         robots="max-image-preview:large"
-        ogTitle="Clipboard to Image - Convert Clipboard Content to Image"
-        ogDescription="Easily convert and download clipboard content as images with our free Clipboard to Image tool. Simply paste and download!"
+        ogTitle="Clipboard to Image - Paste Image to Download"
+        ogDescription="Easily download copied clipboard images with our free Clipboard to Image tool. Simply Paste Image to Download!"
         ogUrl="https://clipboard-to-image.toolyoulove.com/"
         ogImage="https://clipboard-to-image.toolyoulove.com/banner.jpg"
         ogType="website"
