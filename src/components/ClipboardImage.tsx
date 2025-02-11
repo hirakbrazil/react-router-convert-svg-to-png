@@ -76,7 +76,7 @@ const ClipboardImage = () => {
                 open={isFormatSelectOpen}
                 onOpenChange={setIsFormatSelectOpen}
               >
-                <SelectTrigger className="w-30">
+                <SelectTrigger className="w-31">
                   <SelectValue placeholder="Select format" />
                 </SelectTrigger>
                 <SelectContent>
@@ -96,7 +96,7 @@ const ClipboardImage = () => {
             <Button 
               onClick={resetImage} 
               variant="outline" 
-              className="w-32 gap-2"
+              className="w-31 gap-2"
             >
               <RefreshCcw className="w-5 h-5" />
               Reset
