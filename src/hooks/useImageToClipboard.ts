@@ -9,36 +9,33 @@ export const useImageToClipboard = () => {
   const { toast } = useToast();
 
   const fetchImageWithProxy = async (url: string) => {
-    try {
-      console.log('Fetching image via proxy:', url);
-      
-      const { data, error } = await supabase.functions.invoke('fetch-image-proxy', {
-        body: { url }
-      });
+  try {
+    console.log("Fetching image via proxy:", url);
 
-      if (error) {
-        console.error('Proxy error:', error);
-        throw error;
-      }
+    const { data, error } = await supabase.functions.invoke("fetch-image-proxy", {
+      body: { url },
+    });
 
-      if (!data) {
-        throw new Error('No data received from proxy');
-      }
-
-      // Convert the response data to a Uint8Array
-      const uint8Array = new Uint8Array(Object.values(data));
-      
-      // Create a blob from the binary data
-      const blob = new Blob([uint8Array], { type: 'image/png' });
-      const imageUrl = URL.createObjectURL(blob);
-      
-      console.log('Successfully created blob URL:', imageUrl);
-      return imageUrl;
-    } catch (error) {
-      console.error('Proxy error:', error);
+    if (error) {
+      console.error("Proxy error:", error);
       throw error;
     }
-  };
+
+    if (!data) {
+      throw new Error("No data received from proxy");
+    }
+
+    // Convert the response data to a Blob
+    const blob = new Blob([new Uint8Array(data)], { type: "image/png" });
+    const imageUrl = URL.createObjectURL(blob);
+
+    console.log("Successfully created blob URL:", imageUrl);
+    return imageUrl;
+  } catch (error) {
+    console.error("Proxy error:", error);
+    throw error;
+  }
+};
 
   const fetchImage = async (url: string) => {
     try {
