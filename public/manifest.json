@@ -1,6 +1,6 @@
 {
-  "short_name": "Lumpsum Calc",
-  "name": "Lumpsum Calculator",
+  "short_name": "Clipboard to Image",
+  "name": "Clipboard to Image",
   "description": "Calculate your Lumpsum Investment Plan easily with our free calculator",
   "icons": [
     {
@@ -13,6 +13,6 @@
   "display": "standalone",
   "theme_color": "#07a36c",
   "background_color": "#ffffff",
-  "categories": ["finance"],
+  "categories": ["productivity", "utilities"],
   "orientation": "portrait"
 }
