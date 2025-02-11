@@ -6,6 +6,7 @@ import AdSenseHorizontal from "@/components/AdSenseHorizontal";
 import AdSenseResponsive from "@/components/AdSenseResponsive";
 import DesktopSidebar from "@/components/DesktopSidebar";
 import ImageUploader from "@/components/ImageUploader";
+import ImageToClipContent from "@/components/ImageToClipContent";
 
 const ImageToClipboard = () => {
   return (
@@ -35,6 +36,7 @@ const ImageToClipboard = () => {
           <div className="border border-border bg-card dark:bg-card rounded-xl p-6">
             <ImageUploader />
           </div>
+          <ImageToClipContent />
           <AdSenseResponsive />
           <Footer />
         </div>
@@ -45,3 +47,4 @@ const ImageToClipboard = () => {
 };
 
 export default ImageToClipboard;
+

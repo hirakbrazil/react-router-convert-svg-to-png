@@ -7,6 +7,7 @@ import AdSenseHorizontal from "@/components/AdSenseHorizontal";
 import AdSenseResponsive from "@/components/AdSenseResponsive";
 import DesktopSidebar from "@/components/DesktopSidebar";
 import ClipboardImage from "@/components/ClipboardImage";
+import HomepageContent from "@/components/HomepageContent";
 
 const Index = () => {
   return (
@@ -29,6 +30,7 @@ const Index = () => {
           <div className="border border-border bg-card dark:bg-card rounded-xl p-6">
             <ClipboardImage />
           </div>
+          <HomepageContent />
           <AdSenseResponsive />
           <Footer />
         </div>
@@ -39,3 +41,4 @@ const Index = () => {
 };
 
 export default Index;
+
