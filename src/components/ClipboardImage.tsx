@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { ImageIcon, Download, RefreshCcw, Clipboard } from "lucide-react";
@@ -19,6 +18,7 @@ const ClipboardImage = () => {
     isDragging,
     format,
     setFormat,
+    setImage,
     handlePaste, 
     downloadImage, 
     resetImage,
