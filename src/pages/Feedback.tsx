@@ -13,14 +13,14 @@ const Feedback = () => {
   return (
     <>
       <SEO
-        title="Feedback - Clipboard to Image Converter"
-        description="Share your feedback about our Clipboard to Image converter. Help us improve your image conversion experience."
-        canonicalUrl="https://clipboard-to-image.toolyoulove.com/feedback"
+        title="Feedback - Paste Image to Download"
+        description="Share your feedback about Paste Image to Download. Help us improve your image conversion experience."
+        canonicalUrl="https://pasteimagetodownload.com/feedback"
         robots="max-image-preview:large"
-        ogTitle="Feedback - Clipboard to Image Converter"
-        ogDescription="Share your feedback about our Clipboard to Image converter. Help us improve your image conversion experience."
-        ogUrl="https://clipboard-to-image.toolyoulove.com/feedback"
-        ogImage="https://clipboard-to-image.toolyoulove.com/banner.jpg"
+        ogTitle="Feedback - Paste Image to Download"
+        ogDescription="Share your feedback about Paste Image to Download. Help us improve your image conversion experience."
+        ogUrl="https://pasteimagetodownload.com/feedback"
+        ogImage="https://pasteimagetodownload.com/banner.jpg"
         ogType="article"
       />
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
@@ -34,7 +34,7 @@ const Feedback = () => {
 
           <div className="space-y-6">
             <p className="text-lg">
-              We value your feedback! Your input helps us improve and provide a better image conversion experience with our Clipboard to Image tool.
+              We value your feedback! Your input helps us improve and provide a better image conversion experience with our Paste Image to Download tool.
             </p>
 
             <div>
@@ -63,7 +63,7 @@ const Feedback = () => {
             </div>
 
             <p>
-              Thank you for helping us make Clipboard to Image better for everyone!
+              Thank you for helping us make Paste Image to Download better for everyone!
             </p>
           </div>
           <AdSenseResponsive />
