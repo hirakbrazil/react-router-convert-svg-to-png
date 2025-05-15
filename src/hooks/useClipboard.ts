@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -10,11 +11,25 @@ export const useClipboard = () => {
     const savedFormat = localStorage.getItem('clipboard-image-format');
     return (savedFormat as ImageFormat) || 'png';
   });
+  const [autoDownload, setAutoDownload] = useState<boolean>(() => {
+    return localStorage.getItem('clipboard-image-autodownload') === 'true';
+  });
   const { toast } = useToast();
 
   useEffect(() => {
     localStorage.setItem('clipboard-image-format', format);
   }, [format]);
+
+  useEffect(() => {
+    localStorage.setItem('clipboard-image-autodownload', autoDownload.toString());
+  }, [autoDownload]);
+
+  // Auto-download effect when image changes
+  useEffect(() => {
+    if (image && autoDownload) {
+      downloadImage();
+    }
+  }, [image, autoDownload]);
 
   const checkClipboardPermission = async () => {
     try {
@@ -214,6 +229,8 @@ export const useClipboard = () => {
     isDragging,
     format,
     setFormat,
+    autoDownload,
+    setAutoDownload,
     handlePaste,
     downloadImage,
     resetImage,

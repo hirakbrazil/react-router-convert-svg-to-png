@@ -1,6 +1,7 @@
+
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ImageIcon, Download, RefreshCcw } from "lucide-react";
+import { ImageIcon, Download, RefreshCcw, ToggleLeft, ToggleRight } from "lucide-react";
 import { useClipboard } from "@/hooks/useClipboard";
 import { cn } from "@/lib/utils";
 import {
@@ -10,6 +11,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 const ClipboardImage = () => {
   const { 
@@ -17,6 +20,8 @@ const ClipboardImage = () => {
     isDragging,
     format,
     setFormat,
+    autoDownload,
+    setAutoDownload,
     handlePaste, 
     downloadImage, 
     resetImage,
@@ -39,37 +44,79 @@ const ClipboardImage = () => {
     return () => window.removeEventListener("keydown", handleKeyboardPaste);
   }, [handlePaste]);
 
+  const toggleAutoDownload = () => {
+    setAutoDownload(!autoDownload);
+  };
+
   return (
     <div className="space-y-6">
       {!image ? (
-        <Button
-          onClick={handlePaste}
-          onDragOver={handleDragOver}
-          onDragEnter={handleDragEnter}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-          className={cn(
-            "w-full py-8 text-lg gap-3 relative",
-            "border-2 border-dashed",
-            isDragging ? "border-primary bg-primary/5" : "border-border",
-            "transition-colors duration-200"
-          )}
-          variant="outline"
-        >
-          <ImageIcon className="w-6 h-6" />
-          {isDragging ? "Drop Image Here" : "Paste or Drop Image"}
-        </Button>
+        <>
+          <Button
+            onClick={handlePaste}
+            onDragOver={handleDragOver}
+            onDragEnter={handleDragEnter}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            className={cn(
+              "w-full py-8 text-lg gap-3 relative",
+              "border-2 border-dashed",
+              isDragging ? "border-primary bg-primary/5" : "border-border",
+              "transition-colors duration-200"
+            )}
+            variant="outline"
+          >
+            <ImageIcon className="w-6 h-6" />
+            {isDragging ? "Drop Image Here" : "Paste or Drop Image"}
+          </Button>
+          
+          <div className="flex items-center justify-between space-x-2">
+            <div className="flex items-center space-x-2">
+              <Switch 
+                id="auto-download" 
+                checked={autoDownload} 
+                onCheckedChange={toggleAutoDownload}
+              />
+              <Label htmlFor="auto-download" className="cursor-pointer flex items-center gap-2">
+                {autoDownload ? <ToggleRight className="text-primary" /> : <ToggleLeft />}
+                Auto Download
+              </Label>
+            </div>
+            
+            <Select 
+              value={format} 
+              onValueChange={(value: "png" | "jpg" | "webp") => setFormat(value)}
+            >
+              <SelectTrigger className="w-[90px] focus:ring-0 focus:outline-none">
+                <SelectValue placeholder="Select format" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="png">PNG</SelectItem>
+                <SelectItem value="jpg">JPG</SelectItem>
+                <SelectItem value="webp">WEBP</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </>
       ) : (
         <div className="space-y-4">
           <div className="border border-border rounded-lg overflow-hidden">
             <img src={image} alt="Pasted image" className="w-full h-auto" />
           </div>
           <div className="space-y-2">
-            <div
-              className={`flex justify-center transition-all duration-500 ${
-                isFormatSelectOpen ? "mb-32" : "mb-0"
-              }`}
-            >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Switch 
+                  id="auto-download-image" 
+                  checked={autoDownload} 
+                  onCheckedChange={toggleAutoDownload}
+                />
+                <Label htmlFor="auto-download-image" className="cursor-pointer flex items-center gap-2">
+                  {autoDownload ? <ToggleRight className="text-primary" /> : <ToggleLeft />}
+                  Auto Download
+                </Label>
+              </div>
+
               <Select 
                 value={format} 
                 onValueChange={(value: "png" | "jpg" | "webp") => setFormat(value)}
