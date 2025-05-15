@@ -1,5 +1,5 @@
 [[redirects]]
-  from = "https://paste-image-to-download.netlify.app/*"
+  from = "https://paste-image-download.netlify.app/*"
   to = "https://pasteimagetodownload.com/:splat"
   status = 301
   force = true
