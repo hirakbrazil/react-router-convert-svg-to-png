@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -215,7 +214,6 @@ export const useClipboard = () => {
     isDragging,
     format,
     setFormat,
-    setImage, // Add setImage to the returned object
     handlePaste,
     downloadImage,
     resetImage,
