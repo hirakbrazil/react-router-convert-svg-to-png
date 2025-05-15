@@ -12,7 +12,7 @@ export const useClipboard = () => {
     return (savedFormat as ImageFormat) || 'png';
   });
   const [autoDownload, setAutoDownload] = useState<boolean>(() => {
-    return localStorage.getItem('clipboard-image-autodownload') === 'true';
+    return localStorage.getItem('clipboard-image-auto-download') === 'true';
   });
   const { toast } = useToast();
 
@@ -21,10 +21,10 @@ export const useClipboard = () => {
   }, [format]);
 
   useEffect(() => {
-    localStorage.setItem('clipboard-image-autodownload', autoDownload.toString());
+    localStorage.setItem('clipboard-image-auto-download', autoDownload.toString());
   }, [autoDownload]);
 
-  // Auto-download effect when image changes
+  // Auto download when image is set and autoDownload is enabled
   useEffect(() => {
     if (image && autoDownload) {
       downloadImage();
@@ -238,5 +238,6 @@ export const useClipboard = () => {
     handleDragEnter,
     handleDragLeave,
     handleDrop,
+    setImage,
   };
 };
