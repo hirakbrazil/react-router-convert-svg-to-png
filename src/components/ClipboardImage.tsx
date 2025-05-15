@@ -1,10 +1,8 @@
-
 import React, { useEffect, useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { ImageIcon, Download, RefreshCcw } from "lucide-react";
+import { ImageIcon, Download, RefreshCcw, Clipboard } from "lucide-react";
 import { useClipboard } from "@/hooks/useClipboard";
 import { cn } from "@/lib/utils";
-import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import {
   Select,
@@ -20,16 +18,14 @@ const ClipboardImage = () => {
     isDragging,
     format,
     setFormat,
-    autoDownload,
-    setAutoDownload,
+    setImage,
     handlePaste, 
     downloadImage, 
     resetImage,
     handleDragOver,
     handleDragEnter,
     handleDragLeave,
-    handleDrop,
-    setImage
+    handleDrop
   } = useClipboard();
 
   const [isFormatSelectOpen, setIsFormatSelectOpen] = useState(false);
@@ -46,21 +42,29 @@ const ClipboardImage = () => {
     return () => window.removeEventListener("keydown", handleKeyboardPaste);
   }, [handlePaste]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file && file.type.startsWith('image/')) {
-      const url = URL.createObjectURL(file);
-      setImage(url);
-    }
-    // Reset the input so the same file can be selected again
+  const handleClipboardButtonClick = () => {
     if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      fileInputRef.current.click();
     }
   };
 
-  const handleChooseFromClipboard = () => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          if (event.target && event.target.result) {
+            setImage(event.target.result as string);
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+    // Clear input value to allow selecting the same file again
     if (fileInputRef.current) {
-      fileInputRef.current.click();
+      fileInputRef.current.value = '';
     }
   };
 
@@ -86,39 +90,29 @@ const ClipboardImage = () => {
             {isDragging ? "Drop Image Here" : "Paste or Drop Image"}
           </Button>
           
-          <div className="flex items-center space-x-2 justify-center">
-            <Switch
-              id="auto-download"
-              checked={autoDownload}
-              onCheckedChange={setAutoDownload}
-            />
-            <label 
-              htmlFor="auto-download" 
-              className="text-sm cursor-pointer"
-            >
-              Auto Download
-            </label>
+          <div className="flex items-center gap-4">
+            <Separator className="flex-grow" />
+            <span className="text-sm text-muted-foreground">Or</span>
+            <Separator className="flex-grow" />
           </div>
           
-          <div className="relative flex items-center justify-center">
-            <Separator className="flex-grow" />
-            <span className="mx-2 text-xs text-muted-foreground">Or</span>
-            <Separator className="flex-grow" />
-          </div>
-
           <Button 
-            onClick={handleChooseFromClipboard}
-            className="w-full"
+            onClick={handleClipboardButtonClick}
+            className="w-full py-6 gap-3"
             variant="outline"
           >
+            <Clipboard className="w-5 h-5" />
             Choose from Keyboard's Clipboard
           </Button>
-          <input 
-            type="file" 
-            accept="image/*"
-            onChange={handleFileChange}
-            className="hidden"
+          
+          <input
+            type="file"
             ref={fileInputRef}
+            onChange={handleFileChange}
+            accept="image/*"
+            className="hidden"
+            // This attribute helps on mobile to access the camera/gallery/clipboard
+            capture="user"
           />
         </div>
       ) : (
@@ -149,35 +143,24 @@ const ClipboardImage = () => {
               </Select>
             </div>
             <div className="flex flex-col space-y-2 items-center">
-              <div className="flex items-center space-x-2 mb-2">
-                <Switch
-                  id="auto-download-image"
-                  checked={autoDownload}
-                  onCheckedChange={setAutoDownload}
-                />
-                <label 
-                  htmlFor="auto-download-image" 
-                  className="text-sm cursor-pointer"
-                >
-                  Auto Download
-                </label>
+            <Button 
+              onClick={downloadImage} 
+              className="w-40 gap-2"
+              disabled={isFormatSelectOpen}
+            >
+              <Download className="w-5 h-5" />
+              Download Image
+            </Button>
+            <Button 
+              onClick={resetImage} 
+              variant="outline" 
+              className="w-30 gap-2"
+              disabled={isFormatSelectOpen}
+            >
+              <RefreshCcw className="w-5 h-5" />
+              Reset
+            </Button>
               </div>
-              <Button 
-                onClick={downloadImage} 
-                className="w-40 gap-2"
-              >
-                <Download className="w-5 h-5" />
-                Download Image
-              </Button>
-              <Button 
-                onClick={resetImage} 
-                variant="outline" 
-                className="w-30 gap-2"
-              >
-                <RefreshCcw className="w-5 h-5" />
-                Reset
-              </Button>
-            </div>
           </div>
         </div>
       )}
