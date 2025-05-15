@@ -12,12 +12,12 @@ const Index = () => {
   return (
     <>
       <SEO
-        title="Clipboard to Image - Paste Image to Download"
-        description="Easily download copied clipboard images with our free Clipboard to Image tool. Simply Paste Image to Download!"
+        title="Paste Image to Download"
+        description="Easily download copied clipboard images with Paste Image to Download tool."
         canonicalUrl="https://pasteimagetodownload.com/"
         robots="max-image-preview:large"
-        ogTitle="Clipboard to Image - Paste Image to Download"
-        ogDescription="Easily download copied clipboard images with our free Clipboard to Image tool. Simply Paste Image to Download!"
+        ogTitle="Paste Image to Download"
+        ogDescription="Easily download copied clipboard images with Paste Image to Download tool."
         ogUrl="https://pasteimagetodownload.com/"
         ogImage="https://pasteimagetodownload.com/banner.jpg"
         ogType="website"
