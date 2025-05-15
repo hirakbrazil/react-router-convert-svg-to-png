@@ -7,7 +7,6 @@ import ThemeSwitcher from "./ThemeSwitcher";
 const Footer = () => {
   const location = useLocation();
   const isHomePage = location.pathname === "/";
-  const isImageToClipboardPage = location.pathname === "/imagetoclipboard";
   const isAboutPage = location.pathname === "/about";
   const isFeedbackPage = location.pathname === "/feedback";
 
@@ -24,12 +23,6 @@ const Footer = () => {
             Home
           </Link>
         )}
-        {!isImageToClipboardPage && (
-          <Link to="/imagetoclipboard" className="inline-flex items-center gap-2 text-foreground hover:text-primary whitespace-nowrap">
-            <Image className="h-4 w-4" />
-            Image to Clipboard
-          </Link>
-        )}
         {!isAboutPage && (
           <Link to="/about" className="inline-flex items-center gap-2 text-foreground hover:text-primary whitespace-nowrap">
             <Info className="h-4 w-4" />
@@ -43,18 +36,6 @@ const Footer = () => {
           </Link>
         )}
       </nav>
-
-      <div className="text-center text-sm text-muted-foreground">
-        Built with ❤️ by{" "}
-        <a 
-          href="https://toolyoulove.com/" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="text-primary hover:underline"
-        >
-          Tool You Love
-        </a>
-      </div>
     </footer>
   );
 };
