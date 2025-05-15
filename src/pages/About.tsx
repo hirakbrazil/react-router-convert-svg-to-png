@@ -14,14 +14,14 @@ const About = () => {
   return (
     <>
       <SEO
-        title="About Clipboard to Image - Easy Image Conversion Tool"
-        description="Learn about our free Clipboard to Image converter tool. Convert clipboard content to downloadable images instantly with our user-friendly tool."
-        canonicalUrl="https://clipboard-to-image.toolyoulove.com/about"
+        title="About Paste Image to Download"
+        description="Learn about Paste Image to Download tool. Convert clipboard images instantly with our user-friendly tool."
+        canonicalUrl="https://pasteimagetodownload.com/about"
         robots="max-image-preview:large"
-        ogTitle="About Clipboard to Image - Easy Image Conversion Tool"
-        ogDescription="Learn about our free Clipboard to Image converter tool. Convert clipboard content to downloadable images instantly with our user-friendly tool."
-        ogUrl="https://clipboard-to-image.toolyoulove.com/about"
-        ogImage="https://clipboard-to-image.toolyoulove.com/banner.jpg"
+        ogTitle="About Paste Image to Download"
+        ogDescription="Learn about Paste Image to Download tool. Download clipboard images instantly with our user-friendly tool."
+        ogUrl="https://pasteimagetodownload.com/about"
+        ogImage="https://pasteimagetodownload.com/banner.jpg"
         ogType="article"
       />
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
@@ -29,13 +29,13 @@ const About = () => {
           <AdSenseHorizontal />
           <div className="text-center">
             <h1 className="text-3xl font-bold text-foreground sm:text-4xl">
-              About Clipboard to Image
+              About Paste Image to Download
             </h1>
           </div>
 
           <div className="space-y-6">
             <p className="text-lg">
-              Welcome to Clipboard to Image, a simple yet powerful tool designed to help you convert clipboard content into downloadable images instantly.
+              Welcome to Paste Image to Download, a simple yet powerful tool designed to help you download clipboard images instantly.
             </p>
 
             <div>
@@ -75,7 +75,7 @@ const About = () => {
             </div>
 
             <p>
-              Start using Clipboard to Image today - it's free, fast, and focused on providing the best image conversion experience possible!
+              Start using Paste Image to Download today - it's free, fast, and focused on providing the best image conversion experience possible!
             </p>
           </div>
           <AdSenseResponsive />
