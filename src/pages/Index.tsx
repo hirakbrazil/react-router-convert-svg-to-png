@@ -13,11 +13,11 @@ const Index = () => {
     <>
       <SEO
         title="Paste Image to Download"
-        description="Easily download copied clipboard images with Paste Image to Download tool."
+        description="Easily download copied images with Paste Image to Download tool."
         canonicalUrl="https://pasteimagetodownload.com/"
         robots="max-image-preview:large"
         ogTitle="Paste Image to Download"
-        ogDescription="Easily download copied clipboard images with Paste Image to Download tool."
+        ogDescription="Easily download copied images with Paste Image to Download tool."
         ogUrl="https://pasteimagetodownload.com/"
         ogImage="https://pasteimagetodownload.com/banner.jpg"
         ogType="website"
