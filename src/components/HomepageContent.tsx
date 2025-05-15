@@ -21,8 +21,7 @@ const HomepageContent = () => {
             your device, ensuring complete privacy and quick processing times. It works offline. No internet connection is required to use it.
           </p>
           <p>
-            Supports various image formats including PNG, JPEG, and other common
-            web formats, making it perfect for quick image conversions and saves.
+            Supports various image formats including PNG, JPEG, and WEBP format, making it perfect for quick image conversions and saves.
           </p>
         </div>
       </div>
