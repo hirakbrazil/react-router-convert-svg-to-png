@@ -18,7 +18,7 @@ const HomepageContent = () => {
           </p>
           <p>
             All processing happens right in your browser - your images never leave
-            your device, ensuring complete privacy and quick processing times.
+            your device, ensuring complete privacy and quick processing times. It works offline. No internet connection is required to use it.
           </p>
           <p>
             Supports various image formats including PNG, JPEG, and other common
