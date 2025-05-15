@@ -112,7 +112,6 @@ const ClipboardImage = () => {
                   onCheckedChange={toggleAutoDownload}
                 />
                 <Label htmlFor="auto-download-image" className="cursor-pointer flex items-center gap-2">
-                  {autoDownload ? <ToggleRight className="text-primary" /> : <ToggleLeft />}
                   Auto Download
                 </Label>
               </div>
