@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ImageIcon, Download, RefreshCcw, ToggleLeft, ToggleRight } from "lucide-react";
+import { ImageIcon, Download, RefreshCcw } from "lucide-react";
 import { useClipboard } from "@/hooks/useClipboard";
 import { cn } from "@/lib/utils";
 import {
@@ -78,7 +78,6 @@ const ClipboardImage = () => {
                 onCheckedChange={toggleAutoDownload}
               />
               <Label htmlFor="auto-download" className="cursor-pointer flex items-center gap-2">
-                {autoDownload ? <ToggleRight className="text-primary" /> : <ToggleLeft />}
                 Auto Download
               </Label>
             </div>
