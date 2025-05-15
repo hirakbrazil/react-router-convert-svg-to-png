@@ -1,10 +1,10 @@
 [[redirects]]
-  from = "https://clipboard-to-image.netlify.app/*"
-  to = "https://clipboard-to-image.toolyoulove.com/:splat"
+  from = "https://paste-image-to-download.netlify.app/*"
+  to = "https://pasteimagetodownload.com/:splat"
   status = 301
   force = true
   
 [[redirects]]
-  from = "https://clipboard-to-image.toolyoulove.com/*"
+  from = "https://pasteimagetodownload.com/*"
   to = "/index.html"
   status = 200
