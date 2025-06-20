@@ -3,7 +3,6 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { VitePWA } from 'vite-plugin-pwa';
-import { prerender } from 'vite-plugin-prerender';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -92,16 +91,6 @@ export default defineConfig(({ mode }) => ({
         navigateFallback: 'index.html',
         navigateFallbackDenylist: [/^\/api/]
       }
-    }),
-    mode === 'production' && prerender({
-      routes: [
-        '/',
-        '/about',
-        '/feedback'
-      ],
-      rendererOptions: {
-        renderAfterDocumentEvent: 'render-event'
-      }
     })
   ].filter(Boolean),
   resolve: {
@@ -109,14 +98,4 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  build: {
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          router: ['react-router-dom']
-        }
-      }
-    }
-  }
 }));

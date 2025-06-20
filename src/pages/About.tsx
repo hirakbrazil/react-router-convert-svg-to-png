@@ -1,3 +1,4 @@
+
 import React from "react";
 import Footer from "@/components/Footer";
 import useTheme from "@/hooks/useTheme";
@@ -9,20 +10,6 @@ import { Sparkles, Shield, Globe } from "lucide-react";
 
 const About = () => {
   useTheme();
-  
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "AboutPage",
-    "name": "About Paste Image to Download",
-    "description": "Learn about Paste Image to Download tool. Convert clipboard images instantly with our user-friendly tool.",
-    "url": "https://pasteimagetodownload.com/about",
-    "mainEntity": {
-      "@type": "WebApplication",
-      "name": "Paste Image to Download",
-      "description": "Download clipboard images instantly with our user-friendly tool.",
-      "applicationCategory": "UtilityApplication"
-    }
-  };
   
   return (
     <>
@@ -36,7 +23,6 @@ const About = () => {
         ogUrl="https://pasteimagetodownload.com/about"
         ogImage="https://pasteimagetodownload.com/banner.jpg"
         ogType="article"
-        structuredData={structuredData}
       />
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto space-y-8 lg:mr-[300px]">
