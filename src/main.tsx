@@ -18,25 +18,19 @@ const updateSW = registerSW({
 export const routes = [
   {
     path: '/',
-    element: <App />,
-    children: [
-      {
-        index: true,
-        lazy: () => import('./pages/Index'),
-      },
-      {
-        path: 'about',
-        lazy: () => import('./pages/About'),
-      },
-      {
-        path: 'feedback', 
-        lazy: () => import('./pages/Feedback'),
-      },
-      {
-        path: '*',
-        lazy: () => import('./pages/404'),
-      }
-    ]
+    component: () => import('./pages/Index'),
+  },
+  {
+    path: '/about',
+    component: () => import('./pages/About'),
+  },
+  {
+    path: '/feedback',
+    component: () => import('./pages/Feedback'),
+  },
+  {
+    path: '/404',
+    component: () => import('./pages/404'),
   }
 ]
 
