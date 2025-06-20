@@ -39,7 +39,5 @@ const Index = () => {
   );
 };
 
-// Export as default function component for lazy loading
-export default function Component() {
-  return <Index />;
-}
+export default Index;
+
