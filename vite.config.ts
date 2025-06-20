@@ -94,10 +94,8 @@ export default defineConfig(({ mode }) => ({
         navigateFallbackDenylist: [/^\/api/]
       }
     }),
-    vitePrerender({
-      // Required - The path to the vite-outputted app to prerender.
-      staticDir: path.join(__dirname, 'dist'),
-      // Required - Routes to render.
+    mode === 'production' && vitePrerender({
+      staticDir: path.join(process.cwd(), 'dist'),
       routes: ['/', '/about', '/feedback'],
     })
   ].filter(Boolean),
