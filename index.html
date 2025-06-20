@@ -1,15 +1,30 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
+    <!-- Pre-connect to external domains for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+    
     <!-- Theme Colors -->
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#07a36c" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
     
+    <!-- Icons and Manifest -->
     <link rel="icon" href="/icon.png" />
     <link rel="apple-touch-icon" href="/icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    
+    <!-- Sitemap -->
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    
+    <!-- Default meta tags (will be overridden by React Helmet) -->
+    <title>Paste Image to Download</title>
+    <meta name="description" content="Easily download copied images with Paste Image to Download tool." />
     </head>
   <body>
     <div id="root"></div>

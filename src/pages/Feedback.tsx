@@ -1,4 +1,3 @@
-
 import React from "react";
 import Footer from "@/components/Footer";
 import useTheme from "@/hooks/useTheme";
@@ -9,6 +8,19 @@ import DesktopSidebar from "@/components/DesktopSidebar";
 
 const Feedback = () => {
   useTheme();
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Feedback - Paste Image to Download",
+    "description": "Share your feedback about Paste Image to Download. Help us improve your image conversion experience.",
+    "url": "https://pasteimagetodownload.com/feedback",
+    "mainEntity": {
+      "@type": "ContactPoint",
+      "contactType": "Customer Service",
+      "email": "info@pasteimagetodownload.com"
+    }
+  };
 
   return (
     <>
@@ -22,6 +34,7 @@ const Feedback = () => {
         ogUrl="https://pasteimagetodownload.com/feedback"
         ogImage="https://pasteimagetodownload.com/banner.jpg"
         ogType="article"
+        structuredData={structuredData}
       />
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto space-y-8 lg:mr-[300px]">

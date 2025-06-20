@@ -9,6 +9,25 @@ import ClipboardImage from "@/components/ClipboardImage";
 import HomepageContent from "@/components/HomepageContent";
 
 const Index = () => {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Paste Image to Download",
+    "description": "Easily download copied images with Paste Image to Download tool.",
+    "url": "https://pasteimagetodownload.com/",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "creator": {
+      "@type": "Organization",
+      "name": "Paste Image to Download"
+    }
+  };
+
   return (
     <>
       <SEO
@@ -21,6 +40,7 @@ const Index = () => {
         ogUrl="https://pasteimagetodownload.com/"
         ogImage="https://pasteimagetodownload.com/banner.jpg"
         ogType="website"
+        structuredData={structuredData}
       />
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto space-y-8 lg:mr-[300px]">
@@ -40,4 +60,3 @@ const Index = () => {
 };
 
 export default Index;
-
