@@ -96,8 +96,7 @@ export default defineConfig(({ mode }) => ({
     }),
     vitePrerenderPlugin({
       renderTarget: '#root',
-      prerenderScript: path.resolve(__dirname, 'src/prerender.ts'),
-      routes: ['/', '/about', '/feedback']
+      prerenderScript: path.resolve(__dirname, 'src/prerender.ts')
     })
   ].filter(Boolean),
   resolve: {
