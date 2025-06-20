@@ -21,7 +21,7 @@ export const routes = [
     element: <App />,
     children: [
       {
-        path: '',
+        index: true,
         lazy: () => import('./pages/Index'),
       },
       {
