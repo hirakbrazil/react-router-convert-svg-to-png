@@ -3,7 +3,6 @@ import { ViteReactSSG } from 'vite-react-ssg'
 import App from './App.tsx'
 import './index.css'
 import { registerSW } from 'virtual:pwa-register'
-import { getStaticPaths } from './getStaticPaths'
 
 // Register service worker
 const updateSW = registerSW({
@@ -38,8 +37,5 @@ export const createRoot = ViteReactSSG(
   { routes },
   ({ router, routes, isClient, initialState }) => {
     // Setup for SSG
-  },
-  {
-    getStaticPaths
   }
 )
