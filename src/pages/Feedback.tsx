@@ -43,10 +43,10 @@ const Feedback = () => {
               <p>
                 For any queries, feedback, suggestions, or bug reports, please email us at:{" "}
                 <a
-                  href={`mailto:${siteConfig.email}`}
+                  href="mailto:info@pasteimagetodownload.com"
                   className="text-primary hover:underline"
                 >
-                  {siteConfig.email}
+                  info@pasteimagetodownload.com
                 </a>
               </p>
             </div>
