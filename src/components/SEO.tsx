@@ -1,5 +1,7 @@
+
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import { siteConfig } from '@/config/site';
 
 interface SEOProps {
   title?: string;
@@ -24,23 +26,29 @@ const SEO: React.FC<SEOProps> = ({
   ogImage,
   ogType,
 }) => {
+  // Helper function to resolve absolute URLs
+  const resolveUrl = (path?: string) => {
+    if (!path) return undefined;
+    if (path.startsWith('http')) return path;
+    return `${siteConfig.baseUrl}${path.startsWith('/') ? path : `/${path}`}`;
+  };
+
   return (
     <Helmet>
-
       {title && <title>{title}</title>}
 
       {description && <meta name="description" content={description} />}
 
-      {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+      {canonicalUrl && <link rel="canonical" href={resolveUrl(canonicalUrl)} />}
 
       {robots && <meta name="robots" content={robots} />}
 
       {ogType && <meta property="og:type" content={ogType} />}
-      {ogUrl && <meta property="og:url" content={ogUrl} />}
+      {ogUrl && <meta property="og:url" content={resolveUrl(ogUrl)} />}
       {ogTitle && <meta property="og:title" content={ogTitle} />}
       {ogDescription && <meta property="og:description" content={ogDescription} />}
-      {ogImage && <meta property="og:image" content={ogImage} />}
-      <meta property="og:site_name" content="Paste Image to Download" />
+      {ogImage && <meta property="og:image" content={resolveUrl(ogImage)} />}
+      <meta property="og:site_name" content={siteConfig.name} />
       <script
         async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3677847561110212"

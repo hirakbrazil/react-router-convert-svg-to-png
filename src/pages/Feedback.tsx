@@ -6,6 +6,7 @@ import SEO from "@/components/SEO";
 import AdSenseHorizontal from "@/components/AdSenseHorizontal";
 import AdSenseResponsive from "@/components/AdSenseResponsive";
 import DesktopSidebar from "@/components/DesktopSidebar";
+import { siteConfig } from "@/config/site";
 
 const Feedback = () => {
   useTheme();
@@ -15,12 +16,12 @@ const Feedback = () => {
       <SEO
         title="Feedback - Paste Image to Download"
         description="Share your feedback about Paste Image to Download. Help us improve your image conversion experience."
-        canonicalUrl="https://pasteimagetodownload.com/feedback"
+        canonicalUrl="/feedback"
         robots="max-image-preview:large"
         ogTitle="Feedback - Paste Image to Download"
         ogDescription="Share your feedback about Paste Image to Download. Help us improve your image conversion experience."
-        ogUrl="https://pasteimagetodownload.com/feedback"
-        ogImage="https://pasteimagetodownload.com/banner.jpg"
+        ogUrl="/feedback"
+        ogImage="/banner.jpg"
         ogType="article"
       />
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
@@ -42,10 +43,10 @@ const Feedback = () => {
               <p>
                 For any queries, feedback, suggestions, or bug reports, please email us at:{" "}
                 <a
-                  href="mailto:info@pasteimagetodownload.com"
+                  href={`mailto:${siteConfig.email}`}
                   className="text-primary hover:underline"
                 >
-                  info@pasteimagetodownload.com
+                  {siteConfig.email}
                 </a>
               </p>
             </div>

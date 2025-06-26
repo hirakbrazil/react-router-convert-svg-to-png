@@ -16,12 +16,12 @@ const About = () => {
       <SEO
         title="About Paste Image to Download"
         description="Learn about Paste Image to Download tool. Convert clipboard images instantly with our user-friendly tool."
-        canonicalUrl="https://pasteimagetodownload.com/about"
+        canonicalUrl="/about"
         robots="max-image-preview:large"
         ogTitle="About Paste Image to Download"
         ogDescription="Learn about Paste Image to Download tool. Download clipboard images instantly with our user-friendly tool."
-        ogUrl="https://pasteimagetodownload.com/about"
-        ogImage="https://pasteimagetodownload.com/banner.jpg"
+        ogUrl="/about"
+        ogImage="/banner.jpg"
         ogType="article"
       />
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">

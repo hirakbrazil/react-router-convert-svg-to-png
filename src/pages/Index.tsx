@@ -14,12 +14,12 @@ const Index = () => {
       <SEO
         title="Paste Image to Download"
         description="Easily download copied images with Paste Image to Download tool."
-        canonicalUrl="https://pasteimagetodownload.com/"
+        canonicalUrl="/"
         robots="max-image-preview:large"
         ogTitle="Paste Image to Download"
         ogDescription="Easily download copied images with Paste Image to Download tool."
-        ogUrl="https://pasteimagetodownload.com/"
-        ogImage="https://pasteimagetodownload.com/banner.jpg"
+        ogUrl="/"
+        ogImage="/banner.jpg"
         ogType="website"
       />
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
@@ -40,4 +40,3 @@ const Index = () => {
 };
 
 export default Index;
-
