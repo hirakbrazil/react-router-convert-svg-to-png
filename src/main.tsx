@@ -1,16 +1,21 @@
-import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
-import { registerSW } from 'virtual:pwa-register'
+// src/main.tsx
+import { ViteReactSSG } from 'vite-react-ssg';
+import { routes } from './App';
+import './index.css';
+import { registerSW } from 'virtual:pwa-register';
 
-// Register service worker
 const updateSW = registerSW({
   onNeedRefresh() {
-  updateSW(true)
+    updateSW(true);
   },
   onOfflineReady() {
-    console.log('App ready to work offline')
+    console.log('App ready to work offline');
   }
-})
+});
 
-createRoot(document.getElementById("root")!).render(<App />);
+export const createRoot = ViteReactSSG(
+  { routes },
+  ({ router, routes, isClient, initialState }) => {
+    // Custom setup if needed
+  }
+);
