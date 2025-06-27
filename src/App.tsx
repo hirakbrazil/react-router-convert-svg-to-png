@@ -1,30 +1,33 @@
-// src/App.tsx
-import type { RouteRecord } from 'vite-react-ssg';
-import React from 'react';
-import Layout from './Layout';
 
-export const routes: RouteRecord[] = [
-  {
-    path: '/',
-    element: <Layout />,
-    entry: 'src/Layout.tsx',
-    children: [
-      {
-        index: true,
-        Component: React.lazy(() => import('./pages/Index')),
-      },
-      {
-        path: 'about',
-        Component: React.lazy(() => import('./pages/About')),
-      },
-      {
-        path: 'feedback',
-        Component: React.lazy(() => import('./pages/Feedback')),
-      },
-      {
-        path: '*',
-        Component: React.lazy(() => import('./pages/404')),
-      },
-    ],
-  },
-];
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ScrollToTop from "@/components/ScrollToTop";
+import Index from "./pages/Index";
+import About from "./pages/About";
+import Feedback from "./pages/Feedback";
+import NotFound from "./pages/404";
+
+const queryClient = new QueryClient();
+
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <ScrollToTop />
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/feedback" element={<Feedback />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </TooltipProvider>
+  </QueryClientProvider>
+);
+
+export default App;
