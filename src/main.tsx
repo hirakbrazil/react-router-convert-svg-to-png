@@ -6,7 +6,7 @@ import { registerSW } from 'virtual:pwa-register'
 // Register service worker
 const updateSW = registerSW({
   onNeedRefresh() {
-  updateSW(true)
+  console.log('New version is available');
   },
   onOfflineReady() {
     console.log('App ready to work offline')
