@@ -5,19 +5,19 @@ import SEO from "@/components/SEO";
 import CalculatorHeader from "@/components/calculator/CalculatorHeader";
 import AdSenseResponsive from "@/components/AdSenseResponsive";
 import DesktopSidebar from "@/components/DesktopSidebar";
-import ClipboardImage from "@/components/ClipboardImage";
+import SvgToPngConverter from "@/components/SvgToPngConverter";
 import HomepageContent from "@/components/HomepageContent";
 
 const Index = () => {
   return (
     <>
       <SEO
-        title="Paste Image to Download"
-        description="Easily download copied images with Paste Image to Download tool."
+        title="Convert SVG to PNG - High Quality SVG to PNG Converter"
+        description="Convert SVG files to high-quality PNG images with smart resizing. Free online SVG to PNG converter with 4000px quality output."
         canonicalUrl="/"
         robots="max-image-preview:large"
-        ogTitle="Paste Image to Download"
-        ogDescription="Easily download copied images with Paste Image to Download tool."
+        ogTitle="Convert SVG to PNG - Free Online Converter"
+        ogDescription="Convert SVG files to high-quality PNG images with smart resizing. Free online SVG to PNG converter with 4000px quality output."
         ogUrl="/"
         ogImage="/banner.jpg"
         ogType="website"
@@ -27,7 +27,7 @@ const Index = () => {
           <AdSenseResponsive />
           <CalculatorHeader />
           <div className="border border-border bg-card dark:bg-card rounded-xl p-6">
-            <ClipboardImage />
+            <SvgToPngConverter />
           </div>
           <AdSenseResponsive />
           <HomepageContent />

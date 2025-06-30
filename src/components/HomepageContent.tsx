@@ -12,16 +12,13 @@ const HomepageContent = () => {
         </h2>
         <div className="space-y-4 text-muted-foreground">
           <p>
-            Simply paste any image from your clipboard using Ctrl+V (Windows) or
-            Cmd+V (Mac). Our tool instantly processes the image locally in your
-            browser, allowing you to download it immediately.
+            Simply upload your SVG file using drag-and-drop or the file browser. Our tool automatically processes your SVG and converts it to a high-quality PNG image with smart resizing capabilities.
           </p>
           <p>
-            All processing happens right in your browser - your images never leave
-            your device, ensuring complete privacy and quick processing times. It works offline. No internet connection is required to use it.
+            All processing happens directly in your browser - your files never leave your device, ensuring complete privacy and security. The conversion works offline once loaded.
           </p>
           <p>
-            Supports various image formats including PNG, JPEG, and WEBP format, making it perfect for quick image conversions and saves.
+            Choose between original size conversion or high-quality mode that automatically resizes smaller SVGs to 4000px width while maintaining perfect aspect ratios.
           </p>
         </div>
       </div>
@@ -29,28 +26,25 @@ const HomepageContent = () => {
       <div className="space-y-6">
         <h2 className="text-2xl font-semibold flex items-center gap-2 text-foreground">
           <Layout className="w-6 h-6 text-primary" />
-          Common Uses
+          Perfect For
         </h2>
         <div className="grid gap-4 text-muted-foreground">
           <div>
-            <h3 className="font-medium mb-2 text-foreground">Screenshot Sharing</h3>
+            <h3 className="font-medium mb-2 text-foreground">Web Development</h3>
             <p>
-              Quickly save screenshots from your clipboard for sharing in emails,
-              documents, or presentations.
+              Convert SVG icons and graphics to PNG for use in websites, applications, and presentations where PNG format is required.
             </p>
           </div>
           <div>
-            <h3 className="font-medium mb-2 text-foreground">Document Snippets</h3>
+            <h3 className="font-medium mb-2 text-foreground">Print Materials</h3>
             <p>
-              Capture and save important parts of documents, charts, or diagrams
-              for reference or documentation.
+              Generate high-resolution PNG images from SVG files for print materials, posters, and marketing collateral.
             </p>
           </div>
           <div>
-            <h3 className="font-medium mb-2 text-foreground">Social Media Content</h3>
+            <h3 className="font-medium mb-2 text-foreground">Social Media</h3>
             <p>
-              Save images from your clipboard for social media posts or content
-              creation without the need for image editing software.
+              Create PNG versions of your SVG logos and graphics for social media platforms that don't support SVG format.
             </p>
           </div>
         </div>
@@ -59,28 +53,25 @@ const HomepageContent = () => {
       <div className="space-y-6">
         <h2 className="text-2xl font-semibold flex items-center gap-2 text-foreground">
           <Lightbulb className="w-6 h-6 text-primary" />
-          Tips & Tricks
+          Features & Tips
         </h2>
         <div className="space-y-4 text-muted-foreground">
           <div>
-            <h3 className="font-medium mb-2 text-foreground">Keyboard Shortcuts</h3>
+            <h3 className="font-medium mb-2 text-foreground">Smart Quality Enhancement</h3>
             <p>
-              Use Ctrl+V (Windows) or Cmd+V (Mac) to quickly paste images. The tool
-              automatically detects and processes clipboard content.
+              Enable "High Quality" mode to automatically upscale SVGs smaller than 4000px to ensure crisp, professional results at any size.
             </p>
           </div>
           <div>
-            <h3 className="font-medium mb-2 text-foreground">Format Support</h3>
+            <h3 className="font-medium mb-2 text-foreground">Live Preview Comparison</h3>
             <p>
-              We support common image formats including PNG and JPEG. Images are
-              saved in their original format to maintain quality.
+              Use the interactive slider to compare your original SVG with the converted PNG side-by-side before downloading.
             </p>
           </div>
           <div>
             <h3 className="font-medium mb-2 text-foreground">Browser Compatibility</h3>
             <p>
-              Works best with modern browsers like Chrome, Firefox, Safari, and
-              Edge. Keep your browser updated for optimal performance.
+              Works seamlessly with all modern browsers including Chrome, Firefox, Safari, and Edge. No plugins or software installation required.
             </p>
           </div>
         </div>
@@ -90,4 +81,3 @@ const HomepageContent = () => {
 };
 
 export default HomepageContent;
-
