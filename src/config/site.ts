@@ -1,5 +1,5 @@
 
 export const siteConfig = {
-  baseUrl: 'https://pasteimagetodownload.com',
-  name: 'Paste Image to Download',
+  baseUrl: 'https://convertsvgtopng.net',
+  name: 'Convert SVG to PNG',
 };
