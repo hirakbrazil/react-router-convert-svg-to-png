@@ -6,10 +6,10 @@ const CalculatorHeader = () => {
   return (
     <div className="text-center space-y-6">
       <div className="space-y-3">
-        <h1 className="text-4xl font-bold text-foreground">
+        <h1 className="text-3xl font-bold text-foreground">
           Convert SVG to PNG
         </h1>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
           Transform your SVG files into high-quality PNG images
         </p>
       </div>
