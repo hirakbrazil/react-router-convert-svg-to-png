@@ -109,7 +109,7 @@ const SvgToPngConverter = () => {
                       Original: {svgDimensions ? `${Math.round(svgDimensions.width)} × ${Math.round(svgDimensions.height)}px` : null}
                       {targetDimensions && (
     <span className="ml-2 flex items-center gap-1">
-      <ArrowRightLeft className="inline h-4 w-4 text-muted-foreground" />
+      <ArrowRight className="inline h-4 w-4 text-muted-foreground" />
       PNG: {targetDimensions.width} × {targetDimensions.height}px
     </span>
   )}
