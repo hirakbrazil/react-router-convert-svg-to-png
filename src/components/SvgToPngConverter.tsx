@@ -52,19 +52,6 @@ const SvgToPngConverter = () => {
     }
   };
 
-  const getQualityBadgeText = (qualityOption: string) => {
-    switch (qualityOption) {
-      case 'original':
-        return 'Original Size';
-      case 'high':
-        return 'High Quality';
-      case 'very-high':
-        return 'Very High Quality';
-      default:
-        return qualityOption;
-    }
-  };
-
   const targetDimensions = svgDimensions ? getTargetDimensions(svgDimensions, quality) : null;
   const availableOptions = getAvailableQualityOptions();
 
@@ -151,10 +138,6 @@ const SvgToPngConverter = () => {
                         </SelectContent>
                       </Select>
                     </div>
-                    
-                    <Badge variant={quality === 'original' ? 'secondary' : 'default'}>
-                      {getQualityBadgeText(quality)}
-                    </Badge>
                   </div>
                 )}
               </div>
