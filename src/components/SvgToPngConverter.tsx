@@ -107,7 +107,7 @@ const SvgToPngConverter = () => {
                   <div>
                     <p className="font-medium">{svgFile.name}</p>
                     <p className="text-sm text-muted-foreground">
-                      Original: {svgDimensions?.width} × {svgDimensions?.height}px
+                      Original: {svgDimensions ? `${Math.round(svgDimensions.width)} × ${Math.round(svgDimensions.height)}px` : null}
                       {targetDimensions && (
                         <span className="ml-2">
                           → PNG: {targetDimensions.width} × {targetDimensions.height}px
