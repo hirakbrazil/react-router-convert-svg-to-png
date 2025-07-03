@@ -145,7 +145,7 @@ const SvgToPngConverter = () => {
             <Card>
               <CardContent className="p-6">
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-1">
                     <h3 className="text-lg font-semibold">Preview Comparison</h3>
                     <p className="text-sm text-muted-foreground">
                       Drag the slider to compare SVG vs PNG
