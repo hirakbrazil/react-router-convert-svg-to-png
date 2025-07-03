@@ -12,11 +12,11 @@ const Index = () => {
   return (
     <>
       <SEO
-        title="Convert SVG to PNG - High Quality SVG to PNG Converter"
+        title="Convert SVG to PNG"
         description="Convert SVG files to high-quality PNG images with smart resizing. Free online SVG to PNG converter with 4000px quality output."
         canonicalUrl="/"
         robots="max-image-preview:large"
-        ogTitle="Convert SVG to PNG - Free Online Converter"
+        ogTitle="Convert SVG to PNG"
         ogDescription="Convert SVG files to high-quality PNG images with smart resizing. Free online SVG to PNG converter with 4000px quality output."
         ogUrl="/"
         ogImage="/banner.jpg"
