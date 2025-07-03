@@ -62,37 +62,6 @@ const SvgToPngConverter = () => {
     <div className="space-y-6">
       {!svgFile ? (
         <div className="space-y-6">
-          {/* SVG Text Input */}
-          <Card>
-            <CardContent className="p-6">
-              <div className="space-y-4">
-                <Label htmlFor="svg-text">Paste SVG Code</Label>
-                <Textarea
-                  id="svg-text"
-                  placeholder="Paste your SVG XML code here..."
-                  value={svgTextInput}
-                  onChange={handleSvgTextChange}
-                  className="min-h-[120px] font-mono text-sm"
-                  disabled={isConverting}
-                />
-                <Button
-                  onClick={handleSvgTextSubmit}
-                  disabled={!svgTextInput.trim() || isConverting}
-                  className="w-full"
-                >
-                  Convert SVG Code
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Separator */}
-          <div className="flex items-center gap-4">
-            <Separator className="flex-1" />
-            <span className="text-sm text-muted-foreground">or</span>
-            <Separator className="flex-1" />
-          </div>
-
           {/* File Upload */}
           <div
             className={cn(
@@ -125,6 +94,37 @@ const SvgToPngConverter = () => {
               </div>
             </div>
           </div>
+
+          {/* Separator */}
+          <div className="flex items-center gap-4">
+            <Separator className="flex-1" />
+            <span className="text-sm text-muted-foreground">or</span>
+            <Separator className="flex-1" />
+          </div>
+
+          {/* SVG Text Input should below the File Upload */}
+          <Card>
+            <CardContent className="p-6">
+              <div className="space-y-4">
+                <Label htmlFor="svg-text">Paste SVG Code</Label>
+                <Textarea
+                  id="svg-text"
+                  placeholder="Paste your SVG XML code here..."
+                  value={svgTextInput}
+                  onChange={handleSvgTextChange}
+                  className="min-h-[120px] font-mono text-sm"
+                  disabled={isConverting}
+                />
+                <Button
+                  onClick={handleSvgTextSubmit}
+                  disabled={!svgTextInput.trim() || isConverting}
+                  className="w-full"
+                >
+                  Convert SVG Code
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       ) : (
         <div className="space-y-6">
