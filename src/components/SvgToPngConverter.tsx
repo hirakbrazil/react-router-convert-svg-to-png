@@ -2,8 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Upload, Download, RefreshCcw, Image as ImageIcon } from 'lucide-react';
+import { Upload, Download, ArrowRight, RefreshCcw, Image as ImageIcon } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { useSvgToPng } from '@/hooks/useSvgToPng';
@@ -109,10 +108,11 @@ const SvgToPngConverter = () => {
                     <p className="text-sm text-muted-foreground">
                       Original: {svgDimensions ? `${Math.round(svgDimensions.width)} × ${Math.round(svgDimensions.height)}px` : null}
                       {targetDimensions && (
-                        <span className="ml-2">
-                          → PNG: {targetDimensions.width} × {targetDimensions.height}px
-                        </span>
-                      )}
+    <span className="ml-2 flex items-center gap-1">
+      <ArrowRightLeft className="inline h-4 w-4 text-muted-foreground" />
+      PNG: {targetDimensions.width} × {targetDimensions.height}px
+    </span>
+  )}
                     </p>
                   </div>
                 </div>
