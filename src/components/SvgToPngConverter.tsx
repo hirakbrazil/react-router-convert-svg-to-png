@@ -57,8 +57,6 @@ const SvgToPngConverter = () => {
   return (
     <div className="space-y-6">
       {!svgFile ? (
-        <Card>
-          <CardContent className="p-6">
             <div
               className={cn(
                 "relative border-2 border-dashed rounded-lg p-8 text-center transition-colors duration-200",
@@ -93,8 +91,6 @@ const SvgToPngConverter = () => {
                 </div>
               </div>
             </div>
-          </CardContent>
-        </Card>
       ) : (
         <div className="space-y-6">
           {/* File Info and Quality Settings */}
