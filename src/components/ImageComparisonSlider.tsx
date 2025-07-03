@@ -117,7 +117,7 @@ const ImageComparisonSlider = ({ svgContent, pngDataUrl, className }: ImageCompa
             className="w-full h-full object-contain pointer-events-none"
             draggable={false}
           />
-          <div className="absolute bottom-2 right-2 bg-black/70 dark:bg-white/70 text-white dark:text-black px-2 py-1 rounded text-sm pointer-events-none">
+          <div className="absolute bottom-2 right-2 bg-secondary text-primary px-2 py-1 rounded text-sm pointer-events-none">
             PNG
           </div>
         </div>
@@ -133,7 +133,7 @@ const ImageComparisonSlider = ({ svgContent, pngDataUrl, className }: ImageCompa
             className="w-full h-full object-contain pointer-events-none"
             draggable={false}
           />
-          <div className="absolute bottom-2 left-2 bg-black/70 dark:bg-white/70 text-white dark:text-black px-2 py-1 rounded text-sm pointer-events-none">
+          <div className="absolute bottom-2 left-2 bg-secondary text-primary px-2 py-1 rounded text-sm pointer-events-none">
             SVG
           </div>
         </div>
