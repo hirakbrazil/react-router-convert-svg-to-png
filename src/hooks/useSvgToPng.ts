@@ -1,13 +1,15 @@
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
-type QualityOption = 'high' | 'original';
+type QualityOption = 'original' | 'high' | 'very-high';
 
 interface SvgDimensions {
   width: number;
   height: number;
 }
+
+const QUALITY_STORAGE_KEY = 'svg-to-png-quality';
 
 export const useSvgToPng = () => {
   const [svgFile, setSvgFile] = useState<File | null>(null);
@@ -18,6 +20,19 @@ export const useSvgToPng = () => {
   const [isConverting, setIsConverting] = useState(false);
   const [quality, setQuality] = useState<QualityOption>('high');
   const { toast } = useToast();
+
+  // Load quality preference from localStorage on mount
+  useEffect(() => {
+    const savedQuality = localStorage.getItem(QUALITY_STORAGE_KEY) as QualityOption;
+    if (savedQuality && ['original', 'high', 'very-high'].includes(savedQuality)) {
+      setQuality(savedQuality);
+    }
+  }, []);
+
+  // Save quality preference to localStorage when it changes
+  const saveQualityPreference = useCallback((newQuality: QualityOption) => {
+    localStorage.setItem(QUALITY_STORAGE_KEY, newQuality);
+  }, []);
 
   const resetState = useCallback(() => {
     setSvgFile(null);
@@ -58,7 +73,25 @@ export const useSvgToPng = () => {
     return { width, height };
   };
 
-  const convertSvgToPng = useCallback(async (svgString: string, dimensions: SvgDimensions): Promise<string> => {
+  const getTargetDimensions = useCallback((dimensions: SvgDimensions, selectedQuality: QualityOption) => {
+    if (selectedQuality === 'original') {
+      return dimensions;
+    }
+
+    const targetWidth = selectedQuality === 'high' ? 4000 : 6000;
+    
+    if (dimensions.width < targetWidth) {
+      const scaleFactor = targetWidth / dimensions.width;
+      return {
+        width: targetWidth,
+        height: Math.round(dimensions.height * scaleFactor)
+      };
+    }
+    
+    return dimensions;
+  }, []);
+
+  const convertSvgToPng = useCallback(async (svgString: string, dimensions: SvgDimensions, selectedQuality: QualityOption): Promise<string> => {
     return new Promise((resolve, reject) => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
@@ -68,22 +101,14 @@ export const useSvgToPng = () => {
         return;
       }
 
-      let targetWidth = dimensions.width;
-      let targetHeight = dimensions.height;
-
-      // Apply smart resizing logic for high quality
-      if (quality === 'high' && dimensions.width < 4000) {
-        const scaleFactor = 4000 / dimensions.width;
-        targetWidth = 4000;
-        targetHeight = dimensions.height * scaleFactor;
-      }
-
-      canvas.width = targetWidth;
-      canvas.height = targetHeight;
+      const targetDimensions = getTargetDimensions(dimensions, selectedQuality);
+      
+      canvas.width = targetDimensions.width;
+      canvas.height = targetDimensions.height;
 
       const img = new Image();
       img.onload = () => {
-        ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+        ctx.drawImage(img, 0, 0, targetDimensions.width, targetDimensions.height);
         
         canvas.toBlob((blob) => {
           if (blob) {
@@ -100,7 +125,7 @@ export const useSvgToPng = () => {
       const svgBlob = new Blob([svgString], { type: 'image/svg+xml' });
       img.src = URL.createObjectURL(svgBlob);
     });
-  }, [quality]);
+  }, [getTargetDimensions]);
 
   const handleFileUpload = useCallback(async (file: File) => {
     if (!file.type.includes('svg')) {
@@ -122,7 +147,7 @@ export const useSvgToPng = () => {
       setSvgContent(svgText);
       setSvgDimensions(dimensions);
       
-      const pngUrl = await convertSvgToPng(svgText, dimensions);
+      const pngUrl = await convertSvgToPng(svgText, dimensions, quality);
       setPngDataUrl(pngUrl);
       
       toast({
@@ -140,7 +165,7 @@ export const useSvgToPng = () => {
     } finally {
       setIsConverting(false);
     }
-  }, [convertSvgToPng, toast, resetState]);
+  }, [convertSvgToPng, quality, toast, resetState]);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -191,11 +216,12 @@ export const useSvgToPng = () => {
 
   const handleQualityChange = useCallback(async (newQuality: QualityOption) => {
     setQuality(newQuality);
+    saveQualityPreference(newQuality);
     
     if (svgContent && svgDimensions) {
       setIsConverting(true);
       try {
-        const pngUrl = await convertSvgToPng(svgContent, svgDimensions);
+        const pngUrl = await convertSvgToPng(svgContent, svgDimensions, newQuality);
         setPngDataUrl(pngUrl);
       } catch (error) {
         console.error('Re-conversion error:', error);
@@ -208,7 +234,25 @@ export const useSvgToPng = () => {
         setIsConverting(false);
       }
     }
-  }, [svgContent, svgDimensions, convertSvgToPng, toast]);
+  }, [svgContent, svgDimensions, convertSvgToPng, saveQualityPreference, toast]);
+
+  const getAvailableQualityOptions = useCallback(() => {
+    if (!svgDimensions) return ['original', 'high', 'very-high'] as QualityOption[];
+    
+    if (svgDimensions.width >= 6000) {
+      return [] as QualityOption[]; // Hide quality selector entirely
+    }
+    
+    if (svgDimensions.width >= 4000) {
+      return ['original', 'very-high'] as QualityOption[];
+    }
+    
+    return ['original', 'high', 'very-high'] as QualityOption[];
+  }, [svgDimensions]);
+
+  const shouldShowQualitySelector = useCallback(() => {
+    return getAvailableQualityOptions().length > 0;
+  }, [getAvailableQualityOptions]);
 
   return {
     svgFile,
@@ -226,5 +270,8 @@ export const useSvgToPng = () => {
     downloadPng,
     resetState,
     handleQualityChange,
+    getTargetDimensions,
+    getAvailableQualityOptions,
+    shouldShowQualitySelector,
   };
 };

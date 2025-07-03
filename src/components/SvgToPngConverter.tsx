@@ -4,10 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Upload, Download, RefreshCcw, Image as ImageIcon } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
 import { useSvgToPng } from '@/hooks/useSvgToPng';
 import { cn } from '@/lib/utils';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
 import ImageComparisonSlider from './ImageComparisonSlider';
 
 const SvgToPngConverter = () => {
@@ -27,6 +27,9 @@ const SvgToPngConverter = () => {
     downloadPng,
     resetState,
     handleQualityChange,
+    getTargetDimensions,
+    getAvailableQualityOptions,
+    shouldShowQualitySelector,
   } = useSvgToPng();
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,21 +39,34 @@ const SvgToPngConverter = () => {
     }
   };
 
-  const getTargetDimensions = () => {
-    if (!svgDimensions) return null;
-    
-    if (quality === 'high' && svgDimensions.width < 4000) {
-      const scaleFactor = 4000 / svgDimensions.width;
-      return {
-        width: 4000,
-        height: Math.round(svgDimensions.height * scaleFactor)
-      };
+  const getQualityLabel = (qualityOption: string) => {
+    switch (qualityOption) {
+      case 'original':
+        return 'Original';
+      case 'high':
+        return 'High (4000px)';
+      case 'very-high':
+        return 'Very High (6000px)';
+      default:
+        return qualityOption;
     }
-    
-    return svgDimensions;
   };
 
-  const targetDimensions = getTargetDimensions();
+  const getQualityBadgeText = (qualityOption: string) => {
+    switch (qualityOption) {
+      case 'original':
+        return 'Original Size';
+      case 'high':
+        return 'High Quality';
+      case 'very-high':
+        return 'Very High Quality';
+      default:
+        return qualityOption;
+    }
+  };
+
+  const targetDimensions = svgDimensions ? getTargetDimensions(svgDimensions, quality) : null;
+  const availableOptions = getAvailableQualityOptions();
 
   return (
     <div className="space-y-6">
@@ -114,23 +130,33 @@ const SvgToPngConverter = () => {
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center space-x-2">
-                    <Switch
-                      id="quality-toggle"
-                      checked={quality === 'high'}
-                      onCheckedChange={(checked) => handleQualityChange(checked ? 'high' : 'original')}
-                      disabled={isConverting}
-                    />
-                    <Label htmlFor="quality-toggle" className="cursor-pointer">
-                      High Quality (4000px)
-                    </Label>
+                {shouldShowQualitySelector() && (
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center space-x-2">
+                      <Label htmlFor="quality-select">Choose output quality:</Label>
+                      <Select
+                        value={quality}
+                        onValueChange={handleQualityChange}
+                        disabled={isConverting}
+                      >
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {availableOptions.map((option) => (
+                            <SelectItem key={option} value={option}>
+                              {getQualityLabel(option)}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <Badge variant={quality === 'original' ? 'secondary' : 'default'}>
+                      {getQualityBadgeText(quality)}
+                    </Badge>
                   </div>
-                  
-                  <Badge variant={quality === 'high' ? 'default' : 'secondary'}>
-                    {quality === 'high' ? 'High Quality' : 'Original Size'}
-                  </Badge>
-                </div>
+                )}
               </div>
             </CardContent>
           </Card>
