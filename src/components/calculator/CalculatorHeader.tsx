@@ -10,7 +10,7 @@ const CalculatorHeader = () => {
           Convert SVG to PNG
         </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Transform your SVG files into high-quality PNG images with smart resizing and crystal-clear output
+          Transform your SVG files into high-quality PNG images with crystal-clear output
         </p>
       </div>
       
