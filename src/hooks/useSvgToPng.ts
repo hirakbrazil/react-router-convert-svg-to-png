@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -19,6 +18,7 @@ export const useSvgToPng = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [isConverting, setIsConverting] = useState(false);
   const [quality, setQuality] = useState<QualityOption>('high');
+  const [svgTextInput, setSvgTextInput] = useState<string>("");
   const { toast } = useToast();
 
   // Load quality preference from localStorage on mount
@@ -39,6 +39,7 @@ export const useSvgToPng = () => {
     setSvgContent("");
     setSvgDimensions(null);
     setPngDataUrl("");
+    setSvgTextInput("");
   }, []);
 
   const extractSvgDimensions = (svgString: string): SvgDimensions => {
@@ -127,21 +128,14 @@ export const useSvgToPng = () => {
     });
   }, [getTargetDimensions]);
 
-  const handleFileUpload = useCallback(async (file: File) => {
-    if (!file.type.includes('svg')) {
-      toast({
-        title: "Invalid File Type",
-        description: "Please upload an SVG file (.svg)",
-        variant: "destructive",
-      });
-      return;
-    }
-
+  const processSvgContent = useCallback(async (svgText: string, fileName: string = 'pasted-svg.svg') => {
     setIsConverting(true);
     
     try {
-      const svgText = await file.text();
       const dimensions = extractSvgDimensions(svgText);
+      
+      // Create a fake File object for pasted SVG
+      const file = new File([svgText], fileName, { type: 'image/svg+xml' });
       
       setSvgFile(file);
       setSvgContent(svgText);
@@ -158,7 +152,7 @@ export const useSvgToPng = () => {
       console.error('Conversion error:', error);
       toast({
         title: "Conversion Failed",
-        description: "Failed to convert SVG. Please check if the file is valid.",
+        description: "Failed to convert SVG. Please check if the SVG code is valid.",
         variant: "destructive",
       });
       resetState();
@@ -166,6 +160,40 @@ export const useSvgToPng = () => {
       setIsConverting(false);
     }
   }, [convertSvgToPng, quality, toast, resetState]);
+
+  const handleFileUpload = useCallback(async (file: File) => {
+    if (!file.type.includes('svg')) {
+      toast({
+        title: "Invalid File Type",
+        description: "Please upload an SVG file (.svg)",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const svgText = await file.text();
+    await processSvgContent(svgText, file.name);
+  }, [processSvgContent, toast]);
+
+  const handleSvgTextChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setSvgTextInput(e.target.value);
+  }, []);
+
+  const handleSvgTextSubmit = useCallback(async () => {
+    if (!svgTextInput.trim()) return;
+    
+    // Basic SVG validation
+    if (!svgTextInput.includes('<svg')) {
+      toast({
+        title: "Invalid SVG Code",
+        description: "Please enter valid SVG XML code",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    await processSvgContent(svgTextInput.trim());
+  }, [svgTextInput, processSvgContent, toast]);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -262,6 +290,7 @@ export const useSvgToPng = () => {
     isDragging,
     isConverting,
     quality,
+    svgTextInput,
     handleFileUpload,
     handleDragOver,
     handleDragEnter,
@@ -273,5 +302,7 @@ export const useSvgToPng = () => {
     getTargetDimensions,
     getAvailableQualityOptions,
     shouldShowQualitySelector,
+    handleSvgTextChange,
+    handleSvgTextSubmit,
   };
 };

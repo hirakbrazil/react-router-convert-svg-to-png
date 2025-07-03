@@ -1,10 +1,11 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Upload, Download, ArrowRight, RefreshCcw, Image as ImageIcon } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Separator } from '@/components/ui/separator';
 import { useSvgToPng } from '@/hooks/useSvgToPng';
 import { cn } from '@/lib/utils';
 import ImageComparisonSlider from './ImageComparisonSlider';
@@ -18,6 +19,7 @@ const SvgToPngConverter = () => {
     isDragging,
     isConverting,
     quality,
+    svgTextInput,
     handleFileUpload,
     handleDragOver,
     handleDragEnter,
@@ -29,6 +31,8 @@ const SvgToPngConverter = () => {
     getTargetDimensions,
     getAvailableQualityOptions,
     shouldShowQualitySelector,
+    handleSvgTextChange,
+    handleSvgTextSubmit,
   } = useSvgToPng();
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,37 +61,71 @@ const SvgToPngConverter = () => {
   return (
     <div className="space-y-6">
       {!svgFile ? (
-            <div
-              className={cn(
-                "relative border-2 border-dashed rounded-lg p-8 text-center transition-colors duration-200",
-                isDragging ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
-              )}
-              onDragOver={handleDragOver}
-              onDragEnter={handleDragEnter}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-            >
-              <input
-                type="file"
-                accept=".svg"
-                onChange={handleFileInputChange}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                disabled={isConverting}
-              />
-              <div className="flex flex-col items-center gap-4">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-                  <Upload className="w-8 h-8 text-primary" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">
-                    {isDragging ? "Drop SVG file here" : "Upload or Drop File"}
-                  </h3>
-                  <p className="text-muted-foreground opacity-75">
-                    Supports .svg files only
-                  </p>
-                </div>
+        <div className="space-y-6">
+          {/* SVG Text Input */}
+          <Card>
+            <CardContent className="p-6">
+              <div className="space-y-4">
+                <Label htmlFor="svg-text">Paste SVG Code</Label>
+                <Textarea
+                  id="svg-text"
+                  placeholder="Paste your SVG XML code here..."
+                  value={svgTextInput}
+                  onChange={handleSvgTextChange}
+                  className="min-h-[120px] font-mono text-sm"
+                  disabled={isConverting}
+                />
+                <Button
+                  onClick={handleSvgTextSubmit}
+                  disabled={!svgTextInput.trim() || isConverting}
+                  className="w-full"
+                >
+                  Convert SVG Code
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Separator */}
+          <div className="flex items-center gap-4">
+            <Separator className="flex-1" />
+            <span className="text-sm text-muted-foreground">or</span>
+            <Separator className="flex-1" />
+          </div>
+
+          {/* File Upload */}
+          <div
+            className={cn(
+              "relative border-2 border-dashed rounded-lg p-8 text-center transition-colors duration-200",
+              isDragging ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
+            )}
+            onDragOver={handleDragOver}
+            onDragEnter={handleDragEnter}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+          >
+            <input
+              type="file"
+              accept=".svg"
+              onChange={handleFileInputChange}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              disabled={isConverting}
+            />
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+                <Upload className="w-8 h-8 text-primary" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold mb-2">
+                  {isDragging ? "Drop SVG file here" : "Upload or Drop File"}
+                </h3>
+                <p className="text-muted-foreground opacity-75">
+                  Supports .svg files only
+                </p>
               </div>
             </div>
+          </div>
+        </div>
       ) : (
         <div className="space-y-6">
           {/* File Info and Quality Settings */}
