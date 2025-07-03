@@ -13,93 +13,140 @@ const ImageComparisonSlider = ({ svgContent, pngDataUrl, className }: ImageCompa
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleMouseDown = useCallback(() => {
-    setIsDragging(true);
+  const updateSliderPosition = useCallback((clientX: number) => {
+    if (!containerRef.current) return;
+    
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+    setSliderPosition(percentage);
   }, []);
 
-  const handleMouseUp = useCallback(() => {
+  // Mouse events
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+    updateSliderPosition(e.clientX);
+  }, [updateSliderPosition]);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    updateSliderPosition(e.clientX);
+  }, [isDragging, updateSliderPosition]);
+
+  // Touch events
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+    const touch = e.touches[0];
+    updateSliderPosition(touch.clientX);
+  }, [updateSliderPosition]);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const touch = e.touches[0];
+    updateSliderPosition(touch.clientX);
+  }, [isDragging, updateSliderPosition]);
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    e.preventDefault();
     setIsDragging(false);
   }, []);
 
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!isDragging || !containerRef.current) return;
-    
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
-    setSliderPosition(percentage);
-  }, [isDragging]);
+  // Container click to jump slider
+  const handleContainerClick = useCallback((e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      updateSliderPosition(e.clientX);
+    }
+  }, [updateSliderPosition]);
 
   const svgDataUrl = React.useMemo(() => {
     const blob = new Blob([svgContent], { type: 'image/svg+xml' });
     return URL.createObjectURL(blob);
   }, [svgContent]);
 
+  // Global mouse and touch events
   React.useEffect(() => {
     const handleGlobalMouseUp = () => setIsDragging(false);
     const handleGlobalMouseMove = (e: MouseEvent) => {
-      if (!isDragging || !containerRef.current) return;
-      
-      const rect = containerRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
-      setSliderPosition(percentage);
+      if (!isDragging) return;
+      updateSliderPosition(e.clientX);
+    };
+
+    const handleGlobalTouchEnd = () => setIsDragging(false);
+    const handleGlobalTouchMove = (e: TouchEvent) => {
+      if (!isDragging) return;
+      e.preventDefault();
+      const touch = e.touches[0];
+      updateSliderPosition(touch.clientX);
     };
 
     if (isDragging) {
       document.addEventListener('mouseup', handleGlobalMouseUp);
       document.addEventListener('mousemove', handleGlobalMouseMove);
+      document.addEventListener('touchend', handleGlobalTouchEnd);
+      document.addEventListener('touchmove', handleGlobalTouchMove, { passive: false });
     }
 
     return () => {
       document.removeEventListener('mouseup', handleGlobalMouseUp);
       document.removeEventListener('mousemove', handleGlobalMouseMove);
+      document.removeEventListener('touchend', handleGlobalTouchEnd);
+      document.removeEventListener('touchmove', handleGlobalTouchMove);
     };
-  }, [isDragging]);
+  }, [isDragging, updateSliderPosition]);
 
   return (
     <div className={cn("relative w-full h-96 overflow-hidden rounded-lg border", className)}>
       <div
         ref={containerRef}
-        className="relative w-full h-full cursor-col-resize"
+        className="relative w-full h-full cursor-col-resize select-none"
         onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
+        onMouseUp={() => setIsDragging(false)}
+        onClick={handleContainerClick}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         {/* PNG Image (Background) */}
         <div className="absolute inset-0">
           <img
             src={pngDataUrl}
             alt="PNG Version"
-            className="w-full h-full object-contain"
+            className="w-full h-full object-contain pointer-events-none"
+            draggable={false}
           />
-          <div className="absolute bottom-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-sm">
+          <div className="absolute bottom-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-sm pointer-events-none">
             PNG
           </div>
         </div>
         
         {/* SVG Image (Foreground with clip) */}
         <div 
-          className="absolute inset-0"
+          className="absolute inset-0 pointer-events-none"
           style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
         >
           <img
             src={svgDataUrl}
             alt="SVG Version"
-            className="w-full h-full object-contain"
+            className="w-full h-full object-contain pointer-events-none"
+            draggable={false}
           />
-          <div className="absolute bottom-2 left-2 bg-black/70 text-white px-2 py-1 rounded text-sm">
+          <div className="absolute bottom-2 left-2 bg-black/70 text-white px-2 py-1 rounded text-sm pointer-events-none">
             SVG
           </div>
         </div>
         
         {/* Slider Line */}
         <div
-          className="absolute top-0 bottom-0 w-0.5 bg-white shadow-lg cursor-col-resize z-10"
+          className="absolute top-0 bottom-0 w-0.5 bg-black dark:bg-white shadow-lg cursor-col-resize z-10 touch-none"
           style={{ left: `${sliderPosition}%` }}
           onMouseDown={handleMouseDown}
+          onTouchStart={handleTouchStart}
         >
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-6 bg-white rounded-full shadow-lg flex items-center justify-center">
-            <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-6 bg-black dark:bg-white rounded-full shadow-lg flex items-center justify-center touch-none">
+            <div className="w-2 h-2 bg-white dark:bg-black rounded-full"></div>
           </div>
         </div>
       </div>
