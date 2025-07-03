@@ -120,7 +120,7 @@ const SvgToPngConverter = () => {
                 {shouldShowQualitySelector() && (
                   <div className="flex items-center gap-4">
                     <div className="flex items-center space-x-2">
-                      <Label htmlFor="quality-select">Choose output quality:</Label>
+                      <Label htmlFor="quality-select">Output quality:</Label>
                       <Select
                         value={quality}
                         onValueChange={handleQualityChange}
