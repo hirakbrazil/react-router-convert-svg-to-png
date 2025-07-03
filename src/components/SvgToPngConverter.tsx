@@ -80,12 +80,9 @@ const SvgToPngConverter = () => {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold mb-2">
-                    {isDragging ? "Drop SVG file here" : "Upload SVG File"}
+                    {isDragging ? "Drop SVG file here" : "Upload or Drop File"}
                   </h3>
-                  <p className="text-muted-foreground">
-                    Drag and drop an SVG file here, or click to browse
-                  </p>
-                  <p className="text-sm text-muted-foreground mt-1">
+                  <p className="text-muted-foreground opacity-75">
                     Supports .svg files only
                   </p>
                 </div>
