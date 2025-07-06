@@ -138,15 +138,21 @@ const ImageComparisonSlider = ({ svgContent, pngDataUrl, className }: ImageCompa
           </div>
         </div>
         
-        {/* Slider Line */}
+        {/* Slider Line with Extended Touch Area */}
         <div
-          className="absolute top-0 bottom-0 w-0.5 bg-black dark:bg-white shadow-lg cursor-col-resize z-10 touch-none"
-          style={{ left: `${sliderPosition}%` }}
+          className="absolute top-0 bottom-0 cursor-col-resize z-10 touch-none flex items-center justify-center"
+          style={{ 
+            left: `calc(${sliderPosition}% - 12px)`, 
+            width: '24px' // 24px wide touch area (12px on each side of the line)
+          }}
           onMouseDown={handleMouseDown}
           onTouchStart={handleTouchStart}
         >
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-6 bg-black dark:bg-white rounded-full shadow-lg flex items-center justify-center touch-none">
-            <div className="w-2 h-2 bg-white dark:bg-black rounded-full"></div>
+          {/* Visible slider line */}
+          <div className="w-0.5 h-full bg-black dark:bg-white shadow-lg pointer-events-none">
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-6 bg-black dark:bg-white rounded-full shadow-lg flex items-center justify-center pointer-events-none">
+              <div className="w-2 h-2 bg-white dark:bg-black rounded-full"></div>
+            </div>
           </div>
         </div>
       </div>
