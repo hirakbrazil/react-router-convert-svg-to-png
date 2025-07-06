@@ -1,9 +1,11 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Upload, Download, ArrowRight, RefreshCcw, Image as ImageIcon } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
 import { useSvgToPng } from '@/hooks/useSvgToPng';
@@ -19,6 +21,7 @@ const SvgToPngConverter = () => {
     isDragging,
     isConverting,
     quality,
+    customWidth,
     svgTextInput,
     handleFileUpload,
     handleDragOver,
@@ -28,6 +31,8 @@ const SvgToPngConverter = () => {
     downloadPng,
     resetState,
     handleQualityChange,
+    handleCustomWidthChange,
+    handleCustomWidthBlur,
     getTargetDimensions,
     getAvailableQualityOptions,
     shouldShowQualitySelector,
@@ -50,6 +55,8 @@ const SvgToPngConverter = () => {
         return 'High (4000px)';
       case 'very-high':
         return 'Very High (6000px)';
+      case 'custom':
+        return 'Custom Size';
       default:
         return qualityOption;
     }
@@ -62,6 +69,37 @@ const SvgToPngConverter = () => {
     <div className="space-y-6">
       {!svgFile ? (
         <div className="space-y-6">
+          {/* SVG Text Input */}
+          <Card>
+            <CardContent className="p-6">
+              <div className="space-y-4">
+                <Label htmlFor="svg-text">Paste SVG Code</Label>
+                <Textarea
+                  id="svg-text"
+                  placeholder="Paste your SVG XML code here..."
+                  value={svgTextInput}
+                  onChange={handleSvgTextChange}
+                  className="min-h-[120px] font-mono text-sm"
+                  disabled={isConverting}
+                />
+                <Button
+                  onClick={handleSvgTextSubmit}
+                  disabled={!svgTextInput.trim() || isConverting}
+                  className="w-full"
+                >
+                  Convert SVG Code
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Separator */}
+          <div className="flex items-center gap-4">
+            <Separator className="flex-1" />
+            <span className="text-sm text-muted-foreground">or</span>
+            <Separator className="flex-1" />
+          </div>
+
           {/* File Upload */}
           <div
             className={cn(
@@ -94,37 +132,6 @@ const SvgToPngConverter = () => {
               </div>
             </div>
           </div>
-
-          {/* Separator */}
-          <div className="flex items-center gap-4">
-            <Separator className="flex-1" />
-            <span className="text-sm text-muted-foreground">or</span>
-            <Separator className="flex-1" />
-          </div>
-
-          {/* SVG Text Input should below the File Upload */}
-          <Card>
-            <CardContent className="p-6">
-              <div className="space-y-4">
-                <Label htmlFor="svg-text">Paste SVG Code</Label>
-                <Textarea
-                  id="svg-text"
-                  placeholder="Paste your SVG XML code here..."
-                  value={svgTextInput}
-                  onChange={handleSvgTextChange}
-                  className="min-h-[120px] font-mono text-sm"
-                  disabled={isConverting}
-                />
-                <Button
-                  onClick={handleSvgTextSubmit}
-                  disabled={!svgTextInput.trim() || isConverting}
-                  className="w-full"
-                >
-                  Convert SVG Code
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
         </div>
       ) : (
         <div className="space-y-6">
@@ -149,7 +156,7 @@ const SvgToPngConverter = () => {
                 </div>
                 
                 {shouldShowQualitySelector() && (
-                  <div className="flex items-center gap-4">
+                  <div className="flex flex-col gap-4">
                     <div className="flex items-center space-x-2">
                       <Label htmlFor="quality-select">Output quality:</Label>
                       <Select
@@ -169,6 +176,22 @@ const SvgToPngConverter = () => {
                         </SelectContent>
                       </Select>
                     </div>
+                    
+                    {quality === 'custom' && (
+                      <div className="flex items-center space-x-2">
+                        <Label htmlFor="custom-width">Custom width (px):</Label>
+                        <Input
+                          id="custom-width"
+                          type="number"
+                          value={customWidth}
+                          onChange={handleCustomWidthChange}
+                          onBlur={handleCustomWidthBlur}
+                          className="w-[120px]"
+                          min="1"
+                          disabled={isConverting}
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

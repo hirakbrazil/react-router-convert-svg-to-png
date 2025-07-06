@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
-type QualityOption = 'original' | 'high' | 'very-high';
+type QualityOption = 'original' | 'high' | 'very-high' | 'custom';
 
 interface SvgDimensions {
   width: number;
@@ -9,6 +9,7 @@ interface SvgDimensions {
 }
 
 const QUALITY_STORAGE_KEY = 'svg-to-png-quality';
+const CUSTOM_WIDTH_STORAGE_KEY = 'svg-to-png-custom-width';
 
 export const useSvgToPng = () => {
   const [svgFile, setSvgFile] = useState<File | null>(null);
@@ -18,20 +19,34 @@ export const useSvgToPng = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [isConverting, setIsConverting] = useState(false);
   const [quality, setQuality] = useState<QualityOption>('high');
+  const [customWidth, setCustomWidth] = useState<number>(4000);
   const [svgTextInput, setSvgTextInput] = useState<string>("");
   const { toast } = useToast();
 
-  // Load quality preference from localStorage on mount
+  // Load quality preference and custom width from localStorage on mount
   useEffect(() => {
     const savedQuality = localStorage.getItem(QUALITY_STORAGE_KEY) as QualityOption;
-    if (savedQuality && ['original', 'high', 'very-high'].includes(savedQuality)) {
+    if (savedQuality && ['original', 'high', 'very-high', 'custom'].includes(savedQuality)) {
       setQuality(savedQuality);
+    }
+    
+    const savedCustomWidth = localStorage.getItem(CUSTOM_WIDTH_STORAGE_KEY);
+    if (savedCustomWidth) {
+      const parsedWidth = parseInt(savedCustomWidth);
+      if (!isNaN(parsedWidth) && parsedWidth > 0) {
+        setCustomWidth(parsedWidth);
+      }
     }
   }, []);
 
   // Save quality preference to localStorage when it changes
   const saveQualityPreference = useCallback((newQuality: QualityOption) => {
     localStorage.setItem(QUALITY_STORAGE_KEY, newQuality);
+  }, []);
+
+  // Save custom width preference to localStorage
+  const saveCustomWidthPreference = useCallback((width: number) => {
+    localStorage.setItem(CUSTOM_WIDTH_STORAGE_KEY, width.toString());
   }, []);
 
   const resetState = useCallback(() => {
@@ -79,7 +94,13 @@ export const useSvgToPng = () => {
       return dimensions;
     }
 
-    const targetWidth = selectedQuality === 'high' ? 4000 : 6000;
+    let targetWidth: number;
+    
+    if (selectedQuality === 'custom') {
+      targetWidth = customWidth;
+    } else {
+      targetWidth = selectedQuality === 'high' ? 4000 : 6000;
+    }
     
     if (dimensions.width < targetWidth) {
       const scaleFactor = targetWidth / dimensions.width;
@@ -90,7 +111,7 @@ export const useSvgToPng = () => {
     }
     
     return dimensions;
-  }, []);
+  }, [customWidth]);
 
   const convertSvgToPng = useCallback(async (svgString: string, dimensions: SvgDimensions, selectedQuality: QualityOption): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -264,18 +285,46 @@ export const useSvgToPng = () => {
     }
   }, [svgContent, svgDimensions, convertSvgToPng, saveQualityPreference, toast]);
 
+  const handleCustomWidthChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value);
+    if (!isNaN(value) && value > 0) {
+      setCustomWidth(value);
+    }
+  }, []);
+
+  const handleCustomWidthBlur = useCallback(async () => {
+    saveCustomWidthPreference(customWidth);
+    
+    if (quality === 'custom' && svgContent && svgDimensions) {
+      setIsConverting(true);
+      try {
+        const pngUrl = await convertSvgToPng(svgContent, svgDimensions, 'custom');
+        setPngDataUrl(pngUrl);
+      } catch (error) {
+        console.error('Re-conversion error:', error);
+        toast({
+          title: "Conversion Failed",
+          description: "Failed to re-convert with new custom width",
+          variant: "destructive",
+        });
+      } finally {
+        setIsConverting(false);
+      }
+    }
+  }, [customWidth, quality, svgContent, svgDimensions, convertSvgToPng, saveCustomWidthPreference, toast]);
+
   const getAvailableQualityOptions = useCallback(() => {
-    if (!svgDimensions) return ['original', 'high', 'very-high'] as QualityOption[];
+    if (!svgDimensions) return ['original', 'high', 'very-high', 'custom'] as QualityOption[];
     
     if (svgDimensions.width >= 6000) {
       return [] as QualityOption[]; // Hide quality selector entirely
     }
     
     if (svgDimensions.width >= 4000) {
-      return ['original', 'very-high'] as QualityOption[];
+      return ['original', 'very-high', 'custom'] as QualityOption[];
     }
     
-    return ['original', 'high', 'very-high'] as QualityOption[];
+    return ['original', 'high', 'very-high', 'custom'] as QualityOption[];
   }, [svgDimensions]);
 
   const shouldShowQualitySelector = useCallback(() => {
@@ -290,6 +339,7 @@ export const useSvgToPng = () => {
     isDragging,
     isConverting,
     quality,
+    customWidth,
     svgTextInput,
     handleFileUpload,
     handleDragOver,
@@ -299,6 +349,8 @@ export const useSvgToPng = () => {
     downloadPng,
     resetState,
     handleQualityChange,
+    handleCustomWidthChange,
+    handleCustomWidthBlur,
     getTargetDimensions,
     getAvailableQualityOptions,
     shouldShowQualitySelector,
