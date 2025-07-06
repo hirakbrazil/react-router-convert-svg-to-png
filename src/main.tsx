@@ -7,17 +7,40 @@ import { toast } from 'sonner'
 // Register service worker
 const updateSW = registerSW({
   onNeedRefresh() {
-    toast('Update available!', {
+    toast.info('Update available!', {
       action: {
         label: 'Reload',
-        onClick: () => updateSW(true),
+        onClick: () => {
+          localStorage.setItem('app-updated', 'true');
+          // Delay the reload to allow localStorage to save
+          setTimeout(() => {
+            updateSW(true);
+          }, 200); // 200ms is enough
+        },
       },
       duration: Infinity,
+      actionButtonStyle: {
+        backgroundColor: 'var(--action-button-bg, #000000)',
+        color: 'var(--action-button-text, #ffffff)',
+        border: 'none',
+        borderRadius: '6px',
+        padding: '8px 16px',
+        fontWeight: '500',
+        cursor: 'pointer',
+      },
     });
   },
   onOfflineReady() {
     console.log('App ready to work offline')
   }
-})
+});
 
 createRoot(document.getElementById("root")!).render(<App />);
+
+// Show success toast after <App /> + <Toaster> mounts
+setTimeout(() => {
+  if (localStorage.getItem('app-updated') === 'true') {
+    toast.success('App updated successfully!', { duration: 5000 });
+    localStorage.removeItem('app-updated');
+  }
+}, 200);
