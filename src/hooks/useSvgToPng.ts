@@ -286,14 +286,24 @@ export const useSvgToPng = () => {
   }, [svgContent, svgDimensions, convertSvgToPng, saveQualityPreference, toast]);
 
   const handleCustomWidthChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value);
-    if (!isNaN(value) && value > 0) {
-      setCustomWidth(value);
-    }
+    // Allow any input during typing, no validation
+    const value = e.target.value;
+    setCustomWidth(value === '' ? 0 : parseInt(value) || 0);
   }, []);
 
   const handleCustomWidthBlur = useCallback(async () => {
-    saveCustomWidthPreference(customWidth);
+    // Validate and correct the value onBlur
+    let validatedWidth = customWidth;
+    
+    if (validatedWidth < 10) {
+      validatedWidth = 10;
+    } else if (validatedWidth > 10000) {
+      validatedWidth = 10000;
+    }
+    
+    // Update the state with the validated value
+    setCustomWidth(validatedWidth);
+    saveCustomWidthPreference(validatedWidth);
     
     if (quality === 'custom' && svgContent && svgDimensions) {
       setIsConverting(true);
