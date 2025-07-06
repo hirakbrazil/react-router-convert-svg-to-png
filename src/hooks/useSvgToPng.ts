@@ -102,15 +102,12 @@ export const useSvgToPng = () => {
       targetWidth = selectedQuality === 'high' ? 4000 : 6000;
     }
     
-    if (dimensions.width < targetWidth) {
-      const scaleFactor = targetWidth / dimensions.width;
-      return {
-        width: targetWidth,
-        height: Math.round(dimensions.height * scaleFactor)
-      };
-    }
-    
-    return dimensions;
+    // Scale both up and down based on the target width
+    const scaleFactor = targetWidth / dimensions.width;
+    return {
+      width: targetWidth,
+      height: Math.round(dimensions.height * scaleFactor)
+    };
   }, [customWidth]);
 
   const convertSvgToPng = useCallback(async (svgString: string, dimensions: SvgDimensions, selectedQuality: QualityOption): Promise<string> => {
