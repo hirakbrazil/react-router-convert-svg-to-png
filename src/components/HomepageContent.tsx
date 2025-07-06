@@ -18,7 +18,7 @@ const HomepageContent = () => {
             All processing happens directly in your browser - your files never leave your device, ensuring complete privacy and security. The conversion works offline once loaded.
           </p>
           <p>
-            Choose between original size conversion or high-quality mode that automatically resizes smaller SVGs to 4000px width while maintaining perfect aspect ratios.
+            Choose between original size conversion or high-quality mode that automatically resizes smaller SVGs to HD quality while maintaining perfect aspect ratios.
           </p>
         </div>
       </div>
