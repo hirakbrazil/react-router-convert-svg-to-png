@@ -142,8 +142,8 @@ const ImageComparisonSlider = ({ svgContent, pngDataUrl, className }: ImageCompa
         <div
           className="absolute top-0 bottom-0 cursor-col-resize z-10 touch-none flex items-center justify-center"
           style={{ 
-            left: `calc(${sliderPosition}% - 12px)`, 
-            width: '24px' // 24px wide touch area (12px on each side of the line)
+            left: `calc(${sliderPosition}% - 15px)`, 
+            width: '30px' // Increased from 24px to 30px wide touch area (15px on each side of the line)
           }}
           onMouseDown={handleMouseDown}
           onTouchStart={handleTouchStart}
