@@ -286,9 +286,14 @@ export const useSvgToPng = () => {
   }, [svgContent, svgDimensions, convertSvgToPng, saveQualityPreference, toast]);
 
   const handleCustomWidthChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    // Allow any input during typing, no validation
+    // Allow any input during typing, including empty string
     const value = e.target.value;
-    setCustomWidth(value === '' ? 0 : parseInt(value) || 0);
+    if (value === '') {
+      setCustomWidth(0); // Set to 0 for empty, but input will show empty
+    } else {
+      const numValue = parseInt(value);
+      setCustomWidth(isNaN(numValue) ? 0 : numValue);
+    }
   }, []);
 
   const handleCustomWidthBlur = useCallback(async () => {
@@ -301,10 +306,11 @@ export const useSvgToPng = () => {
       validatedWidth = 10000;
     }
     
-    // Update the state with the validated value
+    // Update the state with the validated value first
     setCustomWidth(validatedWidth);
     saveCustomWidthPreference(validatedWidth);
     
+    // Then trigger conversion with the validated value
     if (quality === 'custom' && svgContent && svgDimensions) {
       setIsConverting(true);
       try {

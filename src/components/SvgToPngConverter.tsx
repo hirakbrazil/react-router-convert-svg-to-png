@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -183,7 +182,7 @@ const SvgToPngConverter = () => {
                         <Input
                           id="custom-width"
                           type="number"
-                          value={customWidth}
+                          value={customWidth === 0 ? '' : customWidth}
                           onChange={handleCustomWidthChange}
                           onBlur={handleCustomWidthBlur}
                           className="w-[120px]"
