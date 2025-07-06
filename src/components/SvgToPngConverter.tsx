@@ -188,6 +188,7 @@ const SvgToPngConverter = () => {
                           onBlur={handleCustomWidthBlur}
                           className="w-[120px]"
                           min="1"
+                          max="10000"
                           disabled={isConverting}
                         />
                       </div>
