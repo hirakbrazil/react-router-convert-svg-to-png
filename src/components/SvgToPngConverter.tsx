@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Upload, RefreshCcw, ImageIcon, Download } from 'lucide-react';
+import { Upload, RefreshCcw, ImageIcon, Download, Loader2 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -142,66 +142,81 @@ const SvgToPngConverter = () => {
         </div>
       ) : (
         <div className="space-y-6">
-          {/* Quality Settings with Download All */}
+          {/* Quality Settings */}
           {shouldShowQualitySelector() && (
             <Card>
               <CardContent className="p-6">
-                <div className="flex flex-col gap-4">
-                  {/* Quality settings and Download All button */}
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                    <div className="flex flex-col gap-4">
-                      <div className="flex items-center space-x-2">
-                        <Label htmlFor="quality-select">Output quality:</Label>
-                        <Select
-                          value={quality}
-                          onValueChange={handleQualityChange}
-                          disabled={isConverting}
-                        >
-                          <SelectTrigger className="w-[180px]">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {availableOptions.map((option) => (
-                              <SelectItem key={option} value={option}>
-                                {getQualityLabel(option)}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      
-                      {quality === 'custom' && (
-                        <div className="flex items-center space-x-2">
-                          <Label htmlFor="custom-width">Custom width (px):</Label>
-                          <Input
-                            id="custom-width"
-                            type="number"
-                            value={customWidth === 0 ? '' : customWidth}
-                            onChange={handleCustomWidthChange}
-                            onBlur={handleCustomWidthBlur}
-                            className="w-[120px]"
-                            min="10"
-                            max="10000"
-                            disabled={isConverting}
-                          />
-                        </div>
-                      )}
+                <div className="space-y-4">
+                  {/* Quality settings only */}
+                  <div className="flex flex-col gap-4">
+                    <div className="flex items-center space-x-2">
+                      <Label htmlFor="quality-select">Output quality:</Label>
+                      <Select
+                        value={quality}
+                        onValueChange={handleQualityChange}
+                        disabled={isConverting}
+                      >
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {availableOptions.map((option) => (
+                            <SelectItem key={option} value={option}>
+                              {getQualityLabel(option)}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
-
-                    {/* Download All button - right side on large screens, below on small screens */}
-                    {showDownloadAll && (
-                      <div className="flex justify-center">
-                        <Button
-                          onClick={handleDownloadAll}
-                          disabled={!allImagesConverted || isConverting}
-                          className="gap-2"
-                          size="lg"
-                        >
-                          <Download className="w-5 h-5" />
-                          Download All
-                        </Button>
+                    
+                    {quality === 'custom' && (
+                      <div className="flex items-center space-x-2">
+                        <Label htmlFor="custom-width">Custom width (px):</Label>
+                        <Input
+                          id="custom-width"
+                          type="number"
+                          value={customWidth === 0 ? '' : customWidth}
+                          onChange={handleCustomWidthChange}
+                          onBlur={handleCustomWidthBlur}
+                          className="w-[120px]"
+                          min="10"
+                          max="10000"
+                          disabled={isConverting}
+                        />
                       </div>
                     )}
+                  </div>
+
+                  {/* Action buttons row - Download All and Convert Another */}
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 pt-2">
+                    {/* Download All button */}
+                    {showDownloadAll && (
+                      <Button
+                        onClick={handleDownloadAll}
+                        disabled={!allImagesConverted || isConverting}
+                        className="gap-2"
+                        size="lg"
+                      >
+                        {isConverting ? (
+                          <Loader2 className="w-5 h-5 animate-spin" />
+                        ) : (
+                          <Download className="w-5 h-5" />
+                        )}
+                        Download All
+                      </Button>
+                    )}
+
+                    {/* Convert Another button */}
+                    <Button
+                      onClick={resetState}
+                      variant="outline"
+                      className="gap-2"
+                      size="lg"
+                      disabled={isConverting}
+                    >
+                      <RefreshCcw className="w-5 h-5" />
+                      Convert Another
+                    </Button>
                   </div>
                 </div>
               </CardContent>
@@ -235,18 +250,6 @@ const SvgToPngConverter = () => {
               )}
             </div>
           ))}
-
-          {/* Convert Another Button */}
-          <div className="flex justify-center pt-4">
-            <Button
-              onClick={resetState}
-              variant="outline"
-              className="gap-2"
-            >
-              <RefreshCcw className="w-5 h-5" />
-              Convert Another
-            </Button>
-          </div>
         </div>
       )}
     </div>
