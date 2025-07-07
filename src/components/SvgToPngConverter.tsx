@@ -190,12 +190,12 @@ const SvgToPngConverter = () => {
 
                     {/* Download All button - right side on large screens, below on small screens */}
                     {showDownloadAll && (
-                      <div className="sm:self-start">
+                      <div className="flex justify-center">
                         <Button
                           onClick={handleDownloadAll}
                           disabled={!allImagesConverted || isConverting}
-                          variant="outline"
                           className="gap-2"
+                          size="lg"
                         >
                           <Download className="w-4 h-4" />
                           Download All
