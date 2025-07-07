@@ -197,7 +197,7 @@ const SvgToPngConverter = () => {
                           className="gap-2"
                           size="lg"
                         >
-                          <Download className="w-4 h-4" />
+                          <Download className="w-5 h-5" />
                           Download All
                         </Button>
                       </div>
