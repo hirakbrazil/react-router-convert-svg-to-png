@@ -223,15 +223,6 @@ const SvgToPngConverter = () => {
             </Card>
           )}
 
-          {/* Processing Status */}
-          {isConverting && (
-            <div className="text-center">
-              <p className="text-sm text-muted-foreground">
-                Converting {processedSvgs.length > 1 ? 'SVGs' : 'SVG'} to PNG...
-              </p>
-            </div>
-          )}
-
           {/* SVG Items */}
           {processedSvgs.map((processedSvg, index) => (
             <div key={processedSvg.id}>
