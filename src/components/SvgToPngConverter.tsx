@@ -1,7 +1,8 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Upload, Download, ArrowRight, RefreshCcw, Image as ImageIcon } from 'lucide-react';
+import { Upload, RefreshCcw, ImageIcon } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -9,14 +10,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
 import { useSvgToPng } from '@/hooks/useSvgToPng';
 import { cn } from '@/lib/utils';
-import ImageComparisonSlider from './ImageComparisonSlider';
+import SvgItem from './SvgItem';
 
 const SvgToPngConverter = () => {
   const {
-    svgFile,
-    svgContent,
-    svgDimensions,
-    pngDataUrl,
+    processedSvgs,
     isDragging,
     isConverting,
     quality,
@@ -40,9 +38,9 @@ const SvgToPngConverter = () => {
   } = useSvgToPng();
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      handleFileUpload(file);
+    const files = e.target.files;
+    if (files) {
+      handleFileUpload(files);
     }
   };
 
@@ -61,12 +59,11 @@ const SvgToPngConverter = () => {
     }
   };
 
-  const targetDimensions = svgDimensions ? getTargetDimensions(svgDimensions, quality) : null;
   const availableOptions = getAvailableQualityOptions();
 
   return (
     <div className="space-y-6">
-      {!svgFile ? (
+      {processedSvgs.length === 0 ? (
         <div className="space-y-6">
           {/* SVG Text Input */}
           <Card>
@@ -113,6 +110,7 @@ const SvgToPngConverter = () => {
             <input
               type="file"
               accept=".svg"
+              multiple
               onChange={handleFileInputChange}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               disabled={isConverting}
@@ -123,10 +121,10 @@ const SvgToPngConverter = () => {
               </div>
               <div>
                 <h3 className="text-lg font-semibold mb-2">
-                  {isDragging ? "Drop SVG file here" : "Upload or Drop File"}
+                  {isDragging ? "Drop SVG files here" : "Upload or Drop Files"}
                 </h3>
                 <p className="text-muted-foreground opacity-75">
-                  Supports .svg files only
+                  Supports .svg files (max 10 at once)
                 </p>
               </div>
             </div>
@@ -134,115 +132,92 @@ const SvgToPngConverter = () => {
         </div>
       ) : (
         <div className="space-y-6">
-          {/* File Info and Quality Settings */}
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <ImageIcon className="w-5 h-5 text-primary" />
-                  <div>
-                    <p className="font-medium">{svgFile.name}</p>
-                    <p className="text-sm text-muted-foreground">
-                      Original: {svgDimensions ? `${Math.round(svgDimensions.width)} × ${Math.round(svgDimensions.height)}px` : null}
-                      {targetDimensions && (
-    <span className="ml-2 flex items-center gap-1">
-      <ArrowRight className="inline h-4 w-4 text-muted-foreground" />
-      PNG: {targetDimensions.width} × {targetDimensions.height}px
-    </span>
-  )}
-                    </p>
-                  </div>
-                </div>
-                
-                {shouldShowQualitySelector() && (
-                  <div className="flex flex-col gap-4">
-                    <div className="flex items-center space-x-2">
-                      <Label htmlFor="quality-select">Output quality:</Label>
-                      <Select
-                        value={quality}
-                        onValueChange={handleQualityChange}
-                        disabled={isConverting}
-                      >
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {availableOptions.map((option) => (
-                            <SelectItem key={option} value={option}>
-                              {getQualityLabel(option)}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    
-                    {quality === 'custom' && (
-                      <div className="flex items-center space-x-2">
-                        <Label htmlFor="custom-width">Custom width (px):</Label>
-                        <Input
-                          id="custom-width"
-                          type="number"
-                          value={customWidth === 0 ? '' : customWidth}
-                          onChange={handleCustomWidthChange}
-                          onBlur={handleCustomWidthBlur}
-                          className="w-[120px]"
-                          min="10"
-                          max="10000"
-                          disabled={isConverting}
-                        />
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Image Comparison */}
-          {pngDataUrl && (
-                <div className="space-y-4">
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-1">
-                    <h3 className="text-lg font-semibold">Preview</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Drag the slider to compare SVG vs PNG
-                    </p>
+          {/* Quality Settings */}
+          {shouldShowQualitySelector() && (
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center space-x-2">
+                    <Label htmlFor="quality-select">Output quality:</Label>
+                    <Select
+                      value={quality}
+                      onValueChange={handleQualityChange}
+                      disabled={isConverting}
+                    >
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {availableOptions.map((option) => (
+                          <SelectItem key={option} value={option}>
+                            {getQualityLabel(option)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                   
-                  <ImageComparisonSlider
-                    svgContent={svgContent}
-                    pngDataUrl={pngDataUrl}
-                  />
+                  {quality === 'custom' && (
+                    <div className="flex items-center space-x-2">
+                      <Label htmlFor="custom-width">Custom width (px):</Label>
+                      <Input
+                        id="custom-width"
+                        type="number"
+                        value={customWidth === 0 ? '' : customWidth}
+                        onChange={handleCustomWidthChange}
+                        onBlur={handleCustomWidthBlur}
+                        className="w-[120px]"
+                        min="10"
+                        max="10000"
+                        disabled={isConverting}
+                      />
+                    </div>
+                  )}
                 </div>
+              </CardContent>
+            </Card>
           )}
 
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-3 items-center justify-center">
-            <Button
-              onClick={downloadPng}
-              disabled={!pngDataUrl || isConverting}
-              className="w-full sm:w-auto gap-2"
-              size="lg"
-            >
-              <Download className="w-5 h-5" />
-              Download PNG
-            </Button>
-            
+          {/* Processing Status */}
+          {isConverting && (
+            <div className="text-center">
+              <p className="text-sm text-muted-foreground">
+                Converting {processedSvgs.length > 1 ? 'SVGs' : 'SVG'} to PNG...
+              </p>
+            </div>
+          )}
+
+          {/* SVG Items */}
+          {processedSvgs.map((processedSvg, index) => (
+            <div key={processedSvg.id}>
+              <SvgItem
+                processedSvg={processedSvg}
+                targetDimensions={getTargetDimensions(processedSvg.dimensions, quality)}
+                onDownload={downloadPng}
+                isConverting={isConverting}
+              />
+              
+              {/* Separator between items (except after last item) */}
+              {index < processedSvgs.length - 1 && (
+                <div className="my-8">
+                  <Separator />
+                </div>
+              )}
+            </div>
+          ))}
+
+          {/* Convert Another Button */}
+          <div className="flex justify-center pt-4">
             <Button
               onClick={resetState}
               variant="outline"
-              className="w-full sm:w-auto gap-2"
+              className="gap-2"
               size="lg"
             >
               <RefreshCcw className="w-5 h-5" />
               Convert Another
             </Button>
           </div>
-
-          {isConverting && (
-            <div className="text-center">
-              <p className="text-sm text-muted-foreground">Converting SVG to PNG...</p>
-            </div>
-          )}
         </div>
       )}
     </div>

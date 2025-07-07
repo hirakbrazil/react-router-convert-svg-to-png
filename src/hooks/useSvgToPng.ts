@@ -1,3 +1,4 @@
+
 import { useState, useCallback, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -8,14 +9,19 @@ interface SvgDimensions {
   height: number;
 }
 
+interface ProcessedSvg {
+  id: string;
+  file: File;
+  svgContent: string;
+  dimensions: SvgDimensions;
+  pngDataUrl: string;
+}
+
 const QUALITY_STORAGE_KEY = 'svg-to-png-quality';
 const CUSTOM_WIDTH_STORAGE_KEY = 'svg-to-png-custom-width';
 
 export const useSvgToPng = () => {
-  const [svgFile, setSvgFile] = useState<File | null>(null);
-  const [svgContent, setSvgContent] = useState<string>("");
-  const [svgDimensions, setSvgDimensions] = useState<SvgDimensions | null>(null);
-  const [pngDataUrl, setPngDataUrl] = useState<string>("");
+  const [processedSvgs, setProcessedSvgs] = useState<ProcessedSvg[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [isConverting, setIsConverting] = useState(false);
   const [quality, setQuality] = useState<QualityOption>('high');
@@ -50,10 +56,7 @@ export const useSvgToPng = () => {
   }, []);
 
   const resetState = useCallback(() => {
-    setSvgFile(null);
-    setSvgContent("");
-    setSvgDimensions(null);
-    setPngDataUrl("");
+    setProcessedSvgs([]);
     setSvgTextInput("");
   }, []);
 
@@ -155,12 +158,17 @@ export const useSvgToPng = () => {
       // Create a fake File object for pasted SVG
       const file = new File([svgText], fileName, { type: 'image/svg+xml' });
       
-      setSvgFile(file);
-      setSvgContent(svgText);
-      setSvgDimensions(dimensions);
-      
       const pngUrl = await convertSvgToPng(svgText, dimensions, quality);
-      setPngDataUrl(pngUrl);
+      
+      const processedSvg: ProcessedSvg = {
+        id: crypto.randomUUID(),
+        file,
+        svgContent: svgText,
+        dimensions,
+        pngDataUrl: pngUrl
+      };
+      
+      setProcessedSvgs([processedSvg]);
       
       toast({
         title: "Conversion Successful",
@@ -179,19 +187,64 @@ export const useSvgToPng = () => {
     }
   }, [convertSvgToPng, quality, toast, resetState]);
 
-  const handleFileUpload = useCallback(async (file: File) => {
-    if (!file.type.includes('svg')) {
+  const handleFileUpload = useCallback(async (files: FileList | File[]) => {
+    const fileArray = Array.from(files);
+    const svgFiles = fileArray.filter(file => file.type.includes('svg'));
+    
+    if (svgFiles.length === 0) {
       toast({
         title: "Invalid File Type",
-        description: "Please upload an SVG file (.svg)",
+        description: "Please upload SVG files (.svg)",
         variant: "destructive",
       });
       return;
     }
 
-    const svgText = await file.text();
-    await processSvgContent(svgText, file.name);
-  }, [processSvgContent, toast]);
+    if (svgFiles.length > 10) {
+      toast({
+        title: "Too Many Files",
+        description: "Maximum 10 files allowed at once",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsConverting(true);
+    const newProcessedSvgs: ProcessedSvg[] = [];
+
+    try {
+      for (const file of svgFiles) {
+        const svgText = await file.text();
+        const dimensions = extractSvgDimensions(svgText);
+        const pngUrl = await convertSvgToPng(svgText, dimensions, quality);
+        
+        newProcessedSvgs.push({
+          id: crypto.randomUUID(),
+          file,
+          svgContent: svgText,
+          dimensions,
+          pngDataUrl: pngUrl
+        });
+      }
+      
+      setProcessedSvgs(newProcessedSvgs);
+      
+      toast({
+        title: "Conversion Successful",
+        description: `${svgFiles.length} SVG${svgFiles.length > 1 ? 's have' : ' has'} been converted to PNG`,
+      });
+    } catch (error) {
+      console.error('Conversion error:', error);
+      toast({
+        title: "Conversion Failed",
+        description: "Failed to convert one or more SVG files",
+        variant: "destructive",
+      });
+      resetState();
+    } finally {
+      setIsConverting(false);
+    }
+  }, [convertSvgToPng, quality, toast, resetState]);
 
   const handleSvgTextChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setSvgTextInput(e.target.value);
@@ -236,39 +289,32 @@ export const useSvgToPng = () => {
     setIsDragging(false);
 
     const files = Array.from(e.dataTransfer.files);
-    const svgFile = files.find(file => file.type.includes('svg'));
-    
-    if (svgFile) {
-      await handleFileUpload(svgFile);
-    } else {
-      toast({
-        title: "Invalid File Type",
-        description: "Please drop an SVG file",
-        variant: "destructive",
-      });
-    }
-  }, [handleFileUpload, toast]);
+    await handleFileUpload(files);
+  }, [handleFileUpload]);
 
-  const downloadPng = useCallback(() => {
-    if (!pngDataUrl || !svgFile) return;
-    
+  const downloadPng = useCallback((processedSvg: ProcessedSvg) => {
     const link = document.createElement('a');
-    link.href = pngDataUrl;
-    link.download = `${svgFile.name.replace('.svg', '')}.png`;
+    link.href = processedSvg.pngDataUrl;
+    link.download = `${processedSvg.file.name.replace('.svg', '')}.png`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  }, [pngDataUrl, svgFile]);
+  }, []);
 
   const handleQualityChange = useCallback(async (newQuality: QualityOption) => {
     setQuality(newQuality);
     saveQualityPreference(newQuality);
     
-    if (svgContent && svgDimensions) {
+    if (processedSvgs.length > 0) {
       setIsConverting(true);
       try {
-        const pngUrl = await convertSvgToPng(svgContent, svgDimensions, newQuality);
-        setPngDataUrl(pngUrl);
+        const updatedSvgs = await Promise.all(
+          processedSvgs.map(async (svg) => {
+            const pngUrl = await convertSvgToPng(svg.svgContent, svg.dimensions, newQuality);
+            return { ...svg, pngDataUrl: pngUrl };
+          })
+        );
+        setProcessedSvgs(updatedSvgs);
       } catch (error) {
         console.error('Re-conversion error:', error);
         toast({
@@ -280,7 +326,7 @@ export const useSvgToPng = () => {
         setIsConverting(false);
       }
     }
-  }, [svgContent, svgDimensions, convertSvgToPng, saveQualityPreference, toast]);
+  }, [processedSvgs, convertSvgToPng, saveQualityPreference, toast]);
 
   const handleCustomWidthChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     // Allow any input during typing, including empty string
@@ -307,12 +353,17 @@ export const useSvgToPng = () => {
     setCustomWidth(validatedWidth);
     saveCustomWidthPreference(validatedWidth);
     
-    // Then trigger conversion with the validated value
-    if (quality === 'custom' && svgContent && svgDimensions) {
+    // Then trigger conversion with the validated value if needed
+    if (quality === 'custom' && processedSvgs.length > 0) {
       setIsConverting(true);
       try {
-        const pngUrl = await convertSvgToPng(svgContent, svgDimensions, 'custom');
-        setPngDataUrl(pngUrl);
+        const updatedSvgs = await Promise.all(
+          processedSvgs.map(async (svg) => {
+            const pngUrl = await convertSvgToPng(svg.svgContent, svg.dimensions, 'custom');
+            return { ...svg, pngDataUrl: pngUrl };
+          })
+        );
+        setProcessedSvgs(updatedSvgs);
       } catch (error) {
         console.error('Re-conversion error:', error);
         toast({
@@ -324,31 +375,31 @@ export const useSvgToPng = () => {
         setIsConverting(false);
       }
     }
-  }, [customWidth, quality, svgContent, svgDimensions, convertSvgToPng, saveCustomWidthPreference, toast]);
+  }, [customWidth, quality, processedSvgs, convertSvgToPng, saveCustomWidthPreference, toast]);
 
   const getAvailableQualityOptions = useCallback(() => {
-    if (!svgDimensions) return ['original', 'high', 'very-high', 'custom'] as QualityOption[];
+    if (processedSvgs.length === 0) return ['original', 'high', 'very-high', 'custom'] as QualityOption[];
     
-    if (svgDimensions.width >= 6000) {
+    // Find the largest SVG to determine available options
+    const maxWidth = Math.max(...processedSvgs.map(svg => svg.dimensions.width));
+    
+    if (maxWidth >= 6000) {
       return [] as QualityOption[]; // Hide quality selector entirely
     }
     
-    if (svgDimensions.width >= 4000) {
+    if (maxWidth >= 4000) {
       return ['original', 'very-high', 'custom'] as QualityOption[];
     }
     
     return ['original', 'high', 'very-high', 'custom'] as QualityOption[];
-  }, [svgDimensions]);
+  }, [processedSvgs]);
 
   const shouldShowQualitySelector = useCallback(() => {
     return getAvailableQualityOptions().length > 0;
   }, [getAvailableQualityOptions]);
 
   return {
-    svgFile,
-    svgContent,
-    svgDimensions,
-    pngDataUrl,
+    processedSvgs,
     isDragging,
     isConverting,
     quality,
