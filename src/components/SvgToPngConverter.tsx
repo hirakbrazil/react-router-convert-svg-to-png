@@ -156,7 +156,7 @@ const SvgToPngConverter = () => {
                         onValueChange={handleQualityChange}
                         disabled={isConverting}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger className="w-auto">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
