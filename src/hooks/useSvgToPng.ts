@@ -365,6 +365,13 @@ export const useSvgToPng = () => {
     }
   }, [processedSvgs, convertSvgToPng, saveQualityPreference]);
 
+  const handleCustomWidthChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value);
+    if (!isNaN(value) || e.target.value === '') {
+      setCustomWidth(e.target.value === '' ? 0 : value);
+    }
+  }, []);
+
   const handleCustomWidthBlur = useCallback(async () => {
     // Validate and correct the value onBlur
     let validatedWidth = customWidth;
