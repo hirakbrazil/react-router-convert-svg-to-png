@@ -14,6 +14,7 @@ interface ProcessedSvg {
   svgContent: string;
   dimensions: SvgDimensions;
   pngDataUrl: string;
+  isConverting?: boolean;
 }
 
 const QUALITY_STORAGE_KEY = 'svg-to-png-quality';
@@ -150,34 +151,41 @@ export const useSvgToPng = () => {
   const processSvgContent = useCallback(async (svgText: string, fileName: string = 'pasted-svg.svg') => {
     setIsConverting(true);
     
-    const conversionPromise = (async () => {
+    try {
       const dimensions = extractSvgDimensions(svgText);
       
       // Create a fake File object for pasted SVG
       const file = new File([svgText], fileName, { type: 'image/svg+xml' });
       
-      const pngUrl = await convertSvgToPng(svgText, dimensions, quality);
-      
-      const processedSvg: ProcessedSvg = {
+      // Create initial SVG with loading state
+      const initialSvg: ProcessedSvg = {
         id: crypto.randomUUID(),
         file,
         svgContent: svgText,
         dimensions,
-        pngDataUrl: pngUrl
+        pngDataUrl: '',
+        isConverting: true
       };
       
-      setProcessedSvgs([processedSvg]);
-      return processedSvg;
-    })();
+      setProcessedSvgs([initialSvg]);
+      
+      const conversionPromise = convertSvgToPng(svgText, dimensions, quality);
+      
+      toast.promise(conversionPromise, {
+        loading: 'Converting SVG to PNG...',
+        success: 'SVG has been converted to PNG successfully!',
+        error: 'Failed to convert SVG. Please check if the SVG code is valid.',
+      });
 
-    toast.promise(conversionPromise, {
-      loading: 'Converting SVG to PNG...',
-      success: 'SVG has been converted to PNG successfully!',
-      error: 'Failed to convert SVG. Please check if the SVG code is valid.',
-    });
-
-    try {
-      await conversionPromise;
+      const pngUrl = await conversionPromise;
+      
+      // Update with converted PNG
+      setProcessedSvgs([{
+        ...initialSvg,
+        pngDataUrl: pngUrl,
+        isConverting: false
+      }]);
+      
     } catch (error) {
       console.error('Conversion error:', error);
       resetState();
@@ -202,35 +210,55 @@ export const useSvgToPng = () => {
 
     setIsConverting(true);
     
-    const conversionPromise = (async () => {
-      const newProcessedSvgs: ProcessedSvg[] = [];
-
+    try {
+      // Create initial SVGs with loading states
+      const initialSvgs: ProcessedSvg[] = [];
+      
       for (const file of svgFiles) {
         const svgText = await file.text();
         const dimensions = extractSvgDimensions(svgText);
-        const pngUrl = await convertSvgToPng(svgText, dimensions, quality);
         
-        newProcessedSvgs.push({
+        initialSvgs.push({
           id: crypto.randomUUID(),
           file,
           svgContent: svgText,
           dimensions,
-          pngDataUrl: pngUrl
+          pngDataUrl: '',
+          isConverting: true
         });
       }
       
-      setProcessedSvgs(newProcessedSvgs);
-      return newProcessedSvgs;
-    })();
-
-    toast.promise(conversionPromise, {
-      loading: `Converting ${svgFiles.length} SVG${svgFiles.length > 1 ? 's' : ''} to PNG...`,
-      success: `${svgFiles.length} SVG${svgFiles.length > 1 ? 's have' : ' has'} been converted to PNG successfully!`,
-      error: 'Failed to convert one or more SVG files',
-    });
-
-    try {
-      await conversionPromise;
+      setProcessedSvgs(initialSvgs);
+      
+      // Convert each SVG and update individually
+      const conversionPromises = initialSvgs.map(async (svg, index) => {
+        try {
+          const pngUrl = await convertSvgToPng(svg.svgContent, svg.dimensions, quality);
+          
+          // Update just this SVG
+          setProcessedSvgs(prev => 
+            prev.map(item => 
+              item.id === svg.id 
+                ? { ...item, pngDataUrl: pngUrl, isConverting: false }
+                : item
+            )
+          );
+          
+          return { success: true, index };
+        } catch (error) {
+          console.error(`Conversion error for file ${index}:`, error);
+          return { success: false, index };
+        }
+      });
+      
+      toast.promise(Promise.all(conversionPromises), {
+        loading: `Converting ${svgFiles.length} SVG${svgFiles.length > 1 ? 's' : ''} to PNG...`,
+        success: `${svgFiles.length} SVG${svgFiles.length > 1 ? 's have' : ' has'} been converted to PNG successfully!`,
+        error: 'Failed to convert one or more SVG files',
+      });
+      
+      await Promise.all(conversionPromises);
+      
     } catch (error) {
       console.error('Conversion error:', error);
       resetState();
@@ -297,25 +325,38 @@ export const useSvgToPng = () => {
     if (processedSvgs.length > 0) {
       setIsConverting(true);
       
-      const reconversionPromise = (async () => {
-        const updatedSvgs = await Promise.all(
-          processedSvgs.map(async (svg) => {
-            const pngUrl = await convertSvgToPng(svg.svgContent, svg.dimensions, newQuality);
-            return { ...svg, pngDataUrl: pngUrl };
-          })
-        );
-        setProcessedSvgs(updatedSvgs);
-        return updatedSvgs;
-      })();
-
-      toast.promise(reconversionPromise, {
-        loading: 'Re-converting with new quality settings...',
-        success: 'Images have been re-converted successfully!',
-        error: 'Failed to re-convert with new quality settings',
-      });
-
+      // Set all SVGs to converting state
+      setProcessedSvgs(prev => prev.map(svg => ({ ...svg, isConverting: true })));
+      
       try {
-        await reconversionPromise;
+        // Convert each SVG individually
+        const reconversionPromises = processedSvgs.map(async (svg) => {
+          try {
+            const pngUrl = await convertSvgToPng(svg.svgContent, svg.dimensions, newQuality);
+            
+            // Update just this SVG
+            setProcessedSvgs(prev => 
+              prev.map(item => 
+                item.id === svg.id 
+                  ? { ...item, pngDataUrl: pngUrl, isConverting: false }
+                  : item
+              )
+            );
+            
+            return { success: true };
+          } catch (error) {
+            console.error('Re-conversion error:', error);
+            return { success: false };
+          }
+        });
+
+        toast.promise(Promise.all(reconversionPromises), {
+          loading: 'Re-converting with new quality settings...',
+          success: 'Images have been re-converted successfully!',
+          error: 'Failed to re-convert with new quality settings',
+        });
+
+        await Promise.all(reconversionPromises);
       } catch (error) {
         console.error('Re-conversion error:', error);
       } finally {
@@ -323,17 +364,6 @@ export const useSvgToPng = () => {
       }
     }
   }, [processedSvgs, convertSvgToPng, saveQualityPreference]);
-
-  const handleCustomWidthChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    // Allow any input during typing, including empty string
-    const value = e.target.value;
-    if (value === '') {
-      setCustomWidth(0); // Set to 0 for empty, but input will show empty
-    } else {
-      const numValue = parseInt(value);
-      setCustomWidth(isNaN(numValue) ? 0 : numValue);
-    }
-  }, []);
 
   const handleCustomWidthBlur = useCallback(async () => {
     // Validate and correct the value onBlur
@@ -353,25 +383,38 @@ export const useSvgToPng = () => {
     if (quality === 'custom' && processedSvgs.length > 0) {
       setIsConverting(true);
       
-      const reconversionPromise = (async () => {
-        const updatedSvgs = await Promise.all(
-          processedSvgs.map(async (svg) => {
-            const pngUrl = await convertSvgToPng(svg.svgContent, svg.dimensions, 'custom');
-            return { ...svg, pngDataUrl: pngUrl };
-          })
-        );
-        setProcessedSvgs(updatedSvgs);
-        return updatedSvgs;
-      })();
-
-      toast.promise(reconversionPromise, {
-        loading: 'Re-converting with new custom width...',
-        success: 'Images have been re-converted successfully!',
-        error: 'Failed to re-convert with new custom width',
-      });
-
+      // Set all SVGs to converting state
+      setProcessedSvgs(prev => prev.map(svg => ({ ...svg, isConverting: true })));
+      
       try {
-        await reconversionPromise;
+        // Convert each SVG individually
+        const reconversionPromises = processedSvgs.map(async (svg) => {
+          try {
+            const pngUrl = await convertSvgToPng(svg.svgContent, svg.dimensions, 'custom');
+            
+            // Update just this SVG
+            setProcessedSvgs(prev => 
+              prev.map(item => 
+                item.id === svg.id 
+                  ? { ...item, pngDataUrl: pngUrl, isConverting: false }
+                  : item
+              )
+            );
+            
+            return { success: true };
+          } catch (error) {
+            console.error('Re-conversion error:', error);
+            return { success: false };
+          }
+        });
+
+        toast.promise(Promise.all(reconversionPromises), {
+          loading: 'Re-converting with new custom width...',
+          success: 'Images have been re-converted successfully!',
+          error: 'Failed to re-convert with new custom width',
+        });
+
+        await Promise.all(reconversionPromises);
       } catch (error) {
         console.error('Re-conversion error:', error);
       } finally {
