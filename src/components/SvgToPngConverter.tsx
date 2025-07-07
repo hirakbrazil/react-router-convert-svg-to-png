@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Upload, RefreshCcw, ImageIcon } from 'lucide-react';
+import { Upload, RefreshCcw, ImageIcon, Download } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -44,6 +44,14 @@ const SvgToPngConverter = () => {
     }
   };
 
+  const handleDownloadAll = () => {
+    processedSvgs.forEach((processedSvg) => {
+      if (processedSvg.pngDataUrl && !processedSvg.isConverting) {
+        downloadPng(processedSvg);
+      }
+    });
+  };
+
   const getQualityLabel = (qualityOption: string) => {
     switch (qualityOption) {
       case 'original':
@@ -60,6 +68,8 @@ const SvgToPngConverter = () => {
   };
 
   const availableOptions = getAvailableQualityOptions();
+  const allImagesConverted = processedSvgs.length > 0 && processedSvgs.every(svg => !svg.isConverting && svg.pngDataUrl);
+  const showDownloadAll = processedSvgs.length > 1;
 
   return (
     <div className="space-y-6">
@@ -132,47 +142,67 @@ const SvgToPngConverter = () => {
         </div>
       ) : (
         <div className="space-y-6">
-          {/* Quality Settings */}
+          {/* Quality Settings with Download All */}
           {shouldShowQualitySelector() && (
             <Card>
               <CardContent className="p-6">
                 <div className="flex flex-col gap-4">
-                  <div className="flex items-center space-x-2">
-                    <Label htmlFor="quality-select">Output quality:</Label>
-                    <Select
-                      value={quality}
-                      onValueChange={handleQualityChange}
-                      disabled={isConverting}
-                    >
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {availableOptions.map((option) => (
-                          <SelectItem key={option} value={option}>
-                            {getQualityLabel(option)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  
-                  {quality === 'custom' && (
-                    <div className="flex items-center space-x-2">
-                      <Label htmlFor="custom-width">Custom width (px):</Label>
-                      <Input
-                        id="custom-width"
-                        type="number"
-                        value={customWidth === 0 ? '' : customWidth}
-                        onChange={handleCustomWidthChange}
-                        onBlur={handleCustomWidthBlur}
-                        className="w-[120px]"
-                        min="10"
-                        max="10000"
-                        disabled={isConverting}
-                      />
+                  {/* Quality settings and Download All button */}
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                    <div className="flex flex-col gap-4">
+                      <div className="flex items-center space-x-2">
+                        <Label htmlFor="quality-select">Output quality:</Label>
+                        <Select
+                          value={quality}
+                          onValueChange={handleQualityChange}
+                          disabled={isConverting}
+                        >
+                          <SelectTrigger className="w-[180px]">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {availableOptions.map((option) => (
+                              <SelectItem key={option} value={option}>
+                                {getQualityLabel(option)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      
+                      {quality === 'custom' && (
+                        <div className="flex items-center space-x-2">
+                          <Label htmlFor="custom-width">Custom width (px):</Label>
+                          <Input
+                            id="custom-width"
+                            type="number"
+                            value={customWidth === 0 ? '' : customWidth}
+                            onChange={handleCustomWidthChange}
+                            onBlur={handleCustomWidthBlur}
+                            className="w-[120px]"
+                            min="10"
+                            max="10000"
+                            disabled={isConverting}
+                          />
+                        </div>
+                      )}
                     </div>
-                  )}
+
+                    {/* Download All button - right side on large screens, below on small screens */}
+                    {showDownloadAll && (
+                      <div className="sm:self-start">
+                        <Button
+                          onClick={handleDownloadAll}
+                          disabled={!allImagesConverted || isConverting}
+                          variant="outline"
+                          className="gap-2"
+                        >
+                          <Download className="w-4 h-4" />
+                          Download All
+                        </Button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </CardContent>
             </Card>
