@@ -242,7 +242,6 @@ const SvgToPngConverter = () => {
               onClick={resetState}
               variant="outline"
               className="gap-2"
-              size="lg"
             >
               <RefreshCcw className="w-5 h-5" />
               Convert Another
