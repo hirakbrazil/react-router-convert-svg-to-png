@@ -100,7 +100,6 @@ const SvgItem = ({ processedSvg, targetDimensions, onDownload, isConverting }: S
           onClick={() => onDownload(processedSvg)}
           disabled={isConverting || processedSvg.isConverting}
           className="gap-2"
-          size="lg"
         >
           {processedSvg.isConverting ? (
             <>
