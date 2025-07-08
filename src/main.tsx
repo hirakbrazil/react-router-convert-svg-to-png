@@ -1,8 +1,15 @@
-import { createRoot } from 'react-dom/client'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 import App from './App.tsx'
 import './index.css'
 import { registerSW } from 'virtual:pwa-register'
 import { toast } from 'sonner'
+
+const root = document.getElementById('root');
+
+if (root) {
+  ReactDOM.createRoot(root).render(<App />);
+}
 
 // Register service worker
 const updateSW = registerSW({
@@ -34,8 +41,6 @@ const updateSW = registerSW({
     console.log('App ready to work offline')
   }
 });
-
-createRoot(document.getElementById("root")!).render(<App />);
 
 // Show success toast after <App /> + <Toaster> mounts
 setTimeout(() => {
