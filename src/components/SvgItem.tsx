@@ -63,6 +63,14 @@ const SvgItem = ({ processedSvg, targetDimensions, onDownload, isConverting }: S
                     PNG: {targetDimensions.width} × {targetDimensions.height}px
                   </span>
                 </p>
+                <p>
+                  SVG size: {formatFileSize(processedSvg.file.size)}
+                  {pngFileSize > 0 && (
+                    <span className="ml-2">
+                      • PNG size: {formatFileSize(pngFileSize)}
+                    </span>
+                  )}
+                </p>
               </div>
             </div>
           </div>
@@ -92,8 +100,6 @@ const SvgItem = ({ processedSvg, targetDimensions, onDownload, isConverting }: S
           <ImageComparisonSlider
             svgContent={processedSvg.svgContent}
             pngDataUrl={processedSvg.pngDataUrl}
-            svgFileSize={processedSvg.file.size}
-            pngFileSize={pngFileSize}
           />
         )}
       </div>
