@@ -6,7 +6,6 @@ import SEO from "@/components/SEO";
 import AdSenseHorizontal from "@/components/AdSenseHorizontal";
 import AdSenseResponsive from "@/components/AdSenseResponsive";
 import DesktopSidebar from "@/components/DesktopSidebar";
-import { siteConfig } from "@/config/site";
 
 const Feedback = () => {
   useTheme();
