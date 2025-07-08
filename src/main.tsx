@@ -1,6 +1,17 @@
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.tsx'
 import './index.css'
 
+// This file is only for client-side rendering
 if (typeof window !== 'undefined') {
+  const root = document.getElementById('root');
+  
+  if (root) {
+    ReactDOM.createRoot(root).render(<App />);
+  }
+
   // Register service worker only on client-side
   if ('serviceWorker' in navigator) {
     import('virtual:pwa-register').then(async ({ registerSW }) => {
