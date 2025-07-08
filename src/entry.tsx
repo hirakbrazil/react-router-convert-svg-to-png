@@ -1,10 +1,8 @@
-// entry.tsx
-import { ViteReactSSG } from 'vite-react-ssg'
-import App from './App'
-import { routes } from './routes'
+import { ViteReactSSG } from 'vite-react-ssg';
+import App from './App';
+import { routes } from './routes';
 
-// Export createApp as required by vite-react-ssg
-export const createApp = ViteReactSSG({
+export const createRoot = ViteReactSSG({
   App,
   routes,
-})
+});
