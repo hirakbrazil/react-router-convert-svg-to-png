@@ -1,4 +1,3 @@
-
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
@@ -38,19 +37,19 @@ export default defineConfig(({ mode }) => ({
         maximumFileSizeToCacheInBytes: 20 * 1024 * 1024, // 20 MB
         runtimeCaching: [
           {
-            urlPattern: /\/fonts\/.*\.woff2$/,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'local-fonts-cache',
-              expiration: {
-                maxEntries: 20,
-                maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
-              },
-              cacheableResponse: {
-                statuses: [0, 200],
-              }
-            }
-          },
+  urlPattern: /\/fonts\/.*\.woff2$/,
+  handler: 'CacheFirst',
+  options: {
+    cacheName: 'local-fonts-cache',
+    expiration: {
+      maxEntries: 20,
+      maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
+    },
+    cacheableResponse: {
+      statuses: [0, 200],
+    }
+  }
+},
           {
             urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/,
             handler: 'CacheFirst',
@@ -99,11 +98,4 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  build: {
-    rollupOptions: {
-      input: {
-        main: 'index.html'
-      }
-    }
-  }
 }));

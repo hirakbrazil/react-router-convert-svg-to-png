@@ -156,7 +156,7 @@ const SvgToPngConverter = () => {
                         onValueChange={handleQualityChange}
                         disabled={isConverting}
                       >
-                        <SelectTrigger className="w-full sm:w-[180px]">
+                        <SelectTrigger className="w-[180px]">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
@@ -221,6 +221,15 @@ const SvgToPngConverter = () => {
                 </div>
               </CardContent>
             </Card>
+          )}
+
+          {/* Processing Status */}
+          {isConverting && (
+            <div className="text-center">
+              <p className="text-sm text-muted-foreground">
+                Converting {processedSvgs.length > 1 ? 'SVGs' : 'SVG'} to PNG...
+              </p>
+            </div>
           )}
 
           {/* SVG Items */}
