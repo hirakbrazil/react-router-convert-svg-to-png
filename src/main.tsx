@@ -1,4 +1,4 @@
-import { createRoot } from 'react-dom/client'
+import { createRoot, hydrateRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 import { registerSW } from 'virtual:pwa-register'
@@ -35,7 +35,16 @@ const updateSW = registerSW({
   }
 });
 
-createRoot(document.getElementById("root")!).render(<App />);
+const rootElement = document.getElementById("root")!;
+
+// Check if the page is pre-rendered by react-snap
+if (rootElement.hasChildNodes()) {
+  // If there are child nodes, it means the page is pre-rendered, so hydrate
+  hydrateRoot(rootElement, <App />);
+} else {
+  // If no child nodes, render normally
+  createRoot(rootElement).render(<App />);
+}
 
 // Show success toast after <App /> + <Toaster> mounts
 setTimeout(() => {
