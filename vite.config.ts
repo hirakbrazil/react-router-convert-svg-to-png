@@ -13,7 +13,10 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
-    ViteReactSSG({ routerOptions: {} }),
+    ViteReactSSG({
+      entry: 'src/entry.tsx',
+      script: 'async',
+    }),
     mode === 'development' &&
     componentTagger(),
     VitePWA({
