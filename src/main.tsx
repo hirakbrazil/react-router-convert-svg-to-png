@@ -3,11 +3,9 @@ import { createRoot, hydrateRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 
-if (typeof document !== 'undefined') {
-  const rootElement = document.getElementById('root')
-  if (rootElement) {
-    hydrateRoot(rootElement, <App />)
-  }
+const rootElement = document.getElementById('root')
+if (rootElement) {
+  hydrateRoot(rootElement, <App />)
 }
 
 // Register service worker only on client-side
