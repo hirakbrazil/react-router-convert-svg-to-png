@@ -33,33 +33,25 @@ const SvgItem = ({ processedSvg, targetDimensions, onDownload, isConverting }: S
     return URL.createObjectURL(blob);
   }, [processedSvg.svgContent]);
 
-  // Calculate PNG file size from data URL with better error handling
+  // Calculate PNG file size from data URL
   const pngFileSize = React.useMemo(() => {
-    console.log('Calculating PNG file size for:', processedSvg.file.name);
-    console.log('PNG Data URL length:', processedSvg.pngDataUrl?.length || 0);
-    console.log('PNG Data URL prefix:', processedSvg.pngDataUrl?.substring(0, 50));
-    
     if (!processedSvg.pngDataUrl || processedSvg.pngDataUrl.length === 0) {
-      console.log('PNG data URL is empty');
       return 0;
     }
     
     // Check if it's a valid data URL
     if (!processedSvg.pngDataUrl.startsWith('data:')) {
-      console.log('Invalid data URL format');
       return 0;
     }
     
     // Split by comma to get base64 part
     const parts = processedSvg.pngDataUrl.split(',');
     if (parts.length !== 2) {
-      console.log('Invalid data URL structure');
       return 0;
     }
     
     const base64Data = parts[1];
     if (!base64Data || base64Data.length === 0) {
-      console.log('No base64 data found');
       return 0;
     }
     
@@ -67,12 +59,8 @@ const SvgItem = ({ processedSvg, targetDimensions, onDownload, isConverting }: S
     const padding = (base64Data.match(/=/g) || []).length;
     const sizeInBytes = (base64Data.length * 3 / 4) - padding;
     
-    console.log('Base64 length:', base64Data.length);
-    console.log('Padding:', padding);
-    console.log('Calculated PNG size:', sizeInBytes);
-    
     return Math.max(0, sizeInBytes);
-  }, [processedSvg.pngDataUrl, processedSvg.file.name]);
+  }, [processedSvg.pngDataUrl]);
 
   return (
     <div className="space-y-4">
