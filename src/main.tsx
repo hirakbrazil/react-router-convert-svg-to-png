@@ -3,6 +3,14 @@ import App from './App.tsx'
 import './index.css'
 import { registerSW } from 'virtual:pwa-register'
 import { toast } from 'sonner'
+import { ViteReactSSG } from 'vite-react-ssg'
+import { routes } from './routes'
+
+// Type-safe version of ViteReactSSG
+export const createApp = ViteReactSSG({
+  App,
+  routes
+})
 
 // Register service worker
 const updateSW = registerSW({
@@ -34,8 +42,6 @@ const updateSW = registerSW({
     console.log('App ready to work offline')
   }
 });
-
-createRoot(document.getElementById("root")!).render(<App />);
 
 // Show success toast after <App /> + <Toaster> mounts
 setTimeout(() => {
