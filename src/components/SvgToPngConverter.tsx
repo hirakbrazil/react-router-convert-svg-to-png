@@ -241,7 +241,6 @@ const SvgToPngConverter = () => {
                 targetDimensions={getTargetDimensions(processedSvg.dimensions, quality)}
                 onDownload={downloadPng}
                 isConverting={isConverting}
-                showPreviewHeader={false}
               />
               
               {/* Separator between items (except after last item) */}
