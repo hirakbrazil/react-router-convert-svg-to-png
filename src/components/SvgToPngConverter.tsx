@@ -142,86 +142,96 @@ const SvgToPngConverter = () => {
         </div>
       ) : (
         <div className="space-y-6">
-          {/* Quality Settings */}
+          {/* Quality Settings - Centered on larger screens */}
           {shouldShowQualitySelector() && (
             <Card>
               <CardContent className="p-6">
                 <div className="space-y-4">
-                  {/* Quality settings only */}
-                  <div className="flex flex-col gap-4">
-                    <div className="flex items-center space-x-2">
-                      <Label htmlFor="quality-select">Output quality:</Label>
-                      <Select
-                        value={quality}
-                        onValueChange={handleQualityChange}
-                        disabled={isConverting}
-                      >
-                        <SelectTrigger className="w-full sm:w-[180px]">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {availableOptions.map((option) => (
-                            <SelectItem key={option} value={option}>
-                              {getQualityLabel(option)}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    
-                    {quality === 'custom' && (
+                  {/* Quality settings - centered on larger screens */}
+                  <div className="flex flex-col items-center space-y-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-4 sm:space-y-0 w-full sm:w-auto">
                       <div className="flex items-center space-x-2">
-                        <Label htmlFor="custom-width">Custom width (px):</Label>
-                        <Input
-                          id="custom-width"
-                          type="number"
-                          value={customWidth === 0 ? '' : customWidth}
-                          onChange={handleCustomWidthChange}
-                          onBlur={handleCustomWidthBlur}
-                          className="w-[120px]"
-                          min="10"
-                          max="10000"
+                        <Label htmlFor="quality-select">Output quality:</Label>
+                        <Select
+                          value={quality}
+                          onValueChange={handleQualityChange}
                           disabled={isConverting}
-                        />
+                        >
+                          <SelectTrigger className="w-full sm:w-[180px]">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {availableOptions.map((option) => (
+                              <SelectItem key={option} value={option}>
+                                {getQualityLabel(option)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </div>
-                    )}
-                  </div>
+                      
+                      {quality === 'custom' && (
+                        <div className="flex items-center space-x-2">
+                          <Label htmlFor="custom-width">Custom width (px):</Label>
+                          <Input
+                            id="custom-width"
+                            type="number"
+                            value={customWidth === 0 ? '' : customWidth}
+                            onChange={handleCustomWidthChange}
+                            onBlur={handleCustomWidthBlur}
+                            className="w-[120px]"
+                            min="10"
+                            max="10000"
+                            disabled={isConverting}
+                          />
+                        </div>
+                      )}
+                    </div>
 
-                  {/* Action buttons row - Download All and Convert Another */}
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 pt-2">
-                    {/* Download All button */}
-                    {showDownloadAll && (
+                    {/* Action buttons row - Centered on larger screens */}
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-3 pt-2">
+                      {/* Download All button */}
+                      {showDownloadAll && (
+                        <Button
+                          onClick={handleDownloadAll}
+                          disabled={!allImagesConverted || isConverting}
+                          className="gap-2"
+                          size="lg"
+                        >
+                          {isConverting ? (
+                            <Loader2 className="w-5 h-5 animate-spin" />
+                          ) : (
+                            <Download className="w-5 h-5" />
+                          )}
+                          Download All
+                        </Button>
+                      )}
+
+                      {/* Convert Another button */}
                       <Button
-                        onClick={handleDownloadAll}
-                        disabled={!allImagesConverted || isConverting}
+                        onClick={resetState}
+                        variant="outline"
                         className="gap-2"
                         size="lg"
+                        disabled={isConverting}
                       >
-                        {isConverting ? (
-                          <Loader2 className="w-5 h-5 animate-spin" />
-                        ) : (
-                          <Download className="w-5 h-5" />
-                        )}
-                        Download All
+                        <RefreshCcw className="w-5 h-5" />
+                        Convert Another
                       </Button>
-                    )}
-
-                    {/* Convert Another button */}
-                    <Button
-                      onClick={resetState}
-                      variant="outline"
-                      className="gap-2"
-                      size="lg"
-                      disabled={isConverting}
-                    >
-                      <RefreshCcw className="w-5 h-5" />
-                      Convert Another
-                    </Button>
+                    </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
           )}
+
+          {/* Preview header - only show once at the top */}
+          <div className="space-y-1">
+            <h3 className="text-lg font-semibold">Preview</h3>
+            <p className="text-sm text-muted-foreground">
+              Drag the slider to compare SVG vs PNG
+            </p>
+          </div>
 
           {/* SVG Items */}
           {processedSvgs.map((processedSvg, index) => (
@@ -231,6 +241,7 @@ const SvgToPngConverter = () => {
                 targetDimensions={getTargetDimensions(processedSvg.dimensions, quality)}
                 onDownload={downloadPng}
                 isConverting={isConverting}
+                showPreviewHeader={false}
               />
               
               {/* Separator between items (except after last item) */}

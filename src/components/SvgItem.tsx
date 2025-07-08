@@ -24,9 +24,10 @@ interface SvgItemProps {
   targetDimensions: SvgDimensions;
   onDownload: (processedSvg: ProcessedSvg) => void;
   isConverting: boolean;
+  showPreviewHeader?: boolean;
 }
 
-const SvgItem = ({ processedSvg, targetDimensions, onDownload, isConverting }: SvgItemProps) => {
+const SvgItem = ({ processedSvg, targetDimensions, onDownload, isConverting, showPreviewHeader = true }: SvgItemProps) => {
   const svgDataUrl = React.useMemo(() => {
     const blob = new Blob([processedSvg.svgContent], { type: 'image/svg+xml' });
     return URL.createObjectURL(blob);
@@ -55,19 +56,22 @@ const SvgItem = ({ processedSvg, targetDimensions, onDownload, isConverting }: S
 
       {/* Image Preview */}
       <div className="space-y-4">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-1">
-          <h3 className="text-lg font-semibold">Preview</h3>
-          {processedSvg.isConverting ? (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Loader2 className="w-4 h-4 animate-spin" />
-              Converting...
-            </div>
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              Drag the slider to compare SVG vs PNG
-            </p>
-          )}
-        </div>
+        {/* Only show preview header if showPreviewHeader is true */}
+        {showPreviewHeader && (
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-1">
+            <h3 className="text-lg font-semibold">Preview</h3>
+            {processedSvg.isConverting ? (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Converting...
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                Drag the slider to compare SVG vs PNG
+              </p>
+            )}
+          </div>
+        )}
         
         {processedSvg.isConverting ? (
           // Show blurred SVG preview while converting
