@@ -14,7 +14,7 @@ if (typeof window !== 'undefined') {
 
   // Register service worker only on client-side
   if ('serviceWorker' in navigator) {
-    import('virtual:pwa-register').then(({ registerSW }) => {
+    import('virtual:pwa-register').then(async ({ registerSW }) => {
       const { toast } = await import('sonner');
       
       const updateSW = registerSW({
