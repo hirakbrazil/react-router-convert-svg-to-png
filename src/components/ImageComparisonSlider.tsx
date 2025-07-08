@@ -1,14 +1,17 @@
 
 import React, { useState, useRef, useCallback } from 'react';
 import { cn } from '@/lib/utils';
+import { formatFileSize } from '@/lib/formatFileSize';
 
 interface ImageComparisonSliderProps {
   svgContent: string;
   pngDataUrl: string;
+  svgFileSize: number;
+  pngFileSize: number;
   className?: string;
 }
 
-const ImageComparisonSlider = ({ svgContent, pngDataUrl, className }: ImageComparisonSliderProps) => {
+const ImageComparisonSlider = ({ svgContent, pngDataUrl, svgFileSize, pngFileSize, className }: ImageComparisonSliderProps) => {
   const [sliderPosition, setSliderPosition] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -118,7 +121,7 @@ const ImageComparisonSlider = ({ svgContent, pngDataUrl, className }: ImageCompa
             draggable={false}
           />
           <div className="absolute bottom-2 right-2 bg-secondary text-primary px-2 py-1 rounded text-sm font-medium pointer-events-none">
-            PNG
+            PNG • {formatFileSize(pngFileSize)}
           </div>
         </div>
         
@@ -134,7 +137,7 @@ const ImageComparisonSlider = ({ svgContent, pngDataUrl, className }: ImageCompa
             draggable={false}
           />
           <div className="absolute bottom-2 left-2 bg-secondary text-primary px-2 py-1 rounded text-sm font-medium pointer-events-none">
-            SVG
+            SVG • {formatFileSize(svgFileSize)}
           </div>
         </div>
         
