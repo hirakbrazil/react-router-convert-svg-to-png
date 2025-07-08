@@ -2,33 +2,22 @@ import { Toaster } from '@/components/ui/toaster'
 import { Toaster as Sonner } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { BrowserRouter, useRoutes } from 'react-router-dom'
-// Change this import:
-import { StaticRouter } from 'react-router-dom/server'  // ✅ correct import here
+import { useRoutes } from 'react-router-dom'
 import ScrollToTop from '@/components/ScrollToTop'
 import { routes } from './routes'
 
 const queryClient = new QueryClient()
 
-const AppRoutes = () => {
+const App = () => {
   const element = useRoutes(routes)
-  return element
-}
-
-const App = ({ url }: { url?: string }) => {
-  const isSSR = typeof window === 'undefined'
-  const Router = isSSR ? StaticRouter : BrowserRouter
-  const routerProps = isSSR ? { location: url || '/' } : {}
-
+  
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <Router {...routerProps}>
-          <ScrollToTop />
-          <AppRoutes />
-        </Router>
+        <ScrollToTop />
+        {element}
       </TooltipProvider>
     </QueryClientProvider>
   )
