@@ -1,10 +1,11 @@
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { VitePWA } from 'vite-plugin-pwa';
-import { ViteReactSSGPlugin } from 'vite-react-ssg/plugin';
 
+// https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
@@ -12,7 +13,8 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
-    mode === 'development' && componentTagger(),
+    mode === 'development' &&
+    componentTagger(),
     VitePWA({
       registerType: 'prompt',
       includeAssets: ['banner.jpg', 'icon.png'],
@@ -33,7 +35,7 @@ export default defineConfig(({ mode }) => ({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,json}'],
-        maximumFileSizeToCacheInBytes: 20 * 1024 * 1024,
+        maximumFileSizeToCacheInBytes: 20 * 1024 * 1024, // 20 MB
         runtimeCaching: [
           {
             urlPattern: /\/fonts\/.*\.woff2$/,
@@ -42,7 +44,7 @@ export default defineConfig(({ mode }) => ({
               cacheName: 'local-fonts-cache',
               expiration: {
                 maxEntries: 20,
-                maxAgeSeconds: 60 * 60 * 24 * 365,
+                maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
               },
               cacheableResponse: {
                 statuses: [0, 200],
@@ -56,7 +58,7 @@ export default defineConfig(({ mode }) => ({
               cacheName: 'images-cache',
               expiration: {
                 maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24 * 30
+                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
               }
             }
           },
@@ -67,7 +69,7 @@ export default defineConfig(({ mode }) => ({
               cacheName: 'static-resources',
               expiration: {
                 maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24 * 7
+                maxAgeSeconds: 60 * 60 * 24 * 7 // 7 days
               }
             }
           },
@@ -79,7 +81,7 @@ export default defineConfig(({ mode }) => ({
               networkTimeoutSeconds: 10,
               expiration: {
                 maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24
+                maxAgeSeconds: 60 * 60 * 24 // 24 hours
               },
               cacheableResponse: {
                 statuses: [0, 200]
@@ -90,8 +92,7 @@ export default defineConfig(({ mode }) => ({
         navigateFallback: 'index.html',
         navigateFallbackDenylist: [/^\/api/]
       }
-    }),
-    ViteReactSSGPlugin() // 🟢 Required for vite-react-ssg
+    })
   ].filter(Boolean),
   resolve: {
     alias: {
