@@ -95,7 +95,7 @@
     ],
     "userAgent": "reactSnap",
     "headless": true,
-    "waitFor": 4000,
+    "waitFor": 6000,
     "fixWebpackChunksIssue": false,
     "removeBlobs": true,
     "fixInsertRule": true,
@@ -122,6 +122,11 @@
     "crawl": true,
     "publicPath": "/",
     "sourceMaps": false,
-    "concurrency": 1
+    "concurrency": 1,
+    "skipRehydration": true,
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    }
   }
 }

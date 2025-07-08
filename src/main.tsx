@@ -43,7 +43,17 @@ if (rootElement.hasChildNodes()) {
   hydrateRoot(rootElement, <App />);
 } else {
   // If no child nodes, render normally
-  createRoot(rootElement).render(<App />);
+  const root = createRoot(rootElement);
+  root.render(<App />);
+  
+  // Signal to react-snap that the page is ready (for pre-rendering)
+  if (typeof window !== 'undefined' && (window as any).reactSnapCrawl) {
+    setTimeout(() => {
+      if ((window as any).reactSnapFinished) {
+        (window as any).reactSnapFinished();
+      }
+    }, 2000);
+  }
 }
 
 // Show success toast after <App /> + <Toaster> mounts

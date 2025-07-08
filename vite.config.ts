@@ -88,7 +88,9 @@ export default defineConfig(({ mode }) => ({
             }
           },
           {
-            urlPattern: /^.*\/about\/?$/,
+            urlPattern: ({ url }) => {
+              return url.pathname === '/about';
+            },
             handler: 'CacheFirst',
             options: {
               cacheName: 'pre-rendered-pages',
@@ -99,7 +101,9 @@ export default defineConfig(({ mode }) => ({
             }
           },
           {
-            urlPattern: /^.*\/feedback\/?$/,
+            urlPattern: ({ url }) => {
+              return url.pathname === '/feedback';
+            },
             handler: 'CacheFirst',
             options: {
               cacheName: 'pre-rendered-pages',
@@ -108,6 +112,16 @@ export default defineConfig(({ mode }) => ({
                 maxAgeSeconds: 60 * 60 * 24 // 24 hours
               }
             }
+          },
+          {
+            urlPattern: ({ url }) => {
+              return url.pathname === '/about/' || url.pathname === '/feedback/';
+            },
+            handler: async ({ url }) => {
+              // Redirect trailing slash versions to clean URLs
+              const cleanPath = url.pathname.slice(0, -1);
+              return Response.redirect(url.origin + cleanPath, 301);
+            }
           }
         ],
         // Use navigateFallback only for unknown routes, not for pre-rendered pages
@@ -115,8 +129,8 @@ export default defineConfig(({ mode }) => ({
         navigateFallbackDenylist: [
           /^\/api/,
           /\.(?:png|jpg|jpeg|svg|gif|webp|js|css|woff2?)$/,
-          /^\/about\/?$/,
-          /^\/feedback\/?$/,
+          /^\/about$/,
+          /^\/feedback$/,
           /^\/404\.html$/
         ],
         // Ensure all pre-rendered HTML files are included in precache
