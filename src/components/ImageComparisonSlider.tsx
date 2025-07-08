@@ -105,7 +105,7 @@ const ImageComparisonSlider = ({ svgContent, pngDataUrl, svgFileSize, pngFileSiz
     <div className={cn("relative w-full h-96 overflow-hidden rounded-lg border", className)}>
       <div
         ref={containerRef}
-        className="relative w-full h-full cursor-col-resize select-none"
+        className="relative w-full h-full select-none"
         onMouseMove={handleMouseMove}
         onMouseUp={() => setIsDragging(false)}
         onClick={handleContainerClick}
