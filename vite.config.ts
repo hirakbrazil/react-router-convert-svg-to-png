@@ -37,19 +37,19 @@ export default defineConfig(({ mode }) => ({
         maximumFileSizeToCacheInBytes: 20 * 1024 * 1024, // 20 MB
         runtimeCaching: [
           {
-  urlPattern: /\/fonts\/.*\.woff2$/,
-  handler: 'CacheFirst',
-  options: {
-    cacheName: 'local-fonts-cache',
-    expiration: {
-      maxEntries: 20,
-      maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
-    },
-    cacheableResponse: {
-      statuses: [0, 200],
-    }
-  }
-},
+            urlPattern: /\/fonts\/.*\.woff2$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'local-fonts-cache',
+              expiration: {
+                maxEntries: 20,
+                maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              }
+            }
+          },
           {
             urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/,
             handler: 'CacheFirst',
@@ -86,10 +86,47 @@ export default defineConfig(({ mode }) => ({
                 statuses: [0, 200]
               }
             }
+          },
+          {
+            urlPattern: /^.*\/about\/?$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'pre-rendered-pages',
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 24 // 24 hours
+              }
+            }
+          },
+          {
+            urlPattern: /^.*\/feedback\/?$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'pre-rendered-pages',
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 24 // 24 hours
+              }
+            }
           }
         ],
-        navigateFallback: 'index.html',
-        navigateFallbackDenylist: [/^\/api/]
+        // Use navigateFallback only for unknown routes, not for pre-rendered pages
+        navigateFallback: '/index.html',
+        navigateFallbackDenylist: [
+          /^\/api/,
+          /\.(?:png|jpg|jpeg|svg|gif|webp|js|css|woff2?)$/,
+          /^\/about\/?$/,
+          /^\/feedback\/?$/,
+          /^\/404\.html$/
+        ],
+        // Ensure all pre-rendered HTML files are included in precache
+        dontCacheBustURLsMatching: /\.\w{8}\./,
+        // Additional files to precache - these will be served directly
+        additionalManifestEntries: [
+          { url: '/about/index.html', revision: null },
+          { url: '/feedback/index.html', revision: null },
+          { url: '/404.html', revision: null }
+        ]
       }
     })
   ].filter(Boolean),
