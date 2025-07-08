@@ -33,18 +33,46 @@ const SvgItem = ({ processedSvg, targetDimensions, onDownload, isConverting }: S
     return URL.createObjectURL(blob);
   }, [processedSvg.svgContent]);
 
-  // Calculate PNG file size from data URL
+  // Calculate PNG file size from data URL with better error handling
   const pngFileSize = React.useMemo(() => {
-    if (!processedSvg.pngDataUrl) return 0;
+    console.log('Calculating PNG file size for:', processedSvg.file.name);
+    console.log('PNG Data URL length:', processedSvg.pngDataUrl?.length || 0);
+    console.log('PNG Data URL prefix:', processedSvg.pngDataUrl?.substring(0, 50));
     
-    // Remove data URL prefix to get base64 data
-    const base64Data = processedSvg.pngDataUrl.split(',')[1];
-    if (!base64Data) return 0;
+    if (!processedSvg.pngDataUrl || processedSvg.pngDataUrl.length === 0) {
+      console.log('PNG data URL is empty');
+      return 0;
+    }
+    
+    // Check if it's a valid data URL
+    if (!processedSvg.pngDataUrl.startsWith('data:')) {
+      console.log('Invalid data URL format');
+      return 0;
+    }
+    
+    // Split by comma to get base64 part
+    const parts = processedSvg.pngDataUrl.split(',');
+    if (parts.length !== 2) {
+      console.log('Invalid data URL structure');
+      return 0;
+    }
+    
+    const base64Data = parts[1];
+    if (!base64Data || base64Data.length === 0) {
+      console.log('No base64 data found');
+      return 0;
+    }
     
     // Calculate size from base64 (each base64 char represents 6 bits, padding considered)
     const padding = (base64Data.match(/=/g) || []).length;
-    return (base64Data.length * 3 / 4) - padding;
-  }, [processedSvg.pngDataUrl]);
+    const sizeInBytes = (base64Data.length * 3 / 4) - padding;
+    
+    console.log('Base64 length:', base64Data.length);
+    console.log('Padding:', padding);
+    console.log('Calculated PNG size:', sizeInBytes);
+    
+    return Math.max(0, sizeInBytes);
+  }, [processedSvg.pngDataUrl, processedSvg.file.name]);
 
   return (
     <div className="space-y-4">
