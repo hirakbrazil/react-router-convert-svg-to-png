@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Download, ArrowRight, Image as ImageIcon, Loader2 } from 'lucide-react';
 import ImageComparisonSlider from './ImageComparisonSlider';
+import { formatFileSize } from '@/lib/formatFileSize';
 
 interface SvgDimensions {
   width: number;
@@ -32,6 +33,19 @@ const SvgItem = ({ processedSvg, targetDimensions, onDownload, isConverting }: S
     return URL.createObjectURL(blob);
   }, [processedSvg.svgContent]);
 
+  // Calculate PNG file size from data URL
+  const pngFileSize = React.useMemo(() => {
+    if (!processedSvg.pngDataUrl) return 0;
+    
+    // Remove data URL prefix to get base64 data
+    const base64Data = processedSvg.pngDataUrl.split(',')[1];
+    if (!base64Data) return 0;
+    
+    // Calculate size from base64 (each base64 char represents 6 bits, padding considered)
+    const padding = (base64Data.match(/=/g) || []).length;
+    return (base64Data.length * 3 / 4) - padding;
+  }, [processedSvg.pngDataUrl]);
+
   return (
     <div className="space-y-4">
       {/* File Info */}
@@ -41,13 +55,23 @@ const SvgItem = ({ processedSvg, targetDimensions, onDownload, isConverting }: S
             <ImageIcon className="w-5 h-5 text-primary" />
             <div>
               <p className="font-medium">{processedSvg.file.name}</p>
-              <p className="text-sm text-muted-foreground">
-                Original: {Math.round(processedSvg.dimensions.width)} × {Math.round(processedSvg.dimensions.height)}px
-                <span className="ml-2 flex items-center gap-1">
-                  <ArrowRight className="inline h-4 w-4 text-muted-foreground" />
-                  PNG: {targetDimensions.width} × {targetDimensions.height}px
-                </span>
-              </p>
+              <div className="text-sm text-muted-foreground space-y-1">
+                <p>
+                  Original: {Math.round(processedSvg.dimensions.width)} × {Math.round(processedSvg.dimensions.height)}px
+                  <span className="ml-2 flex items-center gap-1">
+                    <ArrowRight className="inline h-4 w-4 text-muted-foreground" />
+                    PNG: {targetDimensions.width} × {targetDimensions.height}px
+                  </span>
+                </p>
+                <p>
+                  SVG size: {formatFileSize(processedSvg.file.size)}
+                  {pngFileSize > 0 && (
+                    <span className="ml-2">
+                      • PNG size: {formatFileSize(pngFileSize)}
+                    </span>
+                  )}
+                </p>
+              </div>
             </div>
           </div>
         </CardContent>

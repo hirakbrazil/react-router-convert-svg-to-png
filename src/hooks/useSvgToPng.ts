@@ -26,6 +26,7 @@ export const useSvgToPng = () => {
   const [isConverting, setIsConverting] = useState(false);
   const [quality, setQuality] = useState<QualityOption>('high');
   const [customWidth, setCustomWidth] = useState<number>(4000);
+  const [previousCustomWidth, setPreviousCustomWidth] = useState<number>(4000); // Track previous value
   const [svgTextInput, setSvgTextInput] = useState<string>("");
 
   // Load quality preference and custom width from localStorage on mount
@@ -40,16 +41,15 @@ export const useSvgToPng = () => {
       const parsedWidth = parseInt(savedCustomWidth);
       if (!isNaN(parsedWidth) && parsedWidth > 0) {
         setCustomWidth(parsedWidth);
+        setPreviousCustomWidth(parsedWidth); // Initialize previous value
       }
     }
   }, []);
 
-  // Save quality preference to localStorage when it changes
   const saveQualityPreference = useCallback((newQuality: QualityOption) => {
     localStorage.setItem(QUALITY_STORAGE_KEY, newQuality);
   }, []);
 
-  // Save custom width preference to localStorage
   const saveCustomWidthPreference = useCallback((width: number) => {
     localStorage.setItem(CUSTOM_WIDTH_STORAGE_KEY, width.toString());
   }, []);
@@ -386,8 +386,10 @@ export const useSvgToPng = () => {
     setCustomWidth(validatedWidth);
     saveCustomWidthPreference(validatedWidth);
     
-    // Then trigger conversion with the validated value if needed
-    if (quality === 'custom' && processedSvgs.length > 0) {
+    // Only trigger conversion if the value has actually changed
+    if (quality === 'custom' && processedSvgs.length > 0 && validatedWidth !== previousCustomWidth) {
+      setPreviousCustomWidth(validatedWidth); // Update previous value
+      
       setIsConverting(true);
       
       // Set all SVGs to converting state
@@ -427,8 +429,11 @@ export const useSvgToPng = () => {
       } finally {
         setIsConverting(false);
       }
+    } else if (validatedWidth !== customWidth) {
+      // Just update the previous value if only validation changed the value
+      setPreviousCustomWidth(validatedWidth);
     }
-  }, [customWidth, quality, processedSvgs, convertSvgToPng, saveCustomWidthPreference]);
+  }, [customWidth, previousCustomWidth, quality, processedSvgs, convertSvgToPng, saveCustomWidthPreference]);
 
   // Always show all quality options now
   const getAvailableQualityOptions = useCallback(() => {
