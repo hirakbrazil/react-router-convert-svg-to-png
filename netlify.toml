@@ -3,8 +3,7 @@
   to = "https://pasteimagetodownload.com/:splat"
   status = 301
   force = true
-  
-[[redirects]]
-  from = "https://pasteimagetodownload.com/*"
-  to = "/index.html"
-  status = 200
+
+[build]
+  command = "npm run build"
+  publish = "dist/client"
