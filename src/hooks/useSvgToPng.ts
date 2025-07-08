@@ -133,14 +133,8 @@ export const useSvgToPng = () => {
         
         canvas.toBlob((blob) => {
           if (blob) {
-            const reader = new FileReader();
-            reader.onload = () => {
-              resolve(reader.result as string);
-            };
-            reader.onerror = () => {
-              reject(new Error('Failed to read blob as data URL'));
-            };
-            reader.readAsDataURL(blob);
+            const dataUrl = URL.createObjectURL(blob);
+            resolve(dataUrl);
           } else {
             reject(new Error('Failed to convert to PNG'));
           }
