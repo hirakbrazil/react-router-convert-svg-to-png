@@ -2,7 +2,7 @@
 import React from "react";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
-import CalculatorHeader from "@/components/calculator/CalculatorHeader";
+import HeaderContent from "@/components/HeaderContent";
 import AdSenseResponsive from "@/components/AdSenseResponsive";
 import DesktopSidebar from "@/components/DesktopSidebar";
 import SvgToPngConverter from "@/components/SvgToPngConverter";
@@ -25,7 +25,7 @@ const Index = () => {
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto space-y-8 lg:mr-[300px]">
           <AdSenseResponsive />
-          <CalculatorHeader />
+          <HeaderContent />
           <div className="border border-border bg-card dark:bg-card rounded-xl p-6">
             <SvgToPngConverter />
           </div>
