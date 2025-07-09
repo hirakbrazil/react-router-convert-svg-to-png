@@ -267,7 +267,7 @@ export const useSvgToPng = () => {
       if (ignoredCount > 0) {
         toast.info(`Max limit is ${UPLOAD_CONSTANTS.MAX_FILES}, ${ignoredCount} image${ignoredCount > 1 ? 's' : ''} ignored`,
                   {
-                    duration: 5000, // 5 seconds
+                    duration: 6000,
                     }
                   );
       }
