@@ -1,13 +1,13 @@
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
-import { registerSW } from 'virtual:pwa-register'
 import { toast } from 'sonner'
-import { siteConfig } from '@/config/site';
 
 createRoot(document.getElementById("root")!).render(<App />);
 
-if (siteConfig.offlineSupport) {
+// Conditionally load the PWA register only if offline support is enabled
+if (import.meta.env.VITE_OFFLINE_SUPPORT === 'true') {
+  import('virtual:pwa-register').then(({ registerSW }) => {
 // Register service worker
 const updateSW = registerSW({
   onNeedRefresh() {
@@ -46,4 +46,5 @@ setTimeout(() => {
     localStorage.removeItem('app-updated');
   }
 }, 200);
+});
 }
