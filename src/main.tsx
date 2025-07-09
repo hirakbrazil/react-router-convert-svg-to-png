@@ -3,11 +3,7 @@ import App from './App.tsx'
 import './index.css'
 import { registerSW } from 'virtual:pwa-register'
 import { toast } from 'sonner'
-import { siteConfig } from '@/config/site';
 
-createRoot(document.getElementById("root")!).render(<App />);
-
-if (siteConfig.offlineSupport) {
 // Register service worker
 const updateSW = registerSW({
   onNeedRefresh() {
@@ -39,6 +35,8 @@ const updateSW = registerSW({
   }
 });
 
+createRoot(document.getElementById("root")!).render(<App />);
+
 // Show success toast after <App /> + <Toaster> mounts
 setTimeout(() => {
   if (localStorage.getItem('app-updated') === 'true') {
@@ -46,4 +44,3 @@ setTimeout(() => {
     localStorage.removeItem('app-updated');
   }
 }, 200);
-}
