@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { siteConfig } from '@/config/site';
 
 const AdSenseResponsive: React.FC = () => {
   useEffect(() => {
@@ -11,12 +12,14 @@ const AdSenseResponsive: React.FC = () => {
     }
   }, []);
 
+  if (!siteConfig.adsense?.pubId || !siteConfig.adsense?.adSlot) return null;
+
   return (
     <ins
       className="adsbygoogle"
       style={{ display: 'block' }}
-      data-ad-client="ca-pub-3677847561110212"
-      data-ad-slot="7495897394"
+      data-ad-client={siteConfig.adsense.pubId}
+      data-ad-slot={siteConfig.adsense.adSlot}
       data-ad-format="auto"
       data-full-width-responsive="true"
     ></ins>
