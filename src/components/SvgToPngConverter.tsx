@@ -102,7 +102,7 @@ const SvgToPngConverter = () => {
                 <h3 className="text-lg font-semibold mb-2">
                   {isDragging ? "Drop SVG files here" : "Upload or Drop Files"}
                 </h3>
-                <p className="text-sm text-muted-foreground opacity-75">
+                <p className="text-sm text-muted-foreground opacity-75 pointer-events-none select-none">
                   Max {UPLOAD_CONSTANTS.MAX_FILES} images at once
                 </p>
               </div>
