@@ -49,20 +49,27 @@ const SEO: React.FC<SEOProps> = ({
       {ogDescription && <meta property="og:description" content={ogDescription} />}
       {ogImage && <meta property="og:image" content={resolveUrl(ogImage)} />}
       <meta property="og:site_name" content={siteConfig.name} />
-      <script
-        async
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3677847561110212"
-        crossOrigin="anonymous"
-      ></script>
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-RG2EBW5W0Y"></script>
-      <script>
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-RG2EBW5W0Y');
-        `}
-      </script>
+      {siteConfig.adsense?.pubId && (
+  <script
+    async
+    src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${siteConfig.adsense.pubId}`}
+    crossOrigin="anonymous"
+  ></script>
+)}
+
+{siteConfig.analytics?.ga4MeasurementId && (
+  <>
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${siteConfig.analytics.ga4MeasurementId}`}></script>
+    <script>
+      {`
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '${siteConfig.analytics.ga4MeasurementId}');
+      `}
+    </script>
+  </>
+)}
     </Helmet>
   );
 };
