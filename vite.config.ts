@@ -15,6 +15,7 @@ export default defineConfig(({ mode }) => ({
     react(),
     mode === 'development' &&
     componentTagger(),
+    siteConfig.offlineSupport &&
     VitePWA({
       registerType: 'prompt',
       includeAssets: ['banner.jpg', 'icon.png'],
