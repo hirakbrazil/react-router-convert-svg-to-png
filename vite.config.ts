@@ -7,9 +7,6 @@ import { siteConfig } from './src/config/site';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  define: {
-    'import.meta.env.VITE_OFFLINE_SUPPORT': JSON.stringify(siteConfig.offlineSupport),
-  },
   server: {
     host: "::",
     port: 8080,
