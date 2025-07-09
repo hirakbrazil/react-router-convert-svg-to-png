@@ -265,7 +265,11 @@ export const useSvgToPng = () => {
 
       // Show ignored files toast after the promise toast starts
       if (ignoredCount > 0) {
-        toast.info(`Max limit is ${UPLOAD_CONSTANTS.MAX_FILES}, ${ignoredCount} image${ignoredCount > 1 ? 's' : ''} ignored`);
+        toast.info(`Max limit is ${UPLOAD_CONSTANTS.MAX_FILES}, ${ignoredCount} image${ignoredCount > 1 ? 's' : ''} ignored`,
+                  {
+                    duration: 5000, // 5 seconds
+                    }
+                  );
       }
       
       await Promise.all(conversionPromises);
