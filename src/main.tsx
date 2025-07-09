@@ -2,12 +2,12 @@ import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 import { toast } from 'sonner'
-import { register } from './sw/register';
 
 createRoot(document.getElementById("root")!).render(<App />);
 
-register().then((registerSW) => {
-  if (typeof registerSW === 'function') {
+if (import.meta.env.VITE_OFFLINE_SUPPORT === 'true') {
+  (async () => {
+    const { registerSW } = await import('virtual:pwa-register');
 // Register service worker
 const updateSW = registerSW({
   onNeedRefresh() {
@@ -46,5 +46,5 @@ setTimeout(() => {
     localStorage.removeItem('app-updated');
   }
 }, 200);
+})();
 }
-});
