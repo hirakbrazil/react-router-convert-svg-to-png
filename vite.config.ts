@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { VitePWA } from 'vite-plugin-pwa';
+import { siteConfig } from './src/config/site';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -18,9 +19,9 @@ export default defineConfig(({ mode }) => ({
       registerType: 'prompt',
       includeAssets: ['banner.jpg', 'icon.png'],
       manifest: {
-        name: 'Paste Image to Download',
-        short_name: 'Paste Image to Download',
-        description: 'Easily download copied images with Paste Image to Download tool.',
+        name: siteConfig.name,
+        short_name: siteConfig.name,
+        description: siteConfig.description,
         theme_color: '#07a36c',
         background_color: '#ffffff',
         display: 'standalone',
