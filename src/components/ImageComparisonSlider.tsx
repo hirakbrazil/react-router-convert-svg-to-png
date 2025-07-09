@@ -112,8 +112,11 @@ const ImageComparisonSlider = ({ svgContent, pngDataUrl, svgFileSize, pngFileSiz
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        {/* PNG Image (Background) */}
-        <div className="absolute inset-0">
+        {/* PNG Image (Background) with clipping */}
+        <div 
+          className="absolute inset-0"
+          style={{ clipPath: `inset(0 0 0 ${sliderPosition}%)` }}
+        >
           <img
             src={pngDataUrl}
             alt="PNG Version"
