@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -10,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
 import { useSvgToPng } from '@/hooks/useSvgToPng';
 import { cn } from '@/lib/utils';
+import { UPLOAD_CONSTANTS } from '@/config/constants';
 import SvgItem from './SvgItem';
 
 const SvgToPngConverter = () => {
@@ -103,7 +103,7 @@ const SvgToPngConverter = () => {
                   {isDragging ? "Drop SVG files here" : "Upload or Drop Files"}
                 </h3>
                 <p className="text-sm text-muted-foreground opacity-75">
-                  Max 10 images at once
+                  Max {UPLOAD_CONSTANTS.MAX_FILES} images at once
                 </p>
               </div>
             </div>

@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { toast } from 'sonner';
+import { UPLOAD_CONSTANTS } from '@/config/constants';
 
 type QualityOption = 'original' | 'high' | 'very-high' | 'custom';
 
@@ -209,9 +210,12 @@ export const useSvgToPng = () => {
       return;
     }
 
-    if (svgFiles.length > 10) {
-      toast.error('Maximum 10 files allowed at once');
-      return;
+    // Handle files over the limit
+    const filesToProcess = svgFiles.slice(0, UPLOAD_CONSTANTS.MAX_FILES);
+    const ignoredCount = svgFiles.length - filesToProcess.length;
+
+    if (ignoredCount > 0) {
+      toast.info(`Max limit is ${UPLOAD_CONSTANTS.MAX_FILES}, ${ignoredCount} image${ignoredCount > 1 ? 's' : ''} ignored`);
     }
 
     setIsConverting(true);
@@ -220,7 +224,7 @@ export const useSvgToPng = () => {
       // Create initial SVGs with loading states
       const initialSvgs: ProcessedSvg[] = [];
       
-      for (const file of svgFiles) {
+      for (const file of filesToProcess) {
         const svgText = await file.text();
         const dimensions = extractSvgDimensions(svgText);
         
@@ -258,8 +262,8 @@ export const useSvgToPng = () => {
       });
       
       toast.promise(Promise.all(conversionPromises), {
-        loading: `Converting ${svgFiles.length} SVG${svgFiles.length > 1 ? 's' : ''} to PNG...`,
-        success: `${svgFiles.length} SVG${svgFiles.length > 1 ? 's have' : ' has'} been converted to PNG successfully!`,
+        loading: `Converting ${filesToProcess.length} SVG${filesToProcess.length > 1 ? 's' : ''} to PNG...`,
+        success: `${filesToProcess.length} SVG${filesToProcess.length > 1 ? 's have' : ' has'} been converted to PNG successfully!`,
         error: 'Failed to convert one or more SVG files',
       });
       
