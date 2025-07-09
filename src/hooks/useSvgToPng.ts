@@ -214,10 +214,6 @@ export const useSvgToPng = () => {
     const filesToProcess = svgFiles.slice(0, UPLOAD_CONSTANTS.MAX_FILES);
     const ignoredCount = svgFiles.length - filesToProcess.length;
 
-    if (ignoredCount > 0) {
-      toast.info(`Max limit is ${UPLOAD_CONSTANTS.MAX_FILES}, ${ignoredCount} image${ignoredCount > 1 ? 's' : ''} ignored`);
-    }
-
     setIsConverting(true);
     
     try {
@@ -266,6 +262,11 @@ export const useSvgToPng = () => {
         success: `${filesToProcess.length} SVG${filesToProcess.length > 1 ? 's have' : ' has'} been converted to PNG successfully!`,
         error: 'Failed to convert one or more SVG files',
       });
+
+      // Show ignored files toast after the promise toast starts
+      if (ignoredCount > 0) {
+        toast.info(`Max limit is ${UPLOAD_CONSTANTS.MAX_FILES}, ${ignoredCount} image${ignoredCount > 1 ? 's' : ''} ignored`);
+      }
       
       await Promise.all(conversionPromises);
       
