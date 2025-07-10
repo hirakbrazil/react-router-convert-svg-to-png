@@ -180,7 +180,7 @@ export const useSvgToPng = () => {
       
       toast.promise(conversionPromise, {
         loading: 'Converting SVG to PNG...',
-        success: 'SVG has been converted to PNG successfully!',
+        success: 'Converted successfully!',
         error: 'Failed to convert SVG. Please check if the SVG code is valid.',
       });
 
@@ -392,7 +392,7 @@ export const useSvgToPng = () => {
         // Show final success/error message
         const successCount = results.filter(r => r.success).length;
         if (successCount === totalCount) {
-          toast.success('Images have been re-converted successfully!', { id: toastId });
+          toast.success('Re-converted successfully!', { id: toastId });
         } else {
           toast.error(`${successCount}/${totalCount} image${totalCount > 1 ? 's were' : ' was'} re-converted successfully`, { id: toastId });
         }
@@ -470,7 +470,7 @@ export const useSvgToPng = () => {
         // Show final success/error message
         const successCount = results.filter(r => r.success).length;
         if (successCount === totalCount) {
-          toast.success('Images have been re-converted successfully!', { id: toastId });
+          toast.success('Re-converted successfully!', { id: toastId });
         } else {
           toast.error(`${successCount}/${totalCount} image${totalCount > 1 ? 's were' : ' was'} re-converted successfully`, { id: toastId });
         }
