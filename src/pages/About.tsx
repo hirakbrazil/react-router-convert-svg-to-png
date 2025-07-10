@@ -83,16 +83,6 @@ const About = () => {
               </p>
             </div>
 
-            <div>
-              <h2 className="text-2xl font-semibold mb-4">Perfect For</h2>
-              <div className="space-y-3">
-                <p><strong>Web Developers:</strong> Convert SVG icons and graphics for websites and applications that require PNG format.</p>
-                <p><strong>Designers:</strong> Transform vector graphics into raster images for presentations, mockups, and client deliverables.</p>
-                <p><strong>Print Professionals:</strong> Generate high-resolution PNG files for print materials and marketing collateral.</p>
-                <p><strong>Social Media:</strong> Create PNG versions of logos and graphics for platforms that don't support SVG format.</p>
-              </div>
-            </div>
-
             <p>
               Start using Convert SVG to PNG today - it's free, fast, secure, and designed to provide the best SVG conversion experience possible!
             </p>
