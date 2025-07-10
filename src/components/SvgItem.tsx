@@ -108,7 +108,7 @@ const SvgItem = ({ processedSvg, targetDimensions, onDownload, isConverting }: S
           {processedSvg.isConverting ? (
             <>
               <Loader2 className="w-5 h-5 animate-spin" />
-              Converting...
+              Download PNG
             </>
           ) : (
             <>
