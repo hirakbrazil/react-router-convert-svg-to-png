@@ -77,15 +77,15 @@ const ThemeSwitcher = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-white dark:bg-[#030c21] border-border">
-        <DropdownMenuItem onClick={() => handleThemeChange("light")} className="gap-2">
+        <DropdownMenuItem onClick={() => handleThemeChange("light")} className="gap-2 cursor-pointer">
           <Sun className="h-4 w-4" />
           Light
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleThemeChange("dark")} className="gap-2">
+        <DropdownMenuItem onClick={() => handleThemeChange("dark")} className="gap-2 cursor-pointer">
           <Moon className="h-4 w-4" />
           Dark
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleThemeChange("system")} className="gap-2">
+        <DropdownMenuItem onClick={() => handleThemeChange("system")} className="gap-2 cursor-pointer">
           <Monitor className="h-4 w-4" />
           System
         </DropdownMenuItem>
