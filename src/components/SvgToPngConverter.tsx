@@ -86,6 +86,7 @@ const SvgToPngConverter = () => {
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
           >
+            <div className="pointer-events-none absolute inset-0 z-10"></div> {/* <-- Accepts hover */}
             <input
               type="file"
               accept=".svg"
