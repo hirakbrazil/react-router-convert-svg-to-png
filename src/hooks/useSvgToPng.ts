@@ -1,4 +1,5 @@
-import { useState, useCallback, useEffect } from "react";
+
+import { useState, useCallback, useEffect, useRef } from "react";
 import { toast } from 'sonner';
 import { UPLOAD_CONSTANTS } from '@/config/constants';
 
@@ -27,8 +28,9 @@ export const useSvgToPng = () => {
   const [isConverting, setIsConverting] = useState(false);
   const [quality, setQuality] = useState<QualityOption>('high');
   const [customWidth, setCustomWidth] = useState<number>(4000);
-  const [previousCustomWidth, setPreviousCustomWidth] = useState<number>(4000); // Track previous value
+  const [previousCustomWidth, setPreviousCustomWidth] = useState<number>(4000);
   const [svgTextInput, setSvgTextInput] = useState<string>("");
+  const dragCounterRef = useRef(0);
 
   // Load quality preference and custom width from localStorage on mount
   useEffect(() => {
@@ -42,7 +44,7 @@ export const useSvgToPng = () => {
       const parsedWidth = parseInt(savedCustomWidth);
       if (!isNaN(parsedWidth) && parsedWidth > 0) {
         setCustomWidth(parsedWidth);
-        setPreviousCustomWidth(parsedWidth); // Initialize previous value
+        setPreviousCustomWidth(parsedWidth);
       }
     }
   }, []);
@@ -318,18 +320,31 @@ export const useSvgToPng = () => {
   const handleDragEnter = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsDragging(true);
+    
+    dragCounterRef.current++;
+    
+    if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
+      setIsDragging(true);
+    }
   }, []);
 
   const handleDragLeave = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsDragging(false);
+    
+    dragCounterRef.current--;
+    
+    if (dragCounterRef.current <= 0) {
+      dragCounterRef.current = 0;
+      setIsDragging(false);
+    }
   }, []);
 
   const handleDrop = useCallback(async (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    
+    dragCounterRef.current = 0;
     setIsDragging(false);
 
     const files = Array.from(e.dataTransfer.files);
