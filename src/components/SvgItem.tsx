@@ -102,7 +102,7 @@ const SvgItem = ({ processedSvg, targetDimensions, onDownload, isConverting }: S
       <div className="flex justify-center">
         <Button
           onClick={() => onDownload(processedSvg)}
-          disabled={isConverting || processedSvg.isConverting}
+          disabled={!!processedSvg.isConverting || !processedSvg.pngDataUrl}
           className="gap-2"
         >
           {processedSvg.isConverting ? (
