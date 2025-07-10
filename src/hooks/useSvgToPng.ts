@@ -92,7 +92,7 @@ export const useSvgToPng = () => {
     return { width, height };
   };
 
-  const getTargetDimensions = useCallback((dimensions: SvgDimensions, selectedQuality: QualityOption) => {
+  const getTargetDimensions = useCallback((dimensions: SvgDimensions, selectedQuality: QualityOption, explicitCustomWidth?: number) => {
     if (selectedQuality === 'original') {
       return dimensions;
     }
@@ -100,7 +100,7 @@ export const useSvgToPng = () => {
     let targetWidth: number;
     
     if (selectedQuality === 'custom') {
-      targetWidth = customWidth;
+      targetWidth = explicitCustomWidth !== undefined ? explicitCustomWidth : customWidth;
     } else {
       targetWidth = selectedQuality === 'high' ? 4000 : 6000;
     }
@@ -113,7 +113,7 @@ export const useSvgToPng = () => {
     };
   }, [customWidth]);
 
-  const convertSvgToPng = useCallback(async (svgString: string, dimensions: SvgDimensions, selectedQuality: QualityOption): Promise<string> => {
+  const convertSvgToPng = useCallback(async (svgString: string, dimensions: SvgDimensions, selectedQuality: QualityOption, explicitCustomWidth?: number): Promise<string> => {
     return new Promise((resolve, reject) => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
@@ -123,7 +123,7 @@ export const useSvgToPng = () => {
         return;
       }
 
-      const targetDimensions = getTargetDimensions(dimensions, selectedQuality);
+      const targetDimensions = getTargetDimensions(dimensions, selectedQuality, explicitCustomWidth);
       
       canvas.width = targetDimensions.width;
       canvas.height = targetDimensions.height;
@@ -268,8 +268,8 @@ export const useSvgToPng = () => {
         toast.info(`Max limit is ${UPLOAD_CONSTANTS.MAX_FILES}, ${ignoredCount} image${ignoredCount > 1 ? 's' : ''} ignored`,
                   {
                     duration: 6000,
-                    }
-                  );
+                  }
+                );
       }
       
       await Promise.all(conversionPromises);
@@ -401,7 +401,7 @@ export const useSvgToPng = () => {
     setCustomWidth(validatedWidth);
     saveCustomWidthPreference(validatedWidth);
     
-    // Only trigger conversion if the value has actually changed
+    // Only trigger conversion if the value has actually changed from the previous value
     if (quality === 'custom' && processedSvgs.length > 0 && validatedWidth !== previousCustomWidth) {
       setPreviousCustomWidth(validatedWidth); // Update previous value
       
@@ -411,10 +411,10 @@ export const useSvgToPng = () => {
       setProcessedSvgs(prev => prev.map(svg => ({ ...svg, isConverting: true })));
       
       try {
-        // Convert each SVG individually
+        // Convert each SVG individually using the validatedWidth
         const reconversionPromises = processedSvgs.map(async (svg) => {
           try {
-            const pngUrl = await convertSvgToPng(svg.svgContent, svg.dimensions, 'custom');
+            const pngUrl = await convertSvgToPng(svg.svgContent, svg.dimensions, 'custom', validatedWidth);
             
             // Update just this SVG
             setProcessedSvgs(prev => 
