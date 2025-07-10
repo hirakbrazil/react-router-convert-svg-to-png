@@ -13,12 +13,12 @@ const Feedback = () => {
   return (
     <>
       <SEO
-        title="Feedback - Convert SVG to PNG"
-        description="Share your feedback about Convert SVG to PNG. Help us improve your SVG to PNG conversion experience with better features and functionality."
+        title="Feedback - Paste Image to Download"
+        description="Share your feedback about Paste Image to Download. Help us improve your image conversion experience."
         canonicalUrl="/feedback"
         robots="max-image-preview:large"
-        ogTitle="Feedback - Convert SVG to PNG"
-        ogDescription="Share your feedback about Convert SVG to PNG. Help us improve your SVG to PNG conversion experience with better features and functionality."
+        ogTitle="Feedback - Paste Image to Download"
+        ogDescription="Share your feedback about Paste Image to Download. Help us improve your image conversion experience."
         ogUrl="/feedback"
         ogImage="/banner.jpg"
         ogType="article"
@@ -34,18 +34,18 @@ const Feedback = () => {
 
           <div className="space-y-6">
             <p className="text-lg">
-              We value your feedback! Your input helps us improve and provide a better SVG to PNG conversion experience with enhanced features and functionality.
+              We value your feedback! Your input helps us improve and provide a better image conversion experience with our Paste Image to Download tool.
             </p>
 
             <div>
               <h2 className="text-2xl font-semibold mb-4">Contact Information</h2>
               <p>
-                For any queries, feedback, suggestions, or bug reports regarding our SVG to PNG converter, please email us at:{" "}
+                For any queries, feedback, suggestions, or bug reports, please email us at:{" "}
                 <a
-                  href="mailto:info@convertsvgtopng.net"
+                  href="mailto:info@pasteimagetodownload.com"
                   className="text-primary hover:underline"
                 >
-                  info@convertsvgtopng.net
+                  info@pasteimagetodownload.com
                 </a>
               </p>
             </div>
@@ -53,33 +53,17 @@ const Feedback = () => {
             <div>
               <h2 className="text-2xl font-semibold mb-4">What We'd Love to Hear About</h2>
               <ul className="list-disc pl-6 space-y-2">
-                <li>SVG to PNG conversion quality and accuracy</li>
-                <li>Batch processing performance and speed</li>
-                <li>Custom width and quality settings functionality</li>
-                <li>User interface and drag-and-drop experience</li>
-                <li>Preview comparison slider usability</li>
-                <li>Download and ZIP export features</li>
-                <li>Browser compatibility issues or concerns</li>
-                <li>SVG file format support and compatibility</li>
-                <li>Additional conversion features you'd like to see</li>
-                <li>Any bugs, errors, or technical issues encountered</li>
-                <li>Suggestions for improving the conversion workflow</li>
-                <li>Performance feedback for large file processing</li>
+                <li>Image conversion quality and performance</li>
+                <li>User interface and experience</li>
+                <li>Browser compatibility issues</li>
+                <li>Additional features you'd like to see</li>
+                <li>Any bugs or issues you've encountered</li>
+                <li>Suggestions for improvement</li>
               </ul>
             </div>
 
-            <div>
-              <h2 className="text-2xl font-semibold mb-4">Help Us Improve</h2>
-              <p className="mb-4">
-                Whether you're a web developer, graphic designer, or casual user, your experience matters to us. Let us know how we can make Convert SVG to PNG work better for your specific needs and use cases.
-              </p>
-              <p>
-                We're constantly working to enhance our conversion algorithms, improve file format support, and add new features that make your workflow more efficient.
-              </p>
-            </div>
-
             <p>
-              Thank you for helping us make Convert SVG to PNG the best free SVG conversion tool available!
+              Thank you for helping us make Paste Image to Download better for everyone!
             </p>
           </div>
           <AdSenseResponsive />
