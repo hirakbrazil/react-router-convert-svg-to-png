@@ -55,10 +55,6 @@ const Feedback = () => {
               <ul className="list-disc pl-6 space-y-2">
                 <li>SVG to PNG conversion quality and accuracy</li>
                 <li>Batch processing performance and speed</li>
-                <li>Custom width and quality settings functionality</li>
-                <li>User interface and drag-and-drop experience</li>
-                <li>Preview comparison slider usability</li>
-                <li>Download and ZIP export features</li>
                 <li>Browser compatibility issues or concerns</li>
                 <li>SVG file format support and compatibility</li>
                 <li>Additional conversion features you'd like to see</li>
