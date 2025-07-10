@@ -272,7 +272,7 @@ export const useSvgToPng = () => {
       // Show final success/error message
       const successCount = results.filter(r => r.success).length;
       if (successCount === totalCount) {
-        toast.success(`${totalCount} SVG${totalCount > 1 ? 's' : ''} converted successfully!`, { id: toastId });
+        toast.success('Converted successfully!', { id: toastId });
       } else {
         toast.error(`${successCount}/${totalCount} SVG${totalCount > 1 ? 's were' : ' was'} converted successfully`, { id: toastId });
       }
