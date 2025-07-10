@@ -236,6 +236,11 @@ export const useSvgToPng = () => {
       
       setProcessedSvgs(initialSvgs);
       
+      // Create a toast that can be updated
+      let completedCount = 0;
+      const totalCount = filesToProcess.length;
+      const toastId = toast.loading(`Converting 0/${totalCount} SVG${totalCount > 1 ? 's' : ''} to PNG...`);
+      
       // Convert each SVG and update individually
       const conversionPromises = initialSvgs.map(async (svg, index) => {
         try {
@@ -250,6 +255,10 @@ export const useSvgToPng = () => {
             )
           );
           
+          // Update progress
+          completedCount++;
+          toast.loading(`Converted ${completedCount}/${totalCount} SVG${totalCount > 1 ? 's' : ''} to PNG...`, { id: toastId });
+          
           return { success: true, index };
         } catch (error) {
           console.error(`Conversion error for file ${index}:`, error);
@@ -257,13 +266,18 @@ export const useSvgToPng = () => {
         }
       });
       
-      toast.promise(Promise.all(conversionPromises), {
-        loading: `Converting ${filesToProcess.length} SVG${filesToProcess.length > 1 ? 's' : ''} to PNG...`,
-        success: `${filesToProcess.length} SVG${filesToProcess.length > 1 ? 's have' : ' has'} been converted to PNG successfully!`,
-        error: 'Failed to convert one or more SVG files',
-      });
+      // Wait for all conversions to complete
+      const results = await Promise.all(conversionPromises);
+      
+      // Show final success/error message
+      const successCount = results.filter(r => r.success).length;
+      if (successCount === totalCount) {
+        toast.success(`${totalCount} SVG${totalCount > 1 ? 's have' : ' has'} been converted to PNG successfully!`, { id: toastId });
+      } else {
+        toast.error(`${successCount}/${totalCount} SVG${totalCount > 1 ? 's were' : ' was'} converted successfully`, { id: toastId });
+      }
 
-      // Show ignored files toast after the promise toast starts
+      // Show ignored files toast after conversion completes
       if (ignoredCount > 0) {
         toast.info(`Max limit is ${UPLOAD_CONSTANTS.MAX_FILES}, ${ignoredCount} image${ignoredCount > 1 ? 's' : ''} ignored`,
                   {
@@ -271,8 +285,6 @@ export const useSvgToPng = () => {
                   }
                 );
       }
-      
-      await Promise.all(conversionPromises);
       
     } catch (error) {
       console.error('Conversion error:', error);
@@ -344,6 +356,11 @@ export const useSvgToPng = () => {
       setProcessedSvgs(prev => prev.map(svg => ({ ...svg, isConverting: true })));
       
       try {
+        // Create a toast that can be updated
+        let completedCount = 0;
+        const totalCount = processedSvgs.length;
+        const toastId = toast.loading(`Re-converting 0/${totalCount} SVG${totalCount > 1 ? 's' : ''} with new quality settings...`);
+        
         // Convert each SVG individually
         const reconversionPromises = processedSvgs.map(async (svg) => {
           try {
@@ -358,6 +375,10 @@ export const useSvgToPng = () => {
               )
             );
             
+            // Update progress
+            completedCount++;
+            toast.loading(`Re-converted ${completedCount}/${totalCount} SVG${totalCount > 1 ? 's' : ''} with new quality settings...`, { id: toastId });
+            
             return { success: true };
           } catch (error) {
             console.error('Re-conversion error:', error);
@@ -365,13 +386,17 @@ export const useSvgToPng = () => {
           }
         });
 
-        toast.promise(Promise.all(reconversionPromises), {
-          loading: 'Re-converting with new quality settings...',
-          success: 'Images have been re-converted successfully!',
-          error: 'Failed to re-convert with new quality settings',
-        });
-
-        await Promise.all(reconversionPromises);
+        // Wait for all re-conversions to complete
+        const results = await Promise.all(reconversionPromises);
+        
+        // Show final success/error message
+        const successCount = results.filter(r => r.success).length;
+        if (successCount === totalCount) {
+          toast.success('Images have been re-converted successfully!', { id: toastId });
+        } else {
+          toast.error(`${successCount}/${totalCount} image${totalCount > 1 ? 's were' : ' was'} re-converted successfully`, { id: toastId });
+        }
+        
       } catch (error) {
         console.error('Re-conversion error:', error);
       } finally {
@@ -379,13 +404,6 @@ export const useSvgToPng = () => {
       }
     }
   }, [processedSvgs, convertSvgToPng, saveQualityPreference]);
-
-  const handleCustomWidthChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value);
-    if (!isNaN(value) || e.target.value === '') {
-      setCustomWidth(e.target.value === '' ? 0 : value);
-    }
-  }, []);
 
   const handleCustomWidthBlur = useCallback(async () => {
     // Validate and correct the value onBlur
@@ -411,6 +429,11 @@ export const useSvgToPng = () => {
       setProcessedSvgs(prev => prev.map(svg => ({ ...svg, isConverting: true })));
       
       try {
+        // Create a toast that can be updated
+        let completedCount = 0;
+        const totalCount = processedSvgs.length;
+        const toastId = toast.loading(`Re-converting 0/${totalCount} SVG${totalCount > 1 ? 's' : ''} with new custom width...`);
+        
         // Convert each SVG individually using the validatedWidth
         const reconversionPromises = processedSvgs.map(async (svg) => {
           try {
@@ -425,6 +448,10 @@ export const useSvgToPng = () => {
               )
             );
             
+            // Update progress
+            completedCount++;
+            toast.loading(`Re-converted ${completedCount}/${totalCount} SVG${totalCount > 1 ? 's' : ''} with new custom width...`, { id: toastId });
+            
             return { success: true };
           } catch (error) {
             console.error('Re-conversion error:', error);
@@ -432,13 +459,17 @@ export const useSvgToPng = () => {
           }
         });
 
-        toast.promise(Promise.all(reconversionPromises), {
-          loading: 'Re-converting with new custom width...',
-          success: 'Images have been re-converted successfully!',
-          error: 'Failed to re-convert with new custom width',
-        });
-
-        await Promise.all(reconversionPromises);
+        // Wait for all re-conversions to complete
+        const results = await Promise.all(reconversionPromises);
+        
+        // Show final success/error message
+        const successCount = results.filter(r => r.success).length;
+        if (successCount === totalCount) {
+          toast.success('Images have been re-converted successfully!', { id: toastId });
+        } else {
+          toast.error(`${successCount}/${totalCount} image${totalCount > 1 ? 's were' : ' was'} re-converted successfully`, { id: toastId });
+        }
+        
       } catch (error) {
         console.error('Re-conversion error:', error);
       } finally {
