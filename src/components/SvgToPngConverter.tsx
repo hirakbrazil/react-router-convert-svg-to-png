@@ -162,7 +162,7 @@ const SvgToPngConverter = () => {
                           </SelectTrigger>
                           <SelectContent>
                             {availableOptions.map((option) => (
-                              <SelectItem key={option} value={option}>
+                              <SelectItem key={option} value={option} className="cursor-pointer">
                                 {getQualityLabel(option)}
                               </SelectItem>
                             ))}
