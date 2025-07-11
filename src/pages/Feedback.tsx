@@ -6,6 +6,7 @@ import SEO from "@/components/SEO";
 import AdSenseHorizontal from "@/components/AdSenseHorizontal";
 import AdSenseResponsive from "@/components/AdSenseResponsive";
 import DesktopSidebar from "@/components/DesktopSidebar";
+import { Mail, HeartHandshake, Lightbulb } from "lucide-react";
 
 const Feedback = () => {
   useTheme();
@@ -38,7 +39,9 @@ const Feedback = () => {
             </p>
 
             <div>
-              <h2 className="text-2xl font-semibold mb-4">Contact Information</h2>
+              <h2 className="text-2xl font-semibold flex items-center gap-2 mb-4">
+                <Mail className="w-6 h-6 text-primary" />
+                Contact Information</h2>
               <p>
                 For any queries, feedback, suggestions, or bug reports regarding our SVG to PNG converter, please email us at:{" "}
                 <a
@@ -51,7 +54,9 @@ const Feedback = () => {
             </div>
 
             <div>
-              <h2 className="text-2xl font-semibold mb-4">What We'd Love to Hear About</h2>
+              <h2 className="text-2xl font-semibold flex items-center gap-2 mb-4">
+                <HeartHandshake className="w-6 h-6 text-primary" />
+                What We'd Love to Hear About</h2>
               <ul className="list-disc pl-6 space-y-2">
                 <li>SVG to PNG conversion quality and accuracy</li>
                 <li>Batch processing performance and speed</li>
@@ -65,7 +70,9 @@ const Feedback = () => {
             </div>
 
             <div>
-              <h2 className="text-2xl font-semibold mb-4">Help Us Improve</h2>
+              <h2 className="text-2xl font-semibold flex items-center gap-2 mb-4">
+                <Lightbulb className="w-6 h-6 text-primary" />
+                Help Us Improve</h2>
               <p className="mb-4">
                 Whether you're a web developer, graphic designer, or casual user, your experience matters to us. Let us know how we can make Convert SVG to PNG work better for your specific needs and use cases.
               </p>
