@@ -20,8 +20,6 @@ const updateSW = registerSW({
       },
       duration: Infinity,
       actionButtonStyle: {
-        backgroundColor: 'var(--action-button-bg, #000000)',
-        color: 'var(--action-button-text, #ffffff)',
         border: 'none',
         borderRadius: '6px',
         padding: '8px 16px',
