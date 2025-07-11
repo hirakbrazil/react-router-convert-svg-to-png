@@ -61,7 +61,7 @@ const ThemeSwitcher = () => {
   }
 
   setTheme(newTheme);
-  toast(
+  toast.success(
     `Theme set to ${
       newTheme === "system"
         ? "System default"
