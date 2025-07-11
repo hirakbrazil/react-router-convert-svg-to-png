@@ -8,7 +8,6 @@ import DesktopSidebar from "@/components/DesktopSidebar";
 import { Mail, HeartHandshake, Lightbulb } from "lucide-react";
 
 const Feedback = () => {
-
   return (
     <>
       <SEO
