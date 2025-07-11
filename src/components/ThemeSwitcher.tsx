@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Sun, Moon, Monitor } from "lucide-react";
 import { useState, useEffect } from "react";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 type Theme = 'light' | 'dark' | 'system';
 
@@ -61,11 +61,16 @@ const ThemeSwitcher = () => {
   }
 
   setTheme(newTheme);
-  toast({
-    title: "Theme Changed",
-    description: `Color set to ${newTheme === "system" ? "System default" : newTheme.charAt(0).toUpperCase() + newTheme.slice(1)}`,
-    duration: 5000,
-  });
+  toast(
+    `Theme set to ${
+      newTheme === "system"
+        ? "System default"
+        : newTheme.charAt(0).toUpperCase() + newTheme.slice(1)
+    }`,
+    {
+      duration: 5000,
+    }
+  );
 };
 
   return (
