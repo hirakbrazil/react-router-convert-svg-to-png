@@ -21,6 +21,7 @@ const App = () => {
         <Toaster
           position="bottom-left"
           richColors
+          swipeDirections={["up", "left"]}
           />
         <BrowserRouter>
           <ScrollToTop />
