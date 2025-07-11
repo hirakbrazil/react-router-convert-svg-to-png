@@ -54,24 +54,38 @@ const ThemeSwitcher = () => {
   };
 
   const handleThemeChange = (newTheme: Theme) => {
-  if (newTheme === "system") {
-    localStorage.removeItem("theme"); // Remove theme from localStorage
-  } else {
-    localStorage.setItem("theme", newTheme);
-  }
-
-  setTheme(newTheme);
-  toast.success(
-    `Theme set to ${
-      newTheme === "system"
-        ? "System default"
-        : newTheme.charAt(0).toUpperCase() + newTheme.slice(1)
-    }`,
-    {
-      duration: 5000,
+    // Check if the selected theme is already active
+    if (newTheme === theme) {
+      const modeNames = {
+        light: "Light",
+        dark: "Dark", 
+        system: "System"
+      };
+      
+      toast.info(`${modeNames[newTheme]} mode is already active`, {
+        duration: 5000,
+      });
+      return;
     }
-  );
-};
+
+    if (newTheme === "system") {
+      localStorage.removeItem("theme"); // Remove theme from localStorage
+    } else {
+      localStorage.setItem("theme", newTheme);
+    }
+
+    setTheme(newTheme);
+    toast.success(
+      `Theme set to ${
+        newTheme === "system"
+          ? "System default"
+          : newTheme.charAt(0).toUpperCase() + newTheme.slice(1)
+      }`,
+      {
+        duration: 5000,
+      }
+    );
+  };
 
   return (
     <DropdownMenu>
