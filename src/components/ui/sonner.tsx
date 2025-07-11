@@ -69,6 +69,15 @@ const Toaster = ({ ...props }: ToasterProps) => {
           success: "group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border",
           info: "group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground dark:group-[.toaster]:text-blue-300 group-[.toaster]:border-border",
         },
+        style: {
+          actionButton: {
+          border: "none",
+          borderRadius: "6px",
+          padding: "8px 16px",
+          fontWeight: "500",
+          cursor: "pointer",
+          },
+        },
       }}
       {...props}
     />
