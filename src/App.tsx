@@ -21,7 +21,9 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
-        <Sonner position="bottom-left" swipeDirections="bottom-left" />
+        <Sonner position="bottom-left" toastOptions={{
+    swipeDirection: "bottom-left", //
+  }} />
         <BrowserRouter>
           <ScrollToTop />
           <Routes>
