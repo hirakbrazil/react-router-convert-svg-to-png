@@ -59,7 +59,7 @@ const ThemeSwitcher = () => {
       const modeNames = {
         light: "Light",
         dark: "Dark", 
-        system: "System"
+        system: "System default"
       };
       
       toast.info(`${modeNames[newTheme]} mode is already active`, {
