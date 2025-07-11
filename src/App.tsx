@@ -20,9 +20,7 @@ const App = () => {
       <TooltipProvider>
         <Toaster
           position="bottom-left"
-          toastOptions={{
-            swipeDirection: "right",
-          }}
+          richColors
           />
         <BrowserRouter>
           <ScrollToTop />
