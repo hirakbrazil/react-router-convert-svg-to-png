@@ -20,7 +20,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
+        <Toaster position="bottom-right" />
         <Sonner />
         <BrowserRouter>
           <ScrollToTop />
