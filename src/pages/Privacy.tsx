@@ -25,7 +25,7 @@ const Privacy = () => {
               Your privacy is our priority. Learn how we protect your data.
             </p>
             <p className="text-sm text-muted-foreground">
-              Last updated: {new Date().toLocaleDateString()}
+              Last updated: July 11, 2025
             </p>
           </div>
 
@@ -76,7 +76,7 @@ const Privacy = () => {
                   <li>General geographic region for service optimization</li>
                   <li>Browser type and version for compatibility</li>
                   <li>Technical error logs (without personal information)</li>
-                  <li>Feedback you voluntarily provide through our contact form</li>
+                  <li>Feedback you voluntarily provide through our contact email</li>
                 </ul>
                 <p>
                   All collected data is aggregated and anonymized. We cannot and do not identify individual users.
