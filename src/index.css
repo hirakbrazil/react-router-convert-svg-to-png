@@ -71,10 +71,10 @@
 
   /* Custom Scrollbar Styles */
   ::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.22);
+    background: rgba(0, 0, 0, 0.30);
   }
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.35);
+  ::-webkit-scrollbar-thumb:active {
+    background: rgba(0, 0, 0, 0.45);
   }
 
   @media screen and (min-width: 768px) {
@@ -90,9 +90,6 @@
       background: rgba(0, 0, 0, 0.15);
       border-radius: 10px;
     }
-  }
-  ::-webkit-scrollbar-thumb:active {
-    background: rgba(0, 0, 0, 0.35);
   }
   
   .dark {
@@ -118,15 +115,14 @@
 
     /* Dark mode scrollbar styles */
     ::-webkit-scrollbar-thumb {
-      background: #05112e;
-    }
-    ::-webkit-scrollbar-thumb:hover {
       background: #122040;
     }
+    
     ::-webkit-scrollbar-thumb:active {
-      background: #122040;
+      background: #1d3670;
     }
   }
+  
   input {
     outline: none !important; /* Removes the default browser outline */
     border: none !important; /* Removes any border */
