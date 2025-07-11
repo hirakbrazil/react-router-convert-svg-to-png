@@ -8,7 +8,7 @@ const HomepageContent = () => {
       <div className="space-y-6">
         <h2 className="text-2xl font-semibold flex items-center gap-2 text-foreground">
           <FileSearch className="w-6 h-6 text-primary" />
-          How It Works?
+          How It Works
         </h2>
         <div className="space-y-4 text-muted-foreground">
           <p>
