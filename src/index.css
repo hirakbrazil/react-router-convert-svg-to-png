@@ -24,9 +24,6 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 152 55% 40%;
     --radius: 0.5rem;
-    /* Toast action button colors for light mode */
-    --action-button-bg: #000000;
-    --action-button-text: #ffffff;
   }
 
   .dark {
@@ -49,9 +46,6 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 152 55% 50%;
-    /* Toast action button colors for dark mode */
-    --action-button-bg: #ffffff;
-    --action-button-text: #000000;
   }
 
   * {
