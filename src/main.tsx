@@ -19,13 +19,6 @@ const updateSW = registerSW({
         },
       },
       duration: Infinity,
-      actionButtonStyle: {
-        border: 'none',
-        borderRadius: '6px',
-        padding: '8px 16px',
-        fontWeight: '500',
-        cursor: 'pointer',
-      },
     });
   },
   onOfflineReady() {
