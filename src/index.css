@@ -71,7 +71,7 @@
 
   /* Custom Scrollbar Styles */
   ::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.38);
+    background: rgba(0, 0, 0, 0.30);
   }
   ::-webkit-scrollbar-thumb:hover {
     background: rgba(0, 0, 0, 0.45);
@@ -90,7 +90,6 @@
       background: transparent;
     }
     ::-webkit-scrollbar-thumb {
-      background: rgba(0, 0, 0, 0.15);
       border-radius: 10px;
     }
   }
