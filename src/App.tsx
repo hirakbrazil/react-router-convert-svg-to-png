@@ -18,14 +18,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster richColors
-          toastOptions={{
-    swipeDirections: ["right", "down"],
-    classNames: {
-      info: "dark:text-red-400", // apply only in dark mode
-    },
-  }}
-          />
+        <Toaster richColors />
         <BrowserRouter>
           <ScrollToTop />
           <Routes>
