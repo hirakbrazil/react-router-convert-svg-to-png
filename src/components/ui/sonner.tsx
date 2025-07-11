@@ -72,9 +72,9 @@ const Toaster = ({ ...props }: ToasterProps) => {
         style: {
           actionButton: {
           border: "none",
-          borderRadius: "6px",
+          borderRadius: "1px",
           padding: "8px 16px",
-          fontWeight: "500",
+          fontWeight: "700",
           cursor: "pointer",
           },
         },
