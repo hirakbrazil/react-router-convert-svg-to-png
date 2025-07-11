@@ -1,5 +1,6 @@
 
 import React from "react";
+import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { Shield, Lock, Eye, Server } from "lucide-react";
@@ -161,7 +162,7 @@ const Privacy = () => {
               <h2 className="text-2xl font-semibold text-foreground">Contact Us</h2>
               <div className="space-y-4 text-muted-foreground">
                 <p>
-                  If you have questions about this Privacy Policy or our privacy practices, please contact us through our feedback page or email us directly.
+                  If you have questions about this Privacy Policy or our privacy practices, please contact us through our <Link to="/feedback" className="text-primary underline">feedback page</Link> to email us directly.
                 </p>
                 <p>
                   We are committed to addressing any privacy concerns promptly and transparently.
