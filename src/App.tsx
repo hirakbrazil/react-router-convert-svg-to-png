@@ -18,7 +18,12 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
+        <Toaster
+          position="bottom-left"
+          toastOptions={{
+            swipeDirection: "right",
+          }}
+          />
         <BrowserRouter>
           <ScrollToTop />
           <Routes>
