@@ -170,7 +170,7 @@ const Privacy = () => {
                 Contact Us</h2>
               <div className="space-y-4 text-muted-foreground">
                 <p>
-                  If you have questions about this Privacy Policy or our privacy practices, please contact us through our <Link to="/feedback" className="text-primary underline hover:opacity-70 transition-opacity">feedback page</Link> to email us directly.
+                  If you have questions about this Privacy Policy or our privacy practices, please contact us through our <Link to="/feedback" className="text-primary hover:underline">feedback page</Link> to email us directly.
                 </p>
                 <p>
                   We are committed to addressing any privacy concerns promptly and transparently.
