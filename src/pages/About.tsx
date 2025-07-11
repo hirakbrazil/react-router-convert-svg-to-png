@@ -46,7 +46,7 @@ const About = () => {
               <ul className="list-disc pl-6 space-y-2">
                 <li>Drag-and-drop SVG file upload with instant preview</li>
                 <li>Batch conversion - process multiple SVG files at once</li>
-                <li>Smart quality enhancement up to 10000px for crisp results</li>
+                <li>Smart quality enhancement up to 10,000px for crisp results</li>
                 <li>Custom width settings with automatic aspect ratio preservation</li>
                 <li>Live preview comparison with interactive slider</li>
                 <li>Download individual files or bulk ZIP download</li>
