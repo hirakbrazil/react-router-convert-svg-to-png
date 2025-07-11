@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
-import { Shield, Lock, Eye, Server } from "lucide-react";
+import { Shield, Lock, Eye, Server, Cookie, ShieldCheck, BadgeCheck, Mail, History } from "lucide-react";
 
 const Privacy = () => {
   return (
@@ -112,7 +112,9 @@ const Privacy = () => {
             </div>
 
             <div className="space-y-6">
-              <h2 className="text-2xl font-semibold text-foreground">Cookies</h2>
+              <h2 className="text-2xl font-semibold flex items-center gap-2 text-foreground">
+                <Cookie className="w-6 h-6 text-primary" />
+                Cookies</h2>
               <div className="space-y-4 text-muted-foreground">
                 <p>
                   We use minimal cookies to:
@@ -129,7 +131,9 @@ const Privacy = () => {
             </div>
 
             <div className="space-y-6">
-              <h2 className="text-2xl font-semibold text-foreground">Data Security</h2>
+              <h2 className="text-2xl font-semibold flex items-center gap-2 text-foreground">
+                <ShieldCheck className="w-6 h-6 text-primary" />
+                Data Security</h2>
               <div className="space-y-4 text-muted-foreground">
                 <p>
                   Since all file processing happens in your browser, your files are inherently secure:
@@ -144,7 +148,9 @@ const Privacy = () => {
             </div>
 
             <div className="space-y-6">
-              <h2 className="text-2xl font-semibold text-foreground">Your Rights</h2>
+              <h2 className="text-2xl font-semibold flex items-center gap-2 text-foreground">
+                <BadgeCheck className="w-6 h-6 text-primary" />
+                Your Rights</h2>
               <div className="space-y-4 text-muted-foreground">
                 <p>
                   You have the right to:
@@ -159,10 +165,12 @@ const Privacy = () => {
             </div>
 
             <div className="space-y-6">
-              <h2 className="text-2xl font-semibold text-foreground">Contact Us</h2>
+              <h2 className="text-2xl font-semibold flex items-center gap-2 text-foreground">
+                <Mail className="w-6 h-6 text-primary" />
+                Contact Us</h2>
               <div className="space-y-4 text-muted-foreground">
                 <p>
-                  If you have questions about this Privacy Policy or our privacy practices, please contact us through our <Link to="/feedback" className="text-primary underline">feedback page</Link> to email us directly.
+                  If you have questions about this Privacy Policy or our privacy practices, please contact us through our <Link to="/feedback" className="text-primary underline hover:opacity-70 transition-opacity">feedback page</Link> to email us directly.
                 </p>
                 <p>
                   We are committed to addressing any privacy concerns promptly and transparently.
@@ -171,7 +179,9 @@ const Privacy = () => {
             </div>
 
             <div className="space-y-6">
-              <h2 className="text-2xl font-semibold text-foreground">Changes to This Policy</h2>
+              <h2 className="text-2xl font-semibold flex items-center gap-2 text-foreground">
+                <History className="w-6 h-6 text-primary" />
+                Changes to This Policy</h2>
               <div className="space-y-4 text-muted-foreground">
                 <p>
                   We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated "Last updated" date.
