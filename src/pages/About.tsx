@@ -8,7 +8,6 @@ import DesktopSidebar from "@/components/DesktopSidebar";
 import { Sparkles, Shield, Globe } from "lucide-react";
 
 const About = () => {
-  
   return (
     <>
       <SEO
