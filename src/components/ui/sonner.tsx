@@ -62,7 +62,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
             "group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg",
           description: "group-[.toast]:text-muted-foreground",
           actionButton:
-            "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground border-0 rounded-md px-4 py-2 font-medium cursor-pointer",
+            "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground border-0 rounded-md px-4 py-2 font-semibold cursor-pointer",
           cancelButton:
             "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground",
           error: "group toast group-[.toaster]:bg-destructive group-[.toaster]:text-destructive-foreground group-[.toaster]:border-destructive",
