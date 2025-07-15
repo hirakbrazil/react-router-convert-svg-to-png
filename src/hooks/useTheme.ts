@@ -1,6 +1,29 @@
 
 import { useEffect } from "react";
 
+// Apply theme synchronously before React renders
+const applyThemeSync = () => {
+  const theme = localStorage.getItem("theme");
+  const root = document.documentElement;
+
+  root.classList.remove("light", "dark");
+
+  if (theme === "dark") {
+    root.classList.add("dark");
+  } else if (theme === "light") {
+    root.classList.add("light");
+  } else {
+    // Handle system theme
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    root.classList.add(systemTheme);
+  }
+};
+
+// Apply theme immediately when module loads
+if (typeof window !== "undefined") {
+  applyThemeSync();
+}
+
 const useTheme = () => {
   useEffect(() => {
     const updateThemeColor = () => {
@@ -18,26 +41,9 @@ const useTheme = () => {
       document.head.appendChild(newMeta);
     };
 
-    const applyTheme = () => {
-      const theme = localStorage.getItem("theme");
-      const root = document.documentElement;
-
-      root.classList.remove("light", "dark");
-
-      if (theme === "dark") {
-        root.classList.add("dark");
-      } else if (theme === "light") {
-        root.classList.add("light");
-      } else {
-        // Handle system theme
-        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-        root.classList.add(systemTheme);
-      }
-
-      updateThemeColor();
-    };
-
-    applyTheme();
+    // Apply theme immediately (in case it wasn't applied during module load)
+    applyThemeSync();
+    updateThemeColor();
 
     const darkThemeMq = window.matchMedia("(prefers-color-scheme: dark)");
     const handleThemeChange = (e: MediaQueryListEvent) => {
