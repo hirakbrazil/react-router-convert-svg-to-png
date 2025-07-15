@@ -7,6 +7,26 @@
     
     <link rel="icon" href="/icon.png" />
     <link rel="apple-touch-icon" href="/icon.png" />
+    
+    <script>
+      // Apply theme immediately to prevent flash
+      (function() {
+        const theme = localStorage.getItem("theme");
+        const root = document.documentElement;
+        
+        root.classList.remove("light", "dark");
+        
+        if (theme === "dark") {
+          root.classList.add("dark");
+        } else if (theme === "light") {
+          root.classList.add("light");
+        } else {
+          // Handle system theme
+          const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          root.classList.add(systemTheme);
+        }
+      })();
+    </script>
     </head>
   <body>
     <div id="root"></div>
