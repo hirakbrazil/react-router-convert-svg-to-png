@@ -4,10 +4,10 @@ export const siteConfig = {
   name: 'Convert SVG to PNG',
   description: 'Convert high-quality SVG files to PNG images instantly. Resize, optimize, and download your images effortlessly.',
   adsense: {
-    pubId: 'ca-pub-3677847561110212',
-    adSlot: '7495897394'
+    pubId: 'ca-pub-xxxxxxxxxxxx',
+    adSlot: 'xxxxxxxx'
   },
   analytics: {
-    ga4MeasurementId: 'G-RG2EBW5W0Y'
+    ga4MeasurementId: 'G-xxxxxxxx'
   }
 };
