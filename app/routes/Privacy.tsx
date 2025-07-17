@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { Shield, Lock, Eye, Server, Cookie, ShieldCheck, BadgeCheck, Mail, History } from "lucide-react";
