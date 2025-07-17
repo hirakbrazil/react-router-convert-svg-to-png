@@ -1,8 +1,8 @@
-import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
-import { registerSW } from 'virtual:pwa-register'
-import { toast } from 'sonner'
+import { createRoot } from 'react-dom/client';
+import { HydratedRouter } from "react-router/dom";
+import './index.css';
+import { registerSW } from 'virtual:pwa-register';
+import { toast } from 'sonner';
 
 // Register service worker
 const updateSW = registerSW({
@@ -22,11 +22,11 @@ const updateSW = registerSW({
     });
   },
   onOfflineReady() {
-    console.log('App ready to work offline')
+    console.log('App ready to work offline');
   }
 });
 
-createRoot(document.getElementById("root")!).render(<App />);
+createRoot(document.getElementById("root")!).render(<HydratedRouter />);
 
 // Show success toast after <App /> + <Toaster> mounts
 setTimeout(() => {
