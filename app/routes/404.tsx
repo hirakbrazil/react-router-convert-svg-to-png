@@ -1,11 +1,10 @@
 import { Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useRouter } from "react-router";
 import SEO from "@/components/SEO";
 
 const NotFound = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   return (
     <>
@@ -22,7 +21,7 @@ const NotFound = () => {
           The page you are looking for doesn't exist or has been moved.
         </p>
         <Button
-          onClick={() => navigate("/")}
+          onClick={() => router.navigate("/")}
           className="inline-flex items-center gap-2"
         >
           <Home className="h-4 w-4" />
