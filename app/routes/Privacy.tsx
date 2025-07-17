@@ -1,23 +1,32 @@
 
 import React from "react";
+import type { Route } from "./+types/Privacy";
 import { Link } from "react-router";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { Shield, Lock, Eye, Server, Cookie, ShieldCheck, BadgeCheck, Mail, History } from "lucide-react";
 
+export function meta({}: Route.MetaArgs) {
+  return [
+    { title: "Privacy Policy - Convert SVG to PNG" },
+    { 
+      name: "description", 
+      content: "Learn about our privacy practices. All SVG to PNG conversions happen locally in your browser - your files never leave your device." 
+    },
+    { name: "robots", content: "max-image-preview:large" },
+    { property: "og:title", content: "Privacy Policy - Convert SVG to PNG" },
+    { 
+      property: "og:description", 
+      content: "Learn about our privacy practices. All SVG to PNG conversions happen locally in your browser - your files never leave your device." 
+    },
+    { property: "og:url", content: "/privacy" },
+    { property: "og:image", content: "/banner.jpg" },
+    { property: "og:type", content: "article" },
+  ];
+}
+
 const Privacy = () => {
   return (
-    <>
-      <SEO
-        title="Privacy Policy - Convert SVG to PNG"
-        description="Learn about our privacy practices. All SVG to PNG conversions happen locally in your browser - your files never leave your device."
-        canonicalUrl="/privacy"
-        robots="index, follow"
-        ogTitle="Privacy Policy - Convert SVG to PNG"
-        ogDescription="Learn about our privacy practices. All SVG to PNG conversions happen locally in your browser - your files never leave your device."
-        ogUrl="/privacy"
-        ogType="website"
-      />
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="text-center space-y-4">
@@ -196,7 +205,6 @@ const Privacy = () => {
           <Footer />
         </div>
       </div>
-    </>
   );
 };
 
