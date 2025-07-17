@@ -8,8 +8,16 @@ import {
 } from "react-router";
 
 import type { Route } from "./+types/root";
+import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import ScrollToTop from "@/components/ScrollToTop";
+import useTheme from "@/hooks/useTheme";
 import "./app.css";
 import "./index.css";
+
+// Create QueryClient instance
+const queryClient = new QueryClient();
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -42,8 +50,26 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+function AppProviders({ children }: { children: React.ReactNode }) {
+  useTheme();
+  
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster richColors />
+        <ScrollToTop />
+        {children}
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+}
+
 export default function App() {
-  return <Outlet />;
+  return (
+    <AppProviders>
+      <Outlet />
+    </AppProviders>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
