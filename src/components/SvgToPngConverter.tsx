@@ -130,6 +130,7 @@ const SvgToPngConverter = () => {
                 <Button
                   onClick={handleSvgTextSubmit}
                   disabled={!svgTextInput.trim() || isConverting}
+                  className="self-center"
                 >
                   Convert SVG Code
                 </Button>
