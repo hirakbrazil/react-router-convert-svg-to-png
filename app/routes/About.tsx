@@ -20,7 +20,6 @@ export function meta({}: Route.MetaArgs) {
       content: "Learn about Convert SVG to PNG tool. Transform your SVG files into high-quality PNG images with smart resizing and quality options." 
     },
     { property: "og:url", content: "/about" },
-    { property: "og:image", content: "/banner.jpg" },
     { property: "og:type", content: "article" },
   ];
 }
