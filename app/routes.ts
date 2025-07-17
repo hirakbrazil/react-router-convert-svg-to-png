@@ -5,4 +5,5 @@ export default [
   route("about", "routes/About.tsx"),
   route("feedback", "routes/Feedback.tsx"),
   route("privacy", "routes/Privacy.tsx"),
+  route("*", "routes/404.tsx"),
 ] satisfies RouteConfig;
