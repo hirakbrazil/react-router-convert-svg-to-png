@@ -1,5 +1,6 @@
 
 import React from "react";
+import type { Route } from "./+types/Feedback";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import AdSenseHorizontal from "@/components/AdSenseHorizontal";
@@ -7,20 +8,26 @@ import AdSenseResponsive from "@/components/AdSenseResponsive";
 import DesktopSidebar from "@/components/DesktopSidebar";
 import { Mail, HeartHandshake, Lightbulb } from "lucide-react";
 
+export function meta({}: Route.MetaArgs) {
+  return [
+    { title: "Feedback - Convert SVG to PNG" },
+    { 
+      name: "description", 
+      content: "Share your feedback about Convert SVG to PNG. Help us improve your SVG to PNG conversion experience with better features and functionality." 
+    },
+    { name: "robots", content: "max-image-preview:large" },
+    { property: "og:title", content: "Feedback - Convert SVG to PNG" },
+    { 
+      property: "og:description", 
+      content: "Share your feedback about Convert SVG to PNG. Help us improve your SVG to PNG conversion experience with better features and functionality." 
+    },
+    { property: "og:url", content: "/feedback" },
+    { property: "og:type", content: "article" },
+  ];
+}
+
 const Feedback = () => {
   return (
-    <>
-      <SEO
-        title="Feedback - Convert SVG to PNG"
-        description="Share your feedback about Convert SVG to PNG. Help us improve your SVG to PNG conversion experience with better features and functionality."
-        canonicalUrl="/feedback"
-        robots="max-image-preview:large"
-        ogTitle="Feedback - Convert SVG to PNG"
-        ogDescription="Share your feedback about Convert SVG to PNG. Help us improve your SVG to PNG conversion experience with better features and functionality."
-        ogUrl="/feedback"
-        ogImage="/banner.jpg"
-        ogType="article"
-      />
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto space-y-8 lg:mr-[300px]">
           <AdSenseHorizontal />
@@ -87,7 +94,6 @@ const Feedback = () => {
         </div>
         <DesktopSidebar />
       </div>
-    </>
   );
 };
 
