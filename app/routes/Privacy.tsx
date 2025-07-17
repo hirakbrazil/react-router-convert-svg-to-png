@@ -20,7 +20,6 @@ export function meta({}: Route.MetaArgs) {
       content: "Learn about our privacy practices. All SVG to PNG conversions happen locally in your browser - your files never leave your device." 
     },
     { property: "og:url", content: "/privacy" },
-    { property: "og:image", content: "/banner.jpg" },
     { property: "og:type", content: "article" },
   ];
 }
