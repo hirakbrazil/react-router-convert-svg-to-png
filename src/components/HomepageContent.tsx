@@ -18,7 +18,7 @@ const HomepageContent = () => {
             All processing happens directly in your browser - your files never leave your device, ensuring complete privacy and security. The conversion works offline once loaded, making it fast and secure.
           </p>
           <p>
-            Upload multiple SVG files at once for batch conversion. Choose between original size conversion or high-quality mode that automatically resizes smaller SVGs up to 10,000px while maintaining perfect aspect ratios.
+            Upload multiple SVG files at once for batch conversion or paste SVG code to download it as svg or png format. Choose between original size conversion or high-quality mode that automatically resizes smaller SVGs up to 10,000px while maintaining perfect aspect ratios.
           </p>
         </div>
       </div>
@@ -71,7 +71,7 @@ const HomepageContent = () => {
           <div>
             <h3 className="font-medium mb-2 text-foreground">Custom Width Settings</h3>
             <p>
-              Set precise custom widths for your PNG output while maintaining aspect ratios. Perfect for creating consistent sizing across multiple graphics.
+              Set precise custom size for your hd quality PNG output while maintaining aspect ratios. Perfect for creating consistent sizing across multiple graphics.
             </p>
           </div>
           <div>
