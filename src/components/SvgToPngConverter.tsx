@@ -127,13 +127,14 @@ const SvgToPngConverter = () => {
                   className="min-h-[120px] font-mono text-sm"
                   disabled={isConverting}
                 />
+                <div className="flex justify-center">
                 <Button
                   onClick={handleSvgTextSubmit}
                   disabled={!svgTextInput.trim() || isConverting}
-                  className="self-center"
                 >
                   Convert SVG Code
                 </Button>
+                </div>
               </div>
         </div>
       ) : (
