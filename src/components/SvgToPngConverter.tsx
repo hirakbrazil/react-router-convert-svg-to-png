@@ -117,8 +117,6 @@ const SvgToPngConverter = () => {
           </div>
 
           {/* SVG Text Input - moved below upload */}
-          <Card>
-            <CardContent className="p-6">
               <div className="space-y-4">
                 <Label htmlFor="svg-text">Paste SVG Code</Label>
                 <Textarea
@@ -137,8 +135,6 @@ const SvgToPngConverter = () => {
                   Convert SVG Code
                 </Button>
               </div>
-            </CardContent>
-          </Card>
         </div>
       ) : (
         <div className="space-y-6">
