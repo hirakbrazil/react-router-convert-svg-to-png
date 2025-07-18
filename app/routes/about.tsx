@@ -5,27 +5,20 @@ import AdSenseHorizontal from "@/components/AdSenseHorizontal";
 import AdSenseResponsive from "@/components/AdSenseResponsive";
 import DesktopSidebar from "@/components/DesktopSidebar";
 import { Sparkles, Shield, Globe } from "lucide-react";
-
-export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "About Convert SVG to PNG" },
-    { 
-      name: "description", 
-      content: "Learn about Convert SVG to PNG tool. Transform your SVG files into high-quality PNG images with smart resizing and quality options." 
-    },
-    { name: "robots", content: "max-image-preview:large" },
-    { property: "og:title", content: "About Convert SVG to PNG" },
-    { 
-      property: "og:description", 
-      content: "Learn about Convert SVG to PNG tool. Transform your SVG files into high-quality PNG images with smart resizing and quality options." 
-    },
-    { property: "og:url", content: "/about" },
-    { property: "og:type", content: "article" },
-  ];
-}
+import { CustomMeta } from "@/components/CustomMeta";
 
 const about = () => {
   return (
+    <>
+      <CustomMeta
+        title="About Convert SVG to PNG"
+        description="Learn about Convert SVG to PNG tool. Transform your SVG files into high-quality PNG images with smart resizing and quality options."
+        robots="max-image-preview:large"
+        ogTitle="About Convert SVG to PNG"
+        ogDescription="Learn about Convert SVG to PNG tool. Transform your SVG files into high-quality PNG images with smart resizing and quality options."
+        ogUrl="/about"
+        ogType="article"
+      />
     <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto space-y-8 lg:mr-[300px]">
         <AdSenseHorizontal />
@@ -94,6 +87,7 @@ const about = () => {
       </div>
       <DesktopSidebar />
     </div>
+    </>
   );
 };
 
