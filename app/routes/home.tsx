@@ -31,6 +31,7 @@ export default function Home() {
         </div>
         <AdSenseResponsive />
         <HomepageContent />
+        <AdSenseResponsive />
         <Footer />
       </div>
       <DesktopSidebar />
