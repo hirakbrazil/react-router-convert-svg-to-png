@@ -14,7 +14,7 @@ import useTheme from "@/hooks/useTheme";
 import { toast } from 'sonner';
 
 import type { Route } from "./+types/root";
-import "./index.css";
+import "./app.css";
 
 const queryClient = new QueryClient();
 
