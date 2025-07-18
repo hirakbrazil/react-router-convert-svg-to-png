@@ -69,6 +69,7 @@
   "@types/express": "^5.0.1",
   "@types/react": "^19.1.2",
   "@types/react-dom": "^19.1.2",
+  "autoprefixer": "^10.4.20",
   "cross-env": "^7.0.3",
   "express": "^5.1.0",
   "netlify-cli": "^20.1.1",
