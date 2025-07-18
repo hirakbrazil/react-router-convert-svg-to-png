@@ -126,6 +126,14 @@
   }
 
     /* Custom input and slider styles */
+  .bg-primary {
+    background-color: #2e9e6a !important;
+  }
+
+  .text-primary {
+    color: #2e9e6a !important;
+  }
+  
   .bg-secondary {
     background-color: #e6f5ef !important;
   }
