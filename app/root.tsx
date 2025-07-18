@@ -15,7 +15,6 @@ import { toast } from 'sonner';
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import "./index.css";
 
 const queryClient = new QueryClient();
 
