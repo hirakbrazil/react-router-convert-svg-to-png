@@ -4,149 +4,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 152 55% 40%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 160 84% 96%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 152 55% 40%;
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 223 47% 11%;
-    --popover-foreground: 215 20.2% 65.1%;
-    --primary: 152 55% 50%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 152 55% 50%;
-  }
-
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply bg-background text-foreground font-sans;
-  }
-
-  /* Custom input and slider styles */
-  .bg-secondary {
-    background-color: #e6f5ef !important;
-  }
-
-  [data-radix-slider-thumb] {
-    background-color: #10B981 !important;
-  }
-
-  [data-radix-slider-track] {
-    background-color: #e6f5ef !important;
-  }
-
-  /* Custom Scrollbar Styles */
-  ::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.30);
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.45);
-  }
-  ::-webkit-scrollbar-thumb:active {
-    background: rgba(0, 0, 0, 0.45);
-  }
-
-  @media screen and (min-width: 768px) {
-    ::-webkit-scrollbar {
-      -webkit-appearance: none;
-      width: 8px;
-      height: 5px;
-    }
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-      border-radius: 10px;
-    }
-  }
-
-  .dark {
-    .bg-card {
-      background-color: #030c21 !important;
-    }
-
-    .text-gray-600 {
-      color: #c1cbd6 !important;
-    }
-
-    .text-gray-700 {
-      color: #c1cbd6 !important;
-    }
-
-    .bg-secondary {
-      background-color: #062b1f !important;
-    }
-
-    [role="listbox"] {
-      background-color: #030c21 !important;
-    }
-
-    /* Dark mode scrollbar styles */
-    ::-webkit-scrollbar-thumb {
-      background: #122040;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #1d3670;
-    }
-    ::-webkit-scrollbar-thumb:active {
-      background: #1d3670;
-    }
-  }
-
-  input {
-    outline: none !important; /* Removes the default browser outline */
-    border: none !important; /* Removes any border */
-    box-shadow: none !important; /* Removes any shadow effects, including focus rings */
-  }
-
-  input:focus {
-    outline: none !important; /* Ensures no outline on focus */
-    border: none !important; /* Ensures no border on focus */
-    box-shadow: none !important; /* Ensures no shadow on focus */
-  }
-  html {
-  scroll-behavior: smooth;
-  }
-  ins.adsbygoogle[data-ad-status="unfilled"]{display:none!important;}
-
-}
-
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -266,5 +123,92 @@
     @apply bg-background text-foreground;
 
   }
+
+    /* Custom input and slider styles */
+  .bg-secondary {
+    background-color: #e6f5ef !important;
+  }
+
+  [data-radix-slider-thumb] {
+    background-color: #10B981 !important;
+  }
+
+  [data-radix-slider-track] {
+    background-color: #e6f5ef !important;
+  }
+
+  /* Custom Scrollbar Styles */
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.30);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.45);
+  }
+  ::-webkit-scrollbar-thumb:active {
+    background: rgba(0, 0, 0, 0.45);
+  }
+
+  @media screen and (min-width: 768px) {
+    ::-webkit-scrollbar {
+      -webkit-appearance: none;
+      width: 8px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+    }
+  }
+
+  .dark {
+    .bg-card {
+      background-color: #030c21 !important;
+    }
+
+    .text-gray-600 {
+      color: #c1cbd6 !important;
+    }
+
+    .text-gray-700 {
+      color: #c1cbd6 !important;
+    }
+
+    .bg-secondary {
+      background-color: #062b1f !important;
+    }
+
+    [role="listbox"] {
+      background-color: #030c21 !important;
+    }
+
+    /* Dark mode scrollbar styles */
+    ::-webkit-scrollbar-thumb {
+      background: #122040;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #1d3670;
+    }
+    ::-webkit-scrollbar-thumb:active {
+      background: #1d3670;
+    }
+  }
+
+  input {
+    outline: none !important; /* Removes the default browser outline */
+    border: none !important; /* Removes any border */
+    box-shadow: none !important; /* Removes any shadow effects, including focus rings */
+  }
+
+  input:focus {
+    outline: none !important; /* Ensures no outline on focus */
+    border: none !important; /* Ensures no border on focus */
+    box-shadow: none !important; /* Ensures no shadow on focus */
+  }
+  html {
+  scroll-behavior: smooth;
+  }
+  ins.adsbygoogle[data-ad-status="unfilled"]{display:none!important;}
 
 }
