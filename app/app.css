@@ -126,18 +126,6 @@
   }
 
     /* Custom input and slider styles */
-  .bg-primary {
-    background-color: #2e9e6a !important;
-  }
-
-  .text-primary {
-    color: #2e9e6a !important;
-  }
-  
-  .bg-secondary {
-    background-color: #e6f5ef !important;
-  }
-
   [data-radix-slider-thumb] {
     background-color: #10B981 !important;
   }
@@ -182,10 +170,6 @@
 
     .text-gray-700 {
       color: #c1cbd6 !important;
-    }
-
-    .bg-secondary {
-      background-color: #062b1f !important;
     }
 
     [role="listbox"] {
