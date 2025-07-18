@@ -28,7 +28,7 @@ const useTheme = () => {
   useEffect(() => {
     const updateThemeColor = () => {
       const isDark = document.documentElement.classList.contains("dark");
-      const themeColor = isDark ? "#020817" : "#07a36c";
+      const themeColor = isDark ? "#020817" : "#ffffff";
 
       // Update existing theme-color meta tags
       const existingMetas = document.querySelectorAll('meta[name="theme-color"]');
