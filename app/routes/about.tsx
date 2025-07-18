@@ -24,7 +24,7 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-const About = () => {
+const about = () => {
   return (
     <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto space-y-8 lg:mr-[300px]">
