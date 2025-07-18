@@ -8,7 +8,7 @@ import DesktopSidebar from "@/components/DesktopSidebar";
 import { Mail, HeartHandshake, Lightbulb } from "lucide-react";
 import { CustomMeta } from "@/components/CustomMeta";
 
-const feedback = () => {
+export default function Feedback() {
   return (
     <>
       <CustomMeta
@@ -89,5 +89,3 @@ const feedback = () => {
     </>
   );
 };
-
-export default feedback;
