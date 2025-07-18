@@ -7,7 +7,7 @@ import DesktopSidebar from "@/components/DesktopSidebar";
 import { Sparkles, Shield, Globe } from "lucide-react";
 import { CustomMeta } from "@/components/CustomMeta";
 
-const about = () => {
+export default function About() {
   return (
     <>
       <CustomMeta
@@ -90,5 +90,3 @@ const about = () => {
     </>
   );
 };
-
-export default about;
