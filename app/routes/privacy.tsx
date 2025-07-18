@@ -1,6 +1,6 @@
 
 import React from "react";
-import type { Route } from "./+types/Privacy";
+import type { Route } from "./+types/privacy";
 import { Link } from "react-router";
 import Footer from "@/components/Footer";
 import { Shield, Lock, Eye, Server, Cookie, ShieldCheck, BadgeCheck, Mail, History } from "lucide-react";
@@ -23,7 +23,7 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-const Privacy = () => {
+const privacy = () => {
   return (
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto space-y-8">
@@ -206,4 +206,4 @@ const Privacy = () => {
   );
 };
 
-export default Privacy;
+export default privacy;
