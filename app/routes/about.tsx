@@ -1,5 +1,5 @@
 import React from "react";
-import type { Route } from "./+types/About";
+import type { Route } from "./+types/about";
 import Footer from "@/components/Footer";
 import AdSenseHorizontal from "@/components/AdSenseHorizontal";
 import AdSenseResponsive from "@/components/AdSenseResponsive";
