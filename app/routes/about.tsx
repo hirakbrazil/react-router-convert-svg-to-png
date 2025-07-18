@@ -29,7 +29,7 @@ export default function About() {
         </div>
 
         <div className="space-y-6">
-          <p className="text-lg">
+          <p className="text-lg text-muted-foreground">
             Welcome to Convert SVG to PNG, a powerful and user-friendly tool designed to transform your SVG files into high-quality PNG images with advanced features and customization options.
           </p>
 
@@ -38,7 +38,7 @@ export default function About() {
               <Sparkles className="w-6 h-6 text-primary" />
               Key Features
             </h2>
-            <ul className="list-disc pl-6 space-y-2">
+            <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
               <li>Drag-and-drop SVG file upload with instant preview</li>
               <li>Batch conversion - process multiple SVG files at once</li>
               <li>Smart quality enhancement up to 10,000px for crisp results</li>
@@ -57,10 +57,10 @@ export default function About() {
               <Shield className="w-6 h-6 text-primary" />
               Privacy & Security
             </h2>
-            <p className="mb-4">
+            <p className="mb-4 text-muted-foreground">
               Your privacy is our top priority. All SVG processing and PNG conversion happens entirely in your browser using client-side JavaScript. Your files never leave your device or get uploaded to any server, ensuring complete privacy and security of your content.
             </p>
-            <p>
+            <p className="text-muted-foreground">
               This offline processing approach means your sensitive designs, logos, and graphics remain completely confidential while still providing professional-quality conversion results.
             </p>
           </div>
@@ -70,15 +70,15 @@ export default function About() {
               <Globe className="w-6 h-6 text-primary" />
               Technical Capabilities
             </h2>
-            <p className="mb-4">
+            <p className="mb-4 text-muted-foreground">
               Our converter supports all standard SVG features and automatically handles complex graphics, text, gradients, and effects. The smart resizing algorithm ensures your converted PNG images maintain perfect quality whether you're working with small icons or large illustrations.
             </p>
-            <p>
+            <p className="text-muted-foreground">
               Compatible with all modern browsers including Chrome, Firefox, Safari, and Edge. No software installation or plugins required - just open your browser and start converting.
             </p>
           </div>
 
-          <p>
+          <p className="text-muted-foreground">
             Start using Convert SVG to PNG today - it's free, fast, secure, and designed to provide the best SVG conversion experience possible!
           </p>
         </div>
