@@ -124,7 +124,7 @@ const SvgToPngConverter = () => {
                   placeholder="Paste your SVG XML code here..."
                   value={svgTextInput}
                   onChange={handleSvgTextChange}
-                  className="min-h-[120px] font-mono text-base mt-[20px]"
+                  className="min-h-[120px] font-mono text-base mt-[17px]"
                   disabled={isConverting}
                 />
                 <div className="flex justify-center">
