@@ -9,9 +9,7 @@ import {
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import ScrollToTop from "@/components/ScrollToTop";
 import useTheme from "@/hooks/useTheme";
-import { toast } from 'sonner';
 
 import type { Route } from "./+types/root";
 import "./app.css";
@@ -81,7 +79,6 @@ function AppProviders({ children }: { children: React.ReactNode }) {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster richColors />
-        <ScrollToTop />
         {children}
       </TooltipProvider>
     </QueryClientProvider>
