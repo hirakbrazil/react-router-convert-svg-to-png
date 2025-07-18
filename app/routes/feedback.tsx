@@ -1,6 +1,6 @@
 
 import React from "react";
-import type { Route } from "./+types/Feedback";
+import type { Route } from "./+types/feedback";
 import Footer from "@/components/Footer";
 import AdSenseHorizontal from "@/components/AdSenseHorizontal";
 import AdSenseResponsive from "@/components/AdSenseResponsive";
@@ -25,7 +25,7 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-const Feedback = () => {
+const feedback = () => {
   return (
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto space-y-8 lg:mr-[300px]">
@@ -96,4 +96,4 @@ const Feedback = () => {
   );
 };
 
-export default Feedback;
+export default feedback;
