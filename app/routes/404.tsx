@@ -15,7 +15,7 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-const NotFound = () => {
+export default function NotFound()  {
   const navigate = useNavigate();
 
   return (
@@ -44,5 +44,3 @@ const NotFound = () => {
     </>
   );
 };
-
-export default NotFound;
