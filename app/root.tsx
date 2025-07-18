@@ -6,17 +6,9 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
-import { Toaster } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import ScrollToTop from "@/components/ScrollToTop";
-import useTheme from "@/hooks/useTheme";
-import { toast } from 'sonner';
 
 import type { Route } from "./+types/root";
 import "./app.css";
-
-const queryClient = new QueryClient();
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -29,8 +21,6 @@ export const links: Route.LinksFunction = () => [
     rel: "stylesheet",
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
-  { rel: "icon", href: "/icon.png" },
-  { rel: "apple-touch-icon", href: "/icon.png" },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -41,29 +31,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              // Apply theme immediately to prevent flash
-              (function() {
-                const theme = localStorage.getItem("theme");
-                const root = document.documentElement;
-                
-                root.classList.remove("light", "dark");
-                
-                if (theme === "dark") {
-                  root.classList.add("dark");
-                } else if (theme === "light") {
-                  root.classList.add("light");
-                } else {
-                  // Handle system theme
-                  const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-                  root.classList.add(systemTheme);
-                }
-              })();
-            `,
-          }}
-        />
       </head>
       <body>
         {children}
@@ -74,26 +41,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-function AppProviders({ children }: { children: React.ReactNode }) {
-  useTheme();
-  
-  return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster richColors />
-        <ScrollToTop />
-        {children}
-      </TooltipProvider>
-    </QueryClientProvider>
-  );
-}
-
 export default function App() {
-  return (
-    <AppProviders>
-      <Outlet />
-    </AppProviders>
-  );
+  return <Outlet />;
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
