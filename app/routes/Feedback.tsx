@@ -2,7 +2,6 @@
 import React from "react";
 import type { Route } from "./+types/Feedback";
 import Footer from "@/components/Footer";
-import SEO from "@/components/SEO";
 import AdSenseHorizontal from "@/components/AdSenseHorizontal";
 import AdSenseResponsive from "@/components/AdSenseResponsive";
 import DesktopSidebar from "@/components/DesktopSidebar";
