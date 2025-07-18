@@ -8,16 +8,21 @@ import {
 import { Sun, Moon, Monitor } from "lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { isBrowser } from "@/lib/isBrowser";
 
 type Theme = 'light' | 'dark' | 'system';
 
 const ThemeSwitcher = () => {
   const [theme, setTheme] = useState<Theme>(() => {
-    const savedTheme = localStorage.getItem("theme") as Theme;
-    return savedTheme || "system";
+    if (isBrowser) {
+      const savedTheme = localStorage.getItem("theme") as Theme;
+      return savedTheme || "system";
+    }
+    return "system";
   });
 
   useEffect(() => {
+    if (!isBrowser) return;
     const root = document.documentElement;
     root.classList.remove("light", "dark");
 
@@ -54,6 +59,7 @@ const ThemeSwitcher = () => {
   };
 
   const handleThemeChange = (newTheme: Theme) => {
+    if (!isBrowser) return;
     // Check if the selected theme is already active
     if (newTheme === theme) {
       const modeNames = {
