@@ -14,7 +14,7 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-const 404 = () => {
+const NotFound = () => {
   const navigate = useNavigate();
 
   return (
@@ -37,4 +37,4 @@ const 404 = () => {
   );
 };
 
-export default 404;
+export default NotFound;
