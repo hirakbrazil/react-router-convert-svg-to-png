@@ -8,7 +8,7 @@ import SvgToPngConverter from "@/components/SvgToPngConverter";
 import HomepageContent from "@/components/HomepageContent";
 import { CustomMeta } from "@/components/CustomMeta";
 
-const home = () => {
+export default function Home() {
   return (
     <>
       <CustomMeta
@@ -38,5 +38,3 @@ const home = () => {
     </>
   );
 };
-
-export default home;
