@@ -30,7 +30,7 @@ export default function Feedback() {
           </div>
 
           <div className="space-y-6">
-            <p className="text-lg">
+            <p className="text-lg text-muted-foreground">
               We value your feedback! Your input helps us improve and provide a better SVG to PNG conversion experience with enhanced features and functionality.
             </p>
 
@@ -38,7 +38,7 @@ export default function Feedback() {
               <h2 className="text-2xl font-semibold flex items-center gap-2 mb-4">
                 <Mail className="w-6 h-6 text-primary" />
                 Contact Information</h2>
-              <p>
+              <p className="text-muted-foreground">
                 For any queries, feedback, suggestions, or bug reports regarding our SVG to PNG converter, please email us at:{" "}
                 <a
                   href="mailto:info@convertsvgtopng.net"
@@ -53,7 +53,7 @@ export default function Feedback() {
               <h2 className="text-2xl font-semibold flex items-center gap-2 mb-4">
                 <HeartHandshake className="w-6 h-6 text-primary" />
                 What We'd Love to Hear About</h2>
-              <ul className="list-disc pl-6 space-y-2">
+              <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
                 <li>SVG to PNG conversion quality and accuracy</li>
                 <li>Batch processing performance and speed</li>
                 <li>Browser compatibility issues or concerns</li>
@@ -69,15 +69,15 @@ export default function Feedback() {
               <h2 className="text-2xl font-semibold flex items-center gap-2 mb-4">
                 <Lightbulb className="w-6 h-6 text-primary" />
                 Help Us Improve</h2>
-              <p className="mb-4">
+              <p className="mb-4 text-muted-foreground">
                 Whether you're a web developer, graphic designer, or casual user, your experience matters to us. Let us know how we can make Convert SVG to PNG work better for your specific needs and use cases.
               </p>
-              <p>
+              <p className="text-muted-foreground">
                 We're constantly working to enhance our conversion algorithms, improve file format support, and add new features that make your workflow more efficient.
               </p>
             </div>
 
-            <p>
+            <p className="text-muted-foreground">
               Thank you for helping us make Convert SVG to PNG the best free SVG conversion tool available!
             </p>
           </div>
