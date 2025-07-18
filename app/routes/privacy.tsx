@@ -4,27 +4,20 @@ import type { Route } from "./+types/privacy";
 import { Link } from "react-router";
 import Footer from "@/components/Footer";
 import { Shield, Lock, Eye, Server, Cookie, ShieldCheck, BadgeCheck, Mail, History } from "lucide-react";
+import { CustomMeta } from "@/components/CustomMeta";
 
-export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "Privacy Policy - Convert SVG to PNG" },
-    { 
-      name: "description", 
-      content: "Learn about our privacy practices. All SVG to PNG conversions happen locally in your browser - your files never leave your device." 
-    },
-    { name: "robots", content: "max-image-preview:large" },
-    { property: "og:title", content: "Privacy Policy - Convert SVG to PNG" },
-    { 
-      property: "og:description", 
-      content: "Learn about our privacy practices. All SVG to PNG conversions happen locally in your browser - your files never leave your device." 
-    },
-    { property: "og:url", content: "/privacy" },
-    { property: "og:type", content: "article" },
-  ];
-}
-
-const privacy = () => {
+export default function privacy() {
   return (
+    <>
+      <CustomMeta
+        title="Privacy Policy - Convert SVG to PNG"
+        description="Learn about our privacy practices. All SVG to PNG conversions happen locally in your browser - your files never leave your device."
+        robots="max-image-preview:large"
+        ogTitle="Privacy Policy - Convert SVG to PNG"
+        ogDescription="Learn about our privacy practices. All SVG to PNG conversions happen locally in your browser - your files never leave your device."
+        ogUrl="/privacy"
+        ogType="article"
+      />
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="text-center space-y-4">
@@ -203,7 +196,6 @@ const privacy = () => {
           <Footer />
         </div>
       </div>
+    </>
   );
 };
-
-export default privacy;
