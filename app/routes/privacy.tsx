@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import { Shield, Lock, Eye, Server, Cookie, ShieldCheck, BadgeCheck, Mail, History } from "lucide-react";
 import { CustomMeta } from "@/components/CustomMeta";
 
-export default function privacy() {
+export default function Privacy() {
   return (
     <>
       <CustomMeta
