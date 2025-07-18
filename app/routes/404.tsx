@@ -2,6 +2,7 @@ import { Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
 import type { Route } from "./+types/404";
+import { CustomMeta } from "@/components/CustomMeta";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -18,6 +19,12 @@ const NotFound = () => {
   const navigate = useNavigate();
 
   return (
+    <>
+      <CustomMeta
+        title="404 - Page Not Found"
+        description="The page you are looking for doesn't exist or has been moved."
+        robots="follow, noindex"
+      />
     <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-background text-foreground">
       <div className="text-center space-y-6 max-w-md">
         <h1 className="text-6xl font-bold text-primary">404</h1>
@@ -34,6 +41,7 @@ const NotFound = () => {
         </Button>
       </div>
     </div>
+    </>
   );
 };
 
