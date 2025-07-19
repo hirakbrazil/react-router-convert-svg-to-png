@@ -43,7 +43,7 @@ export default function Feedback() {
                 For any queries, feedback, suggestions, or bug reports regarding our SVG to PNG converter, please email us at:{" "}
                 <a
                   href="mailto:info@convertsvgtopng.net"
-                  className="text-primary hover:underline"
+                  className="text-blue-600 hover:text-blue-500 hover:underline dark:text-blue-400 dark:hover:text-blue-300"
                 >
                   info@convertsvgtopng.net
                 </a>
