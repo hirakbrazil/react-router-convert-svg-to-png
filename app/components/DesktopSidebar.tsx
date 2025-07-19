@@ -7,7 +7,7 @@ const DesktopSidebar = () => {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const mediaQuery = window.matchMedia("(min-width: 1024px)");
+    const mediaQuery = window.matchMedia("(min-width: 64rem)");
     const updateMatch = () => setIsLgUp(mediaQuery.matches);
 
     updateMatch(); // Initial check
