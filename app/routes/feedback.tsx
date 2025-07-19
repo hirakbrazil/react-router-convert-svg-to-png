@@ -14,6 +14,7 @@ export default function Feedback() {
       <CustomMeta
         title="Feedback - Convert SVG to PNG"
         description="Share your feedback about Convert SVG to PNG. Help us improve your SVG to PNG conversion experience with better features and functionality."
+        canonicalUrl="/feedback"
         robots="max-image-preview:large"
         ogTitle="Feedback - Convert SVG to PNG"
         ogDescription="Share your feedback about Convert SVG to PNG. Help us improve your SVG to PNG conversion experience with better features and functionality."
