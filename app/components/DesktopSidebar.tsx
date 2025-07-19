@@ -5,24 +5,23 @@ const DesktopSidebar = () => {
   const [isLgUp, setIsLgUp] = useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined") return; // 🛡️ Prevent SSR crash
+    if (typeof window === "undefined") return;
 
     const mediaQuery = window.matchMedia("(min-width: 1024px)");
-    const handleResize = () => setIsLgUp(mediaQuery.matches);
+    const updateMatch = () => setIsLgUp(mediaQuery.matches);
 
-    handleResize(); // Initial check on mount
-    mediaQuery.addEventListener("change", handleResize);
+    updateMatch(); // Initial check
+    mediaQuery.addEventListener("change", updateMatch);
 
-    return () => mediaQuery.removeEventListener("change", handleResize);
+    return () => mediaQuery.removeEventListener("change", updateMatch);
   }, []);
 
-  // Prevent mismatch between server/client render
-  if (typeof window === "undefined") return null;
+  if (!isLgUp) return null; // ❌ Don't render anything on < lg screens
 
   return (
-    <div className="hidden lg:block w-[300px] fixed right-0 top-0 h-screen p-4 bg-background">
+    <div className="w-[300px] fixed right-0 top-0 h-screen p-4 bg-background">
       <div className="sticky top-4">
-        {isLgUp && <AdSenseResponsive />}
+        <AdSenseResponsive />
       </div>
     </div>
   );
