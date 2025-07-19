@@ -13,6 +13,7 @@ export default function About() {
       <CustomMeta
         title="About Convert SVG to PNG"
         description="Learn about Convert SVG to PNG tool. Transform your SVG files into high-quality PNG images with smart resizing and quality options."
+        canonicalUrl="/about"
         robots="max-image-preview:large"
         ogTitle="About Convert SVG to PNG"
         ogDescription="Learn about Convert SVG to PNG tool. Transform your SVG files into high-quality PNG images with smart resizing and quality options."
