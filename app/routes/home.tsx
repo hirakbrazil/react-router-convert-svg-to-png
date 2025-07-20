@@ -26,12 +26,14 @@ export default function Home() {
       <div className="max-w-3xl mx-auto space-y-8 lg:mr-[300px]">
         <AdSenseResponsive />
         <Header />
-        <div className="border border-border bg-card dark:bg-card rounded-xl p-6">
-          <SvgToPngConverter />
-        </div>
-        <AdSenseResponsive />
-        <HomepageContent />
-        <AdSenseResponsive />
+          <main>
+           <div className="border border-border bg-card dark:bg-card rounded-xl p-6">
+             <SvgToPngConverter />
+           </div>
+           <AdSenseResponsive />
+           <HomepageContent />
+           <AdSenseResponsive />
+          </main>
         <Footer />
       </div>
       <DesktopSidebar />
