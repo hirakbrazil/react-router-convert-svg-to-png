@@ -1,7 +1,7 @@
 import React from "react";
 import type { Route } from "./+types/home";
 import Footer from "@/components/Footer";
-import HeaderContent from "@/components/HeaderContent";
+import Header from "@/components/Header";
 import AdSenseResponsive from "@/components/AdSenseResponsive";
 import DesktopSidebar from "@/components/DesktopSidebar";
 import SvgToPngConverter from "@/components/SvgToPngConverter";
