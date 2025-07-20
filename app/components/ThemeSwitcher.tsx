@@ -6,11 +6,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Sun, Moon, Monitor } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { isBrowser } from "@/lib/isBrowser";
 
 type Theme = 'light' | 'dark' | 'system';
+
+// Check if View Transitions API is supported
+const supportsViewTransitions = isBrowser && 'startViewTransition' in document;
 
 const ThemeSwitcher = () => {
   const [theme, setTheme] = useState<Theme>(() => {
@@ -20,6 +23,8 @@ const ThemeSwitcher = () => {
     }
     return "system";
   });
+
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!isBrowser) return;
@@ -47,6 +52,43 @@ const ThemeSwitcher = () => {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
+  // Add the CSS for the circular reveal animation
+  useEffect(() => {
+    if (!supportsViewTransitions) return;
+
+    const style = document.createElement('style');
+    style.textContent = `
+      ::view-transition-old(root),
+      ::view-transition-new(root) {
+        animation: none;
+        mix-blend-mode: normal;
+      }
+
+      ::view-transition-old(root) {
+        z-index: 1;
+      }
+
+      ::view-transition-new(root) {
+        z-index: 999;
+      }
+
+      .dark::view-transition-old(root) {
+        z-index: 999;
+      }
+
+      .dark::view-transition-new(root) {
+        z-index: 1;
+      }
+
+      [data-theme-transition] {
+        view-transition-name: none !important;
+      }
+    `;
+    
+    document.head.appendChild(style);
+    return () => document.head.removeChild(style);
+  }, []);
+
   const getThemeIcon = () => {
     switch (theme) {
       case "light":
@@ -58,8 +100,83 @@ const ThemeSwitcher = () => {
     }
   };
 
-  const handleThemeChange = (newTheme: Theme) => {
+  const createCircularRevealTransition = async (newTheme: Theme) => {
+    if (!supportsViewTransitions || !buttonRef.current) {
+      return Promise.resolve();
+    }
+
+    const button = buttonRef.current;
+    const rect = button.getBoundingClientRect();
+    
+    // Calculate the center point of the button
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+
+    // Calculate the radius needed to cover the entire viewport
+    const maxRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    );
+
+    // Create the circular clip path animation
+    const clipPath = [
+      `circle(0px at ${x}px ${y}px)`,
+      `circle(${maxRadius}px at ${x}px ${y}px)`
+    ];
+
+    // Determine if we're going to dark mode
+    const isDarkMode = newTheme === 'dark' || 
+      (newTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    
+    return new Promise<void>((resolve) => {
+      if (!document.startViewTransition) {
+        resolve();
+        return;
+      }
+
+      const transition = document.startViewTransition(() => {
+        updateTheme(newTheme);
+      });
+
+      transition.ready.then(() => {
+        const newRoot = document.documentElement;
+        newRoot.animate(
+          {
+            clipPath: isDarkMode ? clipPath : [...clipPath].reverse()
+          },
+          {
+            duration: 500,
+            easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+            pseudoElement: isDarkMode ? '::view-transition-new(root)' : '::view-transition-old(root)'
+          }
+        );
+      });
+
+      transition.finished.then(resolve);
+    });
+  };
+
+  const updateTheme = (newTheme: Theme) => {
     if (!isBrowser) return;
+    
+    const root = document.documentElement;
+    root.classList.remove("light", "dark");
+
+    if (newTheme === "system") {
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      root.classList.add(systemTheme);
+      localStorage.removeItem("theme");
+    } else {
+      root.classList.add(newTheme);
+      localStorage.setItem("theme", newTheme);
+    }
+
+    setTheme(newTheme);
+  };
+
+  const handleThemeChange = async (newTheme: Theme) => {
+    if (!isBrowser) return;
+    
     // Check if the selected theme is already active
     if (newTheme === theme) {
       const modeNames = {
@@ -74,13 +191,13 @@ const ThemeSwitcher = () => {
       return;
     }
 
-    if (newTheme === "system") {
-      localStorage.removeItem("theme"); // Remove theme from localStorage
+    // Use circular reveal transition if supported, otherwise fallback to normal
+    if (supportsViewTransitions) {
+      await createCircularRevealTransition(newTheme);
     } else {
-      localStorage.setItem("theme", newTheme);
+      updateTheme(newTheme);
     }
 
-    setTheme(newTheme);
     toast.success(
       `Theme set to ${
         newTheme === "system"
@@ -96,7 +213,13 @@ const ThemeSwitcher = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="default" className="flex items-center gap-2">
+        <Button 
+          ref={buttonRef}
+          variant="outline" 
+          size="default" 
+          className="flex items-center gap-2"
+          data-theme-transition
+        >
           {getThemeIcon()}
           {theme.charAt(0).toUpperCase() + theme.slice(1)}
         </Button>
