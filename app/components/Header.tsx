@@ -2,9 +2,9 @@
 import React from "react";
 import { FileImage, Zap, Shield } from "lucide-react";
 
-const HeaderContent = () => {
+const Header = () => {
   return (
-    <div className="text-center space-y-6">
+    <header className="text-center space-y-6">
       <div className="space-y-3">
         <h1 className="text-3xl font-bold text-foreground">
           Convert SVG to PNG
@@ -28,8 +28,8 @@ const HeaderContent = () => {
           <span>Privacy Protected</span>
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 
-export default HeaderContent;
+export default Header;
