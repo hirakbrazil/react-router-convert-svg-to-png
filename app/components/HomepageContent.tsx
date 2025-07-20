@@ -4,7 +4,7 @@ import { FileSearch, Layout, Lightbulb } from "lucide-react";
 
 const HomepageContent = () => {
   return (
-    <div className="space-y-12 mt-8">
+    <article className="space-y-12 mt-8">
       <div className="space-y-6">
         <h2 className="text-2xl font-semibold flex items-center gap-2 text-foreground">
           <FileSearch className="w-6 h-6 text-primary" />
@@ -94,7 +94,7 @@ const HomepageContent = () => {
           </div>
         </div>
       </div>
-    </div>
+    </article>
   );
 };
 
