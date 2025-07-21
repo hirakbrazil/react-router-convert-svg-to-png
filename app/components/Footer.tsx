@@ -19,13 +19,13 @@ const Footer = () => {
       
       <nav className="flex flex-wrap justify-center gap-x-6 gap-y-4">
         {!isHomePage && (
-          <Link to="/" className="inline-flex items-center gap-2 text-foreground hover:text-primary whitespace-nowrap">
+          <Link to="/" viewTransition className="inline-flex items-center gap-2 text-foreground hover:text-primary whitespace-nowrap">
             <Home className="h-4 w-4" />
             Home
           </Link>
         )}
         {!isAboutPage && (
-          <Link to="/about" className="inline-flex items-center gap-2 text-foreground hover:text-primary whitespace-nowrap">
+          <Link to="/about" viewTransition className="inline-flex items-center gap-2 text-foreground hover:text-primary whitespace-nowrap">
             <Info className="h-4 w-4" />
             About
           </Link>
