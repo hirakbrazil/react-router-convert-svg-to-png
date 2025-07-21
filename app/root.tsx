@@ -10,6 +10,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import useTheme from "@/hooks/useTheme";
+import { siteConfig } from "@/config/site";
 
 import type { Route } from "./+types/root";
 import "./app.css";
@@ -63,6 +64,33 @@ export function Layout({ children }: { children: React.ReactNode }) {
             `,
           }}
         />
+        {/* AdSense */}
+      {siteConfig.adsense?.pubId && (
+        <script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${siteConfig.adsense.pubId}`}
+          crossOrigin="anonymous"
+        ></script>
+      )}
+      {/* Google Analytics */}
+      {siteConfig.analytics?.ga4MeasurementId && (
+        <>
+          <script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${siteConfig.analytics.ga4MeasurementId}`}
+          ></script>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${siteConfig.analytics.ga4MeasurementId}');
+              `,
+            }}
+          />
+        </>
+      )}
       </head>
       <body>
         {children}
