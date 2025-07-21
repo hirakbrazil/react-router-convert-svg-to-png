@@ -21,7 +21,7 @@ export const loader: LoaderFunction = async () => {
     orientation: "portrait"
   };
   
-  return new Response(JSON.stringify(manifest, null, 2), {
+  return new Response(JSON.stringify(manifest), {
     status: 200,
     headers: {
       "Content-Type": "application/json",
