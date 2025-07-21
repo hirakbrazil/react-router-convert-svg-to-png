@@ -86,22 +86,25 @@ const SvgToPngConverter = () => {
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
           >
+            <label htmlFor="file-upload" className="absolute inset-0 w-full h-full cursor-pointer">
             <input
+              id="file-upload"
               type="file"
               accept=".svg"
               multiple
               onChange={handleFileInputChange}
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              className="sr-only"
               disabled={isConverting}
             />
+            </label>
             <div className="flex flex-col items-center gap-4">
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
                 <Upload className="w-8 h-8 text-primary" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold mb-2">
+                <b className="text-lg font-semibold mb-2">
                   {isDragging ? "Drop SVG files here" : "Upload or Drop Files"}
-                </h3>
+                </b>
                 <p className="text-sm text-muted-foreground pointer-events-none select-none">
                   Max {UPLOAD_CONSTANTS.MAX_FILES} images at once
                 </p>
