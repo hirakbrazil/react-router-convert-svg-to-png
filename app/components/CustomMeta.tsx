@@ -46,33 +46,6 @@ export const CustomMeta: React.FC<CustomMetaProps> = ({
       )}
       {ogImage && <meta property="og:image" content={resolveUrl(ogImage)} />}
       <meta property="og:site_name" content={siteConfig.name} />
-      {/* AdSense */}
-      {siteConfig.adsense?.pubId && (
-        <script
-          async
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${siteConfig.adsense.pubId}`}
-          crossOrigin="anonymous"
-        ></script>
-      )}
-      {/* Google Analytics */}
-      {siteConfig.analytics?.ga4MeasurementId && (
-        <>
-          <script
-            async
-            src={`https://www.googletagmanager.com/gtag/js?id=${siteConfig.analytics.ga4MeasurementId}`}
-          ></script>
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${siteConfig.analytics.ga4MeasurementId}');
-              `,
-            }}
-          />
-        </>
-      )}
     </>
   );
 };
