@@ -2,8 +2,7 @@
 import React from "react";
 import type { Route } from "./+types/feedback";
 import Footer from "@/components/Footer";
-import AdSenseHorizontal from "@/components/AdSenseHorizontal";
-import AdSenseResponsive from "@/components/AdSenseResponsive";
+import AdSense from "@/components/AdSense";
 import DesktopSidebar from "@/components/DesktopSidebar";
 import { Mail, HeartHandshake, Lightbulb } from "lucide-react";
 import { CustomMeta } from "@/components/CustomMeta";
@@ -23,7 +22,7 @@ export default function Feedback() {
       />
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto space-y-8 lg:mr-[300px]">
-          <AdSenseHorizontal />
+          <AdSense format="horizontal" />
           <div className="text-center">
             <h1 className="text-3xl font-bold text-foreground sm:text-4xl">
               Feedback
@@ -82,7 +81,7 @@ export default function Feedback() {
               Thank you for helping us make Convert SVG to PNG the best free SVG conversion tool available!
             </p>
           </div>
-          <AdSenseResponsive />
+          <AdSense format="responsive" />
           <Footer />
         </div>
         <DesktopSidebar />
