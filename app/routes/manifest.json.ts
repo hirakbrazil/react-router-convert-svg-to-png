@@ -13,7 +13,7 @@ export const loader: LoaderFunction = async () => {
         sizes: "512x512"
       }
     ],
-    start_url: ".",
+    start_url: "./?utm_source=pwa&utm_medium=homescreen&utm_campaign=installed_app",
     display: "standalone",
     theme_color: "#ffffff",
     background_color: "#ffffff"
