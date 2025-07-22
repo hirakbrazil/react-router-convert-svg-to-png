@@ -1,8 +1,7 @@
 import React from "react";
 import type { Route } from "./+types/about";
 import Footer from "@/components/Footer";
-import AdSenseHorizontal from "@/components/AdSenseHorizontal";
-import AdSenseResponsive from "@/components/AdSenseResponsive";
+import AdSense from "@/components/AdSense";
 import DesktopSidebar from "@/components/DesktopSidebar";
 import { Sparkles, Shield, Globe } from "lucide-react";
 import { CustomMeta } from "@/components/CustomMeta";
@@ -22,7 +21,7 @@ export default function About() {
       />
     <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto space-y-8 lg:mr-[300px]">
-        <AdSenseHorizontal />
+        <AdSense format="horizontal" />
         <div className="text-center">
           <h1 className="text-3xl font-bold text-foreground sm:text-4xl">
             About Convert SVG to PNG
@@ -83,7 +82,7 @@ export default function About() {
             Start using Convert SVG to PNG today - it's free, fast, secure, and designed to provide the best SVG conversion experience possible!
           </p>
         </div>
-        <AdSenseResponsive />
+        <AdSense format="responsive" />
         <Footer />
       </div>
       <DesktopSidebar />
