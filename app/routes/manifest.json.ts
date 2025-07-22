@@ -17,8 +17,7 @@ export const loader: LoaderFunction = async () => {
     start_url: ".",
     display: "standalone",
     theme_color: "#ffffff",
-    background_color: "#ffffff",
-    orientation: "portrait"
+    background_color: "#ffffff"
   };
   
   return new Response(JSON.stringify(manifest), {
