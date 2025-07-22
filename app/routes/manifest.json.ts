@@ -4,7 +4,6 @@ import { siteConfig } from "~/config/site";
 
 export const loader: LoaderFunction = async () => {
   const manifest = {
-    short_name: siteConfig.name,
     name: siteConfig.name,
     description: siteConfig.description,
     icons: [
