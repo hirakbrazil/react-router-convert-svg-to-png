@@ -96,7 +96,7 @@ const ThemeSwitcher = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="default" className="flex items-center gap-2">
+        <Button variant="outline" size="default" className="flex items-center gap-2 cursor-pointer">
           {getThemeIcon()}
           {theme.charAt(0).toUpperCase() + theme.slice(1)}
         </Button>
