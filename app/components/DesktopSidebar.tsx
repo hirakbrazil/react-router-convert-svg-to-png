@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import AdSenseResponsive from "./AdSenseResponsive";
+import AdSense from "./AdSense";
 
 const DesktopSidebar = () => {
   const [isLgUp, setIsLgUp] = useState(false);
@@ -21,7 +21,7 @@ const DesktopSidebar = () => {
   return (
     <aside className="hidden lg:block w-[300px] fixed right-0 top-0 h-screen p-4 bg-background">
       <div className="sticky top-4">
-        <AdSenseResponsive />
+        <AdSense format="responsive" />
       </div>
     </aside>
   );
