@@ -2,6 +2,7 @@
 import React from "react";
 import type { Route } from "./+types/privacy";
 import { Link } from "react-router";
+import AdSense from "@/components/AdSense";
 import Footer from "@/components/Footer";
 import { Shield, Lock, Eye, Server, Cookie, ShieldCheck, BadgeCheck, Mail, History } from "lucide-react";
 import { CustomMeta } from "@/components/CustomMeta";
@@ -21,6 +22,7 @@ export default function Privacy() {
       />
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto space-y-8">
+          <AdSense format="horizontal" />
           <div className="text-center space-y-4">
             <h1 className="text-4xl font-bold tracking-tight">Privacy Policy</h1>
             <p className="text-xl text-muted-foreground">
@@ -193,7 +195,7 @@ export default function Privacy() {
               </div>
             </div>
           </div>
-
+          <AdSense format="responsive" />
           <Footer />
         </div>
       </div>
