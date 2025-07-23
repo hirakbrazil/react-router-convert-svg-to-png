@@ -4,6 +4,10 @@ import { useNavigate } from "react-router";
 import type { Route } from "./+types/404";
 import { CustomMeta } from "@/components/CustomMeta";
 
+export function loader() {
+  throw new Response("Not Found", { status: 404 });
+}
+
 export default function NotFound()  {
   const navigate = useNavigate();
 
