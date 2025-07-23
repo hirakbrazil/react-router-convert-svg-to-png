@@ -12,6 +12,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import useTheme from "@/hooks/useTheme";
 import { siteConfig } from "@/config/site";
+import { Home } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 import type { Route } from "./+types/root";
 import "./app.css";
