@@ -138,6 +138,28 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     stack = error.stack;
   }
 
+  // For 404 errors, render a proper 404 page instead of the generic error
+  if (isRouteErrorResponse(error) && error.status === 404) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-background text-foreground">
+        <div className="text-center space-y-6 max-w-md">
+          <h1 className="text-6xl font-bold text-primary">404</h1>
+          <h2 className="text-2xl font-semibold">Page Not Found</h2>
+          <p className="text-muted-foreground">
+            The requested page could not be found.
+          </p>
+          <a 
+            href="/" 
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+          >
+            <Home className="h-4 w-4" />
+            Go to Home
+          </a>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <main className="pt-16 p-4 container mx-auto">
       <h1>{message}</h1>
