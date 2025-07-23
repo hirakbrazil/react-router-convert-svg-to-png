@@ -6,6 +6,14 @@ publish = "build/client"
 command = "npm run dev"
 framework = "vite"
 
+# 301 redirect to production domain to avoid duplicate content
+
+[[redirects]]
+  from = "https://subdomain.netlify.app/*"
+  to = "https://yourdomain.com/:splat"
+  status = 301
+  force = true
+
 # Set immutable caching for static files, because they have fingerprinted filenames
 
 [[headers]]
