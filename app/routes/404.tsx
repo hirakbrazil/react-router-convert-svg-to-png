@@ -4,17 +4,6 @@ import { useNavigate } from "react-router";
 import type { Route } from "./+types/404";
 import { CustomMeta } from "@/components/CustomMeta";
 
-export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "404 - Page Not Found" },
-    { 
-      name: "description", 
-      content: "The page you are looking for doesn't exist or has been moved." 
-    },
-    { name: "robots", content: "follow, noindex" },
-  ];
-}
-
 export default function NotFound()  {
   const navigate = useNavigate();
 
