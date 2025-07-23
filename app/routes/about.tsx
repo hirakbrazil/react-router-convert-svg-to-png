@@ -14,9 +14,6 @@ export default function About() {
         description="Learn about Convert SVG to PNG tool. Transform your SVG files into high-quality PNG images with smart resizing and quality options."
         canonicalUrl="/about"
         robots="max-image-preview:large"
-        ogTitle="About Convert SVG to PNG"
-        ogDescription="Learn about Convert SVG to PNG tool. Transform your SVG files into high-quality PNG images with smart resizing and quality options."
-        ogUrl="/about"
         ogType="article"
       />
     <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
