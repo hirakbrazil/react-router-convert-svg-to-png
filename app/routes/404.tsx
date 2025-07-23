@@ -11,7 +11,7 @@ export async function loader() {
   });
 }
 
-export default function NotFound()  {
+export default function ErrorBoundary()  {
   const navigate = useNavigate();
 
   return (
