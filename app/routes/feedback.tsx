@@ -15,9 +15,6 @@ export default function Feedback() {
         description="Share your feedback about Convert SVG to PNG. Help us improve your SVG to PNG conversion experience with better features and functionality."
         canonicalUrl="/feedback"
         robots="max-image-preview:large"
-        ogTitle="Feedback - Convert SVG to PNG"
-        ogDescription="Share your feedback about Convert SVG to PNG. Help us improve your SVG to PNG conversion experience with better features and functionality."
-        ogUrl="/feedback"
         ogType="article"
       />
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
