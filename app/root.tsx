@@ -132,9 +132,9 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     // For 404 errors, render the custom 404 component
     if (error.status === 404) {
       return (
-        
+        <AppProviders>
           <NotFound />
-        
+        </AppProviders>
       );
     }
     
