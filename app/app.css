@@ -125,7 +125,11 @@
 
   }
 
-    /* Custom input and slider styles */
+  /* Custom input and slider styles */
+  .bg-secondary {
+    background-color: oklch(0.9573 0.0177 170.09) !important;
+  }
+  
   [data-radix-slider-thumb] {
     background-color: #10B981 !important;
   }
@@ -160,6 +164,10 @@
   }
 
   .dark {
+    .bg-secondary {
+    background-color: oklch(0.2593 0.0473 167.12) !important;
+    }
+    
     .bg-card {
       background-color: #030c21 !important;
     }
