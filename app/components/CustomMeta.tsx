@@ -30,6 +30,11 @@ export const CustomMeta: React.FC<CustomMetaProps> = ({
     return `${siteConfig.baseUrl}${path.startsWith("/") ? path : `/${path}`}`;
   };
 
+  // Use title, description, and canonicalUrl as fallbacks for OG properties
+  const finalOgTitle = ogTitle || title;
+  const finalOgDescription = ogDescription || description;
+  const finalOgUrl = ogUrl || canonicalUrl;
+
   return (
     <>
       {title && <title>{title}</title>}
@@ -38,13 +43,13 @@ export const CustomMeta: React.FC<CustomMetaProps> = ({
         <link rel="canonical" href={resolveUrl(canonicalUrl)} />
       )}
       {robots && <meta name="robots" content={robots} />}
-      {ogType && <meta property="og:type" content={ogType} />}
-      {ogUrl && <meta property="og:url" content={resolveUrl(ogUrl)} />}
-      {ogTitle && <meta property="og:title" content={ogTitle} />}
-      {ogDescription && (
-        <meta property="og:description" content={ogDescription} />
+      {finalOgTitle && <meta property="og:title" content={finalOgTitle} />}
+      {finalOgDescription && (
+        <meta property="og:description" content={finalOgDescription} />
       )}
+      {finalOgUrl && <meta property="og:url" content={resolveUrl(finalOgUrl)} />}
       {ogImage && <meta property="og:image" content={resolveUrl(ogImage)} />}
+      {ogType && <meta property="og:type" content={ogType} />}
       <meta property="og:site_name" content={siteConfig.name} />
     </>
   );
