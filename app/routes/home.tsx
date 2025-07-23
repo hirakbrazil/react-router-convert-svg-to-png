@@ -16,9 +16,6 @@ export default function Home() {
         description="Convert SVG files to high-quality PNG images with smart resizing. Free online SVG to PNG converter with 4000px quality output."
         canonicalUrl="/"
         robots="max-image-preview:large"
-        ogTitle="Convert SVG to PNG"
-        ogDescription="Convert SVG files to high-quality PNG images with smart resizing. Free online SVG to PNG converter with 4000px quality output."
-        ogUrl="/"
         ogImage="/banner.jpg"
         ogType="website"
       />
