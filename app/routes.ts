@@ -7,5 +7,4 @@ export default [
   route("privacy", "routes/privacy.tsx"),
   route("ads.txt", "routes/ads.txt.ts"),
   route("manifest.json", "routes/manifest.json.ts"),
-  route("*", "routes/404.tsx"),
 ] satisfies RouteConfig;
