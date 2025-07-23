@@ -173,7 +173,7 @@ export default function Privacy() {
                 Contact Us</h2>
               <div className="space-y-4 text-muted-foreground">
                 <p>
-                  If you have questions about this Privacy Policy or our privacy practices, please contact us through our <Link to="/feedback" className="text-blue-600 hover:text-blue-500 hover:underline dark:text-blue-400 dark:hover:text-blue-300">feedback page</Link> to email us directly.
+                  If you have questions about this Privacy Policy or our privacy practices, please contact us through our <Link to="/feedback" className="text-primary hover:underline">feedback page</Link> to email us directly.
                 </p>
                 <p>
                   We are committed to addressing any privacy concerns promptly and transparently.
