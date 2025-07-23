@@ -1,7 +1,7 @@
 import { Home } from "lucide-react";
-import { Button } from "./components/ui/button";
+import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
-import { CustomMeta } from "./components/CustomMeta";
+import { CustomMeta } from "@/components/CustomMeta";
 
 export default function NotFound()  {
   const navigate = useNavigate();
