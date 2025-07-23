@@ -15,9 +15,6 @@ export default function Privacy() {
         description="Learn about our privacy practices. All SVG to PNG conversions happen locally in your browser - your files never leave your device."
         canonicalUrl="/privacy"
         robots="max-image-preview:large"
-        ogTitle="Privacy Policy - Convert SVG to PNG"
-        ogDescription="Learn about our privacy practices. All SVG to PNG conversions happen locally in your browser - your files never leave your device."
-        ogUrl="/privacy"
         ogType="article"
       />
       <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
