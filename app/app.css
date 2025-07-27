@@ -160,22 +160,6 @@
   }
 
   .dark {
-    .bg-card {
-      background-color: #030c21 !important;
-    }
-
-    .text-gray-600 {
-      color: #c1cbd6 !important;
-    }
-
-    .text-gray-700 {
-      color: #c1cbd6 !important;
-    }
-
-    [role="listbox"] {
-      background-color: #030c21 !important;
-    }
-
     /* Dark mode scrollbar styles */
     ::-webkit-scrollbar-thumb {
       background: #122040;
