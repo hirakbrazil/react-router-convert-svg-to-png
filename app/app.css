@@ -172,17 +172,6 @@
     }
   }
 
-  input {
-    outline: none !important; /* Removes the default browser outline */
-    border: none !important; /* Removes any border */
-    box-shadow: none !important; /* Removes any shadow effects, including focus rings */
-  }
-
-  input:focus {
-    outline: none !important; /* Ensures no outline on focus */
-    border: none !important; /* Ensures no border on focus */
-    box-shadow: none !important; /* Ensures no shadow on focus */
-  }
   html {
   scroll-behavior: smooth;
   }
